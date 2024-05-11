@@ -1,0 +1,19 @@
+@import "../utils/variables.scss";
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fafafa;
+  border-radius: 100px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $main-color;
+  border-radius: 100px;
+}

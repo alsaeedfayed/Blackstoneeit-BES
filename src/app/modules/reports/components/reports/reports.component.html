@@ -1,0 +1,24 @@
+<h3 class="title">Reports</h3>
+
+<div class="row">
+  <div class="col-md-9">
+    <div class="search">
+      <i class="bx bx-search"></i>
+      <input type="search" placeholder="search" />
+      <button class="btn btn-link p-0">Advanced Search</button>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <button class="btn btn-main new-report-btn">
+      <i class="bx bx-plus"></i> New Report
+    </button>
+  </div>
+</div>
+
+<div class="report-cards row">
+  <div class="report-card col-md-6" *ngFor="let report of reports">
+    <div class="h-100">
+      <app-report-card [title]="report.title"></app-report-card>
+    </div>
+  </div>
+</div>

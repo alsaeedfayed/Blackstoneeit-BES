@@ -1,0 +1,49 @@
+@import "src/assets/css/utils/mixins.scss";
+
+.freq-wrapper {
+  .input-wrapper {
+    position:relative;
+    display: block;
+    gap: 5px;
+    align-items: center;
+    margin: 15px 0;
+  span {
+    position: absolute;
+    // right: 15px;
+    @include rtl_value(right, 15px, auto);
+    @include rtl_value(left, auto, 15px);
+    top:60%;
+    color: #cbcbcb;
+  }
+  }
+}
+
+
+.diabled {
+  background-color: #CBCBCB !important;
+}
+
+// styling label
+label {
+  // display: block;
+  color: #717986;
+  font-size: 16px;
+  width: 100%;
+  margin: 5px 0;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+:host ::ng-deep app-datepicker {
+  flex-grow: 1;
+}

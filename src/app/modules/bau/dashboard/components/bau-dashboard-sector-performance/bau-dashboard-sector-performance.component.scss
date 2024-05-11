@@ -1,0 +1,87 @@
+.sector-performance-container-body{
+    &-on-track{
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #fff;
+      background: #01db9a;
+      transition: width 2s ease
+    }
+
+    &-off-track{
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #fff;
+      background: rgb(251, 62, 122);
+      transition: width 2s ease;
+
+    }
+
+
+    &-not-started{
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: black;
+      background: #EAEAEA;
+      transition: width 2s ease
+    }
+
+
+  .chart-container{
+    display: flex;
+    position: relative;
+    height: 15px;
+    border-radius: 7px;
+    background-color: #f6f6f6;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  }
+
+
+   .sector-performance-container-footer {
+
+    &-on-track {
+      &-square {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #01db9a;
+      }
+    }
+
+    &-off-track {
+      &-square {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: rgb(251, 62, 122);;
+      }
+    }
+
+    &-not-started {
+      &-square {
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #EAEAEA;
+      }
+    }
+  }
+
+  .line{
+    display: inline-block;
+    width: 100%;
+    background-color: #ecf6ff;
+    height: 1px;
+  }
+

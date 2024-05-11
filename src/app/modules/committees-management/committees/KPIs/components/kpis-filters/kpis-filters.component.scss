@@ -1,0 +1,18 @@
+.kpi-filters-container {
+  position: relative;
+  z-index: 1;
+  container: kpi-filters / inline-size;
+
+  .kpi-filters {
+    display: flex;
+
+    // gap: 1rem;
+
+    @container kpi-filters (min-width: 700px) {
+      & {
+        // grid-template-columns: repeat(3, 1fr);
+        // grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+      }
+    }
+  }
+}

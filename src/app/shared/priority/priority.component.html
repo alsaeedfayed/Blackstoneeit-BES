@@ -1,0 +1,8 @@
+<div class="bar-container">
+  <div class="item"
+       *ngFor="let item of criteriaOptions"
+       [class.faded]="item.title !== priority"
+       [ngStyle]="{'background': item.color}">
+    {{ (lang === 'en' ? item?.title : item?.titleAr)}}
+  </div>
+</div>

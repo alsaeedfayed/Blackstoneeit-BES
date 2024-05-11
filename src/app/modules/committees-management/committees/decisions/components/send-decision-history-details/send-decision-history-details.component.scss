@@ -1,0 +1,109 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-subtitle {
+    color: $info_color;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+}
+
+element.style {
+}
+
+.new-model-dialog-footer {
+  top: 98vh !important;
+}
+.horizontal-line {
+  height: 0.0625rem;
+  background-color: #efefef;
+  margin: 1rem 0;
+}
+.decision {
+  &-info {
+    container: decision-info / inline-size;
+    position: relative;
+    z-index: 1;
+
+    &-list {
+      display: grid;
+
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+
+      &-item {
+        &-content {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 0.875rem;
+          line-height: 1.25rem !important;
+
+          ::ng-deep person-item {
+            .personItem {
+              > .avatar {
+                .letters,
+                img {
+                  height: 2rem !important;
+                  width: 2rem !important;
+                }
+
+                .letters {
+                  font-size: 0.75rem;
+                }
+              }
+
+              > .info {
+                .name {
+                  font-size: 0.875rem;
+                  margin-bottom: 0;
+                }
+
+                .job {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.external-email{
+  background-color: #b9b9b9;
+    padding: 5px 10px;
+    border-radius: 14px;
+}
+.see-more-btn {
+  display: inline-block;
+  color: $main-color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.angular-editor-message{
+  word-break: break-word;
+}

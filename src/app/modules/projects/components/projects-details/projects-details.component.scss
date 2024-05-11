@@ -1,0 +1,333 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.project-details-side-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 16rem;
+
+  .new-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    color: $info_color;
+    margin-inline-start: -0.1875rem;
+    background: none;
+    padding: 0;
+    border: none;
+
+    i {
+      font-size: 1.25rem;
+      @include rtl_value(transform, rotate(0deg), rotate(-180deg));
+      transition: transform 0.15s ease-in-out;
+    }
+
+    &:hover {
+      i {
+        @include rtl_value(
+          transform,
+          translateX(-0.25rem) rotate(0deg),
+          translateX(0.25rem) rotate(-180deg)
+        );
+      }
+    }
+  }
+
+  .module-title {
+    display: flex;
+    gap: 0.5rem;
+    color: $black-color;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.25rem;
+
+    .title {
+      color: #9a9a9a;
+      font-weight: normal;
+    }
+  }
+
+  .side-cards-container {
+    width: 100%;
+
+    .stats-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      padding: 1.25rem;
+      box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+      border-radius: 0.625rem;
+      margin-bottom: 1rem;
+
+      .card-label {
+        color: $black-color;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      &.status-card {
+        height: 136px;
+
+        .card-label {
+          margin-bottom: 10px;
+        }
+
+        .project-status {
+          font-weight: 700;
+          font-size: 22px;
+          line-height: 26px;
+
+          &.primary {
+            color: #00db99;
+          }
+
+          &.secondary {
+            color: $secondary-color;
+          }
+        }
+      }
+
+      &.change-request-card {
+        height: 136px;
+
+        .card-label {
+          margin-bottom: 10px;
+        }
+
+        .card-value {
+          color: $black-color;
+          font-weight: 700;
+          font-size: 22px;
+          line-height: 26px;
+        }
+      }
+
+      &.progress-card {
+        min-height: 218px;
+        // padding: 31px 0;
+
+        .progress-card-circle {
+          margin-bottom: 19px;
+        }
+
+        .card-label {
+          margin-bottom: 10px;
+        }
+
+        .progress-card-text {
+          color: $black-color;
+          font-weight: 700;
+          font-size: 22px;
+          line-height: 26px;
+        }
+
+        .project-status {
+          font-weight: 700;
+          font-size: 22px;
+          line-height: 26px;
+          margin: 10px 0 20px 0;
+
+          &.primary {
+            color: #00db99;
+          }
+
+          &.secondary {
+            color: $secondary-color;
+          }
+
+          &.danger {
+            color: $danger-color;
+          }
+
+          &.closed {
+            color: #b5b5b5;
+          }
+        }
+
+        .bars {
+          width: 100%;
+          // padding: 0 22px;
+          margin-bottom: 20px;
+
+          .bar {
+            border-radius: 2.92887px;
+            height: 15.47px;
+            min-width: 2px;
+            transition: width 0.5s;
+
+            &.spent-bar {
+              width: 0%;
+              background: #00db99;
+              margin-bottom: 2px;
+            }
+
+            &.total-bar {
+              width: 100%;
+              background: #0062ff;
+            }
+
+            &.planned-bar {
+              margin-bottom: 2px;
+              width: 0%;
+              background: #ff285c;
+            }
+          }
+        }
+
+        .budget-keys {
+          width: 100%;
+          // padding: 0 22px;
+
+          .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+
+            div {
+              display: flex;
+              align-items: center;
+            }
+
+            .dot {
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              display: block;
+              margin-inline-end: 12px;
+            }
+
+            .label {
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 16px;
+              letter-spacing: 0.01em;
+              color: #8b8b8b;
+              margin-inline-end: 22px;
+            }
+
+            .price {
+              font-weight: 500;
+              font-size: 12px;
+              line-height: 16px;
+              display: flex;
+              align-items: center;
+              text-align: right;
+              letter-spacing: 0.01em;
+
+              color: #3c557a;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.project-setting-btn {
+  display: flex;
+  align-items: center;
+  color: $black-color;
+  background-color: transparent;
+  border: none;
+
+  i {
+    font-size: 20px;
+    margin-inline-end: 5px;
+  }
+
+  span {
+    font-size: 18px;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.tabs {
+  height: 100%;
+  width: calc(100% - 17.5rem);
+
+  .nav-tabs {
+    width: fit-content;
+    border: none !important;
+
+    li {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 21px;
+      width: fit-content;
+
+      &:not(:last-child) {
+        padding-inline-end: 0.75rem;
+      }
+
+      .nav-link {
+        color: $black-color !important;
+        border: none !important;
+        display: flex;
+        align-items: center;
+        padding: 12px;
+
+        i {
+          font-size: 20px;
+          margin-inline-end: 6px;
+        }
+
+        // &:first-child {
+        //     padding-inline-start: 0 !important;
+        // }
+
+        // &:last-child {
+        //     padding-inline-end: 0px;
+        // }
+
+        &.active {
+          background-color: $main-color !important;
+          color: white !important;
+          border-radius: 6px;
+        }
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}
+
+.module-title {
+  display: flex;
+
+  h3 {
+    color: $black-color;
+  }
+
+  .sub-title {
+    color: $info_color;
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+  }
+
+  .separator {
+    color: $tertiary-color;
+    margin: 0 4px;
+    height: 100%;
+  }
+
+  .value {
+    color: $black-color;
+    margin-inline-start: 10px;
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,55 @@
+<!-- Modal -->
+<div
+  id="QRCodeModalCenter"
+  class="modal fade confirm-modal"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div
+      class="modal-content"
+      [ngClass]="{ custom_content: customContent == true }"
+    >
+      <div class="modal-header" *ngIf="title">
+        <h5 class="modal-title">{{ title | translate }}</h5>
+
+        <button type="button" class="close" data-bs-dismiss="modal">
+          <!-- <span aria-hidden="true">&times;</span> -->
+          <i class="bx bx-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="right">
+          <img *ngIf="link" [src]="link['url']" />
+        </div>
+
+        <div class="left">
+          <span class="text-left d-block title">{{ content | translate }}</span>
+
+          <div class="buttons">
+            <!-- [href]="link" download="QR Code.jpg" -->
+            <button
+              data-dismiss="modal"
+              class="btn btn-outline-main"
+              (click)="downloadQR(link)"
+            >
+              <i class="bx bx-download"></i>
+              {{ 'events.details.downloadQR' | translate }}
+            </button>
+
+            <button
+              type="button"
+              data-dismiss="modal"
+              class="btn btn-main"
+              (click)="copyLink()"
+            >
+              <i class="bx bx-link"></i>
+              {{ 'events.details.copyLink' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

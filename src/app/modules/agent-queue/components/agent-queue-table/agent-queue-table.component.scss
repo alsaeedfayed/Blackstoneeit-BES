@@ -1,0 +1,178 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+:host ::ng-deep {
+  person-item {
+    .personItem {
+      min-width: 100px;
+
+      .avatar {
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .badge-status {
+    min-width: 210px !important;
+  }
+}
+
+.agent-queue-table {
+  width: 100%;
+  overflow-x: auto;
+
+  p {
+    cursor: pointer;
+  }
+}
+
+.details {
+  color: $main-color;
+  cursor: pointer;
+}
+
+.width-10 {
+  width: 10em;
+}
+
+.agent-sla-progress {
+  position: relative;
+
+  .span-progress {
+    display: block;
+    position: absolute;
+    width: 5em;
+    height: 1em;
+    color: white;
+    @include rtl_value(margin-top, 0.2em, -0.2em);
+  }
+
+  .progress-sla {
+    width: 100%;
+    height: 1.5em;
+    border-radius: 20px;
+  }
+
+  .center {
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .pause {
+    font-size: 1em;
+    @include rtl_value(margin-top, 0.2em, 0.2em);
+  }
+
+  .pause-label {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+  }
+}
+
+.text-right {
+  text-align: right;
+}
+.green {
+  color: #00db99;
+}
+.orange {
+  color: #ff9865;
+}
+.red {
+  color: #ff285c;
+}
+.dark-red {
+  color: #d94d4d;
+}
+.span-ar {
+  margin-top: -0.2em;
+}
+.no-sla {
+  color: #717986;
+}
+
+progress::-webkit-progress-bar {
+  border-radius: 20px;
+}
+progress::-webkit-progress-value {
+  border-radius: 20px;
+}
+progress::-moz-progress-bar {
+  border-radius: 20px;
+}
+
+/* For Firefox */
+progress[class*="gray"]::-moz-progress-bar {
+  background: #767171;
+}
+/* For Chrome or Safari */
+progress[class*="gray"]::-webkit-progress-value {
+  background: #767171;
+}
+/* For IE10 */
+progress[class*="gray"] {
+  background: #767171;
+}
+
+/* For Firefox */
+progress[class*="red"]::-moz-progress-bar {
+  background: #ff285c;
+}
+/* For Chrome or Safari */
+progress[class*="red"]::-webkit-progress-value {
+  background: #ff285c;
+}
+/* For IE10 */
+progress[class*="red"] {
+  background: #ff285c;
+}
+
+/* For Firefox */
+progress[class*="orange"]::-moz-progress-bar {
+  background: #ff9865;
+}
+/* For Chrome or Safari */
+progress[class*="orange"]::-webkit-progress-value {
+  background: #ff9865;
+}
+/* For IE10 */
+progress[class*="orange"] {
+  background: #ff9865;
+}
+
+/* For Firefox */
+progress[class*="green"]::-moz-progress-bar {
+  background: #00db99;
+}
+/* For Chrome or Safari */
+progress[class*="green"]::-webkit-progress-value {
+  background: #00db99;
+}
+/* For IE10 */
+progress[class*="green"] {
+  background: #00db99;
+}
+
+/* For Firefox */
+progress[class*="dark-red"]::-moz-progress-bar {
+  background: #d94d4d;
+}
+/* For Chrome or Safari */
+progress[class*="dark-red"]::-webkit-progress-value {
+  background: #d94d4d;
+}
+/* For IE10 */
+progress[class*="dark-red"] {
+  background: #d94d4d;
+}
+
+progress::-webkit-progress-bar {
+  -webkit-appearance: none;
+  white-space: pre;
+  background: #e7e6e6;
+}
+
+.progress-nums {
+  margin-bottom: 0;
+}

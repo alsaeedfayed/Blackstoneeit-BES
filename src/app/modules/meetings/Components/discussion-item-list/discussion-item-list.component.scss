@@ -1,0 +1,162 @@
+// Varaibles
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.wrapper {
+  background: $white-color;
+  padding: 20px;
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.01);
+
+  .section-title {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+
+    h6 {
+      font-weight: normal;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  .list {
+    --actions-width: 70px;
+    margin: 20px 0 15px;
+
+    .meeting-actions {
+      width: var(--actions-width);
+    }
+
+    ::ng-deep {
+      person-item {
+        .personItem {
+          &.header-person {
+            width: fit-content;
+          }
+        }
+      }
+    }
+
+    .item {
+      display: flex;
+      padding: 5px 20px;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      margin-bottom: 10px;
+
+      &::after {
+        content: "";
+        width: 9px;
+        border-radius: 8px;
+        background: $main-color;
+        position: absolute;
+        @include rtl_key(null, left, right, 0);
+        @include rtl_key(null, right, left, auto);
+        height: 100%;
+      }
+
+      .title {
+        width: 230px;
+      }
+
+      .item-widget {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 220px;
+
+        h6 {
+          color: $main-color;
+          font-size: 14px;
+          font-weight: 600;
+          margin: 4px 0;
+        }
+
+        p {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.no-data {
+  display: flex;
+  margin-top: 25px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px !important;
+  color: #3c557a;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .edit-icons {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    border: 0;
+    font-size: 22px;
+    background-color: #00db99;
+    color: #fff;
+  }
+
+  .delete-icons {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    border: 0;
+    font-size: 22px;
+    background-color: #ed719c;
+    color: #fff;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    border-radius: 50% !important;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+      margin: 0 !important;
+    }
+  }
+}
+
+.attachments {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  ul {
+    li {
+      margin-bottom: 10px;
+
+      a {
+        white-space: nowrap;
+      }
+    }
+  }
+}

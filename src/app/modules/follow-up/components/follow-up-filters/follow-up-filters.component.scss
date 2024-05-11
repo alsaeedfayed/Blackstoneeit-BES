@@ -1,0 +1,21 @@
+@import "../../../../../assets/css/utils/variables.scss";
+
+.items {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  .item {
+    display: flex;
+    align-items: center;
+
+    label {
+      margin-inline-end: 15px;
+    }
+
+    app-select {
+      min-width: 250px;
+    }
+  }
+}

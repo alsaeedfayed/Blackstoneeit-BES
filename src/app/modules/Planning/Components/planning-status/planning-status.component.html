@@ -1,0 +1,98 @@
+<!-- Planning Steps -->
+<ng-container *ngIf="loadingstatus; else planningStatus">
+  <ng-container [ngTemplateOutlet]="loadingTeplate"></ng-container>
+</ng-container>
+
+<ng-template #planningStatus>
+  <div class="planningSteps" *ngIf="isScorecardStatusResult">
+    <workflow-states
+      [steps]="scorecardStatusResult?.approvalInstance?.states"
+    ></workflow-states>
+  </div>
+
+  <ng-container *ngIf="!isScorecardStatusResult">
+    <ng-container
+      [ngTemplateOutlet]="scorecardCompleted"
+      *ngIf="scorecardStatusResult.scorecardCompleted"
+    ></ng-container>
+
+    <div *ngIf="!scorecardStatusResult.scorecardCompleted">
+      <ng-container
+        *ngIf="scorecardStatusResult.canStart; else noScorecardTemplate"
+      >
+        <ng-container [ngTemplateOutlet]="startInstanceTemplate"></ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #startInstanceTemplate>
+  <div class="start-planning">
+    <p class="mb-4">
+      {{
+        "Planning.startPlanningMsg"
+          | translate
+            : {
+                groupName:
+                  lang === "en"
+                    ? selectedGroup?.name
+                    : selectedGroup?.arabicName
+              }
+      }}
+    </p>
+
+    <button class="btn btn-main" (click)="startInstanceHandler()">
+      <!-- <i *ngIf="isStartingInstance" class="bx bx-loader-alt bx-spin ml-1"></i> -->
+      {{ "Planning.startPlanning" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #noScorecardTemplate>
+  <div class="no-status-data" *ngIf="selectedGroup?.name">
+    <img _ngcontent-dku-c192="" src="assets/img/no-data.svg" />
+
+    <p class="mt-4 mb-0">
+      {{
+        "Planning.noScorecardAvailable"
+          | translate
+            : {
+                groupName:
+                  lang === "en" ? selectedGroup?.name : selectedGroup?.arabicName
+              }
+      }}
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #scorecardCompleted>
+  <div class="no-status-data">
+    <img _ngcontent-dku-c192="" src="assets/img/no-data.svg" />
+
+    <p class="mt-4 mb-0">
+      {{
+        "Planning.scorecardCompleted"
+          | translate
+            : {
+                groupName:
+                  lang === "en" ? selectedGroup?.name : selectedGroup?.arabicName
+              }
+      }}
+    </p>
+  </div>
+</ng-template>
+
+<ng-template #loadingTeplate>
+  <div class="loader">
+    <ngx-skeleton-loader
+      count="1"
+      [theme]="{
+        height: '230px',
+        width: '100%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'border-radius': '8px'
+      }"
+    ></ngx-skeleton-loader>
+  </div>
+</ng-template>

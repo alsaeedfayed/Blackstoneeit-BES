@@ -1,0 +1,59 @@
+
+
+  <!-- TODO CARD BODY -->
+  <div class="sector-performance-container-body my-4">
+    <ng-container *ngFor="let sector of sectorPerformanceData">
+      <div class="row my-3">
+        <!-- TODO -- SECTOR NAME AND TOTAL -->
+        <div style="color: #86909c;"
+          class="col-12 col-md-4 sector-performance-container-body-sector-name"
+        >
+          {{ language === "en" ? sector?.name : sector?.nameAr }} ({{
+            sector?.total
+          }})
+        </div>
+        <!-- TODO -- CHART PERCENTAGE -->
+        <div class="col-12 col-md-8 chart-container">
+          <span
+          style="padding:5px 25px;"
+            class="sector-performance-container-body-on-track"
+            *ngIf="sector?.onTrackPercentage"
+            [style.width]="sector?.onTrackPercentage + '%'"
+          >{{sector?.onTrackPercentage+'%'}}</span>
+          <span
+          style="padding:0px 25px;"
+            class="sector-performance-container-body-off-track"
+            *ngIf="sector?.offTrackPercentage"
+            [style.width]="sector?.offTrackPercentage + '%'"
+          >{{sector?.offTrackPercentage+'%'}}</span>
+          <!-- <span
+          style="padding:0px 25px;"
+            class="sector-performance-container-body-not-started"
+            *ngIf="sector?.notStartedPercentage"
+            [style.width]="sector?.notStartedPercentage + '%'"
+          >{{sector?.notStartedPercentage+'%'}}</span> -->
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <span class="line" *ngIf="sectorPerformanceData?.length > 0"></span>
+   <!-- TODO CARD FOOTER -->
+   <div *ngIf="sectorPerformanceData?.length>0" class="sector-performance-container-footer d-flex justify-content-center align-items-center gap-3 my-2">
+
+    <div class="sector-performance-container-footer-on-track d-flex align-items-center gap-2">
+      <span class="sector-performance-container-footer-on-track-square"></span>
+      <span>{{'bau.onTrack' | translate}}</span>
+    </div>
+
+    <div class="sector-performance-container-footer-off-track  align-items-center d-flex gap-2">
+      <span class="sector-performance-container-footer-off-track-square"></span>
+      <span>{{'bau.offTrack' | translate}}</span>
+    </div>
+<!--
+    <div class="sector-performance-container-footer-not-started  align-items-center d-flex gap-2">
+      <span class="sector-performance-container-footer-not-started-square"></span>
+      <span>{{'bau.notStarted' | translate}}</span>
+    </div> -->
+   </div>
+

@@ -1,0 +1,59 @@
+//variables
+@import "../../../../../assets/css/utils/variables.scss";
+//forms
+@import "../../../../../assets/css/components/form-inputs.scss";
+.req-filters {
+  &-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .left {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      .text-filter {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        h6 {
+          color: $dark-gray-color;
+          font-size: 14px !important;
+          width: 130px;
+        }
+      }
+    }
+    .left,
+    .right {
+      margin: 15px 0;
+      @media (max-width: 508px) {
+        & > div {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.filter {
+  label {
+    margin-inline-end: 8px;
+    display: block;
+    color: #8b8b8b;
+    font-weight: 400;
+    font-size: 14px;    
+  }
+  ::ng-deep {
+    .ng-select-container {
+      min-width: 250px;
+      .ng-placeholder {
+        color: #25364f;
+        text-transform: capitalize;
+        // margin-top: 3px;
+      }
+    }
+  }
+}
+
+::ng-deep .filter-services .dropdown-container {
+  width: 250px;
+}

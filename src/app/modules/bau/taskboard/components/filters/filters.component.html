@@ -1,0 +1,77 @@
+<div class="container p-0">
+  <div class="page-data p-0">
+    <ng-container *ngIf="isLoading; else search_bar">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </ng-container>
+  </div>
+
+  <ng-template #search_bar>
+    <div class="wrapper">
+      <form class="new-event-form d-flex justify-content-between align-items-center gap-1" [formGroup]="form" (ngSubmit)="onSearch()">
+        <!-- related to controls  -->
+        <div class="selectors-wrapper">
+          <div class="filter year">
+            <app-select
+              formControlName="year"
+              [control]="form | getControl : 'year'"
+              [placeholder]="'bau.year' | translate"
+              [items]="years"
+              [bindVlaue]="'id'"
+            ></app-select>
+          </div>
+
+          <div class="filter">
+            <app-select
+              formControlName="sector"
+              [control]="form | getControl : 'sector'"
+              [placeholder]="'bau.sectorPlaceholder' | translate"
+              [items]="sector"
+              [bindVlaue]="'id'"
+              [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+              [clearable]="true"
+            ></app-select>
+          </div>
+
+          <div class="filter" *ngIf="(form | getControl : 'sector').value !== null && department.length > 0">
+            <app-select
+              formControlName="department"
+              [control]="form | getControl : 'department'"
+              [placeholder]="'bau.departmentPlaceholder' | translate"
+              [items]="department"
+              [bindVlaue]="'id'"
+              [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+              [clearable]="true"
+            ></app-select>
+          </div>
+
+          <div class="filter" *ngIf="(form | getControl : 'department').value !== null && section.length > 0">
+            <app-select
+              class="d-block select-control"
+              formControlName="section"
+              [control]="form | getControl : 'section'"
+              [placeholder]="'bau.sectionPlaceholder' | translate"
+              [items]="section"
+              [bindVlaue]="'id'"
+              [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+              [clearable]="true"
+            ></app-select>
+          </div>
+
+        </div>
+
+        <button
+          class="search btn btn-primary d-flex align-items-center "
+          type="submit"
+          [disabled]="!form.valid"
+        >
+        <i class='bx bx-search'></i>
+          {{ "bau.search" | translate }}
+        </button>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </ng-template>
+</div>

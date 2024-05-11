@@ -1,0 +1,206 @@
+<div class="wrapper">
+  <!-- <app-header-page
+    [title]="'Meetings.actionItems' | translate"
+    [titleBtn]="!isViewMode ? ('Meetings.addItem' | translate) : null"
+    (btnClick)="openAddItemsModal()"
+    [isAddBtn]="true"
+  ></app-header-page> -->
+
+  <div class="header" >
+    <p>{{"Meetings.actionItemCompletion" | translate}}: <strong>{{actionItemsCompletionRate}}%</strong></p>
+    <button class="btn btn-main createService" (click)="openAddItemsModal()" *ngIf="!isViewMode && canAdd">
+      <i class="bx bx-plus"></i>
+    </button>
+  </div>
+
+  <!-- <div class="section-title">
+    <h6>{{ "Meetings.actionItemsList" | translate }}</h6>
+  </div> -->
+
+  <div class="list">
+    <div class="attendees-list-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ "Meetings.actionItemTitle" | translate }}</th>
+            <th scope="col">{{ "Meetings.type" | translate }}</th>
+            <th scope="col">{{ "Meetings.dueDate" | translate }}</th>
+            <th scope="col" [colSpan]="2">
+              {{ "Meetings.status" | translate }}
+            </th>
+            <th scope="col">{{ "Meetings.progress" | translate }}</th>
+            <th scope="col">{{ "Meetings.responsability" | translate }}</th>
+            <th scope="col" class="meeting-actions">
+              {{ "Meetings.actions" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <!-- Id -->
+            <!-- <td>
+              {{ item.id }}
+            </td> -->
+            <td>{{item?.code}}</td>
+            <!-- Title -->
+            <td>
+              {{ item.action }}
+            </td>
+            <!-- Type -->
+            <td>
+              {{ getTaskType(item.typeCode) }}
+            </td>
+            <!-- Due Date -->
+
+            <td>
+              {{
+                item?.dueDate
+                  | date : "MMM d, y" || "-"
+              }}
+            </td>
+            <!-- Status -->
+            <td [colSpan]="2">
+              <div class="action-status">
+                <app-badge
+                  *ngIf="item.response == followUpResponseMode.OnTrack"
+                  [className]="'active'"
+                  [label]="'Meetings.onTrack' | translate"
+                ></app-badge>
+                <app-badge
+                  *ngIf="item.response == followUpResponseMode.Delayed"
+                  [className]="'rejected'"
+                  [label]="'Meetings.statusDelayed' | translate"
+                ></app-badge>
+                <app-badge
+                  *ngIf="item.status == followUpStatusMode.Open"
+                  [className]="'started'"
+                  [label]="'Meetings.statusopened' | translate"
+                ></app-badge>
+                <app-badge
+                  *ngIf="item.status == followUpStatusMode.Closed"
+                  [className]="'closed'"
+                  [label]="'Meetings.statusclosed' | translate"
+                ></app-badge>
+              </div>
+            </td>
+            <!-- Progress -->
+            <td>
+              <div class="preogress">
+                <nz-progress
+                  [nzPercent]="item.progress"
+                  [nzStrokeColor]="'#5271ff'"
+                  [nzFormat]="progressFormat"
+                ></nz-progress>
+              </div>
+            </td>
+
+            <!-- Presenter -->
+            <td>
+              <person-item
+                *ngIf="item.assgineeInfo"
+                [requesterItem]="item.assgineeInfo"
+                [noCursor]="true"
+                [isUserCardFixed]="true"
+              ></person-item>
+            </td>
+
+            <!-- Actions -->
+            <td class="meeting-actions" *ngIf="!isViewMode">
+              <!-- <div class="actions">
+                <button class="edit-icons" (click)="openEditPopup(item)">
+                  <i class="bx bxs-edit-alt"></i>
+                </button>
+                <button class="delete-icons" (click)="deleteItem(item)">
+                  <img src="assets/img/trash.svg" alt="delete" />
+                </button>
+              </div> -->
+              <div>
+                <app-dropdown (select)="onOptionSelect($event, item)" [items]="options"></app-dropdown>
+              </div>
+            </td>
+            <td *ngIf="isViewMode">
+              <div>
+                <app-dropdown (select)="onOptionSelect($event, item)" [items]="actionOptions"></app-dropdown>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="no-data" *ngIf="items && items.length == 0">
+      <!-- <app-no-data-custom
+        msg="{{ 'Meetings.noDataMsg' | translate }}"
+      ></app-no-data-custom> -->
+      {{ "Meetings.noActionItemsMsg" | translate }}
+    </div>
+  </div>
+</div>
+
+<!-- add/edit action model -->
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'add-action-items'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeItemModal()"
+>
+  <div modal-header class="action-item-model-header w-100">
+    <label class="modal-title">
+      {{
+        editedItem ?
+        (
+          editedItem.isCloneClicked ?
+          ('Meetings.addActionItems' | translate) :
+          ('Meetings.editActionItems' | translate)
+        ) :
+        ('Meetings.addActionItems' | translate)
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="action-item-model-content border-top">
+    <app-action-item-modal
+      *ngIf="isShowForm"
+      [createdMeetingId]="createdMeetingId"
+      [Item]="editedItem"
+      (save)="addActionItem($event)"
+      (update)="editedItemHandler($event)"
+    ></app-action-item-modal>
+  </div>
+</app-model>
+
+<!-- update progress model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'update-item-progress'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeItemModal()"
+>
+  <div modal-header class="update-progress-model-header w-100">
+    <label class="modal-title">
+      {{ 'Meetings.updateActionProgress' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="update-progress-model-content border-top">
+    <app-update-item-progress-2
+      *ngIf="isShowForm"
+      [item]="editedItem"
+      (refreshData)="itemUpdatedHandler.emit()"
+    ></app-update-item-progress-2>
+  </div>
+</app-model>
+
+<!-- delete confirmation modal -->
+<app-confirm-modal
+  [id]="'confirm-action-delete'"
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteItemConfirmed()"
+></app-confirm-modal>

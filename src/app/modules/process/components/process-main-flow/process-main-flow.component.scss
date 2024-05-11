@@ -1,0 +1,88 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+:host {
+  display: flex;
+  overflow-x: auto;
+
+  ::ng-deep person-item {
+    .avatar {
+
+      .letters,
+      img {
+        height: 2rem !important;
+        width: 2rem !important;
+        margin: 0 !important;
+      }
+
+      .letters {
+        font-size: 0.75rem;
+      }
+    }
+
+    .info {
+      display: none !important;
+    }
+  }
+}
+
+.main-flow-container {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.625rem;
+  height: fit-content;
+  scrollbar-color: $dark-gray-color #f1f2f7;
+  scrollbar-width: thin;
+
+  .main-flow-item {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 250px;
+    background-color: $white-color;
+    padding: 0.625rem;
+    margin-bottom: 0.5rem;
+    border: 0.0625rem solid transparent;
+    border-radius: 0.625rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+
+    &.completed {
+      border-color: #0fc161;
+      pointer-events: all;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 0.4375rem;
+        width: 0.6875rem;
+        background-color: #0fc161;
+        @include rtl_value(right, 100%, auto);
+        @include rtl_value(left, auto, 100%);
+        @include rtl_value(clip-path,
+          polygon(0 30%, 60% 30%, 60% 0%, 100% 50%, 60% 100%, 60% 60%, 0 60%),
+          polygon(100% 30%, 40% 30%, 40% 0%, 0 50%, 40% 100%, 40% 60%, 100% 60%));
+      }
+    }
+
+    .main-flow-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.625rem;
+      margin-bottom: 1rem;
+
+      span {
+        font-weight: 400;
+        line-height: 1.125rem;
+        color: #878fa7;
+      }
+    }
+  }
+}

@@ -1,0 +1,324 @@
+// any important style is for overriding bootstrap styles
+.container {
+  border-radius: 10px;
+  border: 1px solid #efefef;
+  width: 450px;
+  .row {
+    margin: 0 5px;
+  }
+}
+
+
+.Insights-header {
+  .col {
+    padding: 0;
+  }
+  .header-text {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+// setting icon hovering style
+.setting-icon-wrapper {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0, 0.05);
+  }
+  .setting-icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+}
+
+.change-budget {
+  margin: 10px 5px;
+  gap: 5px;
+  color: #7a838f;
+
+  .submit-button {
+    min-width: 15px;
+    &.ar {
+      transform: rotateY(180deg);
+    }
+    .bx-send {
+      margin: auto;
+    }
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.tasks-count {
+  .col-4 {
+    width: 119px;
+    height: 107px;
+    border-radius: 10px;
+    border: 1px solid #efefef;
+    padding: 16px;
+    .count-header {
+      font-size: 14px;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .counter {
+      font-size: 22px;
+      font-weight: 700;
+      .AED {
+        font-size: 13px;
+        font-weight: 500;
+        align-self: flex-end;
+        padding: 0 2px 5px 2px;
+      }
+    }
+
+    .subcount {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .subcount-track {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .bx-up-arrow-alt {
+        font-size: 16px;
+      }
+
+      .subcount-text {
+        font-size: 12px;
+        font-weight: 500;
+        color: #687588;
+      }
+    }
+  }
+}
+
+.roles-coverage {
+  background: #fff;
+  border-radius: 10px;
+  &.scrollable {
+    max-height: 285px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add a vertical scrollbar if necessary */
+  }
+  .wrapper {
+    padding: 20px 13px;
+
+    .header-text {
+      color: #7a838f;
+      font-weight: 600;
+      size: 12px;
+    }
+
+    .roles {
+      margin-top: 16px;
+
+      .progress {
+        height: 30px;
+        border-radius: 7px;
+        background-color: #c8d1d8;
+        .progress-bar {
+          text-align: start;
+          color: #efefef;
+          font-weight: 400;
+          font-size: 10px;
+          position: relative;
+          background-color: #0066ff;
+        }
+        .progress-bar-text {
+          position: absolute;
+          color: white;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 300px;
+
+          &.low {
+            color: #2c3e50;
+          }
+          &.ar {
+            top: 10%;
+            right: 10px;
+          }
+          &.en {
+            top: 28%;
+            left: 10px;
+          }
+        }
+        .tasks-count {
+          position: absolute;
+          font-weight: 400;
+          font-size: 10px;
+          &.ar {
+            top: 10%;
+            left: 10px;
+          }
+          &.en {
+            top: 28%;
+            right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.workload-emploee {
+  app-workload {
+    padding: 0;
+  }
+
+  &.scrollable {
+    max-height: 220px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add a vertical scrollbar if necessary */
+  }
+
+  .table {
+    background: #ebedef66;
+    border-radius: 10px;
+    border: 0;
+    tr {
+      border: 0 !important;
+      background-color: transparent;
+    }
+    th {
+      border: 0 !important;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+      padding: 20px 10px;
+    }
+
+    td {
+      padding: 5px 10px;
+      gap: 10px;
+      .profile-img {
+        img {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        i {
+          font-size: 28px;
+        }
+      }
+      .profile-name {
+        align-self: center;
+        font-size: 12px;
+        font-weight: 400;
+        color: #121824;
+      }
+
+      &.tasks-count {
+        color: #7a838f;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.workload-section {
+  &.scrollable {
+    max-height: 140px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add a vertical scrollbar if necessary */
+  }
+  .table {
+    background: #fff;
+    border-radius: 10px;
+    border: 0;
+    padding-bottom: 10px;
+    .header-text {
+      th {
+        color: #7a838f !important;
+        font-weight: 600 !important;
+        size: 12px !important;
+      }
+    }
+    tr {
+      border: 0 !important;
+      background-color: transparent;
+    }
+    th {
+      border: 0 !important;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+      padding: 20px 10px 15px 10px !important;
+    }
+
+    td {
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 400;
+
+      &.tasks-count {
+        color: #7a838f;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.no-dataunit{
+  min-height: 350px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+}
+
+// .scrollable {
+//   max-height: 230px; /* Adjust the height as needed */
+//   overflow-y: auto; /* Add a vertical scrollbar if necessary */
+// }
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: #8f99a8;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  &-subtitle {
+    color: $info_color;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+}
+
+
+::ng-deep {
+  app-switch-btn {
+    .switch-container{
+      gap: 5px !important;
+    }
+  }
+}
+

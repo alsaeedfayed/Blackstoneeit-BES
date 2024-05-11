@@ -1,0 +1,143 @@
+<div class="req-table mt-4">
+  <div class="req-table-wrapper">
+    <table class="requests-table table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="project-name">
+            <div class="sortable-row" (click)="sort(1)">
+              {{ "eppmRequests.table.head.name" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 1 && ascMode,
+                'sort-down': sortedCol && sortedCol == 1 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            {{ "eppmRequests.table.head.manager" | translate }}
+          </th>
+          <th scope="col">
+            {{ "eppmRequests.table.head.status" | translate }}
+          </th>
+          <th scope="col">
+            {{ "eppmRequests.table.head.deliveryType" | translate }}
+          </th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(2)">
+              {{ "eppmRequests.table.head.start" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 2 && ascMode,
+                'sort-down': sortedCol && sortedCol == 2 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(3)">
+              {{ "eppmRequests.table.head.end" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 3 && ascMode,
+                'sort-down': sortedCol && sortedCol == 3 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            {{ "eppmRequests.table.head.milestones" | translate }}
+          </th>
+          <th scope="col">
+            {{ "eppmRequests.table.head.deliverables" | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of list
+          | paginate
+            : {
+              itemsPerPage: paginationModel?.pageSize,
+              currentPage: paginationModel?.pageIndex,
+              totalItems
+            };
+          let i = index
+        ">
+          <td>
+            {{ item?.code }}
+          </td>
+          <td class="project-name">
+            <a class="hoverableLink" [routerLink]="'/create-project/' + item.id">{{ item?.name[lang] }}</a>
+          </td>
+          <td>
+            <person-item
+              *ngIf="item?.owner"
+              [ownerItem]="item?.owner"
+              [CompMode]="2"
+              [noCursor]="true"
+              [isUserCardFixed]="true"
+            ></person-item>
+          </td>
+          <td>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'Approved'"
+              [className]="'complete'"
+              [label]="item?.status.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.code === 'Draft'"
+              [className]="'draft'"
+              [label]="item?.status.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'ReturnedForCorrection'"
+              [className]="'started'"
+              [label]="item?.status.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'PendingForReview'"
+              [className]="'inProgress'"
+              [label]="item?.status.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'Rejected'"
+              [className]="'rejected'"
+              [label]="item?.status.title[lang]"
+            ></app-badge>
+          </td>
+          <td>
+            {{ item?.deliveryType?.title[lang] }}
+          </td>
+          <td>
+            <span *ngIf="item?.startDate">
+              {{
+                lang === "en" ?
+                ((item?.startDate | uTCToLocalDate) | date : "d MMM y") :
+                ((item?.startDate | uTCToLocalDate) | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="item?.endDate">
+              {{
+                lang === "en" ?
+                ((item?.endDate | uTCToLocalDate) | date : "d MMM y") :
+                ((item?.endDate | uTCToLocalDate) | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+          <td class="text-center">
+            {{ item?.milestones?.length }}
+          </td>
+          <td class="text-center">
+            {{ item?.deliverablesCount }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

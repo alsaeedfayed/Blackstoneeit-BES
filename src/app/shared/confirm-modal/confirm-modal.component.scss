@@ -1,0 +1,68 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.confirm-modal {
+  z-index: 9999;
+
+  .modal-dialog {
+    justify-content: center;
+    min-width: 600px;
+
+    @media (max-width: 580px) {
+      min-width: unset;
+      width: 90vw;
+      margin: auto;
+    }
+
+    .modal-content {
+      box-shadow: 0px 0px 20px #5a5a5a29;
+      overflow: hidden !important;
+      border: 0;
+      border-radius: 12px !important;
+      height: 210px !important;
+      border-radius: 8px !important;
+
+      .modal-header {
+        border: 0;
+        padding: 15px 15px 0 15px;
+      }
+
+      .modal-body {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 24px;
+        // text-align: center;
+        padding: 28px 15px 30px;
+        color: $tertiary-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-footer {
+        padding-top: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        border: none !important;
+
+        button {
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}
+
+.custom_content {
+  width: 500px;
+  background: #e4e1e1;
+}
+
+span.content {
+  color: $black-color;
+ // font-size: 17px;
+  @include rtl_value(font-size, 17px, 14px);
+}

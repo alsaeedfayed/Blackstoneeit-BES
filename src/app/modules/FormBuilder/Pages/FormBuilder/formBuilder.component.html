@@ -1,0 +1,15 @@
+<!-- Form Builder -->
+<div class="formBuilder">
+  <div class="form">
+    <app-entity-builder [entity]="data"></app-entity-builder>
+
+    <div class="buttons py-4">
+      <button class="btn btn-gray-outline">Cancel</button>
+
+      <button class="btn btn-main" [disabled]="!data.name" (click)="saveForm()">
+        <i *ngIf="loading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        <ng-container *ngIf="!loading">{{ 'shared.save' | translate }}</ng-container>
+      </button>
+    </div>
+  </div>
+</div>

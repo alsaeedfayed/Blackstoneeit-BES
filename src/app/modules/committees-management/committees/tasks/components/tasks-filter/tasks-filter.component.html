@@ -1,0 +1,59 @@
+<div class="tasks-filters-container">
+    <div class="tasks-filters" [formGroup]="form">
+  
+      <!-- committee workgroups select -->
+      <app-select
+        class="d-block"
+        formControlName="workgroupId"
+        [control]="form | getControl: 'workgroupId'"
+        [title]="'committeeTasks.filters.workgroup'| translate"
+        [placeholder]="'committeeTasks.filters.selectWorkgroup' | translate"
+        [items]="workgroups"
+        [bindVlaue]="'id'"
+        [bindLabel]="'name'"
+        [clearable]="true"
+        (change)="changeFilter()"
+      ></app-select>
+
+      <!-- main tasks select -->
+      <app-select
+        class="d-block"
+        formControlName="mainTaskId"
+        [control]="form | getControl: 'mainTaskId'"
+        [title]="'committeeTasks.filters.mainTask'| translate"
+        [placeholder]="'committeeTasks.filters.selectMainTask' | translate"
+        [items]="mainTasks"
+        [bindVlaue]="'id'"
+        [bindLabel]="language == 'en' ? 'title' : 'titleAr'"
+        [clearable]="true"
+        (change)="changeFilter()"
+      ></app-select>
+    
+      <!-- status select -->
+      <div>
+        <label class="form-label">
+          {{ 'committeeTasks.filters.priority' | translate }}
+          <span class="opacity-0">*</span>
+        </label>
+  
+        <ng-select
+          formControlName="importanceLevel"
+          class="input-select"
+          [ngClass]="{ valid: (form | getControl: 'importanceLevel')?.valid }"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="'committeeTasks.filters.selectPriority' | translate"
+          [notFoundText]="'shared.noItemsFound' | translate"
+          (change)="setImportanceLevelValue($event)"   
+        >
+          <ng-option *ngFor="let item of importanceLevel" [value]="item?.id">
+            <app-badge
+              [className]="item?.className"
+              [label]="language == 'ar' ? item['nameAr'] : item['name']"
+            ></app-badge>
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+  </div>

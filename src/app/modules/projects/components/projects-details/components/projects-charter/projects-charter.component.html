@@ -1,0 +1,541 @@
+<div class="row mt-4">
+  <div class="col-lg-7">
+    <div class="team-card mb-4">
+      <div class="item">
+        <h3>{{ "projects.projectManager" | translate }}</h3>
+        <div class="project-manager">
+          <person-item
+            *ngIf="data?.manager"
+            [ownerItem]="data?.manager"
+            [CompMode]="2"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+      <div class="item">
+        <h3>{{ "projects.projectSponsors" | translate }}</h3>
+        <div
+          *ngFor="let sponser of data?.sponsers; let i = index"
+          class="d-flex align-items-center mb-2"
+        >
+          <person-item
+            *ngIf="sponser"
+            [ownerItem]="sponser"
+            [CompMode]="2"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+      <div class="item">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          <h3>{{ "projects.projectTeam" | translate }}</h3>
+
+          <i
+            *ngIf="data?.hasPMPrivilege || isPmo"
+            class="bx bx-plus add pointer"
+            (click)="onAddTeamMember('teamMember')"
+          ></i>
+        </div>
+        <div class="members-container">
+          <div
+            *ngFor="let teamMember of data?.teamMemebers; let i = index"
+            class="d-flex align-items-center mb-2"
+          >
+            <person-item
+              *ngIf="teamMember"
+              [ownerItem]="teamMember"
+              [CompMode]="2"
+              [noCursor]="true"
+              [isUserCardFixed]="true"
+            ></person-item>
+          </div>
+          <div *ngIf="data?.teamMemebers?.length == 0">
+            <span class="font-small">
+              {{ "projects.NoTeamMembersFound" | translate }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          <h3 class="stake-holders">{{ "projects.externalStakeHolders" | translate }}</h3>
+
+          <i
+            *ngIf="data?.hasPMPrivilege || isPmo"
+            class="bx bx-plus add pointer"
+            (click)="onAddExternalMembers()"
+          ></i>
+        </div>
+        <div class="members-container">
+          <div
+            class="mb-2"
+            *ngFor="
+              let externalStakeholder of data?.externalStakeholders;
+              let i = index
+            "
+          >
+            <div class="row">
+              <div class="col-2 initial-container">
+                <app-initials
+                  *ngIf="!externalStakeholder.userPicture?.url"
+                  [dimensions]="{ height: 32, width: 32 }"
+                  [name]="externalStakeholder.name"
+                ></app-initials>
+              </div>
+              <div class="col-7">
+                <img [src]="externalStakeholder?.userPicture?.url" alt="" />
+                <span class="name">{{ externalStakeholder.name }}</span>
+                <p class="position">{{ externalStakeholder.position }}</p>
+              </div>
+              <div
+                class="col-3 icons-container"
+                *ngIf="data?.hasPMPrivilege || isPmo"
+              >
+                <i
+                  (click)="onEditMember(i)"
+                  class="bx bxs-edit-alt pointer edit"
+                ></i>
+                <i
+                  (click)="onDeleteMember(i)"
+                  class="bx bx-x pointer delete"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="data?.externalStakeholders?.length == 0">
+            <span class="font-small">
+              {{ "projects.NoExternalStakeHoldersFound" | translate }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-6">
+        <h3>{{'Project Stakeholders' | translate}}</h3>
+        <div class="users-container">
+          <div *ngFor="let sponser of data?.sponsers let i=index">
+            <img [src]="sponser?.userPicture?.url"
+                 alt="">
+            <span class="name">{{sponser?.fullName}}</span>
+          </div>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="details-card">
+      <div class="first-row pb-4 mb-4 border-bottom">
+        <div class="project-type">
+          <h3>{{ "projects.projectType" | translate }}</h3>
+          <span>{{ getTypes() }}</span>
+        </div>
+
+        <div class="project-category">
+          <h3 class="font-16">{{ "projects.projectCategory" | translate }}</h3>
+          <span>{{ getCategories() }}</span>
+        </div>
+
+        <div class="project-milestone">
+          <div class="card-stats-box">
+            <div class="card-stats">
+              <span class="count">{{ data?.tasks?.length }}</span>
+              <span class="count-label">
+                {{ "projects.tasks" | translate }}
+              </span>
+            </div>
+            <div class="separator"></div>
+            <div class="card-stats">
+              <span class="count">{{ data?.deliverables?.length }}</span>
+              <span class="count-label">
+                {{ "projects.deliverables" | translate }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-duration">
+          <div class="duration-label-container mr-2">
+            <div class="duration-label-col">
+              <span class="counter">{{ data?.duration?.year }}</span>
+              <span class="counter-description">
+                {{ "projects.years" | translate }}
+              </span>
+            </div>
+            <div class="duration-label-col">
+              <span class="counter">{{ data?.duration?.month }}</span>
+              <span class="counter-description">
+                {{ "projects.months" | translate }}
+              </span>
+            </div>
+            <div class="duration-label-col">
+              <span class="counter">{{ data?.duration?.day }}</span>
+              <span class="counter-description">
+                {{ "projects.days" | translate }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="second-row">
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectName" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.name[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectBudget" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ "shared.AED" | translate }} {{ data?.budget | number }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.startDate" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{
+              lang === "en" ?
+              ((data?.startDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+              ((data?.startDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+            }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.endDate" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{
+              lang === "en" ?
+              ((data?.endDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+              ((data?.endDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+            }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.sector" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.sector?.title[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.department" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.department?.title[lang] }}
+          </div>
+        </div>
+
+        <div *ngIf="data?.area">
+          <h4 class="project-details-title mb-2">
+            {{ "projects.area" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.area?.title[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectOrigin" | translate }}
+          </h4>
+
+          <div class="project-details-content" *ngFor="let item of data?.origins">
+            {{ item?.title[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.deliveryType" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.deliveryType?.title[lang] }}
+          </div>
+        </div>
+
+        <div *ngIf="data?.externalEntities?.en || data?.externalEntities?.ar">
+          <h4 class="project-details-title mb-2">
+            {{ "projects.externalEntity" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.externalEntities[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectDescription" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.description[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectInScope" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.projectScope[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectOutOfScope" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.outOfScope[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectOutcomes" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.expectedOutcomes[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ "projects.projectExpectedBenefits" | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.expectedBenefits[lang] }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="priority-card mb-3">
+      <h3>{{ "projects.projectPriority" | translate }}</h3>
+      <span>{{ data?.priorityLevel?.title[lang] }}</span>
+      <div class="mt-2">
+        <app-priority
+          [lang]="lang"
+          [priority]="data?.priorityLevel?.code"
+        ></app-priority>
+      </div>
+    </div>
+
+    <div class="risks-card mb-3" *ngIf="data?.risks?.length !== 0">
+      <h3>{{ "projects.projectRisks" | translate }}</h3>
+      <div class="d-flex flex-column gap-3">
+        <span>{{ "projects.risksSummary" | translate }}:</span>
+        <app-stats-bar [items]="risksStats"></app-stats-bar>
+      </div>
+    </div>
+
+    <div class="deliverables-card">
+      <h3>{{ "projects.deliverables" | translate }}</h3>
+      <div class="d-flex flex-column gap-3">
+        <span>{{ "projects.deliverablesSummary" | translate }}:</span>
+        <app-stats-bar [items]="deliverablesStats"></app-stats-bar>
+      </div>
+    </div>
+  </div>
+
+  <app-model
+    [dimensions]="{ width: 620, height: 750 }"
+    [id]="'select-team'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="onPopupClose()"
+  >
+    <div modal-header class="team-model-header w-100">
+      <label class="modal-title">
+        {{ modalTitle }}
+      </label>
+    </div>
+
+    <div modal-content class="team-model-content border-top">
+      <div class="new-model-dialog-body">
+        <div *ngIf="modalMode === 'internal-members'">
+          <app-team-search
+            class="d-block mt-3"
+            [lang]="lang"
+            [memberToAddType]="memberToAddType"
+            [users]="users"
+          ></app-team-search>
+        </div>
+
+        <div *ngIf="modalMode === 'external-members'">
+          <form class="pb-2" [formGroup]="stakeholderForm">
+            <div class="form-group mt-3 mb-4">
+              <label for="" class="form-label">
+                {{ "projects.fullName" | translate }}:
+              </label>
+              <input formControlName="name" type="text" class="form-control" />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.name?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "projects.companyName" | translate }}:
+              </label>
+              <input
+                formControlName="companyName"
+                type="text"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.companyName?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "projects.email" | translate }}:
+              </label>
+              <input
+                formControlName="email"
+                type="email"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.email?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.email?.errors?.pattern &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.pattern" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "projects.phoneNumber" | translate }}:
+              </label>
+              <input
+                mask="00 000 000"
+                prefix="+971-5"
+                formControlName="phoneNumber"
+                type="tel"
+                dir="ltr"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.phoneNumber?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "projects.position" | translate }}:
+              </label>
+              <input
+                formControlName="position"
+                type="text"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.position?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- footer buttons -->
+      <div class="new-model-dialog-footer">
+
+        <!-- back button -->
+        <button
+          class="btn btn-dark flex-grow-1"
+          (click)="onPopupClose()"
+        >
+          {{ 'shared.back' | translate }}
+        </button>
+
+        <!-- save button -->
+        <button
+          class="btn btn-main flex-grow-1"
+          (click)="submit()"
+        >
+          {{ 'shared.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </app-model>
+</div>
+
+<app-confirm-modal
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteMember()"
+></app-confirm-modal>

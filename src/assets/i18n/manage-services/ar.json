@@ -1,0 +1,30 @@
+{
+  "manageServices": {
+    "serviceTitle": "عنوان الخدمة",
+    "enterServiceTitle": "ادخل عنوان الخدمة",
+    "serviceArabicTitle": "عنوان الخدمة باللغة العربية",
+    "enterServiceArabicTitle": "ادخل عنوان الخدمة باللغة العربية",
+    "serviceDescription": "وصف الخدمة",
+    "enterServiceDescription": "ادخل وصف الخدمة",
+    "serviceCategory": "فئة الخدمة",
+    "selectCategory": "اختر التصنيف",
+    "targetAudience": "الجمهور المستهدف",
+    "selectGroup": "اختر مجموعة",
+    "selectRole": "حدد الدور",
+    "selectForm": "حدد النموذج",
+    "selectProcess": "حدد العملية",
+    "publishThisService": "نشط هذه الخدمة",
+    "category": "الفئة",
+    "form": "النموذج",
+    "process": "العملية",
+    "lastUpdate": "اخر تحديث",
+    "published": "تنشيط",
+    "areYouSureYouWantToUnpublish": "هل أنت متأكد أنك تريد إلغاء تنشيط",
+    "areYouSureYouWantToPublish": "هل أنت متأكد أنك تريد تنشيط",
+    "manageServices": "إدارة الخدمات",
+    "createService": "انشاء خدمة",
+    "newService": "خدمة جديدة",
+    "noDataMsg": "حسنًا .. يبدو أنه ليس لديك أي خدمات",
+    "editService": "تعديل الخدمة"
+  }
+}

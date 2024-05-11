@@ -1,0 +1,46 @@
+@import "src/assets/css/utils/variables.scss";
+
+.main-title {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 21px;
+  color: $tertiary-color;
+}
+
+:host ::ng-deep {
+  .tasks-progress-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .content {
+      height: auto !important;
+      flex-grow: 1;
+    }
+  }
+}
+
+.export-btn {
+  display: flex;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  color: $tertiary-color;
+  cursor: pointer;
+
+  .icon {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $tertiary-color;
+    padding: 3px;
+    width: 29px;
+    height: 29px;
+
+    i {
+      color: #fff;
+      margin: 0;
+    }
+  }
+}

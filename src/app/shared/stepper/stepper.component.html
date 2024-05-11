@@ -1,0 +1,70 @@
+<div class="stepper-container">
+  <header class="stepper-header">
+    <div class="d-flex align-items-center gap-2 w-100 mb-4">
+      <button class="new-back-btn" (click)="back()">
+        <i class="bx bx-left-arrow-alt"></i>
+        <span class="module-title">{{ "initiationForm.requests" | translate }}</span>
+      </button>
+    </div>
+
+    <div class="steps-lists">
+      <span class="steps-title">
+        {{
+          (readonly ? 'initiationForm.details' :'initiationForm.formSteps')
+          | translate
+        }}
+      </span>
+  
+      <ul class="step-list py-3 b">
+        <ng-container *ngFor="let step of steps; let i = index;">
+          <li class="step"
+              [ngClass]="{'active': (selectedIndex === i || step?.completed) || (readonly && selectedIndex === i )}"
+              *ngIf="step.label !== 'Translation' && step.label !== 'Documents'">
+            <a (click)="selectedIndex = i">
+              <ng-container *ngIf="step.stepLabel; else showLabelText"
+                            [ngTemplateOutlet]="step.stepLabel.template">
+              </ng-container>
+              <ng-template #showLabelText>
+                <div class="step-label-number-container">
+                  <span class="step-label-number">{{i + 1}}</span>
+                  <div class="line"
+                       *ngIf="(i + 1) < 4"></div>
+                </div>
+                <div class="step-label-text-container">
+                  <span class="step-label-text">{{ step.label | translate }} </span>
+                  <i class="bx bx-check"
+                     *ngIf="step?.completed || readonly"></i>
+                </div>
+              </ng-template>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+  
+      <ul class="bottom-list mb-0">
+        <li (click)="selectStepByIndex(4)"
+            [class.active]="selectedIndex === 4">
+          <div>
+            <i class="bx bx-file"></i>
+            <span>{{'initiationForm.documents' | translate}}</span>
+          </div>
+          <i class="bx bx-chevron-right"></i>
+        </li>
+        <li (click)="selectStepByIndex(5)"
+            *ngIf="!readonly"
+            [class.active]="selectedIndex === 5">
+          <div>
+            <i class="bx bx-transfer-alt"></i>
+            <span>{{'initiationForm.translation' | translate}}</span>
+          </div>
+          <i class="bx bx-chevron-right"></i>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="stepper-body">
+    <ng-content></ng-content>
+    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  </div>
+</div>

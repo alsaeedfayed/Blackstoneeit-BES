@@ -1,0 +1,111 @@
+<button
+  class="add-new-btn"
+  *ngIf="list?.length > 0 && isUpdating"
+  (click)="openCreateDiscussedItemModel()"
+>
+  <i class="bx bx-plus"></i>
+  {{ "committeeNewMeeting.meetingForm.addNewItem" | translate }}
+</button>
+
+<div class="discussed-list pt-3">
+  <table *ngIf="list?.length > 0">
+    <tr>
+      <th class="discussed-title">
+        {{ "committeeMeetingDetails.discussedItems.title" | translate }}
+      </th>
+      <th class="discussed-description">
+        {{ "committeeMeetingDetails.discussedItems.description" | translate }}
+      </th>
+      <th class="discussed-presented-by">
+        {{ "committeeMeetingDetails.discussedItems.presentedBy" | translate }}
+      </th>
+      <th class="discussed-duration">
+        {{ "committeeMeetingDetails.discussedItems.duration" | translate }}
+      </th>
+      <th *ngIf="isUpdating" class="discussed-actions"></th>
+    </tr>
+    <tr *ngFor="let item of list">
+      <td class="discussed-title">
+        {{ item?.name }}
+      </td>
+      <td
+        class="discussed-description"
+        style="min-width: 200px; max-width: 400px; word-break: break-word"
+      >
+        <ng-container *ngIf="!item?.showMore; else allDescription">
+          {{ item?.description | richTextToText | truncate : 40 }}
+          <a
+            *ngIf="(item?.description | richTextToText).length > 40"
+            (click)="item.showMore = true"
+          >
+            {{ "committeesManagement.seeMore" | translate }}
+          </a>
+        </ng-container>
+        <span *ngIf="!item.description">-</span>
+      </td>
+      <ng-template #allDescription>
+        {{ item?.description | richTextToText }}
+        <a (click)="item.showMore = false">
+          {{ "committeesManagement.seeLess" | translate }}
+        </a>
+      </ng-template>
+      <td class="discussed-presented-by">
+        {{ item?.presenterInfo?.fullName }}
+      </td>
+      <td class="discussed-duration">
+        {{ item?.duration }}
+      </td>
+      <td *ngIf="isUpdating" class="discussed-actions">
+        <button
+          class="edit-grid-item-btn"
+          (click)="openCreateDiscussedItemModel(item)"
+        >
+          <i class="bx bx-edit-alt"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeMeetingDetails.discussedItems.noDataMsg' | translate"
+    ></app-no-data>
+    <button
+      *ngIf="isUpdating"
+      class="btn btn-main"
+      (click)="openCreateDiscussedItemModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "committeeNewMeeting.meetingForm.addNewItem" | translate }}
+    </button>
+  </div>
+
+  <!-- create/edit discussed item model -->
+  <app-model
+    [dimensions]="{ width: 620, height: 750 }"
+    [id]="'create-discussed-item'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="closeCreateDiscussedItemModel()"
+  >
+    <div modal-header class="create-discussed-item-model-header w-100">
+      <label class="modal-title">
+        {{
+          "committeeMeetingDetails.discussedItems.discussedItemsModel" +
+            (discussedItem ? ".editItem" : ".addNewItem") | translate
+        }}
+      </label>
+    </div>
+
+    <div modal-content class="create-discussed-item-model-content border-top">
+      <create-discussed-item-model
+        *ngIf="isDiscussedItemModelOpened"
+        [discussedItemId]="discussedItem?.id"
+        [meetingId]="meetingId"
+        (onCreate)="getMeetingDiscussionItems()"
+        [attendees]="attendees"
+      ></create-discussed-item-model>
+    </div>
+  </app-model>
+</div>

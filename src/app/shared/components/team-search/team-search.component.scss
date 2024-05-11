@@ -1,0 +1,86 @@
+@import "src/assets/css/utils/variables.scss";
+
+.team-cards-container {
+  padding: 0 0.5rem 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  .team-member-card {
+    background: $white-color;
+    border-radius: 8px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 30px 12px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px 1px rgba(123, 123, 123, 0.2);
+    border: 2px solid transparent;
+    user-select: none;
+    width: 49%;
+    margin-bottom: 12px;
+    &:hover {
+      border-color: #f2f4f9;
+    }
+
+    input {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .bxs-check-circle {
+      color: #cbcbcb;
+      font-size: 26px;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+
+    input:checked {
+      & + .bxs-check-circle {
+        color: $primary-color;
+      }
+    }
+
+    .team-member-card-details {
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-inline-end: 9px;
+        border-radius: 50%;
+        object-fit: cover;
+        width: 52px;
+        height: 52px;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+
+        .member-name {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 16px;
+          color: $tertiary-color;
+          margin-bottom: 4px;
+          line-break: normal;
+        }
+
+        .member-position {
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 14px;
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+}
+
+.astrix-red {
+  color: red;
+}

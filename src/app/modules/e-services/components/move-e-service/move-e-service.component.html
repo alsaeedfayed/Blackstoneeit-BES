@@ -1,0 +1,129 @@
+<app-request-header
+  [title]="'EServices.moveEService.headerTitle' | translate"
+  [isValid]="form.valid"
+  (submit)="moveEService()"
+></app-request-header>
+<form class="new-event-form" [formGroup]="form">
+  <h3>
+    {{
+      lang == "en" ? eServiceData?.serviceTitle : eServiceData?.serviceTitleAr
+    }}
+  </h3>
+
+  <div class="row mt-5">
+    <div class="col-12">
+      <app-radio-group
+        class="d-flex"
+        bindValue="id"
+        formControlName="unitCommitteeSwitcher"
+        (valueChanged)="onTypeChange($event)"
+      >
+        <app-radio-box [value]="0">
+          {{ "EServices.createEService.organizationalUnits" | translate }}
+        </app-radio-box>
+        <app-radio-box class="mx-4" [value]="1">
+          {{ "EServices.createEService.committees" | translate }}
+        </app-radio-box>
+      </app-radio-group>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="form.get('unitCommitteeSwitcher').value == 0">
+    <label class="form-label mt-4">
+      {{ "EServices.moveTo" | translate }}
+      <span class="required">*</span>
+    </label>
+
+    <div class="form-group mt-3 col-md-3 col-sm-4 col-12">
+      <app-select
+        [control]="form | getControl : 'sector'"
+        formControlName="sector"
+        [placeholder]="'EServices.selectSector' | translate"
+        [items]="sector"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+        (change)="onSelectChange($event, 1)"
+      ></app-select>
+    </div>
+    <div class="form-group mt-3 col-md-3 col-sm-4 col-12">
+      <app-select
+        [control]="form | getControl : 'department'"
+        [items]="department"
+        formControlName="department"
+        [placeholder]="'EServices.selectDepartment' | translate"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+        (change)="onSelectChange($event, 2)"
+      ></app-select>
+    </div>
+    <div class="form-group mt-3 col-md-3 col-sm-4 col-12">
+      <app-select
+        [control]="form | getControl : 'section'"
+        formControlName="section"
+        [placeholder]="'EServices.selectSection' | translate"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+        [items]="section"
+        (change)="onSelectChange($event, 3)"
+      ></app-select>
+    </div>
+  </div>
+
+  <div class="mt-4" *ngIf="form.get('unitCommitteeSwitcher').value == 1">
+    <div class="row">
+      <div class="col-md-5 col-sm-7 col-12">
+        <app-select
+          class="d-block"
+          [control]="form | getControl : 'commitee'"
+          formControlName="commitee"
+          [placeholder]="'EServices.createEService.commiteeName' | translate"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+          [items]="commitee"
+          [title]="'EServices.createEService.commiteeName' | translate"
+          (change)="onSelectChange($event, 8)"
+        ></app-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group mt-4">
+    <app-text-editor
+      [id]="'movingReason'"
+      formControlName="movingReason"
+      [title]="'EServices.moveEService.movingReason' | translate"
+      [hasAttachments]="false"
+      [control]="form | getControl : 'movingReason'"
+    ></app-text-editor>
+  </div>
+  <div class="form-group mt-4">
+    <app-text-editor
+      [id]="'movingObjective'"
+      formControlName="movingObjective"
+      [title]="'EServices.moveEService.movingObjective' | translate"
+      [hasAttachments]="false"
+      [control]="form | getControl : 'movingObjective'"
+    ></app-text-editor>
+  </div>
+  <div class="form-group mt-4">
+    <app-text-editor
+      [id]="'expectedEffect'"
+      formControlName="expectedEffect"
+      [title]="'EServices.expectedEffects' | translate"
+      [hasAttachments]="false"
+      [control]="form | getControl : 'expectedEffect'"
+    ></app-text-editor>
+  </div>
+
+  <!-- attatchment control -->
+  <div class="form-group mt-4">
+    <app-attachments-files
+      [title]="'EServices.attachment' | translate"
+      [accept]="'doc,docx,pdf'"
+      [maxSize]="5"
+      [control]="form | getControl : 'attachment'"
+      [hint]="'EServices.attachmentHint' | translate"
+      (attachmentUploadEvent)="uploadFile($event)"
+    ></app-attachments-files>
+  </div>
+</form>

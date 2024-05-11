@@ -1,0 +1,178 @@
+<div class="table-main-container">
+  <div class="header">
+    <span class="title">{{ "dashboard.projectsDetails" | translate }}</span>
+    <div class="project-status">
+      <span
+        *ngFor="let status of projectStatus"
+        [ngClass]="{ selected: status.isSelected }"
+        (click)="onFilterByStatus(status.id)"
+      >
+        {{ status.title[lang] }}
+      </span>
+    </div>
+  </div>
+  <div class="content" *ngIf="!isLoading && details?.length">
+    <div class="req-table">
+      <div class="req-table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{ "dashboard.title" | translate }}</th>
+              <th>{{ "dashboard.status" | translate }}</th>
+              <th>{{ "dashboard.progress" | translate }}</th>
+              <th>{{ "dashboard.budget" | translate }}</th>
+              <th>{{ "dashboard.manager" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- | paginate
+                    : {
+                        itemsPerPage: searchModel.pageSize,
+                        currentPage: searchModel.page,
+                        totalItems: totalItems
+                      }
+              " -->
+            <tr
+              *ngFor="
+                let item of details
+                  | paginate
+                    : {
+                        itemsPerPage: searchModel?.pageSize,
+                        currentPage: searchModel?.page,
+                        totalItems: totalItems
+                      }
+              "
+            >
+              <td>
+                <a [routerLink]="'/projects/' + item?.projectId" class="item-name">
+                  {{ item.name[lang] }}
+                </a>
+              </td>
+
+              <td>
+                <span class="project-card-status-badge" [ngClass]="item.statusClass" >
+                  {{ item.status.title[lang] }}
+                </span>
+              </td>
+
+              <td>
+                <p class="wrapper bar-w" [attr.data-progress]="item.acutalProgress || 0 | number: '1.0-0'">
+                  <ngb-progressbar
+                    [type]="progressBarType(item.status.title.en)"
+                    [value]="item.acutalProgress || 0"
+                    [showValue]="true"
+                  ></ngb-progressbar>
+                  <!-- <span
+                    class="line"
+                    [ngStyle]="{
+                      left: lang === 'en' ? item.plannedProgress + '%' : 'auto',
+                      right: lang === 'en' ? 'auto' : item.plannedProgress + '%'
+                    }"
+                  ></span> -->
+                <!-- <span style="font-weight: bold;">{{ item.plannedProgress }}%</span> -->
+                </p>
+                <div style="font-weight: bold;">{{ "dashboard.planned" | translate }}: {{ item.plannedProgress }}%</div>
+                <!-- <div class="progress-wrapper">
+                  <span>{{ "dashboard.actual" | translate }}:</span>
+                  <span class="percentage">{{ item.acutalProgress }}%</span>
+                  <p>
+                    <ngb-progressbar
+                      type="success"
+                      [value]="item.acutalProgress || 0"
+                      [showValue]="true"
+                    ></ngb-progressbar>
+                  </p>
+                </div>
+                <div class="progress-wrapper">
+                  <span>{{ "dashboard.planned" | translate }}:</span>
+                  <span class="percentage">{{ item.plannedProgress }}%</span>
+                  <p>
+                    <ngb-progressbar
+                      type="secondary"
+                      [value]="item.plannedProgress || 0"
+                      [showValue]="true"
+                    ></ngb-progressbar>
+                  </p>
+                </div> -->
+              </td>
+
+              <td>
+                <p class="wrapper wrapper2 budget bar-w" [attr.data-progress]="((item.spentBudget/ 100) * item.budget) || 0 | thousandSuff">
+                  <ngb-progressbar
+                    type="warning"
+                    [value]="item.spentBudget || 0"
+                    [showValue]="true"
+                  ></ngb-progressbar>
+                  <!-- <span
+                    class="line"
+                    [ngStyle]="{
+                      left: lang === 'en' ? item.plannedBudget + '%' : 'auto',
+                      right: lang === 'en' ? 'auto' : item.plannedBudget + '%'
+                    }"
+                  ></span> -->
+                  <span>{{ item.budget | thousandSuff }}</span>
+                </p>
+                <div style="font-weight: bold;">{{ "dashboard.planned" | translate }}: {{ ((item.plannedBudget/ 100) * item.budget ) | thousandSuff}}</div>
+
+                <!-- <div class="progress-wrapper">
+                  <span>{{ "dashboard.spent" | translate }}:</span>
+                  <span class="percentage">{{ item.spentBudget }}%</span>
+                  <p>
+                    <ngb-progressbar
+                      type="success"
+                      [value]="item.spentBudget || 0"
+                      [showValue]="true"
+                    ></ngb-progressbar>
+                  </p>
+                </div>
+                <div class="progress-wrapper">
+                  <span>{{ "dashboard.planned" | translate }}:</span>
+                  <span class="percentage">{{ item.plannedBudget }}%</span>
+                  <p>
+                    <ngb-progressbar
+                      type="secondary"
+                      [value]="item.plannedBudget || 0"
+                      [showValue]="true"
+                    ></ngb-progressbar>
+                  </p>
+                </div> -->
+              </td>
+
+              <td>
+                <person-item
+                  [item]="item.managerItem"
+                  [isTwoWordsOnly]="true"
+                  [noCursor]="true"
+                  [isUserCardFixed]="true"
+                ></person-item>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <pagination-controls
+      *ngIf="totalItems > searchModel?.pageSize"
+      (pageChange)="onPaginate($event)"
+      class="my-pagination"
+      maxSize="5"
+      responsive="true"
+      [previousLabel]="'shared.previous' | translate"
+      [nextLabel]="'shared.next' | translate"
+    ></pagination-controls>
+  </div>
+
+  <div *ngIf="!isLoading && !details?.length" class="mt-100px">
+    <app-empty-state
+      title="{{ 'dashboard.noProjectsFound' | translate }}"
+    ></app-empty-state>
+  </div>
+
+  <div *ngIf="isLoading" class="mt-2">
+    <app-skeleton-loader
+      *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+      class="w-100"
+      [mode]="'table'"
+    ></app-skeleton-loader>
+  </div>
+</div>

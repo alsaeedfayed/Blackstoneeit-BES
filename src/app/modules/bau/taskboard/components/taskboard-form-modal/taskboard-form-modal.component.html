@@ -1,0 +1,72 @@
+<div class="new-model-dialog-body">
+    <div class="step" *ngIf="!isLoading">
+      <div class="plan-start-form mt-2 pb-2" [formGroup]="form">
+        <div class="pt-3">
+          <label class="form-label">
+            {{ "bau.createPlan" | translate }}
+          </label>
+
+          <app-radio-group
+            class="d-flex"
+            bindValue="id"
+            formControlName="creationStatus"
+          >
+            <app-radio-box [value]="'previous'">
+              Copy from previous year
+            </app-radio-box>
+            <app-radio-box [value]="'scratch'" class="ml-5">
+              Create from scratch
+            </app-radio-box>
+          </app-radio-group>
+        </div>
+        <div
+          class="pt-3 mt-2"
+          *ngIf="(form | getControl : 'creationStatus')?.value == 'previous'"
+        >
+          <app-select
+            class="input-select"
+            formControlName="year"
+            [control]="form | getControl : 'year'"
+            [title]="'bau.selectYear' | translate"
+            [placeholder]="'bau.selectYearPlaceholder' | translate"
+            [items]="[2023, 2022]"
+            [bindLabel]="'name'"
+            bindValue="'id'"
+          ></app-select>
+        </div>
+        <div class="mt-2">
+          <app-filed
+            class="d-block pt-3"
+            formControlName="budget"
+            [control]="form | getControl : 'budget'"
+            [title]="'bau.operationBudget' | translate"
+            [placeholder]="'bau.insert' | translate"
+            [isNumber]="true"
+          ></app-filed>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isLoading">
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="onPopupClose()">
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form?.invalid"
+      (click)="onSubmit()"
+    >
+      {{ "shared.save" | translate }}
+    </button>
+  </div>

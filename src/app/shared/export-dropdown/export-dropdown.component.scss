@@ -1,0 +1,80 @@
+@import "src/assets/css/utils/variables.scss";
+
+.dropdown-box {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+
+  .dropdown-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: fit-content;
+    height: 38px;
+    line-height: 38px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    background-color: $white-color;
+    color: $link_water_color;
+    padding: 10px 16px;
+    transition: 0.2s;
+    border: 1px solid $gainsboro_color;
+    border-radius: 0.5rem;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+
+    .chevron-icon {
+      margin-inline-start: 10px;
+      margin-inline-end: 0;
+      vertical-align: bottom;
+      transition: 0.2s;
+    }
+  }
+
+  .dropdown-list {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 10px;
+    background-color: $white-color;
+    border-radius: 0.5rem;
+    line-height: 16px;
+    font-size: 12px;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.04);
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 200;
+
+    .item {
+      padding: 0 5px;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+      height: 0;
+      overflow: hidden;
+      transition: all 0.1s ease;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: $alice_blue_color;
+      }
+    }
+
+    &.show {
+      height: auto;
+      padding: 5px;
+      box-shadow: 1px 1px 15px 0px #0000002b;
+
+      .item {
+        height: 35px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}

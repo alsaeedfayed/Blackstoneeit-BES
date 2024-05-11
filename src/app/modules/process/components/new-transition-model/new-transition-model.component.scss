@@ -1,0 +1,64 @@
+.new-transition-container {
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    form{
+        height: calc(100vh - 200px) !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden;
+        padding-right: 20px;
+    }
+
+}
+
+
+.btn-actions-container {
+    height: 10%;
+    .sub-btn-actions-container{
+        width: 100%;
+        gap: 20px;
+    }
+}
+.radio-button-label {
+    background: #f2f2f2;
+    padding: 12px;
+    color: #c5c6c7;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+  }
+
+
+
+//   :host ::ng-deep  .modal-content {
+//     padding: 0px !important;
+//   }
+
+
+.langBtns-container{
+    position: relative;
+}
+.langBtns{
+position: absolute;
+right: 0;
+top: 0;
+z-index: 1000;
+.lang-btn{
+  background-color: transparent;
+  border: none;
+  color: #c5c6c7;
+}
+.lang-btn-active{
+    color: #5271ff !important;
+}
+}
+.lang-btns-rtl{
+    left: 0 !important;
+    right: unset !important;
+}
+.astrix-red{
+    color: red;
+}

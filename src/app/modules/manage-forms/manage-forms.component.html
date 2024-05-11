@@ -1,0 +1,46 @@
+<app-header-page
+  [title]="'manageForms.manageForms' | translate"
+  [totalItems]="totalItems"
+  [backButton]="true"
+  [showButtons]="isShowCreateButton"
+  [titleBtn]="'manageForms.createForm' | translate"
+  (btnClick)="toFormBuilder()"
+></app-header-page>
+
+<div class="page-data">
+  <ng-container *ngIf="loading; else table_data">
+    <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <app-table
+    *ngIf="forms.length"
+    [totalItems]="totalItems"
+    [forms]="forms"
+  ></app-table>
+  <app-no-data
+    *ngIf="forms.length == 0"
+    msg="{{ 'manageForms.noDataMsg' | translate }}"
+  ></app-no-data>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model [dimensions]="{ width: 856 }" [id]="'new-form'" title="{{ 'manageForms.newForm' | translate }}">
+  <div modal-content class="new-service-popup px-4">
+    <app-create-form
+      *ngIf="isShowForm"
+      (close)="isShowForm = false"
+      (update)="getFormsData()"
+    ></app-create-form>
+  </div>
+</app-model>

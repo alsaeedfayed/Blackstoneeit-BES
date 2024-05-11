@@ -1,0 +1,14 @@
+<div class="vote-progress">
+  <span class="progress-bar" [ngStyle]="{
+    'width': percent + '%',
+    'background-color': color
+  }"></span>
+
+  <div class="users-group">
+    <avatar-stack [members]="users" *ngIf="users?.length > 0"></avatar-stack>
+    <span class="users-count" *ngIf="users?.length > 0">
+      {{ users?.length | votesCount : language }} 
+    </span>
+    <span class="m-auto" *ngIf="users?.length <= 0 ">{{ 'shared.noVotes' | translate }}</span>
+  </div>
+</div>

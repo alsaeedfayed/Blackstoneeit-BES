@@ -1,0 +1,128 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">{{ "requests.requestTitle" | translate }}</th>
+          <th scope="col">{{ "requests.serviceTitle" | translate }}</th>
+          <!-- <th scope="col">{{ "Category" | translate }}</th> -->
+          <th scope="col">{{ "requests.requestedOn" | translate }}</th>
+          <th scope="col">{{ "requests.lastUpdate" | translate }}</th>
+          <th scope="col">{{ "shared.status" | translate }}</th>
+          <th scope="col">{{ "requests.serviceRating" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let request of Requests
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <!-- Id -->
+          <td>
+            <span *ngIf="!allowGoToDetails">{{ request.requestNumber }}</span>
+            <a
+              *ngIf="allowGoToDetails"
+              class="details hoverableLink"
+              [routerLink]="'/requests/request-details/' + request.id"
+              (click)="goToDetails(request.id)"
+            >
+              {{ request.requestNumber }}
+            </a>
+          </td>
+          <!-- Request Title -->
+          <td>
+            <div class="request-title">
+              {{ request.requestTitle }}
+            </div>
+          </td>
+          <!-- Service Title -->
+          <td *ngIf="lang === 'en'">
+            {{ request.serviceName }}
+          </td>
+          <td *ngIf="lang === 'ar'">
+            {{ request.serviceNameAr }}
+          </td>
+          <!-- Category -->
+          <!-- <td>
+            {{ request.cateogryName }}
+          </td> -->
+          <!-- Requested On -->
+          <td>
+            {{
+              lang === "en"
+                ? (request.creationDate | uTCToLocalDate | date : "dd/MM/yyyy")
+                : (request.creationDate
+                  | uTCToLocalDate
+                  | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <!-- Last Update -->
+          <td>
+            {{
+              lang === "en"
+                ? (request.updatedDate | uTCToLocalDate | date : "dd/MM/yyyy")
+                : (request.updatedDate
+                  | uTCToLocalDate
+                  | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <!-- Status -->
+          <td>
+            <app-badge
+              *ngIf="request.status == servicesStatusEnum.Started"
+              [className]="'opened'"
+              [label]="getLabel(request.currentStatus, 'Open')"
+            ></app-badge>
+            <app-badge
+              *ngIf="request.status == servicesStatusEnum.Cancelled"
+              [className]="'cancelled'"
+              [label]="getLabel(request.currentStatus, 'Cancelled')"
+            ></app-badge>
+            <app-badge
+              *ngIf="request.status == servicesStatusEnum.Rejected"
+              [className]="'rejected'"
+              [label]="getLabel(request.currentStatus, 'Rejected')"
+            ></app-badge>
+            <app-badge
+              *ngIf="request.status == servicesStatusEnum.Closed"
+              [className]="'closed'"
+              [label]="getLabel(request.currentStatus, 'Closed')"
+            ></app-badge>
+          </td>
+          <!-- Service Rating -->
+          <td>
+            <bar-rating
+              [rate]="request.rating"
+              [readOnly]="
+                request.rating > 0 &&
+                request.status == servicesStatusEnum.Started
+              "
+              [max]="5"
+              [theme]="'stars'"
+              (rateChange)="setRating($event, request)"
+            ></bar-rating>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPageChange($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

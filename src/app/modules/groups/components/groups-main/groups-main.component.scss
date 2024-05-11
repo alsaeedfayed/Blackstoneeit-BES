@@ -1,0 +1,50 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+@import "src/assets/css/components/badge.scss";
+
+:host ::ng-deep {
+  app-search {
+    .search-bar-container {
+      --input-height: 38px;
+      height: var(--input-height);
+      min-height: var(--input-height);
+      width: 250px;
+
+      input {
+        height: var(--input-height);
+        min-height: var(--input-height);
+        line-height: var(--input-height);
+        background-color: #ffffff !important;
+        border: 1px solid #e1e1e1;
+        @include rtl_value(padding, 0 10px 0 33px, 0 33px 0 10px);
+      }
+
+      i {
+        font-size: 14px;
+        @include rtl_value(left, 10px, auto);
+        @include rtl_value(right, auto, 10px);
+      }
+    }
+  }
+}
+
+.table {
+  --index-width: 50px;
+  --actions-width: 70px;
+
+  .group-index {
+    width: var(--index-width);
+  }
+
+  .group-actions {
+    width: var(--actions-width);
+  }
+}
+
+.rotateY_180deg {
+  transform: rotateY(180deg);
+}
+
+.margin-cards {
+  margin-top: 85px;
+}

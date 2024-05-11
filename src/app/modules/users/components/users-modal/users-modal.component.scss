@@ -1,0 +1,34 @@
+@import "src/assets/css/utils/variables.scss";
+
+:host ::ng-deep {
+  .dropdown-menu.show {
+    transform: translate(0px, 90px) !important;
+    width: 100% !important;
+  }
+
+  .multiselect-dropdown {
+    .selected-item {
+      background-color: $main-color !important;
+
+      span,
+      a {
+        color: $white-color !important;
+      }
+    }
+  }
+
+  ngb-typeahead-window {
+    width: 100% !important;
+    max-height: 250px;
+    overflow-y: auto;
+
+    button:hover,
+    button.active {
+      background-color: #00db99 !important;
+    }
+  }
+}
+
+.astrix-red {
+  color: red;
+}

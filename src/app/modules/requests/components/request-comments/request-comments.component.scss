@@ -1,0 +1,125 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.comments {
+    background: $white-color;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+    height: 100%;
+    position: relative;
+    .header {
+        // display: flex;
+        // align-items: center;
+        // justify-content: space-between;
+        // flex: 1 1 auto;
+        border-bottom: 2px solid $main-color;
+        padding: 1.25rem;
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            .buttons {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                button {
+                    background: white;
+                    border: 1px solid #96A6BD;
+                    color: black;
+                    padding: 4px 18px;
+                    border-radius: 6px;
+                    &:first-of-type {
+                        @include rtl_key(margin-, right, left, 10px);
+                        @include rtl_key(margin-, left, right, 0);
+                    }
+                    i {
+                        &.green {
+                            color: #0FC161;
+                        }
+                        &.red {
+                            color: #FF7373;
+                        }
+                    }
+                }
+            }
+        }
+        
+        .title {
+            color: #96A6BD;
+            font-size: 14px;
+        }
+    }
+    .body {
+        padding: 1.25rem;
+        height: 400px;
+        .noData {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        p {
+            margin-bottom: 0;
+            color: #96A6BD;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .list {
+            width: 100%;
+            min-height: 100px;
+            height: 400px;
+            overflow-y: auto;
+            .comment {
+                margin-top: 15px;
+                .comment-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    flex:  1 1 auto;
+                    .data {
+                        display: flex;
+                      //  align-items: center;
+                        .time {
+                            color: #96A6BD;
+                            font-size: 12px;
+                            font-weight: 500;
+                            padding-top: 4px;
+                            @include rtl_key(padding-, right, left, 0);
+                            @include rtl_key(padding-, left, right, 15px);
+                        }
+                    }
+                    .delete {
+                        i {
+                            color: red;
+                            cursor: pointer;
+                        }
+                    }
+                }
+                p {
+                    color: #292D32;
+                    font-size: 12px;
+                    font-weight: 400;
+                    margin-top: 7px;
+                    word-wrap: break-word;
+                }
+            }
+        }
+    }
+    .footer {
+        padding: 1rem 1.25rem;
+        .input {
+            margin: 10px 0;
+            input {
+                width: 100%;
+                border-radius: 60px;
+                padding: 6px 20px;
+                &.readonly {
+                    background-color: #cac7c7;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

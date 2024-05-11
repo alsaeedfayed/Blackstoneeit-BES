@@ -1,0 +1,26 @@
+<div class="filter-dropdown-box">
+    <button type="button"
+            class="dropdown-btn"
+            (click)="onShow()"
+            [ngClass]="{ show: show || isFilterActive}">
+            <span> {{filterState}}  </span>
+        <i class='bx bx-filter'></i>
+    </button>
+
+    <!-- drop down filter -->
+    <ul class="filter-dropdown-list" [ngClass]="{ show: show }">
+        <li (click)="clear()" class="item clear d-flex justify-content-between">
+            <span> {{'Filter' | translate}} </span>
+            <a> {{'Clear' | translate}} </a> 
+        </li>
+        
+        <div *ngFor="let filter of statusData; index as i">
+            <li class="item"
+            [ngClass]="filter.title.en === 'Verified' ? 'Verified' : 'unVerified' "
+            (click)="onClick(filter.title.en, filter.title[lang])">
+            {{filter.title[lang]}}
+        </li>
+        </div>
+
+    </ul>
+</div>

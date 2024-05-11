@@ -1,0 +1,130 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="scorecard-index">#</th>
+          <th scope="col">{{ "mangeScorecards.name" | translate }}</th>
+          <th scope="col">{{ "mangeScorecards.nameAr" | translate }}</th>
+          <th scope="col">{{ "mangeScorecards.status" | translate }}</th>
+          <th scope="col">{{ "mangeScorecards.creationDate" | translate }}</th>
+          <th scope="col">{{ "mangeScorecards.excutionYear" | translate }}</th>
+          <th scope="col">{{ "mangeScorecards.current" | translate }}</th>
+          <th scope="col" class="scorecard-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let scorecard of scorecards; let i = index">
+          <td class="scorecard-index">
+            {{ i + 1 }}
+          </td>
+          <!-- Title -->
+          <td>
+            {{ scorecard.title }}
+          </td>
+          <!-- Arabic Title -->
+          <td class="Arabic">
+            {{ scorecard.titleAr }}
+          </td>
+          <!-- Status -->
+          <td>
+            <app-badge
+              [className]="getStatusName(scorecard.currentStatus)?.className"
+              [label]="getLevelText(scorecard.currentLevel) + getStatusName(scorecard.currentStatus)?.label"
+            ></app-badge>
+          </td>
+
+          <!-- Creation Date -->
+          <td class="min-width-date">
+            {{
+              language === "en"
+                ? ((scorecard.creationDate | uTCToLocalDate) | date : "dd/MM/yyyy")
+                : ((scorecard.creationDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <!-- Excution Year -->
+          <td>
+            {{ scorecard.excecutionYear }}
+          </td>
+          <!-- Current -->
+          <td class="w-8">
+            <app-switch
+              [disabled]="true"
+              [(ngModel)]="scorecard.current"
+              (click)="openModel(scorecard)"
+            ></app-switch>
+
+            <app-confirm-modal
+              [id]="'confrontation-msg' + scorecard.id"
+              [content]="msgText(scorecard)"
+              [btnContent]="'shared.confirm' | translate"
+              [btnStyle]="'main'"
+              (confirm)="toggleActive(scorecard)"
+            ></app-confirm-modal>
+          </td>
+          <!-- Edit -->
+          <td class="scorecard-actions">
+            <div>
+              <app-dropdown
+                [items]="options"
+                (select)="onOptionSelect($event, scorecard)"
+              ></app-dropdown>
+            </div>
+
+            <app-model
+              [dimensions]="{ width: 620, height: 750 }"
+              [id]="'new-scorecard' + scorecard?.id"
+              [hasBackBtn]="false"
+              [hasTitle]="false"
+              [isNewModel]="true"
+              (close)="closePopup(scorecard)"
+            >
+              <div modal-header class="scorecard-edit-model-header w-100">
+                <label class="modal-title">
+                  {{ 'mangeScorecards.editScorecard' | translate }}
+                </label>
+              </div>
+
+              <div modal-content class="scorecard-edit-model-content border-top">
+                <scorecard-modal
+                  *ngIf="scorecard?.edit"
+                  [Scorecard]="scorecard"
+                  (scorecardEdited)="update($event)"
+                ></scorecard-modal>
+              </div>
+            </app-model>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-confirm-modal
+  [id]="'delete-scorecard'"
+  [content]="deleteConfirmMsg"
+  [btnContent]="'shared.delete' | translate"
+  [btnStyle]="'main'"
+  (confirm)="delete()"
+></app-confirm-modal>
+
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'scorecardStatusDetails'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeDetailsPopup()"
+>
+  <div modal-header class="scorecard-details-model-header w-100">
+    <label class="modal-title">
+      {{ 'mangeScorecards.scorecardStatusDetails' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="scorecard-details-model-content border-top">
+    <scorecard-details-modal
+      *ngIf="isShowDetailsPopup"
+    ></scorecard-details-modal>
+  </div>
+</app-model>

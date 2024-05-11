@@ -1,0 +1,33 @@
+<div class="top-loaded-emps">
+  <div class="top-loaded-emps-title">
+    <h5 style="color: #3c557a;">
+      {{ 'servicesDashboard.workLoad' | translate }}
+    </h5>
+  </div>
+  <div class="top-loaded-emps-content" *ngIf="topLoadedEmps?.length > 0 ;  else noData">
+    <ng-container *ngFor="let topUser of topLoadedEmps; let i = index">
+      <div class="top-loaded-emps-content-row mt-3">
+        <div class="top-loaded-emps-content-row-emp">
+
+          <span class="ml-2">
+            <person-item
+            *ngIf="topUser?.user"
+            [requesterItem]="topUser?.user"
+            [noCursor]="true"
+          ></person-item>
+          </span>
+        </div>
+
+        <div class="top-loaded-emps-content-row-count">
+          {{ topUser.itemsCount }} {{ 'servicesDashboard.items' | translate }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<ng-template #noData>
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <img style="height: 10rem;" src="../../../../../../assets/img/no-data.png" alt="">
+    <div>{{lang == 'en' ? 'No Data' : 'لا توجد داتا'}}</div>
+  </div>
+</ng-template>

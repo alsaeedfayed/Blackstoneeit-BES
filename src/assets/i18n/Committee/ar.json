@@ -1,0 +1,32 @@
+{
+  "committee": {
+    "pageTitle": "اللجان",
+    "new": "اضافة لجنة جديدة",
+    "update":"تعديل لجنة",
+    "name": "الإسم",
+    "nameAr": "الإسم العربي",
+    "chairman": "رئيس الجنه",
+    "members": "الأعضاء",
+    "creationDate": "تاريخ الإنشاء",
+    "lastUpdate": "تاريخ أخر تعديل",
+    "status": "الحاله",
+    "active": "مفعل",
+    "isInactive": "غير مفعل",
+    "activate": "تفعيل",
+    "deactivate": "عدم تفعيل",
+    "noDataMsg": "حسنًا .. يبدو أنه ليس لديك أي لجان",
+    "createForm": "انشاء لجنة",
+    "action": "العمليات",
+    "deactivateSuccessMsg": "تم عدم تفعيل العنصر بنجاح",
+    "activateSuccessMsg": "تم تفعيل العنصر بنجاح",
+    "deleteSuccessMsg": "تم حذف العنصر بنجاح",
+    "deactivateMsg": "هل أنت متأكد من عدم تفعيل العنصر؟",
+    "deleteMsg": "هل أنت متأكد من حذف العنصر؟",
+    "activateMsg": "هل أنت متأكد من تفعيل العنصر؟",
+    "searchMembers": "البحث عن الأعضاء",
+    "enterArabicName": "ادخل اسم اللجنة باللغة العربية",
+    "enterEnglishName": "ادخل اسم اللجنة باللغة الانجليزية",
+    "added": "تمت إضافة اللجنة بنجاح",
+    "updated": "تم تعديل اللجنة بنجاح"
+  }
+}

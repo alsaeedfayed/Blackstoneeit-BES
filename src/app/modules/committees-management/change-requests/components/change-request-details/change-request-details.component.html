@@ -1,0 +1,375 @@
+<!-- page header position -->
+<ng-container *ngIf="loadingData ; else header">
+  <ng-template [ngTemplateOutlet]="skeleton"></ng-template>
+</ng-container>
+
+<!-- buttons and status position -->
+<ng-container *ngIf="loadingData ; else data">
+  <div class="mb-3">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- page header -->
+<ng-template #header>
+  <app-header-page
+    [title]="'changeRequests.details.title' | translate"
+    [backButton]="true"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+    [backTo]="backToUrl"
+  >
+    <div class="d-flex flex-wrap gap-2" buttons>
+      <button
+        *ngIf="modifyInfo.canEdit"
+        class="btn btn-warning"
+        (click)="goToEditCommittee()"
+      >
+        {{ "committeesRequestDetails.draftRequests.edit" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+</ng-template>
+
+<ng-template #data>
+  <!-- action buttons -->
+  <workflow-action-options
+    *ngIf="!modifyInfo.canEdit"
+    buttons
+    class="d-block mb-3"
+    [title]=""
+    [task]="task"
+    [options]="options"
+    [instanceId]="modifyInfo.instanceId"
+    (onSaveAction)="saveAction($event)"
+    (onFormBuilderValuesChange)="getBuildedFormValues($event)"
+    (onActionClicked)="checkAction($event)"
+  >
+    <div *ngIf="!!doesHasDecision" class="justify-content-end d-flex mt-3">
+      <button
+        class="btn btn-main"
+        (click)="exportDataAsPDF()"
+        [disabled]="gettingPreview || notValid"
+      >
+        <i *ngIf="gettingPreview" class="bx bx-loader-alt bx-spin ml-1"></i>
+        <i *ngIf="!gettingPreview" class="bx bxs-file-pdf"></i>
+        {{
+          "committeesRequestDetails.decisionInfo.previewDecision" | translate
+        }}
+      </button>
+    </div>
+  </workflow-action-options>
+
+  <!-- approval timeline -->
+  <workflow-states
+    *ngIf="modifyInfo?.status != '0'"
+    class="d-block mb-3"
+    [steps]="steps"
+    [showTasks]="ShowTasks"
+  ></workflow-states>
+
+  <ng-container
+    *ngIf="
+      isLoading || kpisLoading || mainTasksLoading || StrategicKpisLoading || isFullDataLoading;
+      else details
+    "
+  >
+    <div>
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #details>
+    <div class="d-flex gap-3">
+      <div class="request-details">
+        <div class="modify-header-desc">
+          <h1 class="modify-header-desc-header">
+            {{
+              language == "en"
+                ? modifyInfo?.committeeData?.name
+                : modifyInfo?.committeeData?.nameAr
+            }}
+            <i *ngIf="language === 'en'" class="bx bx-right-arrow-alt"></i>
+            <i *ngIf="language === 'ar'" class="bx bx-left-arrow-alt"></i>
+            {{ modifyInfo?.reason }}
+          </h1>
+
+          <div class="row" *ngIf="modifyInfo?.description?.length > 0">
+            <div class="mb-4" *ngIf="modifyInfo?.description?.length > 0">
+              <div
+                class="angular-editor-description"
+                [innerHTML]="modifyInfo?.description | truncate : descTextLimit"
+              ></div>
+
+              <button
+                class="see-more-btn text-primary"
+                *ngIf="modifyInfo?.description?.length > descTextInitialLimit"
+                (click)="toggleMoreText()"
+              >
+                <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+                  {{ "committeesManagement.seeMore" | translate }}
+                </ng-container>
+                <ng-template #seeLess>
+                  {{ "committeesManagement.seeLess" | translate }}
+                </ng-template>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-label fw-bold d-flex justify-content-between">
+          <div style="font-weight: 500; font-size: 16px; color: #121824">
+            {{
+              language === "en" ? committeeInfo?.name : committeeInfo?.nameAr
+            }}
+          </div>
+          <div class="top-badge">
+            <app-badge
+              [className]="status[modifyInfo?.status]?.className"
+              [label]="
+                language == 'ar'
+                  ? status[modifyInfo?.status]?.nameAr
+                  : status[modifyInfo?.status]?.name
+              "
+            ></app-badge>
+          </div>
+        </div>
+
+        <!-- Request Description -->
+
+        <!-- Committee details section -->
+        <div class="block-content sponsor-info mt-1">
+          <ul class="sponsor-info-list mb-0">
+            <li class="sponsor-info-list-item">
+              <h4 class="block-subtitle mb-2">
+                {{ "committeeDetails.creationDate" | translate }}
+              </h4>
+
+              <div
+                class="sponsor-info-list-item-content"
+                *ngIf="modifyInfo?.creationDate"
+              >
+                {{
+                  language === "en"
+                    ? ((
+                        modifyInfo?.creationDate | uTCToLocalDate
+                      ).toLocaleString() | date : "d MMM y")
+                    : ((
+                        modifyInfo?.creationDate | uTCToLocalDate
+                      ).toLocaleString() | localizeDate : "d MMM y")
+                }}
+              </div>
+            </li>
+
+            <li class="sponsor-info-list-item">
+              <h4 class="block-subtitle mb-2">
+                {{ "committeeDetails.createdBy" | translate }}
+              </h4>
+
+              <div class="sponsor-info-list-item-content">
+                <person-item
+                  *ngIf="modifyInfo?.creatorInfo"
+                  [requesterItem]="modifyInfo?.creatorInfo"
+                  [noCursor]="true"
+                ></person-item>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- tabs -->
+    <div class="table-wrapper mt-4 chrtabs">
+      <app-tabs class="d-block mt-1">
+        <!-- changed data items tab -->
+        <app-tab [title]="'changeRequests.details.changedData' | translate">
+          <!-- basic information table  -->
+          <div>
+            <h1
+              class="noDataHeader"
+              *ngIf="!bacisInfoList || bacisInfoList.length == 0"
+            >
+              {{ "changeRequests.details.basicInfo" | translate }}
+            </h1>
+            <app-basic-information-rows
+              [basicInfoList]="bacisInfoList"
+              [noDataMsg]="
+                'changeRequests.details.noDataChangedData' | translate
+              "
+              [lang]="language"
+              [title]="'changeRequests.details.basicInfo' | translate"
+            ></app-basic-information-rows>
+          </div>
+
+          <!-- members table -->
+          <div class="mt-2">
+            <h1
+              class="noDataHeader"
+              *ngIf="!changedDataMembers || changedDataMembers?.length < 1"
+            >
+              {{ "changeRequests.details.members" | translate }}
+            </h1>
+            <app-changed-data-members
+              [changedDataMembers]="changedDataMembers"
+              [lang]="language"
+            ></app-changed-data-members>
+          </div>
+
+          <!-- kpis table -->
+          <div class="mt-2">
+            <h1
+              class="noDataHeader"
+              *ngIf="!changedKpis || changedKpis?.length < 1"
+            >
+              {{ "changeRequests.details.kpi" | translate }}
+            </h1>
+            <app-changed-kpis-rows
+              [changedKpis]="changedKpis"
+              [lang]="language"
+              (kpiItem)="openKpiModal($event)"
+            ></app-changed-kpis-rows>
+          </div>
+
+          <!-- main tasks table -->
+
+          <div class="mt-2">
+            <h1
+              class="noDataHeader"
+              *ngIf="!changedMainTasks || changedMainTasks?.length < 1"
+            >
+              {{ "changeRequests.details.mainTasks" | translate }}
+            </h1>
+            <app-changed-main-taskes
+              [changedMainTasks]="changedMainTasks"
+              [lang]="language"
+              (tasksRow)="openTaskModal($event)"
+            ></app-changed-main-taskes>
+          </div>
+        </app-tab>
+
+        <!-- full committee tab -->
+        <app-tab
+          [title]="'changeRequests.details.fullCommitteeDetails' | translate"
+        >
+          <section class="info-container w-100">
+            <div class="request-details">
+              <committee-info-panel
+                [committeeInfo]="committeeInfo"
+                [language]="language"
+                [kpis]="kpis"
+                [mainTasks]="mainTasks"
+                [goaltreeData]="goaltreeData"
+                [importedKPIsCount]="importedKPIsCount"
+                (openTaskModal)="openTasksModal($event)"
+                (openKpiModal)="openKpisModal($event)"
+              ></committee-info-panel>
+            </div>
+            <div class="members-list block-content">
+              <app-committee-members-column
+                [language]="language"
+                [members]="modifyInfo.committeeData?.members"
+              ></app-committee-members-column>
+            </div>
+          </section>
+        </app-tab>
+      </app-tabs>
+    </div>
+
+    <!-- decision details -->
+    <app-committee-decision-info
+      *ngIf="modifyInfo?.decisionNumber"
+      [language]="language"
+      [decisionNumber]="modifyInfo?.decisionNumber"
+      [decisionText]="modifyInfo?.decisionText"
+      [url]="exportUrl + '/' + modifyInfo?.id"
+      [fileName]="fileName"
+    ></app-committee-decision-info>
+  </ng-template>
+</ng-template>
+
+<!-- ========================= start here ============================ -->
+
+<!-- (committeeInfo.goalIds?.length > 0 && StrategicKpisLoading) -->
+
+<!-- modal to confirm delete request -->
+<app-confirm-modal
+  [id]="'delete-request'"
+  [content]="
+    'committeesRequestDetails.draftRequests.deleteRequestConfirmMsg' | translate
+  "
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteRequest()"
+></app-confirm-modal>
+
+<!-- kpis details modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'changed-kpis-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="changed-kpis-details w-100">
+    <label class="modal-title">
+      {{ "changeRequests.details.updatedDetails" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="changedKpis-model-content border-top">
+    <ng-container *ngIf="kpisDetailsLoader; else changedKpisDetails">
+      <div class="my-4">
+        <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+      </div>
+    </ng-container>
+
+    <ng-template #changedKpisDetails>
+      <app-changed-kpis-modal
+        *ngIf="!kpisDetailsLoader"
+        [language]="language"
+        [changedDataKpis]="changedKpisData"
+        [kpiDetails]="kpisDetails"
+        [isAddedKpi]="isAddedKpi"
+        (closeKpisModal)="closeKpisModal()"
+      ></app-changed-kpis-modal>
+    </ng-template>
+  </div>
+</app-model>
+
+<!-- main tasks details modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'changed-main-tasks-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="changed-kpis-details w-100">
+    <label class="modal-title">
+      {{ "changeRequests.details.updatedDetails" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="changedKpis-model-content border-top">
+    <app-changed-main-tasks-modal
+      *ngIf="!tasksDetailsLoader; else skeleton"
+      [changedDataTasks]="changedMainTasksData"
+      [taskDetails]="tasksDetails"
+      [language]="language"
+      [isAddedTask]="isAddedTask"
+      (closeTasksDetailsModal)="closeTasksDetailsModal()"
+    ></app-changed-main-tasks-modal>
+  </div>
+</app-model>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

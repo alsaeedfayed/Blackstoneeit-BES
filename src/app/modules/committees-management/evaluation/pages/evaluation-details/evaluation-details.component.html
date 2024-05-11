@@ -1,0 +1,898 @@
+<ng-container
+  *ngIf="
+    loadingData || loadingStatistics || isLoadingMembersPerformance;
+    else details_data
+  "
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #details_data>
+  <app-header-page
+    [title]="'committeesEvaluations.details.title' | translate"
+    [backButton]="true"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+  >
+    <!-- [backTo]="'/committees-management/evaluation'" -->
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <app-button
+        *ngIf="evaluation?.canCancelAudit"
+        [permission]="cancelEvaluationPermission"
+      >
+        <button
+          class="btn btn-secondary"
+          (click)="cancelEvaluationBtn()"
+          [disabled]="cancelEvaluationLoading"
+        >
+          <i
+            *ngIf="cancelEvaluationLoading"
+            class="bx bx-loader-alt bx-spin me-4"
+          ></i>
+          {{ "committeesEvaluations.details.cancel" | translate }}
+        </button>
+      </app-button>
+      <app-button
+        *ngIf="evaluation?.canCloseAudit"
+        [permission]="closeEvaluationPermission"
+      >
+        <button class="btn btn-main" (click)="approveAndCloseAudit()">
+          {{ "committeesEvaluations.details.approveBtn" | translate }}
+        </button>
+      </app-button>
+    </div>
+  </app-header-page>
+
+  <section>
+    <!-- basic info block -->
+    <div class="block-item">
+      <!-- title and status -->
+      <div
+        class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3"
+      >
+        <h3 class="block-title mb-0 block-main-title">
+          <!-- {{ language == "en" ? evaluation?.typeName : evaluation?.typeNameAr }} -->
+
+          {{
+            language == "en"
+              ? evaluation?.committeeName
+              : evaluation?.committeeNameAr
+          }}
+        </h3>
+
+        <app-badge
+          [className]="statuses[evaluation?.status]['className']"
+          [label]="
+            language == 'en'
+              ? statuses[evaluation?.status]['name']
+              : statuses[evaluation?.status]['nameAr']
+          "
+        ></app-badge>
+      </div>
+
+      <!-- description -->
+      <div class="row" *ngIf="evaluation?.description?.length > 0">
+        <div class="mb-4">
+          <div
+            class="angular-editor-description"
+            [innerHTML]="evaluation?.description | truncate : descTextLimit"
+          ></div>
+
+          <button
+            class="see-more-btn text-primary"
+            *ngIf="evaluation?.description?.length > descTextInitialLimit"
+            (click)="toggleMoreText()"
+          >
+            <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+              {{ "committeesManagement.seeMore" | translate }}
+            </ng-container>
+            <ng-template #seeLess>
+              {{ "committeesManagement.seeLess" | translate }}
+            </ng-template>
+          </button>
+        </div>
+      </div>
+
+      <!-- Type & period -->
+      <div class="d-flex justify-content-start gap-4 my-2 creationBasicInfo">
+        <!-- type -->
+        <div class="d-flex flex-column gap-3" [ngClass]="language">
+          <span class="block-subtitle">
+            {{ "committeesEvaluations.details.type" | translate }}
+          </span>
+          <span>
+            {{
+              language == "en" ? evaluation?.typeName : evaluation?.typeNameAr
+            }}
+          </span>
+        </div>
+
+        <!-- period -->
+        <div class="creationBasicInfo-period gap-3" [ngClass]="language">
+          <div>
+            <span class="block-subtitle">
+              {{ "committeesEvaluations.details.period" | translate }}
+            </span>
+          </div>
+          <div>
+            <span *ngIf="evaluation?.from && evaluation?.to" class="">
+              {{
+                language == "en"
+                  ? ((evaluation?.from | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((evaluation?.from | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+              -
+              {{
+                language == "en"
+                  ? ((evaluation?.to | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((evaluation?.to | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </div>
+        </div>
+
+        <!-- created by -->
+        <div class="d-flex flex-column gap-3">
+          <span class="block-subtitle">
+            {{ "committeesEvaluations.details.createdBy" | translate }}
+          </span>
+          <person-item
+            *ngIf="evaluation?.createdByInfo"
+            [requesterItem]="evaluation?.createdByInfo"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+
+      <!-- attachments -->
+      <div *ngIf="oldAttachments.length > 0">
+        <!-- <div class="horizontal-line "></div> -->
+        <h3 class="block-main-title my-3">
+          {{ "shared.attachments" | translate }}
+        </h3>
+        <ng-container>
+          <uploaded-attachments-files
+            class="d-block mt-3"
+            [files]="oldAttachments"
+            [canDeleted]="false"
+            [old]="true"
+          ></uploaded-attachments-files>
+        </ng-container>
+      </div>
+
+      <!-- horizontal line -->
+      <!-- <div class="horizontal-line"></div> -->
+      <!-- attachments -->
+      <!-- <h3 class="block-main-title mb-2">
+        {{ "shared.attachments" | translate }}
+      </h3>
+      <ng-container *ngIf="oldAttachments.length > 0; else noFiles">
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          [canDeleted]="false"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </ng-container> -->
+    </div>
+
+    <!-- tabs - committee performance and member performance -->
+    <div class="block-item-tabs my-3 evaluationTabs">
+      <app-tabs class="d-block my-3" [ngClass]="language">
+        <!-- committee performance tab -->
+        <app-tab
+          [icon]="'bx bx-bar-chart-square'"
+          [title]="
+            'committeesEvaluations.details.committeePerformance' | translate
+          "
+        >
+          <div class="committee-performance-blocks">
+            <!-- Attendance rate block -->
+            <div class="committee-performance-blocks-block">
+              <div
+                style="
+                  width: 12rem;
+                  position: relative !important;
+                  top: -2.1rem !important;
+                "
+              >
+                <app-guage-drawer
+                  [value]="evaluationStatistics?.attendanceRate"
+                  [foregroundColor]="'#EB9400'"
+                  [backgroundColor]="'#d6d6d6'"
+                  [type]="'semi'"
+                  [thick]="15"
+                  [icon]="'bx bx-group'"
+                  [iconColor]="'#EB9400'"
+                  [text]="
+                    'committeesEvaluations.details.attendanceRate' | translate
+                  "
+                ></app-guage-drawer>
+
+                <div class="committee-performance-blocks-block-info">
+                  <div class="d-flex justify-content-between">
+                    <span class="committee-performance-blocks-block-info-lable">
+                      {{
+                        "committeesEvaluations.details.meetingsCount"
+                          | translate
+                      }}
+                    </span>
+                    <span class="committee-performance-blocks-block-info-value">
+                      {{ evaluationStatistics?.meetingCount }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- kpi block  -->
+            <div class="committee-performance-blocks-block">
+              <div
+                style="
+                  width: 12rem;
+                  position: relative !important;
+                  top: -1rem !important;
+                "
+              >
+                <app-guage-drawer
+                  [value]="evaluationStatistics?.kpIsPerformance"
+                  [foregroundColor]="'#0165FF'"
+                  [backgroundColor]="'#d6d6d6'"
+                  [type]="'semi'"
+                  [thick]="15"
+                  [icon]="'bx bx-trending-up'"
+                  [iconColor]="'#0165FF'"
+                  [text]="
+                    'committeesEvaluations.details.kpiPerformance' | translate
+                  "
+                ></app-guage-drawer>
+
+                <div class="committee-performance-blocks-block-info">
+                  <div class="d-flex justify-content-between">
+                    <span
+                      class="committee-performance-blocks-block-info-lable-offtrack"
+                    >
+                      {{ "committeesEvaluations.details.offTrack" | translate }}
+                    </span>
+                    <span class="committee-performance-blocks-block-info-value">
+                      {{ evaluationStatistics?.kpiOffTrackCount }}
+                    </span>
+                  </div>
+
+                  <div class="d-flex justify-content-between my-2">
+                    <span
+                      class="committee-performance-blocks-block-info-lable-ontrack"
+                    >
+                      {{ "committeesEvaluations.details.onTrack" | translate }}
+                    </span>
+                    <span class="committee-performance-blocks-block-info-value">
+                      {{ evaluationStatistics?.kpiOnTrackCount }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- task progress block -->
+            <div class="committee-performance-blocks-block">
+              <div style="width: 12rem">
+                <app-guage-drawer
+                  [value]="evaluationStatistics?.tasksProgress"
+                  [foregroundColor]="'#9C5BEF'"
+                  [backgroundColor]="'#d6d6d6'"
+                  [type]="'semi'"
+                  [thick]="15"
+                  [icon]="'bx bx-extension bx-flip-horizontal'"
+                  [iconColor]="'#9C5BEF'"
+                  [text]="
+                    'committeesEvaluations.details.taskProgress' | translate
+                  "
+                ></app-guage-drawer>
+
+                <div class="committee-performance-blocks-block-info">
+                  <div class="d-flex justify-content-between">
+                    <span
+                      class="committee-performance-blocks-block-info-lable-offtrack"
+                    >
+                      {{ "committeesEvaluations.details.offTrack" | translate }}
+                    </span>
+                    <span class="committee-performance-blocks-block-info-value">
+                      {{ evaluationStatistics?.mainTasksOffTrackCount }}
+                    </span>
+                  </div>
+
+                  <div class="d-flex justify-content-between my-2">
+                    <span
+                      class="committee-performance-blocks-block-info-lable-ontrack"
+                    >
+                      {{ "committeesEvaluations.details.onTrack" | translate }}
+                    </span>
+                    <span class="committee-performance-blocks-block-info-value">
+                      {{ evaluationStatistics?.mainTasksOnTrackCount }}
+                    </span>
+                  </div>
+
+                  <div class="d-flex justify-content-between my-2">
+                    <span
+                      class="committee-performance-blocks-block-info-lable-completed"
+                    >
+                      {{
+                        "committeesEvaluations.details.completed" | translate
+                      }}
+                    </span>
+                    <span class="committee-performance-blocks-block-info-value">
+                      {{ evaluationStatistics?.mainTasksCompletedCount }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-tab>
+
+        <!-- member performance tab -->
+        <app-tab
+          [title]="
+            'committeesEvaluations.details.membersPerformance' | translate
+          "
+          [icon]="'bx bx-group'"
+        >
+          <!-- Members Table -->
+
+          <div class="table mt-4">
+            <div class="table-wrapper memberPerformanceTable">
+              <table class="table" style="border-radius: unset">
+                <thead>
+                  <tr>
+                    <th scope="col" class="col-header-performance personName">
+                      {{ "committeesEvaluations.details.name" | translate }}
+                    </th>
+
+                    <th scope="col" class="col-header-performance attRate">
+                      {{
+                        "committeesEvaluations.details.attendanceRate"
+                          | translate
+                      }}
+                    </th>
+
+                    <th scope="col" class="col-header-performance taskProg">
+                      {{
+                        "committeesEvaluations.details.taskProgress" | translate
+                      }}
+                    </th>
+
+                    <th scope="col" class="committee-name">
+                      <i
+                        *ngIf="!isOpen"
+                        (click)="expandTable()"
+                        class="bx bx-plus expandTable"
+                      ></i>
+                      <i
+                        *ngIf="isOpen"
+                        (click)="closeTable()"
+                        class="bx bx-minus expandTable"
+                      ></i>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="ev-tbody">
+                  <tr
+                    *ngFor="
+                      let item of membersPerformance
+                        | paginate
+                          : {
+                              itemsPerPage: paginationModel?.pageSize,
+                              currentPage: paginationModel?.pageIndex,
+                              totalItems
+                            };
+                      let i = index
+                    "
+                    (click)="clickRow(item)"
+                    class="table-tr"
+                    [ngClass]="{
+                      trActiveBackgroun: openIds?.includes(item?.member?.id)
+                    }"
+                  >
+                    <td
+                      class="person d-flex"
+                      [ngClass]="{
+                        activePersonItem: openIds?.includes(item?.member?.id)
+                      }"
+                    >
+                      <person-item
+                        [requesterItem]="item?.member"
+                        [noCursor]="true"
+                      ></person-item>
+                    </td>
+                    <td class="prog">
+                      <ng-container *ngIf="item?.invited; else notInvited">
+                        <div class="progressPresent">
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="progress-bar flex-grow-1">
+                              <span
+                                class="fill {{
+                                  item?.attendanceRate | progressColor
+                                }}"
+                                [ngStyle]="{
+                                  width: item?.attendanceRate + '%'
+                                }"
+                              ></span>
+                            </div>
+                            <span class="percentage">
+                              {{ item.attendanceRate | number }}%
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="my-4 d-flex gap-5"
+                          *ngIf="openIds?.includes(item?.member?.id)"
+                        >
+                          <div class="d-flex flex-column gap-2">
+                            <span class="attendCount">
+                              {{ item?.attendedCount }}
+                            </span>
+                            <span class="AttendStatus">
+                              {{
+                                "committeesEvaluations.details.attended"
+                                  | translate
+                              }}
+                            </span>
+                          </div>
+                          <div class="sperateBorder"></div>
+                          <div class="d-flex flex-column gap-2">
+                            <span class="attendCountAbsent">
+                              {{ item?.absentCount }}
+                            </span>
+                            <span class="AttendStatus">
+                              {{
+                                "committeesEvaluations.details.absent"
+                                  | translate
+                              }}
+                            </span>
+                          </div>
+                          <div class="sperateBorder"></div>
+                          <div class="d-flex flex-column gap-2">
+                            <span class="attendCount">
+                              {{ item?.absentWithJustificationCount }}
+                            </span>
+                            <span class="AttendStatus">
+                              {{
+                                "committeesEvaluations.details.absentJust"
+                                  | translate
+                              }}
+                            </span>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </td>
+                    <td class="committee-name">
+                      <ng-container *ngIf="item?.invited; else notInvited">
+                        <div class="progressPresent">
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="progress-bar flex-grow-1">
+                              <span
+                                class="fill {{
+                                  item?.taskProgress | progressColor
+                                }}"
+                                [ngStyle]="{ width: item?.taskProgress + '%' }"
+                              ></span>
+                            </div>
+                            <span class="percentage">
+                              {{ item.taskProgress | number }}%
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="my-4 d-flex gap-5"
+                          *ngIf="openIds?.includes(item?.member?.id)"
+                        >
+                          <div class="d-flex flex-column gap-2">
+                            <span class="attendCount">
+                              {{ item?.taskCount }}
+                            </span>
+                            <span class="AttendStatus">
+                              {{
+                                "committeesEvaluations.details.total"
+                                  | translate
+                              }}
+                            </span>
+                          </div>
+                          <div class="sperateBorder"></div>
+                          <div class="d-flex flex-column gap-2">
+                            <span class="attendCount">
+                              {{ item?.offTaskCount }}
+                            </span>
+                            <span class="AttendStatus">
+                              {{
+                                "committeesEvaluations.details.offTrack"
+                                  | translate
+                              }}
+                            </span>
+                          </div>
+                          <div class="sperateBorder"></div>
+                          <div class="d-flex flex-column gap-2">
+                            <span class="attendCount">
+                              {{ item?.onTrackTaskCount }}
+                            </span>
+                            <span class="AttendStatus">
+                              {{
+                                "committeesEvaluations.details.onTrack"
+                                  | translate
+                              }}
+                            </span>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </td>
+                    <td>
+                      <i
+                        *ngIf="item?.invited"
+                        [ngClass]="{
+                          rotateIcon: openIds?.includes(item?.member?.id)
+                        }"
+                        style="cursor: pointer; font-size: 14px"
+                        class="bx bx-chevron-down"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </app-tab>
+      </app-tabs>
+    </div>
+
+    <!-- Observations -->
+    <div class="block-item">
+      <!-- observations header -->
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="block-main-title">
+          {{ "committeesEvaluations.details.observations" | translate }}
+        </h3>
+        <app-button
+          *ngIf="evaluation?.canAddObservation"
+          [permission]="createObservationPermission"
+        >
+          <a class="btn btn-dark" (click)="openNewObservationModel()">
+            <i class="bx bx-plus"></i>
+            {{ "committeesEvaluations.details.newObservation" | translate }}
+          </a>
+        </app-button>
+      </div>
+
+      <!-- observation table -->
+      <table
+        [ngStyle]="{ 'margin-right': language === 'en' ? '' : '-1rem' }"
+        [ngStyle]="{ 'margin-left': language === 'en' ? '-1rem' : '' }"
+        class="my-4"
+        *ngIf="evaluation?.observations?.length > 0"
+      >
+        <tr>
+          <th class="observation-title">
+            {{ "committeesEvaluations.details.table.title" | translate }}
+          </th>
+          <th class="">
+            {{ "committeesEvaluations.details.table.description" | translate }}
+          </th>
+          <th class="">
+            {{ "committeesEvaluations.details.table.topic" | translate }}
+          </th>
+          <th class="">
+            {{ "committeesEvaluations.details.table.status" | translate }}
+          </th>
+          <th class="">
+            {{ "committeesEvaluations.details.table.comments" | translate }}
+          </th>
+          <th class=""></th>
+        </tr>
+        <tr *ngFor="let observation of evaluation?.observations">
+          <td class="observation-title">
+            {{ language == "en" ? observation?.title : observation?.titleAr }}
+          </td>
+          <td class="observation-description">
+            <div class="angular-editor-description">
+              <ng-container *ngIf="!observation?.showMore; else allDescription">
+                {{ observation?.description | richTextToText | truncate : 60 }}
+                <a
+                  class="see-more"
+                  *ngIf="
+                    (observation?.description | richTextToText).length > 60
+                  "
+                  (click)="observation.showMore = true"
+                >
+                  {{ "committeesManagement.seeMore" | translate }}
+                </a>
+              </ng-container>
+              <ng-template #allDescription>
+                {{ observation?.description | richTextToText }}
+                <a class="see-more" (click)="observation.showMore = false">
+                  {{ "committeesManagement.seeLess" | translate }}
+                </a>
+              </ng-template>
+            </div>
+          </td>
+          <td class="">
+            {{
+              language == "en" ? observation?.typeName : observation?.typeNameAr
+            }}
+          </td>
+          <td class="">
+            <app-badge
+              [className]="
+                observationsStatuses[observation?.status]['className']
+              "
+              [label]="
+                language == 'en'
+                  ? observationsStatuses[observation?.status]['name']
+                  : observationsStatuses[observation?.status]['nameAr']
+              "
+            ></app-badge>
+          </td>
+          <td class="">
+            <a class="hoverableLink" (click)="openCommentsModel(observation)">
+              {{ observation?.commentsCount | commentsCount : language }}
+            </a>
+          </td>
+          <td class="observation-actions">
+            <app-button
+              *ngIf="
+                !observation.loadingAction && evaluation?.canAddObservation
+              "
+              [permission]="
+                observation?.status == 2
+                  ? reopenObservationPermission
+                  : closeObservationPermission
+              "
+            >
+              <!-- status 2 means that observation is closed and we need the permission to open it  -->
+              <a
+                [class]="observationsAction[observation?.status]['className']"
+                (click)="takeObservationActionBtn(observation)"
+              >
+                {{
+                  language == "en"
+                    ? observationsAction[observation?.status]["name"]
+                    : observationsAction[observation?.status]["nameAr"]
+                }}
+              </a>
+              <i
+                *ngIf="observation.loadingAction"
+                class="bx bx-loader-alt bx-spin me-4"
+              ></i>
+            </app-button>
+          </td>
+        </tr>
+      </table>
+
+      <div
+        class="no-data"
+        *ngIf="
+          evaluation?.observations?.length == 0 || !evaluation?.observations
+        "
+      >
+        <app-no-data
+          [msg]="
+            'committeesEvaluations.details.table.noObservations' | translate
+          "
+        ></app-no-data>
+      </div>
+    </div>
+
+    <!-- description -->
+    <!-- <div class="row" *ngIf="evaluation?.description?.length > 0">
+      <div class="mb-4">
+        <div
+          class="angular-editor-description"
+          [innerHTML]="evaluation?.description | truncate : descTextLimit"
+        ></div>
+
+        <button
+          class="see-more-btn text-primary"
+          *ngIf="evaluation?.description?.length > descTextInitialLimit"
+          (click)="toggleMoreText()"
+        >
+          <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+            {{ "committeesManagement.seeMore" | translate }}
+          </ng-container>
+          <ng-template #seeLess>
+            {{ "committeesManagement.seeLess" | translate }}
+          </ng-template>
+        </button>
+      </div>
+    </div> -->
+
+    <!-- Type & period -->
+
+    <!-- horizontal line -->
+
+    <!-- observations header -->
+    <!-- <div class="d-flex justify-content-between align-items-center">
+      <h3 class="block-main-title">
+        {{ "committeesEvaluations.details.observations" | translate }}
+      </h3>
+      <app-button
+        *ngIf="evaluation?.canAddObservation"
+        [permission]="createObservationPermission"
+      >
+        <a class="btn btn-main" (click)="openNewObservationModel()">
+          <i class="bx bx-plus"></i>
+          {{ "committeesEvaluations.details.newObservation" | translate }}
+        </a>
+      </app-button>
+    </div> -->
+
+    <!-- observation table -->
+
+    <!-- comments & recommendations-->
+    <div *ngIf="evaluation?.recommendation?.length > 0">
+      <div class="block-item my-1">
+        <h3 class="block-title block-main-title">
+          {{ "committeesEvaluations.details.finalComment" | translate }}
+        </h3>
+        <!-- recommendation -->
+        <div
+          class="row recommendations mx-0"
+          *ngIf="evaluation?.recommendation?.length > 0"
+        >
+          <div class="mb-1">
+            <div>
+              <div
+                class="angular-editor-description mt-3"
+                [innerHTML]="
+                  evaluation?.recommendation | truncate : descTextLimit2
+                "
+              ></div>
+
+              <button
+                class="see-more-btn text-primary"
+                *ngIf="
+                  evaluation?.recommendation.length > descTextInitialLimit2
+                "
+                (click)="toggleMoreText2()"
+              >
+                <ng-container *ngIf="!isDescMoreTextDisplayed2; else seeLess2">
+                  {{ "committeesManagement.seeMore" | translate }}
+                </ng-container>
+                <ng-template #seeLess2>
+                  {{ "committeesManagement.seeLess" | translate }}
+                </ng-template>
+              </button>
+            </div>
+          </div>
+          <!-- horizontal line -->
+          <!-- <div class="horizontal-line"></div> -->
+          <!-- attachments -->
+          <div *ngIf="recommendationAttachments?.length > 0">
+            <h3 class="block-main-title mb-1">
+              {{ "shared.attachments" | translate }}
+            </h3>
+            <ng-container>
+              <uploaded-attachments-files
+                class="d-block my-2"
+                [files]="recommendationAttachments"
+                [canDeleted]="false"
+                [old]="true"
+              ></uploaded-attachments-files>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noComment class="no-data">
+      {{ "shared.noData" | translate }}
+    </ng-template>
+  </section>
+</ng-template>
+<!-- new observation model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'new-observation'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{
+        "committeesEvaluations.newObservationModel.newObservation" | translate
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="border-top">
+    <app-new-observation-model
+      *ngIf="isNewObservationModelOpen"
+      [evaluationId]="evaluationId"
+      [language]="language"
+    ></app-new-observation-model>
+  </div>
+</app-model>
+<!--  observation comments model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'observation-comments'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">{{ "shared.comments" | translate }}</label>
+  </div>
+  <div modal-content class="border-top">
+    <app-observation-comments-model
+      *ngIf="isCommentModelOpen"
+      [observationId]="selectedObservation?.id"
+      [language]="language"
+      [canAddComment]="selectedObservation?.canAddComment"
+    ></app-observation-comments-model>
+  </div>
+</app-model>
+
+<!--  close evaluation model -->
+<app-model
+  [dimensions]="{ width: 720, height: 750 }"
+  [id]="'close-evaluation'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{ "committeesEvaluations.details.closeModel.title" | translate }}
+    </label>
+  </div>
+  <div modal-content class="border-top">
+    <app-approve-and-close-evaluation-model
+      *ngIf="isCloseEvaluationModelOpen"
+      [evaluationId]="evaluationId"
+      [evaluationStatistics]="evaluationStatistics"
+      [language]="language"
+      (onClose)="closePopup()"
+    ></app-approve-and-close-evaluation-model>
+  </div>
+</app-model>
+
+<!-- modal to confirm status changing -->
+<app-confirm-modal
+  [id]="'change-status'"
+  [content]="confirmMsg | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="takeObservationAction()"
+></app-confirm-modal>
+
+<!-- modal to confirm cancel evaluation -->
+<app-confirm-modal
+  [id]="'cancel-evaluation'"
+  [content]="'committeesEvaluations.details.confirmCancel' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="cancelEvaluation()"
+></app-confirm-modal>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<ng-template #noFiles>
+  <div class="text-center py-5">
+    {{ "shared.noDocuments" | translate }}
+  </div>
+</ng-template>
+
+<ng-template #notInvited>-</ng-template>

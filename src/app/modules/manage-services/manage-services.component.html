@@ -1,0 +1,77 @@
+<app-header-page
+  [title]="'manageServices.manageServices' | translate"
+  [totalItems]="totalItems"
+  [backButton]="true"
+  [isSearch]="true"
+  [showButtons]="isShowCreateButton"
+  [titleBtn]="'manageServices.createService' | translate"
+  (search)="handleSearchValueFilter($event)"
+  (btnClick)="openServicePopup()"
+></app-header-page>
+
+<app-filter-services
+  class="d-block"
+  (categoryFilterEvent)="handleCategoryFilter($event)"
+></app-filter-services>
+
+<div class="page-data">
+  <ng-container *ngIf="loading; else table_data">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <app-table
+    *ngIf="services?.length > 0"
+    [services]="services"
+    [totalItems]="totalItems"
+    [paginationModle]="paginationModle"
+  ></app-table>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="services?.length == 0 || !services">
+    <app-no-data [msg]="'manageServices.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'new-service'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeServiceModel()"
+>
+  <div modal-header class="service-model-header w-100">
+    <label class="modal-title">
+      {{ 'manageServices.newService' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="service-model-content border-top">
+    <app-create-service
+      *ngIf="isShowForm"
+      (update)="getServicesData()"
+    ></app-create-service>
+  </div>
+</app-model>
+
+<pagination-controls
+  *ngIf="totalItems > paginationModle?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

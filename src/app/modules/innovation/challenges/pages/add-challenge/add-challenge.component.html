@@ -1,0 +1,266 @@
+<app-header-page
+  [title]="'addChallenges.title' | translate"
+  [backButton]="true"
+  [showTotalItems]="false"
+  [showButtons]="true"
+  [isAddBtn]="false"
+>
+  <div class="d-flex align-items-center flex-wrap gap-2 action-buttons" buttons>
+    <!-- cancel button -->
+    <button class="btn btn-transparent">
+      {{ "addChallenges.cancel" | translate }}
+    </button>
+
+    <!-- save draft button -->
+    <button
+      class="btn btn-info"
+      [disabled]="sendingLoading"
+      (click)="saveChallenge(false)"
+    >
+      <i *ngIf="sendingLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      {{ "addChallenges.draft" | translate }}
+    </button>
+
+    <!-- send request button -->
+    <button
+      class="btn btn-dark"
+      [disabled]="!addChallengeForm.valid && !disableAlert"
+      (click)="saveChallenge(true)"
+    >
+      <i *ngIf="sendingLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      {{ "addChallenges.publish" | translate }}
+    </button>
+  </div>
+</app-header-page>
+<!--<app-success-alert></app-success-alert>-->
+<!-- page filters -->
+<div class="challenge-form">
+  <form [formGroup]="addChallengeForm">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">
+          {{ 'addChallenges.form.picture' | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <div
+          class="drop-zone"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <p class="fw-bold text-black">
+            {{ "challenges.details.drag" | translate }}
+          </p>
+          <div>
+            <span class="text-secondary">{{ "shared.or" | translate }}</span>
+            <a (click)="attachments.click()" class="text-primary">
+              {{ "challenges.details.browse" | translate }}
+            </a>
+            <span class="text-secondary">
+              {{ "challenges.details.choose" | translate }}
+            </span>
+          </div>
+        </div>
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadCoverImage($event)"
+        />
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedCoverImages"
+          [supportedTypes]="
+            ''
+              | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          (viewFile)="onViewLocalCoverImage($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldCoverAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          (viewFile)="onViewLocalCoverImage($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+      <div class="col-12 title-class">
+        <app-filed
+          [style]="{height:'54px !important' }"
+          [length]="100"
+          class="d-block"
+          formControlName="title"
+          [control]="addChallengeForm | getControl : 'title'"
+          [title]="
+              'addChallenges.form.title' | translate
+            "
+          [placeholder]="
+              'Challenge title' | translate
+            "
+        ></app-filed>
+      </div>
+      <div class="col-12 editor-section">
+        <label class="form-label">
+          {{ 'addChallenges.form.content' | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <angular-editor formControlName="content" [config]="editorConfig">
+        </angular-editor>
+      </div>
+      <div class="col-12 mt-4">
+        <label for="" class="form-label">{{'addChallenges.form.focusArea' | translate}} <span
+          class="astrix-red">*</span></label>
+        <div class="checkboxes-items">
+          <div class="card flex justify-content-center">
+            <div class="flex flex-column gap-2">
+              <ng-container *ngFor="let option of focusArea">
+                <div class="d-flex check">
+                  <input (change)="setFocusAreaValues(option.code)" type="checkbox" class="d-block">
+                  <label>{{language == 'ar' ? option.nameAr : option.nameEn}}</label>
+                </div>
+              </ng-container>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-6 col-12 mt-4">
+        <label for="" class="form-label">{{'addChallenges.form.startDate' | translate}}
+          <span class="astrix-red">*</span>
+        </label>
+        <app-datepicker (getSelectedDate)="checkStartDate('startDate')" formControlName="startDate"></app-datepicker>
+        <span class="error-message mt-2 mb-2"
+              *ngIf="dateError['startDate']">Start Date must be Fewer Than End Date.</span>
+      </div>
+      <div class="form-group col-md-6 col-12 mt-4 mb-4">
+        <label for="" class="form-label">{{'addChallenges.form.endDate' | translate}} <span class="astrix-red">*</span></label>
+        <app-datepicker (getSelectedDate)="checkStartDate('endDate')" formControlName="endDate"></app-datepicker>
+        <span class="error-message mt-2"
+              *ngIf="dateError['endDate']"> End Date must be Greater Than Start Date.</span>
+      </div>
+      <div class="col-md-4 col-12">
+        <label class="form-label mb-0">
+          {{ "addChallenges.form.relatedPoints" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <app-filed
+          [style]="{height:'54px !important' }"
+          [length]="100"
+          [isNumber]="true"
+          class="d-block"
+          formControlName="related_points"
+          [control]="addChallengeForm | getControl : 'related_points'"
+          [placeholder]="
+              'addChallenges.form.relatedPoints' | translate
+            "
+        ></app-filed>
+      </div>
+      <div class="col-md-4 col-12">
+        <label class="form-label">
+          {{ "addChallenges.form.rewardType" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <ng-select
+          class="input-select"
+          formControlName="reward_type"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="
+              'addChallenges.form.rewardType' | translate
+            "
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [closeOnSelect]="true"
+          [multiple]="false"
+        >
+          <ng-option *ngFor="let item of challengeRewardType"
+                     [value]="item.code">{{language == 'ar' ? item.nameAr : item.nameEn}}</ng-option>
+        </ng-select>
+      </div>
+      <div class="col-md-4 col-12 awards-value">
+        <ng-container *ngIf="addFormControls.reward_type.value == 'Award Certification'">
+          <label class="form-label">
+            {{ "addChallenges.form.awardCertification" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <app-filed
+            [style]="{height:'54px !important' }"
+            [length]="100"
+            class="d-block"
+            formControlName="award_certification"
+            [control]="addChallengeForm | getControl : 'award_certification'"
+            [placeholder]="
+              'addChallenges.form.awardCertification' | translate
+            "
+          ></app-filed>
+        </ng-container>
+        <ng-container *ngIf="addFormControls.reward_type.value == 'Cash'">
+          <label class="form-label">
+            {{ "addChallenges.form.amount" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <app-filed
+            [style]="{'height':'54px !important', 'margin-top': '0px !important'}"
+            [length]="100"
+            class="d-block"
+            formControlName="amount"
+            [control]="addChallengeForm | getControl : 'amount'"
+            [placeholder]="
+              'addChallenges.form.amount' | translate
+            "
+          ></app-filed>
+        </ng-container>
+
+      </div>
+      <div class="col-md-4 col-12 mt-4">
+        <label class="form-label">
+          {{ "addChallenges.form.attachment" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <div
+          class="input-file"
+          (click)="attachmentsFiles.click()"
+          (drop)="onDropAttachments($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <span class="upload-label">{{'addChallenges.form.uploadAttachment' | translate}}</span>
+          <img width="20" src="assets/img/file-upload.svg">
+        </div>
+        <span class="upload-hint">Max file size : 5MB. File format : pdf, docx, png, and jpeg</span>
+      </div>
+      <div class="col-md-8 col-12 mt-2rem">
+        <input
+          hidden
+          multiple
+          #attachmentsFiles
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadAttachments($event)"
+        />
+        <uploaded-attachments-files
+          class="d-block mt-4"
+          [files]="uploadedAttachments"
+          [supportedTypes]="
+            ''
+              | translate
+          "
+          (deleteFile)="onDeleteAttachments($event, 'new')"
+          (viewFile)="onViewLocalAttachments($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteAttachments($event, 'old')"
+          (viewFile)="onViewLocalAttachments($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+    </div>
+  </form>
+
+</div>

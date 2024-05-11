@@ -1,0 +1,6 @@
+<div class="button-select {{data.clicked ? 'clicked':''}}" [ngClass]="data.className"
+(click)="getButton()">
+  <span>
+    {{ data.text[language] }}
+  </span>
+</div>

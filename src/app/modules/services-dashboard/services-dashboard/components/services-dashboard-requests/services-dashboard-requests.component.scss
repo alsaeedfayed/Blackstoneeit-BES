@@ -1,0 +1,67 @@
+.requestchart {
+
+   // border: 1px solid rgb(227, 231, 233);
+    border-radius: .5rem;
+    padding: 1rem;
+    background: #fff;
+    //box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.1);
+    height: 100%;
+
+    .data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .requestchart-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 10%;
+        margin-inline-end: 12px;
+        display: block;
+        border-radius: 50%;
+    }
+
+    .reqHeader {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 21px;
+        color: #3c557a;
+
+    }
+}
+
+.requestsPieChart {
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    .total {
+        position: absolute !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        top: 45% !important;
+        color: #717986;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+
+    }
+}
+
+.emptyCanvas {
+    border: 13px solid gray !important;
+    border-radius: 50% !important;
+
+}
+
+.status {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #8b8b8b;
+
+}

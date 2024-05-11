@@ -1,0 +1,225 @@
+<ng-container *ngIf="false; else create_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #create_data>
+  <div class="new-model-dialog-body">
+    <div class="pb-2" [formGroup]="form">
+      <div class="row">
+        <!-- TO -->
+        <div class="mt-4">
+          <label class="form-label">
+            {{ "committeeDecisions.details.SendModel.to" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <small class="text-secondary d-block">
+            {{ "shared.userSearchHint" | translate }}
+          </small>
+
+          <ng-select
+            class="input-select members-select"
+            formControlName="tos"
+            [ngClass]="{ valid: (form | getControl : 'tos')?.valid }"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="
+              'committeeDecisions.details.SendModel.to' | translate
+            "
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            (scrollToEnd)="loadMoreEmployees()"
+            (search)="searchEmployees($event)"
+            [loading]="gettingEmployees && toListFlag"
+            (focus)="onFocus('to')"
+            (change)="selected($event, 'to')"
+          >
+            <ng-option
+              *ngFor="let employee of employees"
+              [value]="employee?.id"
+              [disabled]="
+                employee.disabled && !form.value.to?.includes(employee?.id)
+              "
+            >
+              <person-item
+                [requesterItem]="employee"
+                [noCursor]="true"
+              ></person-item>
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!--  CC -->
+        <div class="mt-4">
+          <label class="form-label">
+            {{ "committeeDecisions.details.SendModel.cc" | translate }}
+            <span class="astrix-transparent">*</span>
+          </label>
+          <small class="text-secondary d-block">
+            {{ "shared.userSearchHint" | translate }}
+          </small>
+
+          <ng-select
+            class="input-select members-select"
+            formControlName="ccs"
+            [ngClass]="{ valid: (form | getControl : 'ccs')?.valid }"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="
+              'committeeDecisions.details.SendModel.cc' | translate
+            "
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            (scrollToEnd)="loadMoreEmployees()"
+            (search)="searchEmployees($event)"
+            [loading]="gettingEmployees && ccListFlag"
+            (focus)="onFocus('cc')"
+            (change)="selected($event, 'cc')"
+          >
+            <ng-option
+              *ngFor="let employee of employees"
+              [value]="employee?.id"
+              [disabled]="
+                employee.disabled && !form.value.cc?.includes(employee?.id)
+              "
+            >
+              <person-item
+                [requesterItem]="employee"
+                [noCursor]="true"
+              ></person-item>
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <!-- external to -->
+      <div class="row mt-4">
+        <app-select-states
+          [id]="'externalTos'"
+          [language]="language"
+          [textType]="'email'"
+          formControlName="externalTos"
+          [control]="form | getControl : 'externalTos'"
+          [title]="
+            'committeeDecisions.details.SendModel.externalTos' | translate
+          "
+          [placeholder]="
+            'committeeDecisions.details.SendModel.externalTos' | translate
+          "
+        ></app-select-states>
+      </div>
+
+      <!-- external cc -->
+      <div class="row ">
+        <app-select-states
+          [id]="'externalCcs'"
+          [language]="language"
+          [textType]="'email'"
+          formControlName="externalCcs"
+          [control]="form | getControl : 'externalCcs'"
+          [title]="
+            'committeeDecisions.details.SendModel.externalCcs' | translate
+          "
+          [placeholder]="
+            'committeeDecisions.details.SendModel.externalCcs' | translate
+          "
+        ></app-select-states>
+      </div>
+
+      <!-- description and attachments -->
+      <div class="">
+        <label class="form-label">
+          {{ "committeeDecisions.details.SendModel.message" | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+
+        <angular-editor
+          formControlName="message"
+          [config]="editorConfig"
+        ></angular-editor>
+
+        <label for="" class="form-label mt-3">
+          {{ "shared.attachments" | translate }}
+        </label>
+        <div
+          class="drop-zone"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <p class="fw-bold text-black">
+            {{ "committeeKPIs.details.drag" | translate }}
+          </p>
+          <div>
+            <span class="text-secondary">{{ "shared.or" | translate }}</span>
+            <a (click)="attachments.click()" class="text-primary">
+              {{ "committeeKPIs.details.browse" | translate }}
+            </a>
+            <span class="text-secondary">
+              {{ "committeeKPIs.details.choose" | translate }}
+            </span>
+          </div>
+        </div>
+
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="
+            'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form.invalid || isBtnLoading || uploadingFile"
+      (click)="sendDecision()"
+    >
+      <i
+        *ngIf="isBtnLoading || uploadingFile"
+        class="bx bx-loader-alt bx-spin ml-1"
+      ></i>
+      {{ "shared.send" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

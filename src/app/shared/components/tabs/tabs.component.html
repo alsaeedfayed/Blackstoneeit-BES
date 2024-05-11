@@ -1,0 +1,16 @@
+<ul class="tabs-items d-flex">
+  <li
+    *ngFor="let tab of tabs"
+    (click)="selectTab(tab)"
+    class="item"
+    [class.active]="tab.active"
+  >
+    <i class="bx {{tab.icon}}"></i>
+    <span class="tab-title"> {{ tab.title }}</span>
+    <span class="tab-count" *ngIf="tab.count !== null && tab.count !== undefined">
+      {{ tab.count ?? 0 }}
+    </span>
+  </li>
+</ul>
+
+<ng-content></ng-content>

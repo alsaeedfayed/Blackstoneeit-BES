@@ -1,0 +1,72 @@
+<form [formGroup]="filterForm">
+  <div class="row">
+    <div class="col-md-4 col-12">
+      <label class="form-label">
+        {{ "addChallenges.form.focusArea" | translate }}
+      </label>
+      <ng-select
+        class="input-select"
+        formControlName="focusArea"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+              'addChallenges.form.focusArea' | translate
+            "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [closeOnSelect]="true"
+        [multiple]="true"
+        (change)="setFilterValues()"
+      >
+        <ng-option *ngFor="let item of focusArea"
+                   [value]="item.code">{{language == 'ar' ? item['nameAr'] : item['nameEn'] }}</ng-option>
+      </ng-select>
+    </div>
+    <div class="col-md-4 col-12">
+      <label class="form-label">
+        {{ "filterForm.organizerName" | translate }}
+      </label>
+      <ng-select
+        bindLabel="fullName"
+        class="input-select"
+        formControlName="organizerName"
+        (scrollToEnd)="loadPeople()"
+        (change)="setFilterValues()"
+        [multiple]="true"
+        [placeholder]="
+              'filterForm.organizerName' | translate
+            "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [loading]="peopleLoading"
+        typeToSearchText="Please enter 2 or more characters"
+      >
+        <ng-option *ngFor="let item of usersList" [value]="item?.id">
+          {{language == 'ar' ? item.fullArabicName : item.fullName}}
+        </ng-option>
+      </ng-select>
+    </div>
+    <div class="col-md-4 col-12">
+      <label class="form-label">
+        {{ "filterForm.status" | translate }}
+      </label>
+      <ng-select
+        class="input-select"
+        formControlName="status"
+        [searchable]="true"
+        [clearable]="true"
+        (change)="setFilterValues()"
+        [placeholder]="
+              'filterForm.status' | translate
+            "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [closeOnSelect]="true"
+        [multiple]="true"
+      >
+        <ng-option [value]="1">{{'New' | translate}}</ng-option>
+        <ng-option [value]="2">{{'Draft' | translate}}</ng-option>
+        <ng-option [value]="3">{{'Closed' | translate}}</ng-option>
+        <ng-option [value]="4">{{'Resolved' | translate}}</ng-option>
+      </ng-select>
+    </div>
+
+  </div>
+</form>

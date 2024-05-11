@@ -1,0 +1,258 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="form-title mb-0">{{ "projects.closureRequests" | translate }}</h3>
+
+  <button
+    *ngIf="
+      mode === 'card' &&
+      !projectData?.isProjectClosed &&
+      (isPmo || projectData?.hasPMPrivilege)
+    "
+    class="btn btn-main"
+    (click)="onCreateNewRequest()"
+    [disabled]="HasOpenRequests"
+  >
+    <i class="bx bx-plus"></i>
+    {{ "projects.newClosureRequest" | translate }}
+  </button>
+
+  <button
+    *ngIf="mode === 'form'"
+    class="btn btn-outline-main"
+    (click)="onBackToList()"
+  >
+    <i class="bx bx-chevron-left"></i>
+    {{ "projects.closureRequestsList" | translate }}
+  </button>
+</div>
+
+<!-- request details -->
+<div *ngIf="mode === 'card'">
+  <div class="closure-request-card mb-4" *ngFor="let item of closureRequests">
+    <div class="closure-request-card-header d-flex justify-content-between align-items-center">
+      <div class="align-items-center details">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <h3 class="mb-0">
+            {{ "projects.closureRequestOf" | translate }}:
+            {{ item?.project?.name[lang] }}
+          </h3>
+
+          <app-badge
+            *ngIf="item?.status?.mappedStatusCode === 'Approved'"
+            [className]="'complete'"
+            [label]="item?.status?.title[lang]"
+          ></app-badge>
+          <app-badge
+            *ngIf="item?.status?.mappedStatusCode === 'Rejected'"
+            [className]="'rejected'"
+            [label]="item?.status?.title[lang]"
+          ></app-badge>
+          <app-badge
+            *ngIf="item?.status?.mappedStatusCode === 'ReturnedForCorrection'"
+            [className]="'closed'"
+            [label]="item?.status?.title[lang]"
+          ></app-badge>
+          <app-badge
+            *ngIf="item?.status?.mappedStatusCode === 'PendingForReview'"
+            [className]="'inProgress'"
+            [label]="item?.status?.title[lang]"
+          ></app-badge>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="date">
+            {{ "projects.createdBy" | translate }}:
+            <span>{{ item?.createdBy?.fullname }}</span>
+          </div>
+          <div class="date">
+            {{ "projects.createdAt" | translate }}:
+            <span>
+              {{
+                lang === "en"
+                  ? ((item?.createdDate | uTCToLocalDate)
+                    | date : "dd/MM/yyyy hh:mm a")
+                  : ((item?.createdDate | uTCToLocalDate)
+                    | localizeDate : "dd/MM/yyyy hh:mm a")
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-link"
+        (click)="isCollapsed[i] = !isCollapsed[i]"
+        aria-controls="collapseExample"
+      >
+        {{ (isCollapsed[i] ? "projects.collapse" : "projects.expand") | translate }}
+      </button>
+    </div>
+
+    <div class="change-request-card-body mt-4" [ngbCollapse]="!isCollapsed[i]">
+      <div class="workflow-timeline mb-4">
+        <workflow-states [steps]="item?.states"></workflow-states>
+      </div>
+
+      <div class="mb-4">
+        <ngb-accordion #acc="ngbAccordion" [activeIds]="accordionActiveIds">
+          <ngb-panel
+            [title]="'projects.general' | translate"
+            [id]="'ngb-panel-' + (item?.answers.length + 1)"
+          >
+            <ng-template ngbPanelContent>
+              <div class="request-info">
+                <ul class="request-info-list">
+                  <li class="request-info-list-item">
+                    <h4 class="request-info-title mb-2">{{ "projects.details" | translate }}</h4>
+    
+                    <div class="request-info-list-item-content">
+                      {{ item?.details }}
+                    </div>
+                  </li>
+                  <li class="request-info-list-item">
+                    <h4 class="request-info-title mb-2">{{ "shared.status" | translate }}</h4>
+    
+                    <div class="request-info-list-item-content">
+                      {{ item?.closedStatus?.title[lang] }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+          </ngb-panel>
+
+          <ngb-panel
+            *ngFor="let answer of item?.answers"
+            [title]="answer?.category?.title[this.lang]"
+          >
+            <ng-template ngbPanelContent>
+              <div class="request-info">
+                <ul class="request-info-list">
+                  <li class="request-info-list-item" *ngFor="let question of answer?.questions">
+                    <h4 class="request-info-title mb-2">{{ question?.question?.title[lang] }}</h4>
+
+                    <div class="request-info-list-item-content" *ngIf="!question?.question?.isTrueOrFalse">
+                      {{ question?.answer }}
+                    </div>
+                    <div class="request-info-list-item-content" *ngIf="question?.question?.isTrueOrFalse">
+                      {{ (question?.achieved ? "projects.achieved" : "projects.notAchieved") | translate }}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- request form -->
+<div class="form-container" *ngIf="mode === 'form'">
+  <form class="closure-request-form d-flex flex-column gap-4" [formGroup]="form">
+    <div class="questions-category">
+      <h3 class="mb-0">{{ "projects.general" | translate }}</h3>
+
+      <div class="request-info mt-4">
+        <ul class="request-info-list">
+          <li class="request-info-list-item">
+            <div class="form-group">
+              <label for="" class="form-label">
+                {{ "projects.details" | translate }}
+                <span class="astrix-red">*</span>
+              </label>
+
+              <textarea
+                class="form-textarea"
+                formControlName="details"
+                [control]="form | getControl : 'details'"
+              ></textarea>
+            </div>
+          </li>
+          <li class="request-info-list-item">
+            <div class="form-group">
+              <app-select
+                formControlName="status"
+                [control]="form | getControl: 'status'"
+                [title]="'shared.status' | translate"
+                [placeholder]="'projects.selectStatus' | translate"
+                [items]="statusList"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+              ></app-select>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="questions-category"
+      *ngFor="let category of questions | keyvalue; let i = index"
+      [formArrayName]="category.key"
+    >
+      <h3 class="mb-0">{{ category.key }}</h3>
+
+      <div class="request-info mt-4">
+        <ul class="request-info-list">
+          <li
+            class="request-info-list-item"
+            *ngFor="let question of category?.value; let questionIndex = index"
+            [formGroupName]="questionIndex"
+          >
+            <p>{{ question?.title[lang] }}</p>
+
+            <div class="form-group">
+              <textarea
+                *ngIf="!question?.isTrueOrFalse"
+                formControlName="question"
+                class="form-textarea"
+              ></textarea>
+
+              <app-custom-radio-buttons-control
+                *ngIf="question?.isTrueOrFalse"
+                formControlName="question"
+                [items]="items"
+                [cardHeight]="44"
+              ></app-custom-radio-buttons-control>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+
+  <div class="d-flex align-items-center justify-content-end mt-4">
+    <!-- <button class="btn btn-outline-secondary mr-2">Save as Draft</button> -->
+    <button
+      class="btn btn-main"
+      [disabled]="form.invalid"
+      (click)="onSubmitClosureRequest()"
+    >
+      {{ "shared.submit" | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- empty state msg -->
+<div
+  class="d-flex justify-content-center align-items-center flex-column pt-5 pb-5 h-100"
+  *ngIf="
+    closureRequests?.length === 0 &&
+    mode === 'card' &&
+    !projectData?.isProjectClosed
+  "
+>
+  <app-empty-state
+    [title]="'projects.noClosureRequests' | translate"
+  ></app-empty-state>
+
+  <button
+    *ngIf="!projectData?.isProjectClosed && (isPmo || projectData?.hasPMPrivilege)"
+    class="btn btn-main"
+    (click)="onCreateNewRequest()"
+  >
+    <i class="bx bx-plus"></i>
+    {{ "projects.newClosureRequest" | translate }}
+  </button>
+</div>

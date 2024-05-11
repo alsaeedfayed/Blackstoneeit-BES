@@ -1,0 +1,684 @@
+<h3 class="form-title mb-3">
+  {{ "initiationForm.projectOrganization" | translate }}
+</h3>
+
+<div class="step-content-container" *ngIf="readOnly">
+
+  <div class="project-details mb-4">
+    <div class="step-content-grid gap-4 mb-4">
+      <div>
+        <h4 class="project-details-title mb-2">
+          {{ 'initiationForm.sector' | translate }}
+        </h4>
+
+        <div class="project-details-content">
+          {{ data?.sector?.title[lang] }}
+        </div>
+      </div>
+
+      <div>
+        <h4 class="project-details-title mb-2">
+          {{ 'initiationForm.department' | translate }}
+        </h4>
+
+        <div class="project-details-content">
+          {{ data?.department?.title[lang] }}
+        </div>
+      </div>
+
+      <div *ngIf="data?.area">
+        <h4 class="project-details-title mb-2">
+          {{ 'initiationForm.section' | translate }}
+        </h4>
+
+        <div class="project-details-content">
+          {{ data?.area?.title[lang] }}
+        </div>
+      </div>
+    </div>
+
+    <div class="step-content-grid gap-4">
+      <div>
+        <h4 class="project-details-title mb-2">
+          {{ 'initiationForm.deliveryType' | translate }}
+        </h4>
+
+        <div class="project-details-content">
+          {{ data?.deliveryType?.title[lang] }}
+        </div>
+      </div>
+
+      <div *ngIf="data?.externalEntities?.en">
+        <h4 class="project-details-title mb-2">
+          {{ 'initiationForm.externalEntity' | translate }}
+        </h4>
+
+        <div class="project-details-content">
+          {{ data?.externalEntities[lang] }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="form-title mb-3">
+    {{ "initiationForm.teamMembers" | translate }}
+  </h3>
+
+  <div class="team-selection-container step-content-grid gap-4">
+    <div class="team-selection-col readonly">
+      <h3 class="form-title">
+        {{ "initiationForm.projectManager" | translate }}
+      </h3>
+
+      <div class="team-members-container single-member">
+        <div class="team-member">
+          <person-item
+            *ngIf="data?.manager"
+            [ownerItem]="data?.manager"
+            [CompMode]="2"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-selection-col readonly">
+      <h3 class="form-title">
+        {{ "initiationForm.projectSponsors" | translate }}
+      </h3>
+
+      <div class="team-members-container single-member" *ngIf="data?.sponsers?.length !== 0">
+        <div
+          class="team-member"
+          *ngFor="let item of data?.sponsers; let i = index"
+        >
+          <person-item
+            *ngIf="item"
+            [ownerItem]="item"
+            [CompMode]="2"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+
+      <div class="empty-state">
+        <span *ngIf="data?.sponsers?.length === 0" class="empty-state-text">
+          {{ "initiationForm.sponsorsEmptyText" | translate }}
+        </span>
+      </div>
+    </div>
+
+    <div class="team-selection-col readonly">
+      <h3 class="form-title">
+        {{ "initiationForm.teamMembers" | translate }}
+      </h3>
+
+      <div
+        class="team-members-container"
+        *ngIf="data?.teamMemebers?.length !== 0"
+      >
+        <div
+          class="team-member"
+          *ngFor="let item of data?.teamMemebers; let i = index"
+        >
+          <person-item
+            *ngIf="item"
+            [ownerItem]="item"
+            [CompMode]="2"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+
+      <div class="empty-state">
+        <span *ngIf="data?.teamMemebers?.length === 0" class="empty-state-text">
+          {{ "initiationForm.teamMembersEmptyText" | translate }}
+        </span>
+      </div>
+    </div>
+
+    <div class="team-selection-col readonly" *ngIf="data?.deliveryType?.code === 'ExternalTeam'">
+      <h3 class="form-title">
+        {{ "External Stakeholders" | translate }}
+      </h3>
+
+      <div
+        class="team-members-container"
+        *ngIf="data?.externalStakeholders?.length !== 0"
+      >
+        <div
+          class="team-member stakeholder"
+          *ngFor="let item of data?.externalStakeholders; let i = index"
+        >
+          <span class="initials">{{ item?.name | initials }}</span>
+          <div class="team-member-details">
+            <span class="team-member-name">{{ item?.name }}</span>
+            <span class="team-member-position">{{ item?.email }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state">
+        <span
+          *ngIf="data?.externalStakeholders?.length === 0"
+          class="empty-state-text"
+        >
+          No external stakeholders have been added to this project
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!readOnly">
+  <form [formGroup]="oraganizationForm">
+    <label for="" class="form-label">
+      {{ "initiationForm.teamMembers" | translate }}:
+    </label>
+
+    <div class="team-selection-container mb-2">
+      <div
+        class="team-selection-col"
+        [class.has-members]="getOraganizationForm?.managerId?.value"
+      >
+        <button
+          *ngIf="!getOraganizationForm?.managerId?.value"
+          (click)="onAddTeamMember('projectManager')"
+          class="btn"
+        >
+          <i class="bx bx-plus"></i>
+          {{ "initiationForm.addProjectManager" | translate }}
+        </button>
+
+        <div *ngIf="getOraganizationForm?.managerId?.value" class="w-100">
+          <div class="team-selection-col-header">
+            <h3 class="form-title mb-0">
+              {{ "initiationForm.projectManager" | translate }}
+            </h3>
+            <i
+              class="bx bx-plus"
+              (click)="onAddTeamMember('projectManager')"
+            ></i>
+          </div>
+          <ul>
+            <li class="team-member">
+              <app-initials
+                *ngIf="!getOraganizationForm?.managerId?.value?.userPicture?.url"
+                [dimensions]="{ width: 40, height: 40 }"
+                [name]="
+                  getOraganizationForm?.managerId?.value?.fullName ||
+                  getOraganizationForm?.managerId?.value?.name?.en
+                "
+              ></app-initials>
+              <img
+                *ngIf="getOraganizationForm?.managerId?.value?.userPicture?.url"
+                class="profile-img"
+                [src]="getOraganizationForm?.managerId?.value?.userPicture?.url"
+                alt=""
+              />
+              <div class="team-member-details">
+                <span class="team-member-name">
+                  {{
+                    getOraganizationForm?.managerId?.value?.fullName ||
+                      getOraganizationForm?.managerId?.value?.name[lang]
+                  }}
+                </span>
+                <span class="team-member-position">
+                  {{ getOraganizationForm?.managerId?.value?.position }}
+                </span>
+              </div>
+              <i (click)="onDeleteMember('managerId')" class="bx bx-x"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="team-selection-col"
+        [class.has-members]="getOraganizationForm?.sponserIds?.value?.length !== 0"
+      >
+        <button
+          *ngIf="getOraganizationForm?.sponserIds?.value?.length === 0"
+          (click)="onAddTeamMember('sponsor')"
+          class="btn"
+        >
+          <i class="bx bx-plus"></i>
+          {{ "initiationForm.addSponsors" | translate }}
+        </button>
+
+        <div *ngIf="getOraganizationForm?.sponserIds?.value?.length !== 0" class="w-100">
+          <div class="team-selection-col-header">
+            <h3 class="form-title mb-0">
+              {{ "initiationForm.projectSponsors" | translate }}
+            </h3>
+            <i class="bx bx-plus" (click)="onAddTeamMember('sponsor')"></i>
+          </div>
+          <ul>
+            <li
+              class="team-member"
+              *ngFor="
+                let member of getOraganizationForm?.sponserIds?.value;
+                let i = index
+              "
+            >
+              <app-initials
+                *ngIf="!member?.userPicture?.url"
+                [dimensions]="{ width: 40, height: 40 }"
+                [name]="member?.fullName || member?.name?.en"
+              ></app-initials>
+              <img
+                class="profile-img"
+                *ngIf="member?.userPicture?.url"
+                [src]="member?.userPicture?.url"
+                alt=""
+              />
+              <div class="team-member-details">
+                <span class="team-member-name">
+                  {{ member?.fullName || member?.name[lang] }}
+                </span>
+                <span class="team-member-position">{{ member?.position }}</span>
+              </div>
+              <i (click)="onDeleteMember('sponserIds', i)" class="bx bx-x"></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="team-selection-col"
+        [class.has-members]="getOraganizationForm?.teamMemeberIds?.value?.length !== 0"
+      >
+        <button
+          *ngIf="getOraganizationForm?.teamMemeberIds?.value?.length === 0"
+          (click)="onAddTeamMember('teamMember')"
+          class="btn"
+        >
+          <i class="bx bx-plus"></i>
+          {{ "initiationForm.addTeamMembers" | translate }}
+        </button>
+
+        <div
+          *ngIf="getOraganizationForm?.teamMemeberIds?.value?.length !== 0"
+          class="w-100"
+        >
+          <div class="team-selection-col-header">
+            <h3 class="form-title mb-0">
+              {{ "initiationForm.teamMembers" | translate }}
+            </h3>
+            <i class="bx bx-plus" (click)="onAddTeamMember('teamMember')"></i>
+          </div>
+          <ul>
+            <li
+              class="team-member"
+              *ngFor="
+                let member of getOraganizationForm?.teamMemeberIds?.value;
+                let i = index
+              "
+            >
+              <app-initials
+                *ngIf="!member?.userPicture?.url"
+                [dimensions]="{ width: 40, height: 40 }"
+                [name]="member?.fullName || member?.name?.en"
+              ></app-initials>
+              <img
+                class="profile-img"
+                *ngIf="ember?.userPicture?.url"
+                [src]="member?.userPicture?.url"
+                alt=""
+              />
+              <div class="team-member-details">
+                <span class="team-member-name">
+                  {{ member?.fullName || member?.name[lang] }}
+                </span>
+                <span class="team-member-position">{{ member?.position }}</span>
+              </div>
+              <i
+                (click)="onDeleteMember('teamMemeberIds', i)"
+                class="bx bx-x"
+              ></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="team-selection-col"
+        [class.has-members]="getOraganizationForm?.externalStakeholders?.value?.length !== 0"
+      >
+        <button
+          *ngIf="getOraganizationForm?.externalStakeholders?.value?.length === 0"
+          (click)="onAddExternalMembers()"
+          class="btn"
+        >
+          <i class="bx bx-plus"></i>
+          {{ "initiationForm.addExternalStakeholders" | translate }}
+        </button>
+
+        <div *ngIf="getOraganizationForm?.externalStakeholders?.value?.length !== 0" class="w-100">
+          <div class="team-selection-col-header">
+            <h3 class="form-title mb-0">
+              {{ "External Stakeholders" | translate }}
+            </h3>
+            <i class="bx bx-plus" (click)="onAddExternalMembers()"></i>
+          </div>
+          <ul>
+            <li
+              class="team-member stakeholder"
+              *ngFor="
+                let member of getOraganizationForm?.externalStakeholders?.value;
+                let i = index
+              "
+            >
+              <span class="initials">{{ member?.name | initials }}</span>
+              <div class="team-member-details">
+                <span class="team-member-name">{{ member?.name }}</span>
+                <span class="team-member-position">{{ member?.position }}</span>
+              </div>
+              <i
+                (click)="onDeleteMember('externalStakeholders', index)"
+                class="bx bx-x"
+              ></i>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <small
+      class="form-error mb-2"
+      *ngIf="getOraganizationForm.managerId?.errors?.required && isFormSubmitted"
+    >
+      <i class="bx bx-error-circle mr-2"></i>
+      {{ "initiationForm.managerValidationMsg" | translate }}
+    </small>
+    <small
+      class="form-error mb-2"
+      *ngIf="getOraganizationForm.sponserIds?.errors?.required && isFormSubmitted"
+    >
+      <i class="bx bx-error-circle mr-2"></i>
+      {{ "initiationForm.sponsorValidationMsg" | translate }}
+    </small>
+
+    <div class="form-group my-4">
+      <app-select
+        formControlName="sector"
+        [control]="oraganizationForm | getControl: 'sector'"
+        [title]="'initiationForm.sector' | translate"
+        [placeholder]="'initiationForm.selectSector' | translate"
+        [items]="sectorsList"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        (change)="getDepartmentsList($event)"
+      ></app-select>
+      <small
+        class="form-error"
+        *ngIf="getOraganizationForm.sector?.errors?.required && isFormSubmitted"
+      >
+        <i class="bx bx-error-circle mr-2"></i>
+        {{ "shared.validations.required" | translate }}
+      </small>
+    </div>
+
+    <div class="form-group mb-4">
+      <app-select
+        formControlName="department"
+        [control]="oraganizationForm | getControl: 'department'"
+        [title]="'initiationForm.department' | translate"
+        [placeholder]="'initiationForm.selectDepartment' | translate"
+        [items]="selectedSectorChildren"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [disabled]="!(getOraganizationForm?.sector?.value && selectedSectorChildren)"
+        (change)="getAreasList($event)"
+      ></app-select>
+      <small
+        class="form-error"
+        *ngIf="
+          getOraganizationForm.department?.errors?.required &&
+          isFormSubmitted
+        "
+      >
+        <i class="bx bx-error-circle mr-2"></i>
+        {{ "shared.validations.required" | translate }}
+      </small>
+    </div>
+
+    <div class="form-group mb-4">
+      <app-select
+        formControlName="area"
+        [control]="oraganizationForm | getControl: 'area'"
+        [title]="'initiationForm.section' | translate"
+        [placeholder]="'initiationForm.selectSection' | translate"
+        [items]="selectedDepartmentChildren"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [disabled]="!(getOraganizationForm?.department?.value && selectedDepartmentChildren)"
+      ></app-select>
+      <small
+        class="form-error"
+        *ngIf="getOraganizationForm.area?.errors?.required && isFormSubmitted"
+      >
+        <i class="bx bx-error-circle mr-2"></i>
+        {{ "shared.validations.required" | translate }}
+      </small>
+    </div>
+
+    <div class="form-group mb-4">
+      <label for="" class="form-label">
+        {{ "initiationForm.deliveryType" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <app-custom-radio-buttons-control
+        (change)="onDeliveryTypeChange($event)"
+        [cardHeight]="46"
+        formControlName="deliveryType"
+        [items]="projectDeliveryTypes"
+      ></app-custom-radio-buttons-control>
+      <small class="form-hint mb-2">
+        <i class="bx bx-info-circle"></i>
+        <span>{{ "initiationForm.deliveryTypeHint" | translate }}</span>
+      </small>
+
+      <small
+        class="form-error"
+        *ngIf="
+          getOraganizationForm.deliveryType?.errors?.required &&
+          isFormSubmitted
+        "
+      >
+        <i class="bx bx-error-circle mr-2"></i>
+        {{ "shared.validations.required" | translate }}
+      </small>
+    </div>
+
+    <div class="form-group" *ngIf="getOraganizationForm?.deliveryType?.value?.code === 'ExternalTeam'">
+      <label for="" class="form-label">
+        {{ "initiationForm.externalEntity" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <input
+        type="text"
+        formControlName="externalEntities"
+        class="form-control"
+      />
+      <small
+        class="form-error"
+        *ngIf="
+          getOraganizationForm.externalEntities?.errors?.required &&
+          isFormSubmitted
+        "
+      >
+        <i class="bx bx-error-circle mr-2"></i>
+        {{ "shared.validations.required" | translate }}
+      </small>
+    </div>
+  </form>
+
+  <app-model
+    [dimensions]="{ width: 700, height: 750 }"
+    [id]="'select-team'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="onPopupClose()"
+  >
+    <div modal-header class="team-model-header w-100">
+      <label class="modal-title">
+        {{ modalTitle }}
+      </label>
+    </div>
+
+    <div modal-content class="team-model-content border-top">
+      <div class="new-model-dialog-body">
+        <div *ngIf="modalMode === 'internal-members'">
+          <app-team-search
+            class="d-block mt-3"
+            [lang]="lang"
+            [memberToAddType]="memberToAddType"
+            [users]="users"
+          ></app-team-search>
+        </div>
+
+        <div *ngIf="modalMode === 'external-members'">
+          <form class="pb-2" [formGroup]="stakeholderForm">
+            <div class="form-group mt-3 mb-4">
+              <label for="" class="form-label">
+                {{ "initiationForm.fullName" | translate }}:
+              </label>
+              <input formControlName="name" type="text" class="form-control" />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.name?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "initiationForm.companyName" | translate }}:
+              </label>
+              <input
+                formControlName="companyName"
+                type="text"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.companyName?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "initiationForm.email" | translate }}:
+              </label>
+              <input
+                formControlName="email"
+                type="email"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.email?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.email?.errors?.pattern &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.pattern" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "initiationForm.phoneNumber" | translate }}:
+              </label>
+              <input
+                mask="00 000 000"
+                prefix="+971-5"
+                formControlName="phoneNumber"
+                type="tel"
+                dir="ltr"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.phoneNumber?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "initiationForm.position" | translate }}:
+              </label>
+              <input
+                formControlName="position"
+                type="text"
+                class="form-control"
+              />
+              <small
+                class="form-error"
+                *ngIf="
+                  getStakeholderForm.position?.errors?.required &&
+                  isStackholdersFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.validations.required" | translate }}
+              </small>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- footer buttons -->
+      <div class="new-model-dialog-footer">
+
+        <!-- back button -->
+        <button
+          class="btn btn-dark flex-grow-1"
+          (click)="onPopupClose()"
+        >
+          {{ 'shared.back' | translate }}
+        </button>
+
+        <!-- save button -->
+        <button
+          class="btn btn-main flex-grow-1"
+          (click)="modalMode === 'external-members' ? onSaveExternalMember() : onTeamSelectSave()"
+        >
+          {{ 'shared.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </app-model>
+</div>

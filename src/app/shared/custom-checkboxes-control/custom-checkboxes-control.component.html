@@ -1,0 +1,16 @@
+<div class="cards-container row gap-2 m-0">
+  <div
+    *ngFor="let item of items; let i = index"
+    class="card-with-icon col"
+    [class.active]="item?.isActive"
+    [ngStyle]="{ height: cardHeight + 'px' }"
+    (click)="onSelectItem(item, i)"
+  >
+    <!-- <img [src]="'../../../assets/icons/project-types-icon/' + item?.title?.en + '.svg'" alt=""> -->
+    <i class="bx bx-radio" *ngIf="item?.code === 'Strategic'"></i>
+    <i class="bx bx bx-bulb" *ngIf="item?.code === 'Innovative'"></i>
+    <i class="bx bx-cog" *ngIf="item?.code === 'Operational'"></i>
+    <i class="bx bx-rocket" *ngIf="item?.code === 'FutureForesight'"></i>
+    <span>{{ item?.title["en"] }}</span>
+  </div>
+</div>

@@ -1,0 +1,174 @@
+<div class="wrapper">
+  <app-header-page
+    [title]="'lookups.headerTitle' | translate"
+    [totalItems]="totalItems"
+    [backButton]="true"
+    [titleBtn]="selectedLookuptype ? ('lookups.createLookup' | translate) : null"
+    (btnClick)="openLookupPopup()"
+  ></app-header-page>
+
+  <div class="filters">
+    <div class="item">
+      <label>{{ "lookups.lookupService" | translate }}</label>
+      <app-select
+        [items]="lookupService"
+        [clearable]="true"
+        (change)="changeLookupServiceHandler($event)"
+        [placeholder]="'lookups.pleaseSelectModule' | translate"
+        [bindVlaue]="'code'"
+        [(ngModel)]="selectedService"
+        [bindLabel]="'label'"
+        [dropdownPosition]="'bottom'"
+      ></app-select>
+    </div>
+
+    <div class="item">
+      <label>{{ "lookups.lokkupType" | translate }}</label>
+      <app-select
+        [items]="lookupTypes"
+        [disabled]="isGettingLookupTypes || !selectedService"
+        [clearable]="true"
+        [bindVlaue]="'code'"
+        [(ngModel)]="selectedLookuptype"
+        [placeholder]="'lookups.pleaseSelectLookupType' | translate"
+        (change)="changeLookupTypeHandler($event)"
+        [bindLabel]="language === 'en' ? 'nameEn' : 'nameAr'"
+        [dropdownPosition]="'bottom'"
+      ></app-select>
+    </div>
+  </div>
+
+  <div class="table-wrapper mt-3" *ngIf="typeLookupValues">
+    <table class="table" *ngIf="typeLookupValues.length > 0">
+      <thead>
+        <tr>
+          <th scope="col" class="lookup-index">#</th>
+          <th scope="col">
+            {{ "lookups.EnglishTitle" | translate }}
+          </th>
+          <th scope="col">
+            {{ "lookups.ArabicTitle" | translate }}
+          </th>
+          <th scope="col">
+            {{ "lookups.lastUpdate" | translate }}
+          </th>
+          <th scope="col">
+            {{ "lookups.status" | translate }}
+          </th>
+          <th scope="col" class="lookup-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lookup of typeLookupValues; let i = index">
+          <td class="lookup-index">
+            {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+          </td>
+          <td>
+            {{ lookup.nameEn }}
+          </td>
+          <td class="arabic-font">{{ lookup.nameAr }}</td>
+          <td>
+            <span *ngIf="lookup.updatedDate">
+              {{
+                this.language === "en" ?
+                (lookup.updatedDate | date: "dd/MM/yyyy") :
+                (lookup.updatedDate | localizeDate : "dd/MM/yyyy")
+              }}
+            </span>
+          </td>
+          <td>
+            <app-switch
+              [disabled]="true"
+              [(ngModel)]="lookup.status"
+              (click)="openConfirmationModel(lookup)"
+            ></app-switch>
+          </td>
+          <td class="lookup-actions">
+            <div>
+              <app-dropdown (select)="onOptionSelect($event, lookup)" [items]="options"></app-dropdown>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="no-data" *ngIf="typeLookupValues.length === 0">
+      <app-no-data [msg]="'lookups.noDataMsg' | translate"></app-no-data>
+    </div>
+  </div>
+</div>
+
+<!-- create/edit lookup model -->
+<app-model
+  [dimensions]="{ width: 500, height: 750 }"
+  [id]="'lookup-form'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeLookupFormModel()"
+>
+  <div modal-header class="lookup-form-model-header w-100">
+    <label class="modal-title">
+      {{ isEditMode ? ('lookups.editLookup' | translate) : ('lookups.addLookup' | translate) }}
+    </label>
+  </div>
+
+  <div modal-content class="lookup-form-model-content border-top">
+    <app-lookup-form
+      *ngIf="isShowlookup"
+      [selectedLookupTypeId]="selectedLookuptypeId"
+      [LookupTypes]="lookupTypes"
+      (lookupAddedHandler)="lookupAddedHandler($event)"
+      (lookupEditedHandler)="lookupEditedHandler($event)"
+    ></app-lookup-form>
+  </div>
+</app-model>
+
+<!-- set roles model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'set-role-lookup-form'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeLookupRolesModel()"
+>
+  <div modal-header class="lookup-roles-model-header w-100">
+    <label class="modal-title">
+      {{ ('lookups.lookupRoles' | translate)+' ('+ (language == 'en' ? selectedLookup?.nameEn : selectedLookup?.nameAr) +')' }}
+    </label>
+  </div>
+
+  <div modal-content class="lookup-roles-model-content border-top">
+    <app-lookup-set-roles 
+      *ngIf="isShowLookupRoles"
+      [lookup]="selectedLookup"
+      (lookupSetHandler)="lookupSetHandler($event)"
+    ></app-lookup-set-roles>
+  </div>
+</app-model>
+
+<!-- <app-model
+  [dimensions]="{ width: 856, height: 750 }"
+  [id]="'lookup-type-form'"
+  title="New Service"
+>
+  <div modal-content class="new-service-popup px-4">
+    <app-lookup-form *ngIf="isShowlookupType"></app-lookup-form>
+  </div>
+</app-model> -->
+
+<app-confirm-modal
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onToggleStatusConfirmed()"
+></app-confirm-modal>
+
+<app-confirm-modal
+  [id]="'delete-lookup'"
+  [content]="delteConfirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteLookupConfirmed()"
+></app-confirm-modal>

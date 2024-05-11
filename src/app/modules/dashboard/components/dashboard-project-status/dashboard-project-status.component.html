@@ -1,0 +1,38 @@
+<div class="project-status-container">
+  <div class="header">
+    <span class="title">{{ "dashboard.projectStatusChart" | translate }}</span>
+  </div>
+
+  <div class="chart" [hidden]="!shouldShowStatusChart">
+    <span class="total">{{ data?.total }}</span>
+    <canvas
+      class="my-chart"
+      id="myChart"
+      width="170"
+      height="170"
+      #myChart
+    ></canvas>
+  </div>
+
+  <div class="no-data-message" *ngIf="!shouldShowStatusChart">{{ "dashboard.noDataAvailable" | translate }}</div>
+
+  <div class="status">
+    <div class="row project-status">
+      <div class="col-sm-6 item" *ngFor="let item of projectStatusData">
+        <div class="first-col">
+          <span
+            class="dot"
+            [ngStyle]="{ 'background-color': item.color }"
+          ></span>
+          <span class="status">{{ item.status }}</span>
+        </div>
+        <div class="second-col">
+          <!-- <span class="count">{{ item.total }}</span> -->
+          <span class="percentage" [ngStyle]="{ color: item.color }">
+            {{ item.percentage }}%
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

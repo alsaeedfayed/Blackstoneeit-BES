@@ -1,0 +1,112 @@
+// Mixins
+@import "../../../../../assets/css/utils/variables.scss";
+// Mixins
+@import "../../../../../assets/css/utils/mixins.scss";
+// Tootltip
+@import "../../../../../assets/css/components/tooltip.scss";
+
+.statistics-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 17px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+
+  // min-width: 400px;
+  // padding: 40px 30px;
+
+  // @media (max-width: 440px) {
+  //   min-width: auto;
+  // }
+
+  .item {
+    display: grid;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 30px 1fr 50px 2fr;
+      gap: 15px 10px;
+    }
+
+    @media (max-width: 767px) {
+      grid-template-columns: 50px 1fr;
+      gap: 10px;
+    }
+
+    .info {
+      display: flex;
+      position: relative;
+      // z-index: 999;
+      // min-width: 180px;
+
+      // @media (min-width: 768px) {
+      //   justify-content: flex-end;
+      // }
+
+      &:hover {
+        .toolTip {
+          display: block;
+
+          &:before {
+            content: "";
+            position: absolute;
+            right: 7px;
+            top: -7px;
+            width: 0;
+            height: 0;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 0;
+          }
+
+          span {
+            color: #fff;
+          }
+        }
+      }
+
+      i {
+        color: $main-color;
+        font-size: 27px;
+      }
+    }
+
+    .info2 {
+      width: 27px;
+      height: 27px;
+    }
+
+    span {
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 21px;
+      color: #3c557a;
+      @include rtl_value(margin-left, 0, 7px);
+      @include rtl_value(margin-right, 7px, 0);
+    }
+
+    ngb-progressbar {
+      flex-grow: 1;
+      min-width: 200px;
+    }
+  }
+}
+
+:host ::ng-deep div[role="progressbar"].bg-secondary {
+  background-color: #878fa7 !important;
+}
+
+:host ::ng-deep div[role="progressbar"].bg-success {
+  background-color: #1be3a7 !important;
+}
+
+.percent {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3c557a;
+  width: 40px;
+  @include rtl_value(margin-left, 20px, initial);
+  @include rtl_value(margin-right, initial, 20px);
+}

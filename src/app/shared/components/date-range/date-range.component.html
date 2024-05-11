@@ -1,0 +1,21 @@
+<div class="form-group">
+  <label *ngIf="!!title" class="form-label">{{ title }}</label>
+  <!-- type="text" -->
+  <input
+    (change)="change()"
+    [disabled]="disabled"
+    [locale]="{applyLabel: dir === 'ltr' ? 'Apply' : 'تطبيق',clearLabel: dir === 'ltr' ? 'Clear' : 'مسح'}"
+    [(ngModel)]="value"
+    [ngClass]="{ valid: control?.valid }"
+    [opens]="dir === 'ltr' ? 'right' : 'left'"
+    class="form-control"
+    [placeholder]="placeholder"
+    readonly
+    [showClearButton]="true"
+    ngxDaterangepickerMd
+  />
+</div>
+<app-validation
+  *ngIf="control?.dirty && control?.invalid"
+  [control]="control"
+></app-validation>

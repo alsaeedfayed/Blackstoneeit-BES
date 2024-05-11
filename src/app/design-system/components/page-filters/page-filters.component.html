@@ -1,0 +1,255 @@
+<div class="page-filters">
+  <div class="top-row">
+    <h3 class="block-title" *ngIf="hasTitle">
+      {{ title }}
+    </h3>
+    <div class="start-area">
+      <!-- search field -->
+      <app-search
+        *ngIf="hasSearch"
+        [searchKey]="searchValue"
+        [searchPlaceHolder]="searchPlaceHolder"
+        (search)="onSearch($event)"
+      ></app-search>
+
+      <!-- switch button -->
+      <app-switch-btn
+        *ngIf="hasAssignedSwitch"
+        [id]="assignedSwitchId"
+        [label]="assignedSwitchLabel"
+        (onChange)="onSwitchChange($event)"
+        (search)="onSearch($event)"
+        [value]="assignedSwitchValue"
+      ></app-switch-btn>
+
+      <app-switch-btn
+        *ngIf="hasSwitchMainTasks"
+        [label]="SwitchMainTasksLabel"
+        (onChange)="onSwitchMainTasks($event)"
+      ></app-switch-btn>
+
+    </div>
+
+    <div class="end-area">
+      <!-- view buttons -->
+      <div
+        class="view-btns d-flex gap-2"
+        *ngIf="
+          hasListViewBtn ||
+          hasCardsViewBtn ||
+          hasTreeViewBtn ||
+          hasExpandTreeBtn ||
+          hasMapViewBtn ||
+          hasCalendarViewBtn
+        "
+      >
+        <!-- expand tree button -->
+        <button
+          *ngIf="hasExpandTreeBtn"
+          class="view-btn"
+          [title]="
+            (isTreeExpanded
+              ? 'designSystem.views.collapseAll'
+              : 'designSystem.views.expandAll'
+            ) | translate
+          "
+          (click)="toggleTreeExpanding()"
+        >
+          <svg
+            fill="none"
+            viewBox="0 0 800 800"
+            xmlns="http://www.w3.org/2000/svg"
+            *ngIf="isTreeExpanded"
+          >
+            <path
+              d="M560.333 400H239"
+              stroke="currentColor"
+              stroke-width="54"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M399.5 762.333V521M399.5 521L309 611.5M399.5 521L490 611.5"
+              stroke="currentColor"
+              stroke-width="54"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M399.5 38V279.333M399.5 279.333L490 188.833M399.5 279.333L309 188.833"
+              stroke="currentColor"
+              stroke-width="54"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            fill="none"
+            viewBox="0 0 800 800"
+            xmlns="http://www.w3.org/2000/svg"
+            *ngIf="!isTreeExpanded"
+          >
+            <path
+              d="M399.667 279.333V38M399.667 38L309.167 128.5M399.667 38L490.167 128.5M399.667 520.667V762M399.667 762L490.167 671.5M399.667 762L309.167 671.5M560.333 400H239"
+              stroke="currentColor"
+              stroke-width="54"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <!-- tree view button -->
+        <button
+          *ngIf="hasTreeViewBtn"
+          class="view-btn"
+          [ngClass]="{ active: viewMode == 'tree' }"
+          [title]="'designSystem.views.tree' | translate"
+          (click)="changeViewMode('tree')"
+        >
+          <svg
+            fill="currentColor"
+            viewBox="0 0 36 36"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="10" y="26" width="6" height="6" rx="1" ry="1"></rect>
+            <path
+              d="M15,16H11a1,1,0,0,0-1,1v1.2H5.8V12H7a1,1,0,0,0,1-1V7A1,1,0,0,0,7,6H3A1,1,0,0,0,2,7v4a1,1,0,0,0,1,1H4.2V29.8H11a.8.8,0,1,0,0-1.6H5.8V19.8H10V21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V17A1,1,0,0,0,15,16Z"
+            ></path>
+            <path d="M33,8H10v2H33a1,1,0,0,0,0-2Z"></path>
+            <path d="M33,18H18v2H33a1,1,0,0,0,0-2Z"></path>
+            <path d="M33,28H18v2H33a1,1,0,0,0,0-2Z"></path>
+          </svg>
+        </button>
+
+        <!-- list view button -->
+        <button
+          *ngIf="hasListViewBtn"
+          class="view-btn"
+          [ngClass]="{ active: viewMode == 'list' }"
+          [title]="'designSystem.views.list' | translate"
+          (click)="changeViewMode('list')"
+        >
+          <i
+            class="bx bx-list-ul"
+            [ngClass]="{ rotateY_180deg: lang == 'ar' }"
+          ></i>
+        </button>
+
+        <!-- cards view button -->
+        <button
+          *ngIf="hasCardsViewBtn"
+          class="view-btn"
+          [ngClass]="{ active: viewMode == 'cards' }"
+          [title]="'designSystem.views.cards' | translate"
+          (click)="changeViewMode('cards')"
+        >
+          <i class="bx bx-grid-alt"></i>
+        </button>
+
+        <!-- map view button -->
+        <button
+          *ngIf="hasMapViewBtn"
+          class="view-btn"
+          [ngClass]="{ active: viewMode == 'map' }"
+          [title]="'designSystem.views.map' | translate"
+          (click)="changeViewMode('map')"
+        >
+          <i class="bx bx-sitemap"></i>
+        </button>
+
+        <!-- calendar view button -->
+        <button
+          *ngIf="hasCalendarViewBtn"
+          class="view-btn"
+          [ngClass]="{ active: viewMode == 'calendar' }"
+          [title]="'designSystem.views.calendar' | translate"
+          (click)="changeViewMode('calendar')"
+        >
+          <i class="bx bx-calendar"></i>
+        </button>
+      </div>
+
+      <!-- advanced filter button -->
+      <button
+        class="advanced-filter-btn"
+        *ngIf="hasAdvancedFilter"
+        (click)="toggleContentVisibility()"
+      >
+        <img src="assets/icons/filter-2.svg" alt="filter" />
+        <span>{{ "designSystem.filter" | translate }}</span>
+        <span class="applied-filters-count" [hidden]="!appliedCountAppeared">
+          {{ appliedFiltersCount }}
+        </span>
+        <ng-container *ngIf="!popupAdvancedFilter">
+          <i class="bx bx-chevron-down"></i>
+        </ng-container>
+      </button>
+
+      <!-- add button -->
+      <button
+        class="add-btn btn btn-main"
+        *ngIf="hasAddBtn && isAddAllowed"
+        (click)="addBtnClicked()"
+      >
+        <i class="bx bx-plus"></i>
+        {{ addBtnLabel }}
+      </button>
+
+      <!-- see more button -->
+      <a class="see-more" *ngIf="hasSeeBtn" (click)="seeBtnClicked()">
+        {{ seeBtnTitle }}
+      </a>
+
+      <!-- export button -->
+      <button
+        class="filter-export-btn btn btn-info"
+        *ngIf="hasExportBtn"
+        [disabled]="isDownloading"
+        (click)="exportBtnClicked()"
+      >
+        <i class="bx bxs-download" *ngIf="!isDownloading"></i>
+        <i class="bx bx-loader-alt bx-spin" *ngIf="isDownloading"></i>
+        {{ "designSystem.export" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- advanced filter content -->
+  <ng-container *ngIf="hasAdvancedFilter">
+    <div class="advanced-filter-content" #advanced_filter_content>
+      <!-- filter body -->
+      <div class="advanced-filter-body">
+        <ng-content></ng-content>
+      </div>
+
+      <div class="advanced-filter-divider" *ngIf="hasFooter"></div>
+
+      <!-- filter footer -->
+      <div class="advanced-filter-footer" *ngIf="hasFooter">
+        <button
+          (click)="ClearFilter()"
+          class="filter-clear-btn text-danger"
+          *ngIf="hasClearBtn"
+        >
+          {{ clearBtnLabel || "designSystem.clearAllFilter" | translate }}
+        </button>
+
+        <button
+          class="filter-action-btn btn-transparent"
+          (click)="closeContentVisibility()"
+        >
+          {{ cancelBtnLabel || "designSystem.close" | translate }}
+        </button>
+
+        <button
+          [disabled]="disableSearchBtn"
+          class="filter-action-btn btn-dark"
+          (click)="searchBtnClicked()"
+        >
+          {{ searchBtnLabel || "designSystem.search" | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

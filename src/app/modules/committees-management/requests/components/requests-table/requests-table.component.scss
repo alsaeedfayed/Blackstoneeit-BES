@@ -1,0 +1,56 @@
+.table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    --id-width: 100px;
+    width: 100%;
+
+    .id {
+      width: var(--id-width);
+    }
+
+    .committee-name {
+       max-width:300px;
+    }
+
+    .created-by {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 40%);
+    }
+
+    .assigned-to {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 20%);
+    }
+
+    .committee-type {
+      width: 140px;
+    }
+
+    .created-on {
+      width: 110px;
+    }
+
+    .committee-chairman {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 40%);
+    }
+
+    .status {
+      width: 120px;
+    }
+  }
+}
+
+.list-button {
+  font-size: 18px;
+  background: transparent;
+  border: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 22px;
+  background-color: #00db99;
+  color: #fff;
+}

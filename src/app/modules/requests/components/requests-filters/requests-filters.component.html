@@ -1,0 +1,75 @@
+<div class="req-filters" *ngIf="!loading" >
+  <div class="req-filters-wrapper">
+    <div class="left">
+      <div class="filter">
+        <label class="label-select"> {{ 'requests.allCategories' | translate }} </label>
+
+        <ng-select
+          [searchable]="false"
+          class="input-select w-255px"
+          (change)="handleCatgoryFilter($event)"
+          placeholder="{{ 'shared.all' | translate }}"
+          [dropdownPosition]="'bottom'"
+          [(ngModel)]="filters.categoryId"
+        >
+          <ng-option [value]="category.id" *ngFor="let category of categories">
+            {{ language == "ar" ? category.nameAr : category.nameEn }}
+          </ng-option>
+        </ng-select>
+      </div>
+      <!-- <div class="filter service">
+        <label class="label-select"> {{ 'requests.service' | translate }} </label>
+        <app-filed [(ngModel)]="service" placeholder="{{ 'requests.enterService' | translate }}"
+        (onKeyup)="handleServicesFilter($event)"></app-filed>
+      </div> -->
+      <!-- <div class="filter">
+        <label class="label-select"> All Services </label>
+        <ng-select
+          [searchable]="false"
+          (change)="handleServicesFilter($event)"
+          class="input-select"
+          placeholder="all"
+        >
+          <ng-option
+            [value]="service.serviceId"
+            *ngFor="let service of services"
+          >
+            {{ service.title }}</ng-option
+          >
+        </ng-select>
+      </div> -->
+      <!-- <div class="filter">
+        <label class="label-select"> All Statuses </label>
+        <ng-select
+          [searchable]="false"
+          (change)="handleStatusesFilter($event)"
+          class="input-select"
+          placeholder="all"
+        >
+          <ng-option [value]="servicesStatusEnum.Active"> Active</ng-option>
+          <ng-option [value]="servicesStatusEnum.NotActive">
+            Not Active</ng-option
+          >
+        </ng-select>
+      </div> -->
+    </div>
+    <div class="right">
+      <!-- <div class="switch-filter">
+        <div class="switch">
+          <input type="checkbox" (input)="handleOwnedTasksFilterEvent($event)" class="switch__input" id="customSwitch1" />
+          <label class="switch__label" for="customSwitch1">{{
+            "Requires My Attension" | translate
+          }}</label>
+        </div>
+      </div> -->
+      <div>
+        <app-switch-btn
+          [id]="'assignedToMe'"
+          [label]="'shared.assignedToMe' | translate"
+          [value]="filters.assignedToMe"
+          (onChange)="onAssignedToMeChange($event)"
+        ></app-switch-btn>
+      </div>
+    </div>
+  </div>
+</div>

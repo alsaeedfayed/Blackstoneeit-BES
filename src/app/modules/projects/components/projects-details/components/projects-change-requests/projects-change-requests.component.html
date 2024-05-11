@@ -1,0 +1,947 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="form-title mb-0">{{ "projects.changeRequests" | translate }}</h3>
+
+  <button
+    *ngIf="
+      mode === 'card' &&
+      !projectData?.isProjectClosed &&
+      (isPmo || projectData?.hasPMPrivilege)
+    "
+    class="btn btn-main"
+    [disabled]="HasOpenRequests"
+    (click)="onCreateChangeRequest()"
+  >
+    <i class="bx bx-plus"></i>
+    {{ "projects.newChangeRequest" | translate }}
+  </button>
+
+  <button
+    *ngIf="mode === 'create'"
+    class="btn btn-outline-main"
+    (click)="onBackToList()"
+  >
+    <i class="bx bx-chevron-left"></i>
+    {{ "projects.changeRequestsList" | translate }}
+  </button>
+</div>
+<div>
+  <!-- Change requests cards -->
+  <ng-container *ngIf="mode === 'card'">
+    <div
+      class="change-request-card mb-4"
+      *ngFor="let item of changeRequests; let i = index"
+    >
+      <div class="change-request-card-header d-flex justify-content-between align-items-center">
+        <div class="align-items-center cr-details">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <h3 class="mb-0">{{ item?.title }}</h3>
+
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'Approved'"
+              [className]="'complete'"
+              [label]="item?.status?.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'Rejected'"
+              [className]="'rejected'"
+              [label]="item?.status?.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'ReturnedForCorrection'"
+              [className]="'closed'"
+              [label]="item?.status?.title[lang]"
+            ></app-badge>
+            <app-badge
+              *ngIf="item?.status?.mappedStatusCode === 'PendingForReview'"
+              [className]="'inProgress'"
+              [label]="item?.status?.title[lang]"
+            ></app-badge>
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            <div class="date">
+              {{ "projects.createdBy" | translate }}:
+              <span>{{ item?.createdBy?.fullname }}</span>
+            </div>
+            <div class="date">
+              {{ "projects.createdAt" | translate }}:
+              <span>
+                {{
+                  lang === "en" ?
+                  ((item?.createdDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                  ((item?.createdDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="btn btn-link"
+          (click)="isCollapsed[i] = !isCollapsed[i]"
+          aria-controls="collapseExample"
+        >
+          {{ (isCollapsed[i] ? "projects.collapse" : "projects.expand") | translate }}
+        </button>
+      </div>
+
+      <div class="change-request-card-body mt-4" [ngbCollapse]="!isCollapsed[i]">
+        <div class="workflow-timeline mb-4">
+          <workflow-states [steps]="item?.states"></workflow-states>
+        </div>
+
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>{{ "projects.crOverview" | translate }}</a>
+            <ng-template ngbNavContent>
+              <div
+                class="d-flex flex-column justify-content-center mb-4 mt-4 justification-box"
+              >
+                <label for="" class="form-label">
+                  {{ "projects.isThisCrJustified" | translate }}
+                </label>
+                <app-switch
+                  (change)="onJustifyToggle(item?.id)"
+                  [(ngModel)]="item.isJustified"
+                ></app-switch>
+              </div>
+
+              <ngb-accordion
+                #acc="ngbAccordion"
+                [activeIds]="accordionActiveIds"
+              >
+                <ngb-panel
+                  *ngFor="let change of item?.changeTypes; let i = index"
+                  [id]="'ngb-panel-' + i"
+                >
+                  <ng-template
+                    ngbPanelTitle
+                    *ngIf="change?.type?.title?.en === 'Project Information'"
+                  >
+                    <div class="accordion-title">
+                      <i class="bx bx-target-lock"></i>
+                      <h3>
+                        {{ "projects.changeOf" | translate }}
+                        {{ change?.type?.title[lang] }}
+                      </h3>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelTitle
+                    *ngIf="change?.type?.title?.en === 'Scope'"
+                  >
+                    <div class="accordion-title">
+                      <i class="bx bx-target-lock"></i>
+                      <h3>
+                        {{ "projects.changeOf" | translate }}
+                        {{ change?.type?.title[lang] }}
+                      </h3>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelTitle
+                    *ngIf="change?.type?.title?.en === 'Schedule'"
+                  >
+                    <div class="accordion-title">
+                      <i class="bx bx-calendar"></i>
+                      <h3>
+                        {{ "projects.changeOf" | translate }}
+                        {{ change?.type?.title[lang] }}
+                      </h3>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelTitle
+                    *ngIf="change?.type?.title?.en === 'Cost'"
+                  >
+                    <div class="accordion-title">
+                      <i class="bx bx-money"></i>
+                      <h3>
+                        {{ "projects.changeOf" | translate }}
+                        {{ change?.type?.title[lang] }}
+                      </h3>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelTitle
+                    *ngIf="change?.type?.title?.en === 'Organization'"
+                  >
+                    <div class="accordion-title">
+                      <i class="bx bx-building-house"></i>
+                      <h3>
+                        {{ "projects.changeOf" | translate }}
+                        {{ change?.type?.title[lang] }}
+                      </h3>
+                    </div>
+                  </ng-template>
+
+                  <ng-template
+                    ngbPanelContent
+                    *ngIf="change?.type?.code === 'Information'"
+                  >
+                    <div class="mb-3">
+                      <div class="highlight-changes-btn">
+                        <label for="" class="form-label mb-0 mr-2">
+                          {{ "projects.highlightChanges" | translate }}
+                        </label>
+                        <app-switch
+                          [(ngModel)]="item.information.highlightChanges"
+                        ></app-switch>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.name[lang]"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.projectName" | translate }}:
+                        </label>
+                        <div class="d-flex align-items-center mb-2">
+                          <p class="name">
+                            {{ item?.information?.name[lang] }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.categories?.length > 0"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.projectCategory" | translate }}:
+                        </label>
+                        <div class="mb-2">
+                          <p
+                            class="value"
+                            *ngFor="
+                              let category of item?.information?.categories
+                            "
+                          >
+                            {{ category?.title[lang] }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.types?.length > 0"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.projectType" | translate }}:
+                        </label>
+                        <div class="mb-2">
+                          <p
+                            class="value"
+                            *ngFor="let type of item?.information?.types"
+                          >
+                            {{ type?.title[lang] }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.origins?.length > 0"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.projectOrigin" | translate }}:
+                        </label>
+                        <div class="mb-2">
+                          <p
+                            class="value"
+                            *ngFor="let origin of item?.information?.origins"
+                          >
+                            {{ origin?.title[lang] }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        class="col-12"
+                        *ngIf="item?.information?.description[lang]"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.projectDescription" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ item?.information?.description[lang] }}
+                        </p>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.projectScope[lang]"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.inScope" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ item?.information?.projectScope[lang] }}
+                        </p>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.outOfScope[lang]"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.outOfscope" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ item?.information?.outOfScope[lang] }}
+                        </p>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.expectedOutcomes[lang]"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.expectedOutcomes" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ item?.information?.expectedOutcomes[lang] }}
+                        </p>
+                      </div>
+
+                      <div
+                        class="col-6"
+                        *ngIf="item?.information?.expectedBenefits[lang]"
+                      >
+                        <label for="" class="form-label">
+                          {{ "projects.expectedBenefits" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ item?.information?.expectedBenefits[lang] }}
+                        </p>
+                      </div>
+
+                      <div class="col-12" *ngIf="change?.reasons">
+                        <label for="" class="form-label">
+                          {{ "projects.changeReasons" | translate }}:
+                        </label>
+                        <p class="value">{{ change?.reasons }}</p>
+                      </div>
+
+                      <div
+                        class="separator"
+                        *ngIf="item?.information?.highlightChanges"
+                      ></div>
+
+                      <ng-container
+                        *ngIf="item?.information?.highlightChanges"
+                      >
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldName[lang]"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectName" | translate }}:
+                          </label>
+                          <div class="d-flex align-items-center mb-2">
+                            <p class="name">
+                              {{ item?.information?.oldName[lang] }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldCategories?.length > 0"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectCategory" | translate }}:
+                          </label>
+                          <div class="mb-2">
+                            <p
+                              class="value"
+                              *ngFor="
+                                let category of item?.information
+                                  ?.oldCategories
+                              "
+                            >
+                              {{ category?.title[lang] }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldTypes?.length > 0"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectType" | translate }}:
+                          </label>
+                          <div class="mb-2">
+                            <p
+                              class="value"
+                              *ngFor="let type of item?.information?.oldTypes"
+                            >
+                              {{ type?.title[lang] }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldOrigins?.length > 0"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectOrigin" | translate }}:
+                          </label>
+                          <div class="mb-2">
+                            <p
+                              class="value"
+                              *ngFor="
+                                let origin of item?.information?.oldOrigins
+                              "
+                            >
+                              {{ origin?.title[lang] }}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="col-12"
+                          *ngIf="item?.information?.oldDescription[lang]"
+                        >
+                          <label for="" class="form-label">
+                            {{
+                              "projects.oldProjectDescription" | translate
+                            }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.information?.oldDescription[lang] }}
+                          </p>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldProjectScope[lang]"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldInScope" | translate }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.information?.oldProjectScope[lang] }}
+                          </p>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldOutOfScope[lang]"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldOutOfscope" | translate }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.information?.oldOutOfScope[lang] }}
+                          </p>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldExpectedOutcomes[lang]"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldExpectedOutcomes" | translate }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.information?.oldExpectedOutcomes[lang] }}
+                          </p>
+                        </div>
+
+                        <div
+                          class="col-6"
+                          *ngIf="item?.information?.oldExpectedBenefits[lang]"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldExpectedBenefits" | translate }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.information?.oldExpectedBenefits[lang] }}
+                          </p>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-template>
+
+                  <ng-template
+                    ngbPanelContent
+                    *ngIf="change?.type?.code === 'Organization'"
+                  >
+                    <div class="mb-3">
+                      <div class="highlight-changes-btn">
+                        <label for="" class="form-label mb-0 mr-2">
+                          {{ "projects.highlightChanges" | translate }}
+                        </label>
+                        <app-switch
+                          [(ngModel)]="item.highlightChanges"
+                        ></app-switch>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6" *ngIf="item?.manager">
+                        <label for="" class="form-label">
+                          {{ "projects.projectManager" | translate }}:
+                        </label>
+                        <div class="d-flex align-items-center mb-2">
+                          <person-item
+                            *ngIf="item?.manager"
+                            [ownerItem]="item?.manager"
+                            [CompMode]="2"
+                            [noCursor]="true"
+                          ></person-item>
+                        </div>
+                      </div>
+                      <div class="col-6" *ngIf="item?.sponsers?.length !== 0">
+                        <label for="" class="form-label">
+                          {{ "projects.projectSponsors" | translate }}:
+                        </label>
+
+                        <div
+                          *ngFor="
+                            let sponser of item?.sponsers;
+                            let i = index
+                          "
+                          class="d-flex align-items-center mb-2"
+                        >
+                          <person-item
+                            *ngIf="sponser"
+                            [ownerItem]="sponser"
+                            [CompMode]="2"
+                            [noCursor]="true"
+                          ></person-item>
+                        </div>
+                      </div>
+                      <div class="col-6" *ngIf="item?.sector">
+                        <label for="" class="form-label">
+                          {{ "projects.projectSector" | translate }}:
+                        </label>
+                        <p class="value">{{ item?.sector?.title[lang] }}</p>
+                      </div>
+                      <div class="col-6" *ngIf="item?.department">
+                        <label for="" class="form-label">
+                          {{ "projects.projectDepartment" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ item?.department?.title[lang] }}
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <label for="" class="form-label">
+                          {{ "projects.changeReasons" | translate }}:
+                        </label>
+                        <p class="value">{{ change?.reasons }}</p>
+                      </div>
+
+                      <div
+                        class="separator"
+                        *ngIf="item?.highlightChanges"
+                      ></div>
+
+                      <ng-container *ngIf="item?.highlightChanges">
+                        <div class="col-6" *ngIf="item?.oldManager">
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectManager" | translate }}:
+                          </label>
+                          <div class="d-flex align-items-center mb-2">
+                            <person-item
+                              *ngIf="item?.oldManager"
+                              [ownerItem]="item?.oldManager"
+                              [CompMode]="2"
+                              [noCursor]="true"
+                            ></person-item>
+                          </div>
+                        </div>
+                        <div
+                          class="col-6"
+                          *ngIf="item?.oldSponsers?.length !== 0"
+                        >
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectSponsors" | translate }}:
+                          </label>
+                          <div
+                            *ngFor="
+                              let sponser of item?.oldSponsers;
+                              let i = index
+                            "
+                            class="d-flex align-items-center mb-2"
+                          >
+                            <person-item
+                              *ngIf="sponser"
+                              [ownerItem]="sponser"
+                              [CompMode]="2"
+                              [noCursor]="true"
+                            ></person-item>
+                          </div>
+                        </div>
+                        <div class="col-6" *ngIf="item?.oldSector">
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectSector" | translate }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.oldSector?.title[lang] }}
+                          </p>
+                        </div>
+                        <div class="col-6" *ngIf="item?.oldDepartment">
+                          <label for="" class="form-label">
+                            {{ "projects.oldProjectDepartment" | translate }}:
+                          </label>
+                          <p class="value">
+                            {{ item?.oldDepartment?.title[lang] }}
+                          </p>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelContent
+                    *ngIf="change?.type?.code === 'Schedule'"
+                  >
+                    <div class="row">
+                      <div class="col-6" *ngIf="item?.newEndDate">
+                        <label for="" class="form-label">
+                          {{ "projects.newProjectEndDate" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{
+                            lang === "en" ?
+                            ((item?.newEndDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                            ((item?.newEndDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                          }}
+                        </p>
+                      </div>
+                      <div class="col-6" *ngIf="change?.changeType">
+                        <label for="" class="form-label">
+                          {{ "projects.changeType" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ change?.changeType?.title[lang] }}
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <label for="" class="form-label">
+                          {{ "projects.changeReasons" | translate }}:
+                        </label>
+                        <p class="value">{{ change?.reasons }}</p>
+                      </div>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelContent
+                    *ngIf="change?.type?.code === 'Cost'"
+                  >
+                    <div class="row">
+                      <div class="col-6" *ngIf="item?.newBudget">
+                        <label for="" class="form-label">
+                          {{ "projects.newProjectBudget" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ "shared.AED" | translate }} {{ item?.newBudget | number}}
+                        </p>
+                      </div>
+                      <div class="col-6" *ngIf="change?.changeType">
+                        <label for="" class="form-label">
+                          {{ "projects.changeType" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ change?.changeType?.title[lang] }}
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <label for="" class="form-label">
+                          {{ "projects.changeReasons" | translate }}:
+                        </label>
+                        <p class="value">{{ change?.reasons }}</p>
+                      </div>
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ngbPanelContent
+                    *ngIf="change?.type?.code === 'Scope'"
+                  >
+                    <div class="row">
+                      <div class="col-6" *ngIf="change?.changeType">
+                        <label for="" class="form-label">
+                          {{ "projects.changeType" | translate }}:
+                        </label>
+                        <p class="value">
+                          {{ change?.changeType?.title[lang] }}
+                        </p>
+                      </div>
+                      <div class="col-12">
+                        <label for="" class="form-label">
+                          {{ "projects.changeReasons" | translate }}:
+                        </label>
+                        <p class="value">{{ change?.reasons }}</p>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+
+                <ngb-panel
+                  [id]="'ngb-panel-' + (item?.changeTypes?.length + 1)"
+                  *ngIf="item?.attachments?.length !== 0"
+                >
+                  <ng-template ngbPanelTitle>
+                    <div class="accordion-title">
+                      <i class="bx bx-file-blank"></i>
+                      <h3>
+                        {{ "projects.supportingDocuments" | translate }}
+                      </h3>
+                    </div>
+                  </ng-template>
+                  <ng-template ngbPanelContent>
+                    <div
+                      class="attachment"
+                      *ngFor="let doc of item?.attachments"
+                    >
+                      <i class="bx bx-file"></i>
+                      <a target="_blank" (click)="openFile(doc?.fileName)">
+                        {{ doc?.fileName }}
+                      </a>
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+              </ngb-accordion>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>{{ "projects.updatedPlan" | translate }}</a>
+            <ng-template ngbNavContent>
+              <div
+                class="d-flex align-items-center justify-content-end my-4"
+                *ngIf="item?.showHighlightChanges"
+              >
+                <label for="" class="form-label mb-0 mr-2">
+                  {{ "projects.highlightChanges" | translate }}
+                </label>
+                <app-switch
+                  [(ngModel)]="item.highlightMilestonesChanges"
+                ></app-switch>
+              </div>
+
+              <div
+                *ngFor="let milestone of item?.milestones"
+                class="milestone-card mb-4"
+              >
+                <div class="inner row">
+                  <div class="d-flex align-items-center top-right-options">
+                    <!--
+                    <div class="d-flex align-items-center mr-2"
+                         *ngIf="milestone?.status?.code === 'Edited'">
+                      <label for=""
+                             class="form-label mb-0 mr-2">{{'projects.highlightChanges' | translate}}</label>
+                      <app-switch [(ngModel)]="milestone.highlightChanges"></app-switch>
+                    </div>
+                  -->
+                    <ng-container *ngIf="milestone?.status">
+                      <app-badge
+                        *ngIf="milestone?.status?.code === 'Edited'"
+                        [className]="'inProgress'"
+                        [label]="milestone?.status?.title[lang]"
+                      ></app-badge>
+                      <app-badge
+                        *ngIf="milestone?.status?.code === 'New'"
+                        [className]="'new'"
+                        [label]="milestone?.status?.title[lang]"
+                      ></app-badge>
+                      <app-badge
+                        *ngIf="milestone?.status?.code === 'Deleted'"
+                        [className]="'rejected'"
+                        [label]="milestone?.status?.title[lang]"
+                      ></app-badge>
+                      <app-badge
+                        *ngIf="milestone?.status?.code === 'NotChanged'"
+                        [className]="'closed'"
+                        [label]="milestone?.status?.title[lang]"
+                      ></app-badge>
+                    </ng-container>
+                  </div>
+                  <div class="card-details-col col-6 d-flex">
+                    <div class="mr-2">
+                      <circle-progress
+                        [percent]="milestone?.weight"
+                        [radius]="45"
+                        [space]="-10"
+                        [outerStrokeGradient]="false"
+                        [outerStrokeWidth]="10"
+                        [outerStrokeColor]="'#3c81fb'"
+                        [innerStrokeColor]="'#d2daff'"
+                        [innerStrokeWidth]="10"
+                        [animateTitle]="false"
+                        [animationDuration]="1000"
+                        [showUnits]="true"
+                        [showBackground]="false"
+                        [clockwise]="false"
+                        [startFromZero]="false"
+                        [lazy]="false"
+                        [showTitle]="true"
+                        [showSubtitle]="item.highlightMilestonesChanges && milestone?.oldWeight"
+                        [unitsFontSize]="18"
+                        [titleFontSize]="18"
+                        [unitsFontWeight]="400"
+                        [titleFontWeight]="400"
+                        [title]="'auto'"
+                        [subtitle]="milestone?.oldWeight + '%'"
+                        [titleColor]="'#353535'"
+                        [unitsColor]="'#353535'"
+                      ></circle-progress>
+                    </div>
+                    <div>
+                      <h3 class="col-title">
+                        {{ milestone?.name }}
+                        <span
+                          class="old-data"
+                          *ngIf="
+                            item.highlightMilestonesChanges &&
+                            milestone?.oldName
+                          "
+                        >
+                          ({{ milestone?.oldName }})
+                        </span>
+                      </h3>
+                      <div>
+                        <span class="col-date" *ngIf="milestone?.dueDate">
+                          {{ "projects.dueDate" | translate }} :
+                          {{
+                            lang === "en" ?
+                            ((milestone?.dueDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                            ((milestone?.dueDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                          }}
+                          <span
+                            class="old-data"
+                            *ngIf="
+                              item.highlightMilestonesChanges &&
+                              milestone?.oldDueDate
+                            "
+                          >
+                            (
+                            {{
+                              lang === "en" ?
+                              ((milestone?.oldDueDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                              ((milestone?.oldDueDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                            }}
+                            )
+                          </span>
+                        </span>
+                        <span class="col-date" *ngIf="!milestone?.dueDate">
+                          {{ "projects.dueDate" | translate }}: N/A
+                        </span>
+                      </div>
+                      <div>
+                        <span class="col-date" *ngIf="milestone?.cost">
+                          {{ "projects.cost" | translate }} :
+                          {{ "shared.AED" | translate }} {{ milestone?.cost | number }}
+                          <span
+                            class="old-data"
+                            *ngIf="
+                              item.highlightMilestonesChanges &&
+                              milestone?.oldCost
+                            "
+                          >
+                            ({{ "shared.AED" | translate
+                            }}{{ milestone?.oldCost | number}})
+                          </span>
+                        </span>
+                        <span class="col-date" *ngIf="!milestone?.cost">
+                          {{ "projects.cost" | translate }}: N/A
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-details-col col-6">
+                    <h3 class="col-title">
+                      {{ "projects.deliverables" | translate }}
+                    </h3>
+                    <ul>
+                      <ng-container
+                        *ngFor="let deliverable of milestone?.deliverables"
+                      >
+                        <li class="deliverable" *ngIf="!deliverable?.isRemoved">
+                          {{ deliverable?.title }}
+                          <app-badge class="d-inline-block"
+                            *ngIf="deliverable?.status?.code === 'New' && item.highlightMilestonesChanges"
+                            [className]="'new'"
+                            [label]="'shared.new' | translate"
+                          ></app-badge>
+                        </li>
+                        <li
+                          class="deliverable"
+                          *ngIf="
+                            deliverable?.isRemoved &&
+                            item.highlightMilestonesChanges
+                          "
+                        >
+                          {{ deliverable?.title }}
+                          <app-badge class="d-inline-block"
+                            [className]="'rejected'"
+                            [label]="'shared.removed' | translate"
+                          ></app-badge>
+                        </li>
+                      </ng-container>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-column" *ngIf="milestone?.description">
+                  <label for="" class="form-label">
+                    {{ "projects.description" | translate }}
+                  </label>
+                  <p>{{ milestone?.description }}</p>
+
+                  <span
+                    class="old-data"
+                    *ngIf="
+                      milestone?.oldDescription &&
+                      item.highlightMilestonesChanges
+                    "
+                  >
+                    ({{ milestone?.oldDescription }})
+                  </span>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Change requests form -->
+  <ng-container *ngIf="mode === 'create'">
+    <app-change-request-form
+      [projectData]="projectData"
+      [scheduleOptions]="scheduleOptions"
+      [changeRequestOptions]="changeRequestOptions"
+      [projectTypes]="projectTypes"
+      [projectCategories]="projectCategories"
+      [projectOrigins]="projectOrigins"
+      [changeRequestTypes]="changeRequestTypes"
+      (refreshParentComponent)="getChangeRequests(projectData?.id)"
+    ></app-change-request-form>
+  </ng-container>
+
+  <!-- empty state msg -->
+  <div
+    class="d-flex justify-content-center align-items-center flex-column pt-5 pb-5 h-100"
+    *ngIf="changeRequests?.length === 0 && mode === 'card' && !projectData?.isProjectClosed"
+  >
+    <app-empty-state
+      [title]="'projects.emptyStateText' | translate"
+    ></app-empty-state>
+
+    <button
+      *ngIf="!projectData?.isProjectClosed && (isPmo || projectData?.hasPMPrivilege)"
+      class="btn btn-main"
+      (click)="onCreateChangeRequest()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "projects.newChangeRequest" | translate }}
+    </button>
+  </div>
+</div>

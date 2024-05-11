@@ -1,0 +1,86 @@
+<div class="mt-4">
+  <ul class="horizontal-cards">
+    <li class="horizontal-cards-item" *ngFor="
+      let item of list
+        | paginate
+          : {
+              itemsPerPage: paginationModel?.pageSize,
+              currentPage: paginationModel?.pageIndex,
+              totalItems
+            };
+      let i = index
+    ">
+      <div class="card-container">
+        <div class="card-content">
+          <div class="horizontal-cards-item-cell committee-name">
+            <div class="cell-title">{{ "committeesList.list.committeeName" | translate }}</div>
+            <div class="cell-content"><a class="hoverableLink" [routerLink]="'/committees-management/committee-details/'+item.id">{{ language == "ar" ? item?.nameAr : item?.name }}</a> </div>
+          </div>
+          <div class="horizontal-cards-item-cell committee-chairman">
+            <div class="cell-title">{{ "committeesList.list.chairman" | translate }}</div>
+            <div  class="cell-content">{{ language == "ar" ? item?.chairmanInfo?.fullArabicName : item?.chairmanInfo?.fullName }}</div>
+          </div>
+          <div class="horizontal-cards-item-cell committee-type">
+            <div class="cell-title">{{ "committeesList.list.category" | translate }}</div>
+            <div class="cell-content">{{ language == "en" ? item?.committeeTypeName : item?.committeeTypeNameAr }}</div>
+          </div>
+          <div class="horizontal-cards-item-cell committee-members">
+            <div class="cell-title">{{ "committeesList.list.members" | translate }}</div>
+            <div class="cell-content">
+              <avatar-stack  [members]="item?.members"></avatar-stack>
+              <span class="members-count">
+                {{ item?.membersCount | membersCount : language }}
+              </span>
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell committee-creation-date">
+            <div class="cell-title">{{ "committeesList.list.creationDate" | translate }}</div>
+            <div class="cell-content" *ngIf="item?.creationDate">
+              {{
+                language === "en" ?
+                (convertUTCDateToLocalDate(item?.creationDate).toLocaleString() | date: "d MMM y") :
+                (convertUTCDateToLocalDate(item?.creationDate).toLocaleString() | localizeDate : "d MMM y")
+              }}
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell committee-actions">
+            <a (click)="openCommitteeHighlightModal(item)">{{ "committeesList.list.highlight" | translate }}</a>
+            <span class="separator">|</span>
+            <a [routerLink]="'/committees-management/committee-details/'+item.id">{{ "committeesList.list.details" | translate }}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- committee highlight modal -->
+      <app-model
+        [dimensions]="{ width: 480, height: 750 }"
+        [id]="'committee-highlight' + item?.id"
+        [hasBackBtn]="false"
+        [hasTitle]="false"
+        [isNewModel]="true"
+      >
+        <div modal-header class="committee-highlight-model-header w-100">
+          <label class="modal-title">{{ 'committeesList.highlightModel.title' | translate }}</label>
+        </div>
+
+        <div modal-content class="committee-highlight-model-content border-top">
+          <committee-highlight-model
+            *ngIf="item?.isHighlighted"
+            [item]="item"
+          ></committee-highlight-model>
+        </div>
+      </app-model>
+    </li>
+  </ul>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

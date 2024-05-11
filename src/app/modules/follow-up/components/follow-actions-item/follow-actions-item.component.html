@@ -1,0 +1,59 @@
+<div class="new-model-dialog-body">
+  <ng-container *ngIf="loading; else action">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #action>
+    <div class="item-actions-form pt-3 pb-2" [formGroup]="form">
+      <div class="item-progress">
+        <app-custom-range-control
+          *ngIf="item.isUpdateProgress"
+          formControlName="progress"
+          [maxRange]="100"
+          [minRange]="0"
+          [step]="5"
+          [unit]="'%'"
+        ></app-custom-range-control>
+
+        <app-description-input-with-attachments
+          class="d-block mt-3"
+          [control]="form | getControl : 'notes'"
+          formControlName="notes"
+          (attachmentUploadEvent)="uploadFile($event)"
+          (onDelete)="deleteAttachment($event)"
+        ></app-description-input-with-attachments>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closeModel()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="btnLoading || (item.isUpdateProgress && json(initValue) == json (form.value))"
+    (click)="submit()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="btnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,17 @@
+app-page-filters {
+  position: relative;
+  z-index: 100;
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.row-gap-3 {
+  row-gap: 1rem;
+}

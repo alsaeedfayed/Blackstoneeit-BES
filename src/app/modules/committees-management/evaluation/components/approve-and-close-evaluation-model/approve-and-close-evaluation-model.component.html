@@ -1,0 +1,123 @@
+<div class="new-model-dialog-body">
+  <div class="new-attendee-form pb-2" [formGroup]="form">
+    <div class="row my-4 mx-0 fs-5 fw-normal">
+      {{'committeesEvaluations.details.closeModel.message' | translate}}
+    </div>
+    <!-- kpis progress & tasks progress  -->
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <app-filed
+          class="d-block"
+          formControlName="kpiProgress"
+          [control]="form | getControl : 'kpiProgress'"
+          [title]="'committeesEvaluations.details.closeModel.KPIsProgress' | translate"
+          [placeholder]="'committeesEvaluations.details.closeModel.KPIsProgress' | translate"
+        ></app-filed>
+      </div>
+
+      <div class="col-md-6">
+        <app-filed
+          class="d-block"
+          formControlName="mainTasksProgress"
+          [control]="form | getControl : 'mainTasksProgress'"
+          [title]="'committeesEvaluations.details.closeModel.tasksProgress' | translate"
+          [placeholder]="'committeesEvaluations.details.closeModel.tasksProgress' | translate"
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- Attendance rate -->
+    <div class="mt-4">
+      <app-filed
+        class="d-block"
+        formControlName="attendanceRate"
+        [control]="form | getControl : 'attendanceRate'"
+        [title]="'committeesEvaluations.details.closeModel.attendanceRate' | translate"
+        [placeholder]="'committeesEvaluations.details.closeModel.attendanceRate' | translate"
+      ></app-filed>
+    </div>
+
+    <!-- FinalComment -->
+    <div class="mt-4">
+      <label class="form-label">
+        {{ "committeesEvaluations.details.closeModel.finalComment" | translate }}
+      </label>
+
+      <angular-editor formControlName="recommendation" [config]="editorConfig">
+      </angular-editor>
+      <label for="" class="form-label mt-3">
+        {{ "committeesEvaluations.details.closeModel.attachments" | translate }}
+      </label>
+      <div
+        class="drop-zone"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+      >
+        <p class="fw-bold text-black">
+          {{ "committeeKPIs.details.drag" | translate }}
+        </p>
+        <div>
+          <span class="text-secondary">{{ "shared.or" | translate }}</span>
+          <a (click)="attachments.click()" class="text-primary">
+            {{ "committeeKPIs.details.browse" | translate }}
+          </a>
+          <span class="text-secondary">
+            {{ "committeeKPIs.details.choose" | translate }}
+          </span>
+        </div>
+      </div>
+
+      <input
+        hidden
+        #attachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event)"
+      />
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        [supportedTypes]="
+          'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'new')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAttachments"
+        (deleteFile)="onDeleteFile($event, 'old')"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- cancel button -->
+  <button class="btn btn-info flex-grow-1" (click)="closePopup()">
+    {{ "shared.cancel" | translate }}
+  </button>
+
+  <!-- close button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || isBtnLoading ||uploadingFile"
+    (click)="closeEvaluation()"
+  >
+    <i *ngIf="isBtnLoading || uploadingFile" class="bx bx-loader-alt bx-spin ml-1"></i>
+    {{ "committeesEvaluations.details.closeModel.closeAndApprove" | translate }}
+  </button>
+</div>
+<!-- modal to confirm cancel evaluation -->
+<app-confirm-modal
+  [id]="'close-evaluation'"
+  [content]="'committeesEvaluations.details.closeModel.confirmClose' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="closeEvaluation()"
+></app-confirm-modal>

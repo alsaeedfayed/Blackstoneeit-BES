@@ -1,0 +1,51 @@
+.requests-filters-container {
+  position: relative;
+  z-index: 1;
+ // container: requests-filters / inline-size;
+
+  .requests-filters {
+    // display: grid;
+    // gap: 1rem;
+
+    // @container requests-filters (min-width: 700px) {
+    //   & {
+    //     grid-template-columns: repeat(4, 1fr);
+    //   }
+    // }
+    display: flex;
+   // justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+}
+
+.text-transparent {
+  color: transparent;
+}
+
+.year-filter {
+  width: 100px;
+}
+
+.from-filter{
+  width: 200px;
+}
+
+.to-filter{
+  width: 200px;
+}
+
+.sector-filter{
+  width: 250px;
+}
+
+.dept-filter{
+  width: 250px;
+}
+
+.sec-filter{
+  width: 250px;
+}
+.maintask-filter{
+  width: 250px;
+}

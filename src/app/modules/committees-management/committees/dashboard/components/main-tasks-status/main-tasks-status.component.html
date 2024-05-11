@@ -1,0 +1,193 @@
+<section class="tasks-status-container mb-3">
+  <div class="row">
+    <app-page-filters
+      [hasSearch]="false"
+      [hasClearBtn]="false"
+      [hasFooter]="false"
+      [hasAdvancedFilter]="true"
+      [hasTitle]="true"
+      [hasSeeBtn]="true"
+      [appliedFiltersCount]="appliedFiltersCount"
+      [seeBtnTitle]="'committeeDashboard.mainTasks.seeAllTasks' | translate"
+      [title]="'committeeDashboard.mainTasks.title' | translate"
+      (onSearchBtnCLicked)="getMainTaskData()"
+      (onAddBtnCLicked)="getMainTaskData()"
+      (onSeeBtnClicked)="goToTasks()"
+    >
+      <app-main-tasks-filters
+        [language]="language"
+        [committeeId]="committeeId"
+        (filter)="handelFilter($event)"
+      ></app-main-tasks-filters>
+    </app-page-filters>
+  </div>
+  <ng-container *ngIf="loadingNumbers || loadingList; else details_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #details_data>
+    <div>
+      <i class="iconsax" icon-name="activity-square"></i>
+    </div>
+    <!-- analytics widgets -->
+    <div class="analytics-widgets my-4">
+      <div class="analytics-widgets-items">
+        <!-- main tasks count -->
+        <!-- <app-stats-widget
+          [id]="'total'"
+          [count]="mainTasksStatus.mainTaskTotalCount"
+          [title]="'committeeDashboard.mainTasks.total' | translate"
+          [icon]="'bx bx-clipboard'"
+          [iconColor]="'#25314C'"
+          [widgetColor]="'#121824'"
+          [WidgetColorType]="'colorFul'"
+        ></app-stats-widget> -->
+        <app-stats-widget
+          [id]="'total'"
+          [count]="mainTasksStatus.mainTaskTotalCount"
+          [title]="'committeeDashboard.mainTasks.total' | translate"
+          [icon]="'bx bx-clipboard'"
+          [type]="'dark'"
+          [hasBorder]="true"
+          [borderColor]="'black'"
+        ></app-stats-widget>
+
+        <!-- sub inprogress tasks count -->
+        <!-- <app-stats-widget
+          [id]="'inProgress'"
+          [count]="mainTasksStatus.inprogressMainTasksCount"
+          [title]="'committeeDashboard.mainTasks.inProgress' | translate"
+          [icon]="'bx bxs-time-five'"
+          [iconColor]="'white'"
+          [iconBGColor]="'#FF8540'"
+          [iconContainerColor]="'#FF8540'"
+          [widgetColor]="'#FDB287'"
+          [WidgetColorType]="'colorFul'"
+        ></app-stats-widget> -->
+        <app-stats-widget
+          [id]="'inProgress'"
+          [count]="mainTasksStatus.inprogressMainTasksCount"
+          [title]="'committeeDashboard.mainTasks.inProgress' | translate"
+          [icon]="'bx bx-clipboard'"
+          [type]="'warning'"
+          [hasBorder]="true"
+          [borderColor]="'#FF8540'"
+        ></app-stats-widget> 
+        <!--  sub completed tasks count -->
+        <!-- <app-stats-widget
+          [id]="'completed'"
+          [count]="mainTasksStatus.completedMainTasksCount"
+          [title]="'committeeDashboard.mainTasks.completed' | translate"
+          [icon]="'bx bxs-check-circle'"
+          [iconColor]="'white'"
+          [iconBGColor]="'#00A3FF'"
+          [iconContainerColor]="'#00A3FF'"
+          [widgetColor]="'#52C1FF'"
+          [WidgetColorType]="'colorFul'"
+        ></app-stats-widget> -->
+        <app-stats-widget
+          [id]="'completed'"
+          [count]="mainTasksStatus.completedMainTasksCount"
+          [title]="'committeeDashboard.mainTasks.completed' | translate"
+          [icon]="'bx bx-clipboard'"
+          [type]="'lightBlue'"
+          [hasBorder]="true"
+          [borderColor]="'#00a3ff'"
+        ></app-stats-widget> 
+
+        <!-- on track tasks count -->
+        <!-- <app-stats-widget
+          [id]="'offTrack '"
+          [count]="mainTasksStatus.onTrackMainTaskPercentage"
+          [title]="'committeeDashboard.mainTasks.onTrack' | translate"
+          [icon]="'bx bxs-chart'"
+          [iconColor]="'white'"
+          [iconBGColor]="'#28a71c'"
+          [iconContainerColor]="'#28a71c'"
+          [widgetColor]="'#31c22e'"
+          [WidgetColorType]="'colorFul'"
+          [hasPercentage]="true"
+        ></app-stats-widget> -->
+        <app-stats-widget
+          [id]="'onTrack'"
+          [count]="mainTasksStatus.onTrackMainTaskPercentage"
+          [title]="'committeeDashboard.mainTasks.onTrack' | translate"
+          [icon]="'bx bxs-check-circle'"
+          [type]="'success'"
+          [hasBorder]="true"
+          [borderColor]="'#28a71c'"
+        ></app-stats-widget>
+      </div>
+    </div>
+    <h4 class="block-subtitle mb-2 d-flex gap-2">
+      {{ "committeeDashboard.mainTasks.tasksProgress" | translate }}
+      <span class="px-2 bg-primary text-white rounded-pill">
+        {{ mainTasks.length }}
+      </span>
+    </h4>
+
+    <!-- Tasks Table -->
+    <div class="tasks-list-container">
+      <div class="tasks-list">
+        <table>
+          <tr>
+            <th class="task-title">
+              {{ "committeeDashboard.mainTasks.table.taskName" | translate }}
+            </th>
+            <th class="task-progress">
+              {{ "committeeDashboard.mainTasks.table.progress" | translate }}
+            </th>
+            <th class="task-status">
+              {{ "committeeDashboard.mainTasks.table.dueDate" | translate }}
+            </th>
+            <th class="task-status">
+              {{ "committeeDashboard.mainTasks.table.total" | translate }}
+            </th>
+          </tr>
+          <tr *ngFor="let task of mainTasks">
+            <td class="task-title">
+              {{ language == "en" ? task?.title : task.titleAr }}
+            </td>
+            <td class="task-progress">
+              <div class="d-flex align-items-center gap-2">
+                <div class="progress-bar flex-grow-1">
+                  <span
+                    class="fill {{ task?.progress | progressColor }}"
+                    [ngStyle]="{ width: task?.progress + '%' }"
+                  ></span>
+                </div>
+                <span class="percentage">{{ task.progress | number }}%</span>
+              </div>
+            </td>
+            <td class="task-created-on">
+              <span *ngIf="task?.dueDate">
+                {{
+                  language === "en"
+                    ? ((task?.dueDate | uTCToLocalDate).toLocaleString()
+                      | date : "d MMM y")
+                    : ((task?.dueDate | uTCToLocalDate).toLocaleString()
+                      | localizeDate : "d MMM y")
+                }}
+              </span>
+            </td>
+            <td>
+              <span>{{ task?.closedTasksCount }}</span>
+              <span class="taskTotal">
+                /{{ task?.totalTasksCount }}
+                {{ "committeeDashboard.mainTasks.tasks" | translate }}
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+</section>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

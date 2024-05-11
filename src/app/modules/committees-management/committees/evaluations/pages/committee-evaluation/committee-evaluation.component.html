@@ -1,0 +1,86 @@
+<!-- filters container -->
+<ng-container *ngIf="filtersLoading; else filters">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton_filters"></ng-container>
+  </div>
+</ng-container>
+
+<!-- table container-->
+<ng-container *ngIf="loading; else meetings_items">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- filters  -->
+<ng-template #filters>
+  <app-page-filters
+    [lang]="language"
+    [hasSearch]="false"
+    [hasListViewBtn]="true"
+    [hasAddBtn]="false"
+    [hasAdvancedFilter]="true"
+    [appliedFiltersCount]="appliedFiltersCount"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+    (onClear)="clearFilter()"
+    (onAddBtnCLicked)="goToCreateMeeting()"
+    (onViewModeChange)="changeViewMode($event)"
+    [assignedSwitchValue]="selectedStatus == 5"
+    [disableSearchBtn]="showDateRangeValidator == true"
+    >
+    <!-- [hasCalendarViewBtn]="true" -->
+    <!-- [isFiltersEmpty]="emptyFIlters"
+  [selectedStatus]="selectedStatus"
+  (filtersNumber)="getFiltersCount($event)"
+  (filter)="handelFilter($event)" -->
+    <app-evaluation-filter
+      [isFiltersEmpty]="emptyFIlters"
+      [selectedStatus]="selectedStatus"
+      [showCommittee]="false"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+      [showDateRangeValidatorInput]="showDateRangeValidator"
+    ></app-evaluation-filter>
+  </app-page-filters>
+</ng-template>
+
+<!-- meetings items -->
+<ng-template #meetings_items>
+  <!-- list view -->
+  <app-evaluation-rows
+    *ngIf="list?.data?.length > 0 && auditsViewMode == 'list'"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></app-evaluation-rows>
+
+  <!-- calendar view -->
+  <!-- <app-evaluation-calender
+    *ngIf="list?.data?.length > 0 && auditsViewMode == 'calendar'"
+    [list]="list?.data"
+  ></app-evaluation-calender> -->
+
+  <div class="no-data" *ngIf="list?.data?.length == 0 || !list?.data">
+    <app-no-data
+      [msg]="'committeesEvaluations.noDataMsg' | translate"
+    ></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the filters -->
+<ng-template #skeleton_filters>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

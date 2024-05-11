@@ -1,0 +1,44 @@
+
+.blue {
+  color: #00A9FF;
+  background: #00A9FF;
+}
+
+.green {
+  color: #42D87E;
+  background: #42D87E;
+}
+
+.yellow {
+  background: #F59643;
+  color: #F59643;
+}
+
+.red {
+  color: #F45050;
+  background: #F45050;
+}
+
+.goal-title {
+  color: #121824;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  border-inline-start: 1px solid #EFEFEF;
+  display: flex;
+  align-items: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.group-status-badge {
+  margin-top: 14px;
+}
+
+hr {
+  height: 34px;
+  border-radius: 10px 0 0 10px;
+  opacity: 1;
+}

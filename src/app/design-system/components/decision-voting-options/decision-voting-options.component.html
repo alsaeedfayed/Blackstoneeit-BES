@@ -1,0 +1,43 @@
+<section class="block-content voting-list row">
+  <label for="priority" class="block-title" *ngIf="!!title">
+    {{ title }}
+  </label>
+  <div  class="btn-group row justify-content-between mt-4 gap-3">
+    <ng-container *ngFor="let option of options">
+    <button
+    [disabled]="disableVoting || cantVoteDecision"
+    *ngIf="option?.id > 0"
+      [class]="'voting-option border btn btn-outline-' + option?.color"
+      [class.active]="selectedOption?.id == option?.id"
+      (click)="vote(option)"
+    >
+      <i [class]="option?.icon"></i>
+      {{ option.title[language] }}
+    </button>
+  </ng-container>
+  </div>
+  <div
+    class="voting-info d-flex flex-wrap align-items-center justify-content-{{
+      !!selectedOption ? 'between' : 'end'
+    }}"
+  >
+    <div class="voting-info-data" *ngIf="!!selectedOption">
+      <i
+        class="voting-info-data-icon"
+        [ngClass]="'text-' + selectedOption.color + ' ' + selectedOption.icon"
+      ></i>
+      <p class="voting-info-data-message">
+        {{ "committeeDecisions.details.voteMessage" | translate }}
+      </p>
+    </div>
+    <div class="voting-info-time" *ngIf="votingDate != null">
+      {{
+        language === "en"
+          ? ((votingDate | uTCToLocalDate).toLocaleString()
+            | date : "d MMM y")
+          : ((votingDate | uTCToLocalDate).toLocaleString()
+            | localizeDate : "d MMM y")
+      }}
+    </div>
+  </div>
+</section>

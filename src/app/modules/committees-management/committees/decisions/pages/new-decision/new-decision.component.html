@@ -1,0 +1,413 @@
+<div class="page">
+  <ng-container
+    *ngIf="
+      loadingTypes ||
+        (loadingUSers && memberIdsList?.length > 0) ||
+        (loadingData && isUpdating) ||
+        loadingVotingTemplates || gettingCommitteeMembers||
+        loadingGroups;
+      else data
+    "
+  >
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- new decision form -->
+<ng-template #data>
+  <app-header-page
+    [title]="
+      (!isUpdating
+        ? 'committeeNewDecision.newDecision'
+        : 'committeeNewDecision.updateDecision'
+      ) | translate
+    "
+    [showTotalItems]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <!-- cancel button -->
+      <button class="btn btn-transparent" (click)="backToLastPage()">
+        {{ "shared.cancel" | translate }}
+      </button>
+
+      <!-- save draft button -->
+      <button
+        class="btn btn-info"
+        [disabled]="form.invalid || sendingLoading"
+        (click)="saveDecisionAsDraft()"
+      >
+        <i *ngIf="sendingLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{ "committeeNewDecision.saveDraft" | translate }}
+      </button>
+
+      <!-- publish button -->
+      <button
+        class="btn btn-main"
+        [disabled]="form.invalid || sendingLoading"
+        (click)="publishBtn()"
+      >
+        <i *ngIf="sendingLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{ "committeeNewDecision.publish" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+  <div [ngClass]="'decisionTitle'+language" class="new-decision-form" [formGroup]="form">
+    <div class="row decisionTitleContainer">
+      <!-- decision title -->
+      <div class="col-md-6 mt-4 enNameLable">
+        <app-filed
+          [length]="100"
+          class="d-block"
+          formControlName="name"
+          [control]="form | getControl : 'name'"
+          [title]="
+            'committeeNewDecision.decisionForm.decisionTitle' | translate
+          "
+          [placeholder]="
+            'committeeNewDecision.decisionForm.decisionTitle' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <!-- decision title ar -->
+      <div class="col-md-6 mt-4 arNameLable">
+        <app-filed
+          [length]="100"
+          class="d-block rtl-text"
+          formControlName="nameAr"
+          [control]="form | getControl : 'nameAr'"
+          [title]="
+            'committeeNewDecision.decisionForm.decisionTitleAr' | translate
+          "
+          [placeholder]="
+            'committeeNewDecision.decisionForm.decisionTitleAr' | translate
+          "
+        ></app-filed>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- decision type -->
+      <div class="col-md-4 mt-4">
+        <app-select
+          class="d-block"
+          formControlName="type"
+          [control]="form | getControl : 'type'"
+          [title]="'committeeNewDecision.decisionForm.decisionType' | translate"
+          [placeholder]="
+            'committeeNewDecision.decisionForm.decisionType' | translate
+          "
+          [items]="decisionTypes"
+          [bindVlaue]="'code'"
+          [bindLabel]="language == 'ar' ? 'nameAr' : 'nameEn'"
+        ></app-select>
+      </div>
+    </div>
+
+    <!-- <div class="col-md-6 mt-4">
+      <label class="form-label">
+        {{ "committeesNewRequest.committeeForm.financialImpact" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+      <app-radio-group
+        class="d-flex"
+        bindValue="id"
+        formControlName="financial"
+
+      >
+        <app-radio-box [value]=true>
+          {{ "committeesNewRequest.committeeForm.yes" | translate }}
+        </app-radio-box>
+        <app-radio-box class="mr-4 ml-4" [value]=false>
+          {{ "committeesNewRequest.committeeForm.no" | translate }}
+        </app-radio-box>
+      </app-radio-group>
+    </div> -->
+
+    <!-- decision notes -->
+    <div class="mt-4">
+      <label class="form-label">
+        {{ "committeeNewDecision.decisionForm.notes" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+      <angular-editor formControlName="notes" [config]="editorConfig">
+        <ng-template #customButtons>
+          <ae-toolbar-set>
+            <ae-button
+              iconClass="fa fa-paperclip fa-lg"
+              title="Attachment"
+              (buttonClick)="attachments.click()"
+            ></ae-button>
+          </ae-toolbar-set>
+        </ng-template>
+      </angular-editor>
+      <input
+        hidden
+        #attachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event)"
+      />
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        [supportedTypes]="
+          'committeeNewDecision.decisionForm.notesAttachmentsTypes' | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'new')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAttachments"
+        (deleteFile)="onDeleteFile($event, 'old')"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </div>
+
+    <!-- voting template -->
+    <div class="row"  style="display: none;">
+      <div class="col-md-4 mt-4">
+        <label class="form-label" for="votTemplate">
+          {{ "committeeNewDecision.decisionForm.votingTemplate" | translate }}
+        </label>
+        <div class="mt-1">
+          {{
+            language == "en"
+              ? votingTemplateObj?.name
+              : votingTemplateObj?.nameAr
+          }}
+        </div>
+
+
+
+
+        <!-- <app-select
+          class="d-block"
+          formControlName="votingTemplate"
+          [control]="form | getControl : 'votingTemplate'"
+          [title]="
+            'committeeNewDecision.decisionForm.votingTemplate' | translate
+          "
+          [placeholder]="
+            'committeeNewDecision.decisionForm.votingTemplate' | translate
+          "
+          [items]="votingTemplates"
+          [bindVlaue]="'id'"
+          [bindLabel]="language == 'ar' ? 'nameAr' : 'name'"
+          [disabled]="disableVotingTemplate"
+          [clearable]="true"
+          [isRequired]="form.get('votingTemplate').value ? true : false"
+          (change)="selectTemplate($event)"
+        ></app-select> -->
+      </div>
+
+      <div class="col-md-4">
+        <!-- voting for new -->
+        <!-- <div class="row mt-4">
+          <label class="form-label">
+            {{
+              "committeeNewDecision.decisionForm.votingForType" | translate
+            }}
+            <span class="astrix-red">*</span>
+          </label>
+          <app-radio-group
+            class="d-flex"
+            bindValue="id"
+            formControlName="votingType"
+            [disabled]="disableVotingTemplate"
+            (valueChanged)="selectVoters($event)"
+          >
+            <app-radio-box [value]="0">
+              {{
+                "committeeNewDecision.decisionForm.committeeEmployee"
+                  | translate
+              }}
+            </app-radio-box>
+            <app-radio-box class="mr-4 ml-4" [value]="1">
+            {{
+              "committeeNewDecision.decisionForm.employeeToWorkgroup" | translate
+            }}
+          </app-radio-box>
+          </app-radio-group>
+        </div> -->
+      </div>
+
+      <!-- close date -->
+      <!-- <div class="col-md-6 mt-4" *ngIf="form.get('votingTemplate').value">
+        <div class="form-group">
+          <label class="form-label">
+            {{ "committeeNewDecision.decisionForm.closingDate" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <app-nz-date-picker
+            formControlName="closingDate"
+            [control]="form | getControl : 'closingDate'"
+            minDate="today"
+            [placeholder]="'shared.selectDate' | translate"
+            ShowToday="false"
+            [disabled]="disableVotingTemplate"
+          ></app-nz-date-picker> -->
+      <!-- [isSubmitted]="isSubmitted" -->
+      <!-- <app-datepicker class="d-block" formControlName="date"></app-datepicker> -->
+      <!-- </div>
+      </div> -->
+    </div>
+  <!-- voting available for new -->
+  <div class="mt-4" style="display: none;">
+    <label class="form-label">
+      {{
+        "committeeNewDecision.decisionForm.votingAvailableFor" | translate
+      }}
+      <!-- <span class="astrix-red">*</span> -->
+    </label>
+
+    <ng-select
+      class="input-select voting-available-for-select"
+      formControlName="memberIds"
+      [ngClass]="{ valid: (form | getControl : 'memberIds')?.valid }"
+      [dir]="language === 'en' ? 'ltr' : 'rtl'"
+      [searchable]="false"
+      [clearable]="false"
+      [placeholder]="
+        'committeeNewDecision.decisionForm.votingAvailableFor' | translate
+      "
+      [notFoundText]="'shared.noItemsFound' | translate"
+      [multiple]="true"
+      [closeOnSelect]="false"
+      [readonly]="true"
+
+    >
+      <ng-option
+        *ngFor="let employee of employees"
+        [value]="employee?.id"
+      >
+        <person-item
+          [requesterItem]="employee"
+          [noCursor]="true"
+        ></person-item>
+      </ng-option>
+    </ng-select>
+  </div>
+    <!-- <div class="row mt-4" *ngIf="form.get('votingTemplate').value">
+      <label class="form-label">
+        {{ "committeeNewDecision.decisionForm.votingForType" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+      <app-radio-group
+        class="d-flex"
+        bindValue="id"
+        formControlName="votingType"
+        [disabled]="disableVotingTemplate"
+        (valueChanged)="selectVoters($event)"
+      >
+        <app-radio-box [value]="0" selected="true">
+          {{
+            "committeeNewDecision.decisionForm.committeeEmployee" | translate
+          }}
+        </app-radio-box> -->
+    <!-- <app-radio-box class="mr-4 ml-4" [value]="1">
+          {{
+            "committeeNewDecision.decisionForm.employeeToWorkgroup" | translate
+          }}
+        </app-radio-box> -->
+    <!-- </app-radio-group>
+    </div> -->
+
+    <!-- voting available for -->
+    <!-- <div
+      class="mt-4"
+      *ngIf="
+        form.get('votingType').value == 0 && form.get('votingTemplate').value
+      "
+    >
+      <label class="form-label">
+        {{ "committeeNewDecision.decisionForm.votingAvailableFor" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <ng-select
+        class="input-select voting-available-for-select"
+        formControlName="memberIds"
+        [ngClass]="{ valid: (form | getControl : 'memberIds')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeeNewDecision.decisionForm.votingAvailableFor' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [multiple]="true"
+        [closeOnSelect]="false"
+        (scrollToEnd)="loadMoreEmployees()"
+        [loading]="gettingEmployees"
+        [readonly]="disableVotingTemplate"
+        (focus)="onFocus($event)"
+      >
+        <ng-option *ngFor="let employee of employees" [value]="employee?.id">
+          <person-item
+            [requesterItem]="employee"
+            [noCursor]="true"
+          ></person-item>
+        </ng-option>
+      </ng-select>
+    </div> -->
+
+    <div
+      class="mt-4"
+      *ngIf="
+        form.get('votingType').value == 1 && form.get('votingTemplate').value
+      "
+    >
+      <app-select
+        class="d-block"
+        formControlName="workgroupId"
+        [control]="form | getControl : 'workgroupId'"
+        [title]="'committeeNewDecision.decisionForm.workgroup' | translate"
+        [placeholder]="
+          'committeeNewDecision.decisionForm.workgroup' | translate
+        "
+        [items]="workgroups"
+        [bindVlaue]="'id'"
+        [bindLabel]="'name'"
+        [disabled]="disableVotingTemplate"
+      ></app-select>
+    </div>
+
+    <!-- tags -->
+    <!-- <div class="row mt-4">
+      <app-filed
+        class="d-block"
+        formControlName="tags"
+        [control]="form | getControl : 'tags'"
+        [title]="'committeesNewRequest.committeeForm.tags' | translate"
+        [placeholder]="'committeesNewRequest.committeeForm.tags' | translate"
+        [isTagsFiled]="true"
+        [tags]="tags"
+      ></app-filed>
+    </div> -->
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-confirm-modal
+  *ngIf="isConfirmationModelOpened"
+  [id]="'publish-decision'"
+  [content]="'committeeNewDecision.publishMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="publish()"
+></app-confirm-modal>

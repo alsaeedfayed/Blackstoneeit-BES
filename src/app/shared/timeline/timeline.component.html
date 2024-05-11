@@ -1,0 +1,141 @@
+<div class="timeline-table">
+  <table class="custom-table mb-4">
+    <thead>
+      <tr>
+        <th class="col-3"
+            scope="col">{{'STAGE' | translate}}</th>
+        <th class="col-2"
+            scope="col">{{'OWNERS' | translate}}</th>
+        <th class="col-1"
+            scope="col">{{'ACTION' | translate}}</th>
+        <th class="col-2"
+            scope="col">{{'DATE & TIME' | translate}}</th>
+        <th class="col-2"
+            scope="col">{{'COMMENTS & DOCUMENTS' | translate}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <div class="timeline">
+        <div class="timeline-highlight"></div>
+      </div>
+      <ng-container *ngIf="mode == 'allStates'">
+        <tr *ngFor="let event of events">
+          <td class="col-3 position-relative">
+            <div class="timeline-status"
+                 [ngClass]="{'active': event.status == 'Completed', 'disabled': event.status == 'Upcoming'}">
+              <i class="bx bx-check"></i>
+            </div>
+            <span
+                  [ngClass]="{'state-active': event.status == 'Completed', 'state-disabled': event.status == 'Upcoming'}">{{event?.state?.title[lang]}}</span>
+          </td>
+          <td class="col-2"
+              [class.active]="event?.status != 'Upcoming'">
+            <div *ngFor="let item of event?.tasks"
+                 class="d-flex align-items-center task-td">
+              <i class="bx bxs-user mr-2"></i>
+              <span class="task-owner-name">{{item?.assignedTo?.fullName[lang]}}</span>
+            </div>
+          </td>
+          <td class="col-2"
+              [class.active]="event?.status != 'Upcoming'">
+            <div *ngFor="let item of event?.tasks"
+                 class="d-flex align-items-center task-td">
+              <span class="timeline-status-badge status-badge-success"
+                    *ngIf="item?.action">{{item?.action?.title[lang]}}</span>
+              <span class="timeline-status-badge status-badge-primary"
+                    *ngIf="!item?.action && event.status != 'Completed'">{{'Waiting for action' | translate}}</span>
+              <span class="timeline-status-badge status-badge-default"
+                    *ngIf="!item?.action && event.status == 'Completed'">{{'Beaten' | translate}}</span>
+            </div>
+          </td>
+          <td class="col-1"
+              [class.active]="event?.status != 'Upcoming'">
+            <div *ngFor="let item of event?.tasks"
+                 class="d-flex align-items-center task-td">
+              <span *ngIf="item?.updatedDate">
+                {{ this.lang === "en" ? (item?.updatedDate | date : "dd/MM/yyyy hh:mm a") : (item?.updatedDate | localizeDate : "dd/MM/yyyy hh:mm a") }}
+              </span> <span
+                    *ngIf="item?.updatedDate"> - </span> <span *ngIf="item?.updatedDate">{{item?.updatedDate | date:
+                'HH:mm'}}</span>
+            </div>
+          </td>
+          <td class="col-3"
+              [class.active]="event?.status != 'Upcoming'">
+            <div *ngFor="let item of event?.tasks"
+                 class="d-flex align-items-center task-td">
+              <span class="timeline-comment-text" *ngIf="item?.action?.comments">{{item?.action?.comments.slice(0, 70)}}<span
+                      *ngIf="item?.action?.comments && item?.action?.comments.length > 70">...</span></span>
+
+              <button data-bs-toggle="modal"
+                      (click)="getCurrentEventAttachmentsAndComments(item?.action?.attachments, item?.action?.comments)"
+                      data-bs-target="#exampleModal"
+                      class="expand-attachments-btn"
+                      *ngIf="item?.action?.attachments?.length != 0 && item?.action?.attachments">
+                <span>({{item?.action?.attachments?.length}}) {{'Files' | translate}}</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="mode == 'currentState'">
+        <tr>
+          <td class="col-3 position-relative">
+            <div class="timeline-status"
+                 [ngClass]="{'active': currentStateEvent?.status == 'Completed', 'disabled': currentStateEvent?.status == 'Upcoming'}">
+              <i class="bx bx-check"></i>
+            </div>
+            <span
+                  [ngClass]="{'state-active': currentStateEvent?.status == 'Completed', 'state-disabled': currentStateEvent?.status == 'Upcoming'}">{{currentStateEvent?.state?.title[lang]}}</span>
+          </td>
+          <td class="col-2"
+              [class.active]="currentStateEvent?.status != 'Upcoming'">
+            <div *ngFor="let item of currentStateEvent?.tasks"
+                 class="d-flex align-items-center task-td">
+              <i class="bx bxs-user mr-2"></i>
+              <span class="task-owner-name">{{item?.assignedTo?.fullName[lang]}}</span>
+            </div>
+          </td>
+          <td class="col-2"
+              [class.active]="currentStateEvent?.status != 'Upcoming'">
+            <div *ngFor="let item of currentStateEvent?.tasks"
+                 class="d-flex align-items-center task-td">
+              <span class="timeline-status-badge status-badge-success"
+                    *ngIf="item?.action">{{item?.action?.title[lang]}}</span>
+              <span class="timeline-status-badge status-badge-primary"
+                    *ngIf="!item?.action && currentStateEvent?.status != 'Completed'">{{'Waiting for action' | translate}}</span>
+              <span class="timeline-status-badge status-badge-default"
+                    *ngIf="!item?.action && currentStateEvent?.status == 'Completed'">{{'Beaten' | translate}}</span>
+            </div>
+          </td>
+          <td class="col-1"
+              [class.active]="currentStateEvent?.status != 'Upcoming'">
+            <div *ngFor="let item of currentStateEvent?.tasks"
+                 class="d-flex align-items-center task-td">
+              <span *ngIf="item?.updatedDate">{{item?.updatedDate | date: 'dd/MM/yyyy hh:mm a'}}</span> <span
+                    *ngIf="item?.updatedDate"> - </span> <span *ngIf="item?.updatedDate">{{item?.updatedDate | date:
+                'HH:mm'}}</span>
+            </div>
+          </td>
+          <td class="col-3"
+              [class.active]="currentStateEvent?.status != 'Upcoming'">
+            <div *ngFor="let item of currentStateEvent?.tasks"
+                 class="d-flex align-items-center task-td">
+              <span *ngIf="item?.action?.comments">{{item?.action?.comments.slice(0, 70)}}<span
+                      *ngIf="item?.action?.comments && item?.action?.comments.length > 70">...</span></span>
+
+              <button data-bs-toggle="modal"
+                      (click)="getCurrentEventAttachmentsAndComments(item?.action?.attachments, item?.action?.comments)"
+                      data-bs-target="#exampleModal"
+                      class="expand-attachments-btn"
+                      *ngIf="item?.action?.attachments?.length != 0 && item?.action?.attachments">
+                <i class="bx bxs-file"></i>
+                <span>{{item?.action?.attachments?.length}}</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+
+    </tbody>
+  </table>

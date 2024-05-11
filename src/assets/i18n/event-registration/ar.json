@@ -1,0 +1,28 @@
+{
+  "eventRegistration": {
+    "eventRegistration": "تسجيل الحدث",
+    "emptyState": {
+      "title": "عفوًا، لقد تم إغلاق التسجيل لهذا الحدث الآن",
+      "desc": "لقد انقضى الموعد النهائي للتسجيل"
+    },
+    "successState": {
+      "title": "تهانينا، لقد تم تقديم طلبك بنجاح"
+    },
+    "form": {
+      "title": "يرجى ملء النموذج للتسجيل في هذا الحدث",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل الاسم الكامل",
+      "position": "المنصب",
+      "positionPlaceholder": "أدخل المنصب",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل البريد الإلكتروني",
+      "phoneNumber": "رقم الهاتف",
+      "phoneNumberPlaceholder": "أدخل رقم الهاتف",
+      "profilePicture": "الصورة الشخصية",
+      "selectFiles": "اضغط لاختيار الملفات من جهازك",
+      "supportedFiles": "يدعم صور jpeg, png",
+      "submitRequest": "تقديم الطلب",
+      "thisFieldIsRequired": "هذا الحقل مطلوب"
+    }
+  }
+}

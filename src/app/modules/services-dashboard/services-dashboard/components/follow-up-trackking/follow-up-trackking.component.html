@@ -1,0 +1,22 @@
+<div class="tracking-chart mt-2">
+  <div class="header">
+    <h5 class="mb-3 tracking-chart-title">
+      {{ 'servicesDashboard.followUptrackingChartHeader' | translate }}
+    </h5>
+  </div>
+
+  <div class="row tracking-chart-row">
+    <div class="col-12 col-lg-8">
+      <div class="tracking-chart-row-bar-chart" style="height: 370px;">
+        <canvas
+          style="height: 370px !important;"
+          id="myChart"
+          #myChart
+        ></canvas>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <app-tracking-pie-chart [data]="pieChartData"></app-tracking-pie-chart>
+    </div>
+  </div>
+</div>

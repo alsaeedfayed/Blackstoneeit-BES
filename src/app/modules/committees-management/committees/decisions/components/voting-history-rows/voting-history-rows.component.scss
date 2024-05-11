@@ -1,0 +1,99 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.voting {
+  &-list {
+    overflow-x: auto;
+    &-container {
+      background-color: #ffffff;
+      border: 0.0625rem solid #efefef;
+      border-radius: 0.625rem;
+      box-shadow: 0rem 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+    }
+  }
+  &-voter {
+    width: 180px;
+
+    ::ng-deep person-item {
+      .personItem {
+        > .avatar {
+          .letters,
+          img {
+            height: 2rem !important;
+            width: 2rem !important;
+          }
+
+          .letters {
+            font-size: 0.75rem;
+          }
+        }
+
+        > .info {
+          .name {
+            font-size: 0.875rem;
+          }
+
+          .job {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &-time {
+    min-width: 150px;
+  }
+
+
+}
+
+table {
+  width: 100%;
+
+  tr {
+    &:not(:first-of-type):not(:last-of-type) {
+      border-bottom: 0.0625rem solid #efefef;
+    }
+
+    th {
+      color: $info_color;
+      font-size: 0.75rem;
+    }
+
+    th,
+    td {
+      font-weight: 500;
+      font-size: 13px;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+
+::ng-deep app-badge {
+  .badge-status::before {
+    display: none !important;
+  }
+}
+
+::ng-deep{
+  .voting-voting{
+    .success {
+      color: #0FC161 !important;
+      border: 1px solid #0FC161 !important;
+      padding: 8px, 10px, 8px, 10px;
+    }
+
+    .danger {
+      color: #DC0808 !important;
+      border: 1px solid #DC0808 !important;
+      padding: 8px, 10px, 8px, 10px;
+    }
+
+    .secondary{
+      color: #C4C4C4 !important;
+      border: 1px solid #C4C4C4 !important;
+      padding: 8px, 10px, 8px, 10px;
+    }
+  }
+
+}

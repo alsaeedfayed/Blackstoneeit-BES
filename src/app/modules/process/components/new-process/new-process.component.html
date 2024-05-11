@@ -1,0 +1,284 @@
+<div class="page" >
+
+
+    <ng-container *ngIf=" loadingConsumers ||
+        (loadingProcessData && isUpdating) ||
+        (loadingUsers && isUpdating) else data">
+      <div class="my-4">
+        <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #data>
+    <app-header-page
+    [backButton]="true" 
+    [title]= "(isUpdating ? 'newProcess.editProcess':'newProcess.newProcess')|translate" 
+    [showTotalItems]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+  
+      <!-- cancel button -->
+      <button
+        class="btn btn-transparent"
+        (click)="backToLastPage()"
+      >
+        {{ "shared.cancel" | translate }}
+      </button>
+  
+      <!-- save  button -->
+      <button
+        class="btn btn-main"
+        [disabled]="form.invalid"
+        (click)="save()"
+      >
+        <i *ngIf="isSaveBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{ "shared.save" | translate }}
+      </button>
+    </div>
+    </app-header-page>
+    <div class="block-content" [formGroup]="form">
+    
+      <div class="row">
+        <!-- process title -->
+        <div class="col-md-6 mt-4">
+          <app-filed 
+              class="d-block" 
+              formControlName="title" 
+              [control]="form | getControl: 'title'"
+              [title]="'newProcess.form.titleEn' | translate"
+              [placeholder]="'newProcess.form.titleEn' | translate">
+          </app-filed>
+        </div>
+
+        <!-- process title ar -->
+        <div class="col-md-6 mt-4">
+          <app-filed 
+              class="d-block rtl-text" 
+              formControlName="arabicTitle" 
+              [control]="form | getControl: 'arabicTitle'"
+              [title]="'newProcess.form.titleAr' | translate"
+              [placeholder]="'newProcess.form.titleAr' | translate">
+          </app-filed>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- process description -->
+        <div class="col-md-6 mt-4">
+          <app-text-editor
+            [id]="'description'"
+            formControlName="description"
+            [control]="form | getControl: 'description'"
+            [title]="'newProcess.form.descriptionEn' | translate"
+            [placeholder]="'newProcess.form.descriptionEn' | translate"
+            [disable]="false"
+            [hasAttachments]="false"
+          ></app-text-editor>
+        </div>
+
+        <!-- process description ar -->
+        <div class="col-md-6 mt-4">
+          <app-text-editor
+            [id]="'arabicDescription'"
+            formControlName="arabicDescription"
+            [control]="form | getControl: 'arabicDescription'"
+            [title]="'newProcess.form.descriptionAr' | translate"
+            [placeholder]="'newProcess.form.descriptionAr' | translate"
+            [disable]="false"
+            [hasAttachments]="false"
+          ></app-text-editor>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- process sla -->
+        <div class="col-md-6 mt-4">
+          <app-filed 
+              class="d-block" 
+              formControlName="sla" 
+              [control]="form | getControl: 'sla'"
+              [title]="'newProcess.form.sla' | translate"
+              [placeholder]="'newProcess.form.slaPlaceHolder' | translate">
+          </app-filed>
+        </div>
+        
+
+        <!-- process consumer -->
+        <div class="col-md-6 mt-4">
+          <app-select 
+            class="d-block" 
+            formControlName="consumerId" 
+            [control]="form | getControl: 'consumerId'"
+            [title]="'newProcess.form.consumer' | translate"
+            [placeholder]="'newProcess.form.consumer' | translate" 
+            [items]="consumers"
+            [bindVlaue]="'id'" 
+            [bindLabel]="language == 'en' ? 'name.en' : 'name.ar'"
+            ></app-select>
+            <!-- [disabled]="disableVotingTemplate" -->
+        </div>
+      </div>
+
+      <div class="d-flex my-4 justify-content-between">
+          <label class="form-label fs-5 ">
+              {{ 'newProcess.form.allowForceAction' | translate }}
+            </label>
+
+          <app-switch
+            formControlName="isForceActionUsed"
+            [(ngModel)]="isForceActionUsed.value"
+            (ngChange)="onAllowForceActionChange($event)">
+          </app-switch>
+      </div>
+
+      <div *ngIf="isForceActionUsed?.value" class="auth">
+          <div class="d-flex my-2 justify-content-between">
+              <label class="form-label">
+                  {{ 'newProcess.form.authorizationType' | translate }}
+                  <span class="astrix-red">*</span>
+              </label>
+
+              <app-radio-group class="d-flex" bindValue="id" formControlName="forceActionType" (change)="onSelectAuthType()">
+              <app-radio-box [value]="1">
+                  {{ 'newProcess.form.user' | translate }}
+              </app-radio-box>
+              <app-radio-box class="mr-4 ml-4" [value]="2">
+                  {{ 'newProcess.form.role' | translate }}
+              </app-radio-box>
+              </app-radio-group>
+          </div>
+          <!-- users select -->
+          <div class="mt-4" *ngIf="forceActionType.value == 1">
+              <label class="form-label">
+                {{ 'newProcess.form.allowedUsers' | translate }}
+                <span class="astrix-red">*</span>
+              </label>
+
+              <ng-select 
+              class="input-select voting-available-for-select" 
+              formControlName="forceActionUsers"
+                [ngClass]="{ valid: (form | getControl: 'forceActionUsers')?.valid }" 
+                [dir]="language === 'en' ? 'ltr' : 'rtl'"
+                [searchable]="true" 
+                [clearable]="true"
+                [placeholder]="'newProcess.form.selectUsers' | translate"
+                [notFoundText]="'shared.noItemsFound' | translate" 
+                [multiple]="true" 
+                [closeOnSelect]="false"
+                (scrollToEnd)="loadMoreUsers()"
+                [loading]="gettingUsers"
+                (focus)="onUserSelectFocus($event)"
+                (keyup)="onUserInputChange($event)"
+                >
+                <ng-option *ngFor="let user of users" [value]="user?.id">
+                  {{ user?.fullName }}
+                  <!-- <person-item [requesterItem]="user" [noCursor]="true"></person-item> -->
+                </ng-option>
+              </ng-select>
+          </div>
+
+          <!-- roles select -->
+          <div class="mt-4" *ngIf="form.get('forceActionType').value == 2">
+              <label class="form-label">
+                {{ 'newProcess.form.allowedRoles' | translate }}
+                <span class="astrix-red">*</span>
+              </label>
+
+              <ng-select 
+              class="input-select voting-available-for-select" 
+              formControlName="forceActionRoles"
+                [ngClass]="{ valid: (form | getControl: 'forceActionRoles')?.valid }" 
+                [dir]="language === 'en' ? 'ltr' : 'rtl'"
+                [searchable]="true" 
+                [clearable]="true"
+                [placeholder]="'newProcess.form.selectRoles' | translate"
+                [notFoundText]="'shared.noItemsFound' | translate" 
+                [multiple]="true" 
+                [closeOnSelect]="false"
+                (scrollToEnd)="loadMoreRoles()"
+                [loading]="gettingRoles"
+                (focus)="onRolesSelectFocus($event)"
+                (keyup)="onRoleInputChange($event)"
+                >
+                <ng-option *ngFor="let role of roles" [value]="role?.id">
+                  {{language == 'en' ? role.name : role.nameAr}}
+                </ng-option>
+              </ng-select>
+          </div>
+
+          <label class="form-label my-3">
+              {{ 'newProcess.form.overrideButtonStyle' | translate }} 
+              <span class="astrix-red">*</span>
+            </label>
+
+          <div>
+              <app-buttons-select 
+                [buttons]="overrideTagList" 
+                [selected]="processData.forceActionOptionTag" 
+                (onSelect)="getOverrideButtonStyle($event)"
+                [language]="language">
+              </app-buttons-select>
+
+          </div>
+      </div>
+      <div class="d-flex my-4 justify-content-between">
+        <label class="form-label fs-5">
+            {{ 'newProcess.form.allowReviewAction' | translate }}
+          </label>
+
+          <app-switch 
+            formControlName="isReassignOptionUsed"
+            [(ngModel)]="isReassignOptionUsed.value"
+            (ngChange)="onAllowReviewAction($event)">
+        </app-switch>
+      </div>
+      <div *ngIf="isReassignOptionUsed.value" class="auth">
+          <label class="form-label my-3">
+              {{ 'newProcess.form.reviewButtonStyle' | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+
+          <div>
+            <app-buttons-select 
+            [buttons]="reviewTagList" 
+            [selected]="processData.reassignOptionTag" 
+            (onSelect)="getReviewButtonStyle($event)"
+            [language]="language">
+          </app-buttons-select>
+
+          </div>
+      </div>
+      <div class="d-flex my-4 justify-content-between">
+        <label class="form-label fs-5">
+            {{ 'newProcess.form.activated' | translate }}
+          </label>
+
+          <app-switch 
+            formControlName="isEnabled"
+            [(ngModel)]="isEnabled.value"
+            (ngChange)="enabledChange($event)">
+        </app-switch>
+      </div>
+      <app-select-states 
+        [id]="'externalStates'"
+        [language]="language"
+        formControlName="externalStates"
+        [control]="form | getControl: 'externalStates'"
+        [title]="'newProcess.form.externalStates' | translate"
+        [placeholder]="'newProcess.form.externalStates' | translate"
+         >
+      </app-select-states>
+  </div>
+</ng-template>
+
+  <!-- loader skeleton for the form -->
+<ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </ng-template>
+  

@@ -1,0 +1,10 @@
+<div class="search-bar-container mr-2">
+  <!-- type="text" -->
+  <input
+    [placeholder]="searchPlaceHolder || 'shared.search' | translate"
+    [id]="id"
+    maxlength="40"
+    [(ngModel)]="searchKey"
+  />
+  <i class="bx bx-search"></i>
+</div>

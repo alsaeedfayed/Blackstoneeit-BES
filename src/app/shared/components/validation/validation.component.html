@@ -1,0 +1,13 @@
+<div *ngFor="let key of keysOfErrors" class="msg" role="alert">
+  <span class="font-medium">
+   <span *ngIf="valideMax">{{ "shared.validations." + key | translate }}</span>
+   <span *ngIf="!valideMax">{{ "shared.validations.validateMinPercentage." + key | translate }}</span>
+    <span *ngIf="key == 'maxlength'">
+      {{ length }}
+    </span>
+    <span *ngIf="key == 'minlength'">
+      {{ minLength }}
+    </span>
+
+  </span>
+</div>

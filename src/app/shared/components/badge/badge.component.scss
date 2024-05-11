@@ -1,0 +1,173 @@
+.badge-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: fit-content;
+  // min-width: 10em !important;
+  min-height: 22px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 0 10px;
+  border-radius: 40px;
+  text-transform: capitalize;
+
+  &::before {
+    content: "";
+    height: 8px;
+    width: 8px;
+    background-color: rgb(var(--color));
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &.active, &.onTrack {
+    --color: 0, 219, 153;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.1);
+  }
+  &.new, &.started, &.overAchived {
+    --color: 0, 117, 255;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.1);
+  }
+  &.inprogress, &.offTrack {
+    color: rgba(255, 76, 52);
+    background: rgba(255, 76, 52, 0.2);
+  }
+
+  &.inProgress {
+    // rgb(255, 195, 73)
+    --color: 255, 195, 73;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.1);
+  }
+
+  &.opened {
+    // rgb(27, 227, 167)
+    --color: 27, 227, 167;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.2);
+  }
+
+  &.rejected {
+    // rgb(255, 115, 115)
+    --color: 255, 115, 115;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.08);
+  }
+  &.closed, &.baseLine , &.notDue {
+    --color: 113, 121, 134;
+    color: rgb(var(--color));
+    background: rgba(var(--color), 0.1);
+  }
+
+  &.cancelled, &.canceled {
+    // rgb(87, 87, 87)
+    --color: 87, 87, 87;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.2);
+  }
+
+  &.Warning {
+    // rgb(255, 255, 255)
+    --color: 255, 255, 255;
+    color: rgb(var(--color));
+    background-color: rgba(254, 214, 0, 1);
+  }
+
+  &.pendingMom {
+    // rgb(235, 148, 0)
+    --color: 235, 148, 0;
+    color: rgb(var(--color));
+    background-color: rgba(235, 148, 0, 0.078);
+  }
+
+  &.complete {
+    // rgb(15, 193, 97)
+    --color: 15, 193, 97;
+    color: rgb(var(--color));
+    background-color: rgba(15, 193, 97, 0.078);
+  }
+
+  &.momReviewed {
+    // rgb(196, 214, 0)
+    --color: 196, 214, 0;
+    color: rgb(var(--color));
+    background-color: rgba(196, 214, 0, 0.078);
+  }
+
+  &.needMOMReview {
+    // rgb(60, 166, 189)
+    --color: 60, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(157, 189, 150, 0.141);
+  }
+
+  &.draft {
+    // rgb(150, 166, 189)
+    --color: 150, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(150, 166, 189, 0.141);
+  }
+
+  &.notDueYet {
+    // rgb(41, 45, 50)
+    --color: 41, 45, 50;
+    color: rgb(var(--color));
+    background-color: rgba(41, 45, 50, 0.078);
+  }
+
+  // Importance level for tasks in committees
+  &.highLevel {
+    --color: 255, 72, 72;
+    color: rgb(var(--color));
+    background-color: rgba(255, 72, 72, 0.09);
+  }
+
+  &.mediumLevel {
+    --color: 255, 168, 0;
+    color: rgb(var(--color));
+    background-color: rgba(255, 168, 0, 0.09);
+  }
+
+  &.lowLevel {
+    --color: 150, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(172, 181, 193, 0.149);
+  }
+
+
+  &.todoTask {
+    --color: 5, 0, 255;
+    color: rgb(var(--color));
+    background-color: rgba(4, 0, 255, 0.07);
+  }
+
+  &.inProgressTask {
+    --color: 255, 107, 0;
+    color: rgb(var(--color));
+    background-color: rgba(255, 107, 0, 0.07);
+  }
+
+  &.underReviewTask {
+    --color: 60, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(60, 166, 189, 0.07);
+  }
+
+  &.doneTask {
+    --color: 15, 193, 150;
+    color: rgb(var(--color));
+    background-color: rgba(15, 193, 150, 0.08);
+  }
+
+  &.primary {
+    --color: 255, 255, 255;
+    color: rgb(var(--color));
+    background-color: rgba(4, 55, 242, 1);
+  }
+
+}

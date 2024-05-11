@@ -1,0 +1,224 @@
+<div class="tasks-list-container">
+  <div class="tasks-list">
+    <table>
+      <tr>
+        <th class="task-code">#</th>
+        <th class="task-title">
+          <div class="sortable-row" (click)="sort(sortKey.title)">
+            {{ "committeeTasks.taskTitle" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.title && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.title && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th class="task-status">
+          <div class="sortable-row" (click)="sort(sortKey.importanceLevel)">
+            {{ "committeeTasks.priority" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.importanceLevel && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.importanceLevel && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th class="task-progress">
+          <div class="sortable-row" (click)="sort(sortKey.progress)">
+            {{ "committeeTasks.progress" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.progress && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.progress && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th class="task-created-on">
+          <div class="sortable-row" (click)="sort(sortKey.creationDate)">
+            {{ "committeeTasks.createdOn" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.creationDate && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.creationDate && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th class="task-assigned-to">
+          {{ "committeeTasks.assignedTo" | translate }}
+        </th>
+        <th class="task-filesCount">
+          <div class="sortable-row" (click)="sort(sortKey.attachmentsCount)">
+            {{'committeeTasks.filesCount' | translate}}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.attachmentsCount && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.attachmentsCount && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th class="task-commentsCount">
+          <div class="sortable-row" (click)="sort(sortKey.commentsCount)">
+            {{'committeeTasks.commentsCount' | translate}}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.commentsCount && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.commentsCount && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th class="task-status">
+          <div class="sortable-row" (click)="sort(sortKey.status)">
+            {{'committeeTasks.status' | translate}}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.status && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.status && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+      </tr>
+      <tr *ngFor="
+        let task of list
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems
+              };
+        let i = index
+      ">
+        <td class="task-code">
+          <a class="hoverableLink" (click)="openTaskDetailsModel(task)">
+            {{ task?.code }}
+          </a>
+        </td>
+        <td class="task-title">
+          <a class="hoverableLink" (click)="openTaskDetailsModel(task)">
+            {{ language == 'en'? task?.title :task?.titleAr }}
+          </a>
+        </td>
+        <td class="task-status">
+          <app-badge
+            [className]="importanceLevels[task?.importanceLevel]['className']"
+            [label]="language =='en'? importanceLevels[task?.importanceLevel]['name']: importanceLevels[task?.importanceLevel]['nameAr']"
+          ></app-badge>
+        </td>
+        <td class="task-progress">
+          <div class="d-flex align-items-center gap-2">
+            <div class="progress-bar flex-grow-1">
+              <span class="fill {{task?.progress | progressColor}}" [ngStyle]="{ 'width': task?.progress + '%' }"></span>
+            </div>
+            <span class="percentage">{{task.progress}}%</span>
+          </div>
+        </td>
+        <td class="task-created-on">
+          <span *ngIf="task?.creationDate">
+            {{
+            language === "en" ?
+            ((task?.creationDate|uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+            ((task?.creationDate|uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+            }}
+          </span>
+        </td>
+        <td class="task-assigned-to">
+          <person-item [requesterItem]="task?.assignedToInfo" [noCursor]="true" [isUserCardFixed]="true"></person-item>
+        </td>
+        <td>{{task?.attachmentsCount}}</td>
+        <td>{{task?.commentsCount}}</td>
+        <td>
+          <app-badge
+          [className]="statuses[task?.status]['className']"
+          [label]="language =='en'? statuses[task?.status]['name']: statuses[task?.status]['nameAr']"
+        ></app-badge>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+
+
+<!-- task details modal -->
+<app-model
+  [dimensions]="{ width: isDetailsModelOpened ? 900 : 900, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+    <label class="modal-title" *ngIf="isDetailsModelOpened">
+      {{ "committeeTasks.detailsModel.title" | translate }}
+    </label>
+
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">
+      {{ "committeeTasks.detailsModel.title" | translate }}
+    </label>
+    <!-- change title  -->
+    <label class="modal-title" *ngIf="isUpdatingTask">
+      {{ "committeeTasks.updateTask" | translate }}
+    </label>
+    <!-- <label class="modal-title">{{ ( isDetailsModelOpened ? 'committeeTasks.detailsModel.title' :'committeeTasks.updateProgress.title') | translate }}</label> -->
+
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+    <task-details-model
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdate)="updateTask($event)"
+      (onDelete)="deleteTask()"
+    ></task-details-model>
+
+    <app-update-progress-model
+      *ngIf="isUpdateProgressModelOpened"
+      [task]="openedTask"
+      [language]="language"
+      (onBack)="openTaskDetailsModel(openedTask)"
+    ></app-update-progress-model>
+
+    <!-- edit mode task -->
+    <create-task-model
+      [taskId]="openedTask?.id"
+      *ngIf="isUpdatingTask"
+      [committeeId]="committeeId"
+      (taskAdded)="onChangeHappened()"
+    ></create-task-model>
+
+    <!-- modal to confirm task deletion -->
+    <app-confirm-modal
+      [id]="'delete-task'"
+      [content]="confirmMsg"
+      [btnContent]="'shared.confirm' | translate"
+      [btnStyle]="'main'"
+      (confirm)="onDeleteTaskConfirmed()"
+    ></app-confirm-modal>
+  </div>
+</app-model>

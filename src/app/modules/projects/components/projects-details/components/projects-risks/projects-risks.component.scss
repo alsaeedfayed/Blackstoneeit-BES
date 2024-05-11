@@ -1,0 +1,13 @@
+@import "src/assets/css/utils/variables.scss";
+
+.risks-table-wrapper {
+  overflow: auto;
+}
+
+.cards-title {
+  color: $black-color;
+}
+
+.paragraph {
+  word-break: break-all;
+}

@@ -1,0 +1,136 @@
+<div class="wrapper">
+  <!-- <app-header-page
+    [title]="'Meetings.discussionItems' | translate"
+    [titleBtn]="!isViewMode ? ('Meetings.addItem' | translate) : null"
+    (btnClick)="opendiscussionItemsModal()"
+    [isAddBtn]="true"
+  ></app-header-page> -->
+
+  <div class="header" *ngIf="!isViewMode && canAdd">
+    <button
+      class="btn btn-main createService"
+      (click)="opendiscussionItemsModal()"
+    >
+      <i class="bx bx-plus"></i>
+    </button>
+  </div>
+
+  <!-- <div class="section-title">
+    <h6>{{ "Meetings.discussionItemsList" | translate }}</h6>
+  </div> -->
+
+  <div class="list" *ngIf="items">
+    <div class="attendees-list-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">
+              {{ "Meetings.discussionItemTitle" | translate }}
+            </th>
+            <th scope="col">{{ "Meetings.Presenter" | translate }}</th>
+            <th scope="col">{{ "Meetings.Description" | translate }}</th>
+            <th scope="col">{{ "Meetings.Duration" | translate }}</th>
+            <th scope="col">{{ "Meetings.attachments" | translate }}</th>
+            <th scope="col" class="meeting-actions" *ngIf="!isViewMode">
+              {{ "Meetings.actions" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <!-- Title -->
+            <td>
+              {{ item?.title }}
+            </td>
+            <!-- Presenter -->
+            <td>
+              <person-item
+                *ngIf="item.presenterInfo"
+                [requesterItem]="item.presenterInfo"
+                [noCursor]="true"
+              ></person-item>
+            </td>
+            <!-- Description -->
+            <td>
+              <see-more [text]="item?.notes" [maxWidth]="'300px'"></see-more>
+            </td>
+            <!-- Duration -->
+            <td>{{ item?.duration || "-" }}</td>
+            <td>
+              <div class="attachments">
+                <ul *ngIf="item.attachments.length > 0">
+                  <li  class="file-name-li" *ngFor="let attachment of item.attachments">
+                    <a
+                      class="file-name"
+                      (click)="getFileURL(attachment.fileName)"
+                      >{{ attachment.uploadedFileName }}</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div *ngIf="item.attachments.length == 0">-</div>
+            </td>
+            <!-- Actions -->
+            <td class="meeting-actions" *ngIf="!isViewMode">
+              <!-- <div class="actions" *ngIf="!isViewMode">
+                <div class="actions">
+                  <button class="edit-icons" (click)="openEditPopup(item)">
+                    <i class="bx bxs-edit-alt"></i>
+                  </button>
+                  <button class="delete-icons" (click)="deleteItem(item)">
+                    <img src="assets/img/trash.svg" alt="delete" />
+                  </button>
+                </div>
+              </div> -->
+              <div *ngIf="!isViewMode">
+                <app-dropdown (select)="onOptionSelect($event, item)" [items]="options"></app-dropdown>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="no-data" *ngIf="items.length == 0">
+      <!-- <app-no-data-custom
+        msg="{{ 'Meetings.noDataMsg' | translate }}"
+      ></app-no-data-custom> -->
+      {{ "Meetings.nodiscussionItemsDataMsg" | translate }}
+    </div>
+  </div>
+</div>
+
+<!-- add/edit discussion items model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'add-discussion-items'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeDiscussionItemsModal()"
+>
+  <div modal-header class="discussion-items-model-header w-100">
+    <label class="modal-title">
+      {{ editedItem ? ('Meetings.editDiscussionItems' | translate) : ('Meetings.addDiscussionItems' | translate) }}
+    </label>
+  </div>
+
+  <div modal-content class="discussion-items-model-content border-top">
+    <app-discussion-items-modal
+      *ngIf="isShowForm"
+      [Item]="editedItem"
+      [attendees]="attendeesList ?? []"
+      [createdMeetingId]="createdMeetingId"
+      (save)="addDiscussionItem($event)"
+      (update)="editedItemHandler($event)"
+    ></app-discussion-items-modal>
+  </div>
+</app-model>
+
+<app-confirm-modal
+  [id]="'confirm-discussion-delete'"
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteItemConfirmed()"
+></app-confirm-modal>

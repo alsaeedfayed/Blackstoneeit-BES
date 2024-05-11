@@ -1,0 +1,28 @@
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  > button {
+    padding: 8px 13px;
+    border: 0;
+    color: #fff;
+    font-size: 18px;
+    margin-inline-end: 10px;
+  }
+  .primary {
+    background: #00db99;
+    border-radius: 8px;
+  }
+  .warning {
+    background: #ff285c;
+    border-radius: 8px;
+  }
+  .Secondary{
+    background: #717986;
+    border-radius: 8px;
+  }
+  .success {
+    background: #81d979;
+    border-radius: 8px;
+  }
+}

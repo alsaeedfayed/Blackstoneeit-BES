@@ -1,0 +1,187 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.bar-w {
+  // width: 260px;
+  width: 130px;
+}
+
+.mt-100px {
+  margin-top: 100px;
+}
+
+.table-main-container {
+  height: 100%;
+  background: #ffffff;
+  padding: 21px 20px;
+  box-shadow: 0px 0px 26px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+
+    .title {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 21px;
+      color: $tertiary-color;
+    }
+
+    .project-status {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      span {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 5px 15px;
+        color: $tertiary-color;
+        border: 1px solid $tertiary-color;
+        border-radius: 20px;
+        cursor: pointer;
+
+        &.selected {
+          color: #fff;
+          background-color: $tertiary-color;
+          transition: all 0.2s ease-in-out;
+        }
+      }
+    }
+  }
+
+  .content {
+  }
+}
+
+.req-table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    thead {
+      background-color: #fafbff;
+
+      tr {
+        th {
+          color: $tertiary-color;
+        }
+      }
+    }
+
+    .item-name {
+      display: inline-block;
+      width: 180px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+}
+
+.progress-wrapper {
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
+
+  .percentage {
+    margin-inline-start: 5px;
+  }
+
+  p {
+    margin: 6px 0 0;
+  }
+}
+
+.project-card-status-badge {
+  width: 100px;
+  display: inline-block;
+}
+
+.project-card-status-badge.started {
+  background-color: #0075ff;
+  color: #fff;
+}
+
+:host ::ng-deep ngb-progressbar {
+  border-radius: 10px !important;
+}
+
+:host ::ng-deep ngb-progressbar .progress-bar {
+  border-radius: 10px !important;
+  span {
+    font-size: 10px;
+    color: transparent;
+  }
+}
+
+:host ::ng-deep ngb-progressbar .progress-bar.bg-success {
+  background-color: #00db99 !important;
+}
+
+:host ::ng-deep ngb-progressbar .progress-bar.bg-danger {
+  background-color: $danger-color !important;
+}
+
+:host ::ng-deep ngb-progressbar .progress-bar.bg-secondary {
+  background-color: #b5b5b5 !important;
+}
+
+:host ::ng-deep ngb-progressbar .progress-bar.bg-warning {
+  background-color: #eda25b !important;
+}
+
+.wrapper {
+  --progressbar-height: 25px;
+  position: relative;
+  margin: 0;
+
+  &::before {
+    content: attr(data-progress) "%";
+    position: absolute;
+    top: calc(var(--progressbar-height) * -0.75);
+    @include rtl_value(left, 0, auto);
+    @include rtl_value(right, auto, 0);
+  }
+
+  .line {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: var(--progressbar-height);
+    background-color: #00db99;
+  }
+
+  span:last-child {
+    position: absolute;
+    @include rtl_value(right, 5px, auto);
+    @include rtl_value(left, auto, 5px);
+    top: 0;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: $tertiary-color;
+  }
+
+  &.budget {
+    .line {
+      background-color: #eda25b;
+    }
+  }
+}
+
+.wrapper2 {
+  &::before {
+    // content: attr(data-progress) "%";
+    content: attr(data-progress);
+    position: absolute;
+    top: calc(var(--progressbar-height) * -0.75);
+    @include rtl_value(left, 0, auto);
+    @include rtl_value(right, auto, 0);
+  }
+}

@@ -1,0 +1,89 @@
+<div class="page">
+  <app-header-page
+    [backButton]="true"
+    [title]="'bau.roles.title' | translate"
+    [isAddBtn]="false"
+    [showTotalItems]="true"
+    [totalItems]="totalItems"
+  ></app-header-page>
+
+  <!-- page filters -->
+  <app-page-filters
+    [searchPlaceHolder]="'bau.roles.searchPlaceholder' | translate"
+    [appliedFiltersCount]="appliedFiltersCount"
+    (onClear)="clearFilter()"
+    (search)="onSearch($event)"
+    [hasAddBtn]="canAddRole"
+    [addBtnPermission]="addRolePermission"
+    [addBtnLabel]="'bau.roles.new' | translate"
+    (onAddBtnCLicked)="openNewRoleModel()"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+    [hasAdvancedFilter]="true"
+  >
+    <app-roles-filter
+      [isFiltersEmpty]="emptyFIlters"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-roles-filter>
+  </app-page-filters>
+
+  <!-- table -->
+  <ng-container *ngIf="isLoading; else table_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- requests items table -->
+<ng-template #table_data>
+  <app-roles-rows
+    *ngIf="roles?.length > 0"
+    [SortedCol]="orderBy"
+    [SortDirection]="orderType"
+    [totalItems]="totalItems"
+    [list]="roles"
+    [paginationModel]="paginationModel"
+    (sortFilter)="handleSortFilter($event)"
+    (onPaginateEvent)="handlePaginationChange($event)"
+    (onChange)="onChanges()"
+  ></app-roles-rows>
+
+  <div class="no-data" *ngIf="roles?.length == 0 || !roles">
+    <app-no-data [msg]="'bau.roles.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'new-role'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeModal()"
+>
+  <div modal-header class="create-role-modal-header w-100">
+    <label class="modal-title">
+      {{ "bau.roles.modal.headerTitle" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="create-role-modal-content border-top">
+    <app-new-role-modal
+      *ngIf="isNewModalOpen"
+      [language]="language"
+      (onChange)="onChanges()"
+    ></app-new-role-modal>
+  </div>
+</app-model>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

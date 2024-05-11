@@ -1,0 +1,321 @@
+<div class="d-flex gap-4">
+
+  <!-- Side project details -->
+  <div class="project-details-side-container">
+    <div class="w-100 mb-4">
+      <button class="new-back-btn" (click)="back()">
+        <i class="bx bx-left-arrow-alt"></i>
+        <span class="module-title">{{ "projects.projects" | translate }}</span>
+      </button>
+    </div>
+
+    <div class="side-cards-container">
+      <div class="stats-card progress-card">
+        <span class="card-label">{{ "shared.status" | translate }}</span>
+        <span
+          class="project-status"
+          [ngClass]="{
+            primary: projectStatus?.title?.en === 'On Track',
+            danger: projectStatus?.title?.en === 'Off Track',
+            closed: projectStatus?.title?.en === 'Closed',
+            notStarted: projectStatus?.title?.en === 'Not Started'
+          }"
+        >
+          {{ projectStatus?.title[lang] }}
+        </span>
+        <div class="progress-card-circle">
+          <circle-progress
+            *ngIf="projectData"
+            [percent]="projectData?.progress"
+            [radius]="45"
+            [space]="-10"
+            [outerStrokeGradient]="false"
+            [outerStrokeWidth]="10"
+            [outerStrokeColor]="projectStatus?.outerColor"
+            [innerStrokeColor]="projectStatus?.innerColor"
+            [innerStrokeWidth]="10"
+            [animateTitle]="false"
+            [animationDuration]="1000"
+            [showUnits]="true"
+            [showBackground]="false"
+            [clockwise]="false"
+            [startFromZero]="false"
+            [lazy]="false"
+            [showTitle]="true"
+            [showSubtitle]="false"
+            [unitsFontSize]="18"
+            [titleFontSize]="18"
+            [unitsFontWeight]="400"
+            [titleFontWeight]="400"
+            [titleColor]="'#3C557A'"
+            [unitsColor]="'#3C557A'"
+          ></circle-progress>
+        </div>
+        <span class="card-label">
+          {{ "projects.planned" | translate }} {{ plannedPercentage }}%
+        </span>
+        <span class="progress-card-text">
+          {{ "projects.overallProgress" | translate }}
+        </span>
+      </div>
+
+      <div class="stats-card progress-card">
+        <span class="card-label mb-4">
+          {{ "projects.budgetVsActual" | translate }}
+        </span>
+        <div class="bars">
+          <div
+            class="spent-bar bar"
+            [ngStyle]="{
+              width:
+                (projectData?.spentAmount / projectData?.budget) * 100 + '%'
+            }"
+          ></div>
+          <div
+            class="planned-bar bar"
+            [ngStyle]="{
+              width: (plannedBudget / projectData?.budget) * 100 + '%'
+            }"
+          ></div>
+          <div class="total-bar bar"></div>
+        </div>
+        <div class="budget-keys">
+          <div class="item">
+            <div>
+              <span class="dot" [ngStyle]="{ background: '#00DB99' }"></span>
+              <span class="label">{{ "projects.spent" | translate }}</span>
+            </div>
+            <span class="price">
+              {{ projectData?.spentAmount | number }} {{ "shared.AED" | translate }}
+            </span>
+          </div>
+          <div class="item">
+            <div>
+              <span class="dot" [ngStyle]="{ background: '#FF285C' }"></span>
+              <span class="label">{{ "projects.planned" | translate }}</span>
+            </div>
+            <span class="price">
+              {{ plannedBudget | number }} {{ "shared.AED" | translate }}
+            </span>
+          </div>
+          <div class="item">
+            <div>
+              <span class="dot" [ngStyle]="{ background: '#0075FF' }"></span>
+              <span class="label">{{ "projects.total" | translate }}</span>
+            </div>
+            <span class="price">
+              {{ projectData?.budget | number }} {{ "shared.AED" | translate  }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="stats-card change-request-card">
+          <span class="card-label">{{'projects.changeRequests' | translate}}</span>
+          <span class="card-value">{{changeRequests?.length}}</span>
+      </div> -->
+      <div class="stats-card change-request-card">
+        <span class="card-label">{{ "projects.healthScore" | translate }}</span>
+        <span class="card-value">{{ 100 }}%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="module-title flex-column">
+        <h3>{{ projectData?.name[lang] }}</h3>
+        <div class="d-flex align-items-center">
+          <div class="sub-title">
+            {{ "projects.id" | translate }}:
+            <p class="value">{{ projectData?.code }}</p>
+          </div>
+          <div class="separator">|</div>
+          <div class="sub-title">
+            {{ "projects.pm" | translate }}:
+            <p class="value">
+              {{ projectData?.manager?.name[lang] }}
+            </p>
+          </div>
+          <div class="separator" *ngIf="projectData?.delegatedManager">|</div>
+          <div class="sub-title" *ngIf="projectData?.delegatedManager">
+            {{ "projects.dpm" | translate }}:
+            <p class="value">{{ projectData?.delegatedManager?.fullname }}</p>
+          </div>
+        </div>
+      </div>
+      <button
+        (click)="onProjectSettingBtnClick()"
+        *ngIf="isPmo || isPm"
+        class="project-setting-btn"
+      >
+        <i class="bx bx-cog"></i>
+        <span>{{ "projects.projectsSettings" | translate }}</span>
+      </button>
+    </div>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mb-4">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>
+          <i class="bx bx-building"></i>
+          {{ "projects.charter" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-charter
+            [lang]="lang"
+            [data]="projectData"
+          ></app-projects-charter>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>
+          <i class="bx bx-calendar"></i>
+          {{ "projects.schedule" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <div class="w-100">
+            <app-projects-planning
+              (navigateToTab)="navigateToTab($event)"
+              [isPmo]="isPmo"
+              [isPm]="isPm"
+              [lang]="lang"
+              (refreshParentComponent)="ngOnInit()"
+              [data]="projectData"
+            ></app-projects-planning>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="3">
+        <a ngbNavLink>
+          <i class="bx bx-box"></i>
+          {{ "projects.deliverables" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-deliverables
+            [selectedMilestone]="selectedMilestone"
+            [isPmo]="isPmo"
+            [isPm]="isPm"
+            [lang]="lang"
+            (refreshParentComponent)="ngOnInit()"
+            [projectData]="projectData"
+            (onDestroy)="selectedMilestone = undefined"
+          ></app-projects-deliverables>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="4">
+        <a ngbNavLink>
+          <i class="bx bx-money"></i>
+
+          {{ "projects.cost" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-cost
+            [isPmo]="isPmo"
+            [isPm]="isPm"
+            [lang]="lang"
+            [projectData]="projectData"
+          ></app-projects-cost>
+        </ng-template>
+      </li>
+      <!-- <li [ngbNavItem]="4">
+        <a ngbNavLink>
+          <i class="bx bx-building"></i>
+          {{ "projects.charter" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-charter
+            [lang]="lang"
+            [data]="projectData"
+          ></app-projects-charter>
+        </ng-template>
+      </li> -->
+      <li [ngbNavItem]="5">
+        <a ngbNavLink>
+          <i class="bx bx-error-alt"></i>
+          {{ "projects.risks" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-risks
+            [likelihoods]="likelihoods"
+            [isPmo]="isPmo"
+            [isPm]="isPm"
+            [impacts]="impacts"
+            [lang]="lang"
+            [data]="projectData"
+          ></app-projects-risks>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="6">
+        <a ngbNavLink>
+          <i class="bx bx-file"></i>
+          {{ "projects.documents" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-project-document-list
+            [projectId]="projectData?.id"
+            [projectStatus]="projectStatus?.title"
+          ></app-project-document-list>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="7">
+        <a ngbNavLink>
+          <i class="bx bx-comment-dots"></i>
+          {{ "projects.comments" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-project-comments-list></app-project-comments-list>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="8">
+        <a ngbNavLink>
+          <i class="bx bx-edit"></i>
+          {{ "projects.changeRequests" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-change-requests
+            [lang]="lang"
+            [isPmo]="isPmo"
+            [isPm]="isPm"
+            [projectData]="projectData"
+          ></app-projects-change-requests>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="9">
+        <a ngbNavLink>
+          <i class="bx bx-window-close"></i>
+          {{ "projects.closureRequests" | translate }}
+        </a>
+        <ng-template ngbNavContent>
+          <app-projects-closure
+            [lang]="lang"
+            [isPmo]="isPmo"
+            [isPm]="isPm"
+            [projectData]="projectData"
+          ></app-projects-closure>
+        </ng-template>
+      </li>
+    </ul>
+
+    <div class="mt-2" [ngbNavOutlet]="nav"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-projects-modal
+  [projectData]="projectData"
+  [likelihoods]="likelihoods"
+  [risksTypes]="risksTypes"
+  [impacts]="impacts"
+  (refreshParentComponent)="ngOnInit()"
+></app-projects-modal>
+
+<!-- Loading Modal -->
+<app-loading-modal [displayModal]="displayLoadingModal"></app-loading-modal>
+
+<!-- Confirmation Modal -->
+<app-confirm-modal
+  [content]="confirmationModalConfig?.text"
+  [btnContent]="confirmationModalConfig?.btnText"
+  [btnStyle]="'main'"
+  (confirm)="onPopupConfirm($event)"
+></app-confirm-modal>

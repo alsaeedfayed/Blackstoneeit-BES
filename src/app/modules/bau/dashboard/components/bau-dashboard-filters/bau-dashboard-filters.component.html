@@ -1,0 +1,153 @@
+<div class="requests-filters-container">
+  <div class="requests-filters" [formGroup]="form">
+    <!-- committee type select -->
+
+    <!-- TODO SELECT YEAR -->
+    <div class="year-filter">
+      <label class="form-label">
+        {{ "bau.year" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="Year"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'Year')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="false"
+        [placeholder]="'bau.year' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setYear($event)"
+      >
+        <ng-option *ngFor="let year of years" [value]="year">
+          {{ year }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- TODO  SELECT SECTOR  -->
+    <div class="sector-filter">
+      <label class="form-label">
+        {{ "bau.roles.filters.sector" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="SectorId"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'SectorId')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'bau.roles.filters.sector' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setSectorValue($event)"
+      >
+        <ng-option *ngFor="let item of sectors" [value]="item?.id">
+          {{ language == "ar" ? item["arabicName"] : item["name"] }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- TODO SELECT DEPARTMENT -->
+    <div class="dept-filter" *ngIf="departments?.length > 0">
+      <label class="form-label">
+        {{ "bau.roles.filters.department" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="DepartmentId"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'DepartmentId')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'bau.roles.filters.department' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setDepartmentValue($event)"
+      >
+        <ng-option *ngFor="let item of departments" [value]="item?.id">
+          {{ language == "ar" ? item?.arabicName : item?.name }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- TODO SELECT SECTION -->
+    <div class="sec-filter" *ngIf="sections?.length > 0">
+      <label class="form-label">
+        {{ "bau.roles.filters.section" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="SectionId"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'SectionId')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'bau.roles.filters.section' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setSection($event)"
+      >
+        <ng-option *ngFor="let item of sections" [value]="item?.id">
+          {{ language == "ar" ? item?.arabicName : item?.name }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- TODO SELECT DATE From-->
+    <div class="from-filter" [ngStyle]="{ 'margin-top': language === 'en' ? '-1rem' : '-0.35rem' }">
+      <app-nz-date-picker
+        [formControl]="form.controls['FromDate']"
+        [control]="form | getControl : 'FromDate'"
+        [title]="'bau.dashboard.dateFrom' | translate"
+        [disabled]="!form.value.Year"
+        [placeholder]="'bau.dashboard.dateFrom' | translate"
+        [minDate]="startDate"
+        [maxDate]="endDate"
+        (onInputChange)="setFromDate($event)"
+      ></app-nz-date-picker>
+    </div>
+
+    <!-- TODO SELECT DATE To -->
+    <div class="to-filter" [ngStyle]="{ 'margin-top': language === 'en' ? '-1rem' : '-0.35rem' }">
+      <app-nz-date-picker
+        [formControl]="form.controls['ToDate']"
+        [control]="form | getControl : 'ToDate'"
+        [title]="'bau.dashboard.dateTo' | translate"
+        [disabled]="!form.value.Year"
+        [placeholder]="'bau.dashboard.dateTo' | translate"
+        [minDate]="startDate"
+        [maxDate]="endDate"
+        (onInputChange)="setToDate($event)"
+      ></app-nz-date-picker>
+    </div>
+
+    <!-- TODO SELECT MAIN TASK -->
+    <div class="maintask-filter" *ngIf="activities?.length > 0">
+      <label class="form-label">
+        {{ "bau.dashboard.mainTasks" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="MainTaskId"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'MainTaskId')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'bau.dashboard.mainTasks' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setActivity($event)"
+      >
+        <ng-option *ngFor="let item of activities" [value]="item?.id">
+          {{ language == "ar" ? item?.titleAr : item?.titleEn }}
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+</div>

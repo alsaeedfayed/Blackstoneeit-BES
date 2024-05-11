@@ -1,0 +1,125 @@
+@import "src/assets/css/utils/variables.scss";
+
+.stats {
+  &-widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    background: $white-color;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+  }
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+
+    i.bx {
+      font-size: 20px;
+    }
+
+    &.default {
+      background-color: #f4f6f9;
+
+      i.bx {
+        color: #777777;
+      }
+    }
+
+    &.primary {
+      background-color: #e9f5f9;
+
+      i.bx {
+        color: #5bb8e2;
+      }
+    }
+
+    &.warning {
+      background-color: #fcefe4;
+
+      i.bx {
+        color: #c79874;
+      }
+    }
+    
+    &.success {
+      background-color: #f1fcf0;
+      
+      i.bx {
+        color: #28a71c;
+      }
+    }
+
+    &.danger {
+      background-color: #ffe4e4;
+      
+      i.bx {
+        color: #e72e2e;
+      }
+    }
+    
+    &.dark {
+      background-color: #e7e8e9;
+      
+      i.bx {
+        color: #25314c;
+      }
+    }
+    
+    &.in-progress {
+      background-color: #fff3ec;
+
+      i.bx {
+        color: #ff8540;
+      }
+    }
+    
+    &.purple {
+      background-color: #f2eff3;
+      
+      i.bx {
+        color: #7d5e84;
+      }
+    }
+    &.orange {
+      background-color: #fcefe4;
+  
+      i.bx {
+        color: #FDB287;
+      }
+    }
+    
+    &.lightBlue {
+      background-color: #d7edff;
+  
+      i.bx {
+        color: #52c1ff;
+      }
+    }
+    
+  }
+  
+  &-details {
+    text-align: end;
+  }
+  
+  &-count {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 20px;
+  }
+  
+  &-title {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 4px 0 0;
+  }
+}

@@ -1,0 +1,113 @@
+<app-header-page
+  [title]="'roles.roles' | translate"
+  [totalItems]="totalRoles"
+  [backButton]="true"
+></app-header-page>
+
+<!-- page filters -->
+<app-page-filters
+  class="d-block mb-4"
+  [lang]="language"
+  [searchPlaceHolder]="'shared.search' | translate"
+  [hasListViewBtn]="true"
+  [hasCardsViewBtn]="true"
+  [viewMode]="'list'"
+  [hasAddBtn]="true"
+  [addBtnLabel]="'roles.addNewRole' | translate"
+  (search)="onSearch($event)"
+  (onAddBtnCLicked)="onAddRole()"
+  (onViewModeChange)="changeViewMode($event)"
+></app-page-filters>
+
+<!-- roles skeleton -->
+<ng-container *ngIf="loading; else roles_data">
+  <div class="my-4">
+    <ng-container *ngIf="isListView" [ngTemplateOutlet]="table_skeleton"></ng-container>
+    <ng-container *ngIf="!isListView" [ngTemplateOutlet]="cards_skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- roles data -->
+<ng-template #roles_data>
+
+  <!-- table view -->
+  <roles-table
+    *ngIf="roles?.length > 0 && isListView"
+    [totalItems]="totalRoles"
+    [list]="roles"
+    [paginationModel]="paginationModel"
+    (viewPermissions)="viewPermissions($event)"
+    (onConfirmation)="getSelectedRole($event)"
+  ></roles-table>
+
+  <!-- cards view -->
+  <div class="row" *ngIf="roles?.length > 0 && !isListView">
+    <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center mb-16 position-relative" *ngFor="
+        let role of roles
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems: totalRoles
+              };
+        let i = index
+      ">
+      <app-role-card class="w-100" [role]="role" (viewPermissions)="viewPermissions($event)"></app-role-card>
+    </div>
+  </div>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="roles?.length == 0 || !roles">
+    <app-no-data [msg]="'roles.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #table_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the cards -->
+<ng-template #cards_skeleton>
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center mb-16" *ngFor="let i of [1, 2, 3, 4, 5, 6]">
+      <app-skeleton-loader class="w-100" [mode]="'roleCard'"></app-skeleton-loader>
+    </div>
+  </div>
+</ng-template>
+
+<!-- confirm modal -->
+<app-confirm-modal
+  [content]="'roles.confirmDeleteMsg' | translate : { name: (language == 'ar' ? role?.nameAr : role?.name) }"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onConfirmationModalConfirm($event)"
+></app-confirm-modal>
+
+<!-- roles modal -->
+<app-roles-modal
+  [title]="title"
+  [Permissions]="permissions"
+  (refreshRolesList)="refreshList()"
+></app-roles-modal>
+
+<!-- view permissions modal -->
+<app-view-permissions-modal
+  [role]="role"
+></app-view-permissions-modal>
+
+<pagination-controls
+  *ngIf="!loading && totalRoles > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

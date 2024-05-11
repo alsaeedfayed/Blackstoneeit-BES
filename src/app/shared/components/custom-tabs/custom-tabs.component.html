@@ -1,0 +1,22 @@
+<div class="tabs-container">
+  <div class="tabs border-bottom">
+    <div
+      class="tab"
+      (click)="activateTabHandler(tab)"
+      *ngFor="let tab of tabs"
+      [ngClass]="{
+        disabled: tab.disbaled,
+        active: tab.tabIndex === activeTabIndex
+      }"
+      [ngStyle]="{ minWidth: 100 / tabs.length + '%' }"
+    >
+      <h5>
+        {{ tab.tabTitle }}
+        <app-badge *ngIf="!tab.disbaled && tab.counter !== undefined" [label]="tab.counter" [className]="'closed'"></app-badge>
+      </h5>
+    </div>
+  </div>
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>

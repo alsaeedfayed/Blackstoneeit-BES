@@ -1,0 +1,85 @@
+<div class="new-model-dialog-body">
+  <div class="addGoal-wrapper py-3">
+    <!-- Informative -->
+    <!-- <div>
+      <div class="wrapperInformative">
+        <cr-goal-info
+          (setData)="model.setInfoData($event)"
+          (setGoalTypeEvent)="model.setMode($event)"
+          (setPrevAtachmentEvent)="model.setPrevAtachment($event)"
+          (chnageModeEvent)="model.setChnageMode($event)"
+          [selectedType]="model.selectedType"
+          [scorecardId]="model.scoreCardId"
+          [isChnageMode]="model.isChangeModeInfo"
+        ></cr-goal-info>
+      </div>
+    </div> -->
+
+    <stepper [steps]="model.steps" [activeStep]="model.activeStep">
+      <div
+        class="step"
+        [ngStyle]="{ display: model.activeStep === 1 ? 'block' : 'none' }"
+      >
+        <cr-goal-info
+          (setData)="model.setInfoData($event)"
+          (setGoalTypeEvent)="model.setMode($event)"
+          (setPrevAtachmentEvent)="model.setPrevAtachment($event)"
+          (chnageModeEvent)="model.setChnageMode($event)"
+          [selectedType]="model.selectedType"
+          [scorecardId]="model.scoreCardId"
+          [isChnageMode]="model.isChangeModeInfo"
+        ></cr-goal-info>
+      </div>
+
+      <div
+        class="step"
+        [ngStyle]="{ display: model.activeStep === 2 ? 'block' : 'none' }"
+      >
+        <cr-target-frequency
+          (setFreqData)="model.setFreqData($event)"
+        ></cr-target-frequency>
+      </div>
+    </stepper>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="model.onPopupCancel()"
+  >
+    {{ "shared.back" | translate }}
+  </button>
+
+  <!-- previous button -->
+  <button
+    *ngIf="model.activeStep > 1"
+    class="btn btn-secondary flex-grow-1"
+    (click)="model.activeStep = model.activeStep - 1"
+  >
+    {{ "shared.previous" | translate }}
+  </button>
+
+  <!-- next button -->
+  <button
+    *ngIf="model.activeStep == 1"
+    class="btn btn-main flex-grow-1"
+    (click)="model.onNextStep()"
+  >
+    {{ "shared.next" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    *ngIf="model.activeStep == 2"
+    class="btn btn-main flex-grow-1"
+    [disabled]="model.isBtnLoading"
+    (click)="model.onPopupSave()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="model.isBtnLoading"></i>
+    {{ "shared.save" | translate }}
+  </button>
+</div>

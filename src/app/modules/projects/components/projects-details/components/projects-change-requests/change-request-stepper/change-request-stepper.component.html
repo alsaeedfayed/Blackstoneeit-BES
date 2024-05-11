@@ -1,0 +1,9 @@
+<section class="example-container">
+  <header class="mb-4">
+    <button [class.active]="step === selected"
+            (click)="selected = step"
+            *ngFor="let step of steps">{{step.label}}</button>
+  </header>
+
+  <div [ngTemplateOutlet]="selected ? selected.content : null"></div>
+</section>

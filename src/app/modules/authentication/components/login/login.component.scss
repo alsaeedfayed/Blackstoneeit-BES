@@ -1,0 +1,289 @@
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: $white-color;
+  overflow-y: auto;
+
+  .lang-switch {
+    position: absolute;
+    z-index: 1;
+    top: 2rem;
+    @include rtl_value(left, auto, 2.5rem);
+    @include rtl_value(right, 2.5rem, auto);
+    min-height: 2rem;
+    color: $main-color;
+    font-weight: 400;
+    font-size: 1.25rem;
+    text-decoration: none;
+    padding-inline-end: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .inner {
+    display: grid;
+    width: 100%;
+    height: 100%;
+
+    @media (min-width: 992px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      padding: 1.25rem;
+    }
+
+    @media (max-width: 991px) {
+      gap: 1.75rem;
+      padding: 1.75rem;
+    }
+
+    .left-side,
+    .right-side {
+      width: 100%;
+      height: 100%;
+    }
+
+    .left-side {
+      display: flex;
+      background: linear-gradient(180deg, #e3e1f3 0%, #fcf0f2 100%);
+      border-radius: 1.25rem;
+
+      .logo {
+        max-width: 265px;
+        max-height: 80%;
+        margin: auto;
+      }
+    }
+
+    .right-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-block: 2rem;
+      margin-inline: auto;
+
+      @media (min-width: 768px) {
+        max-width: 400px;
+      }
+
+      .auth-form-title {
+        color: $black-color;
+        font-weight: 600;
+        font-size: 1.5rem;
+        line-height: 2.25rem !important;
+        margin-bottom: 1.25rem;
+      }
+
+      .microsoft-auth-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        border: 0.0625rem solid $gainsboro_color;
+        border-radius: 2.5rem !important;
+
+        &:hover {
+          background-color: $main-color;
+          border-color: $main-color;
+          color: $white-color;
+        }
+      }
+
+      .or-text {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-block: 1.25rem;
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          top: 52%;
+          // transform: translateY(-50%);
+          width: calc(50% - 1rem);
+          height: 0.0625rem;
+          background-color: $gainsboro_color;
+        }
+
+        &::before {
+          @include rtl_value(left, 0, auto);
+          @include rtl_value(right, auto, 0);
+        }
+
+        &::after {
+          @include rtl_value(right, 0, auto);
+          @include rtl_value(left, auto, 0);
+        }
+
+        span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 2rem;
+          height: 2rem;
+          color: $medium-gray-color;
+          font-weight: 400;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .auth-input-container {
+    position: relative;
+
+    .form-input {
+      width: 100%;
+      background: transparent;
+      color: #9a9a9a;
+      padding: 0.75rem 2.5rem;
+      border: 0.0625rem solid $gainsboro_color;
+      border-radius: 2.5rem;
+
+      &:focus {
+        border-color: $main-color;
+
+        & + i {
+          color: $main-color;
+        }
+      }
+
+      &.ng-valid {
+        border: 1px solid $main-color !important;
+
+        & + i {
+          color: $main-color;
+        }
+      }
+    }
+
+    i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      @include rtl_value(left, 0.75rem, auto);
+      @include rtl_value(right, auto, 0.75rem);
+      color: #9a9a9a;
+      font-size: 1.5rem;
+    }
+
+    .toggle-password-visibility {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      @include rtl_value(right, 0.875rem, auto);
+      @include rtl_value(left, auto, 0.875rem);
+      display: block;
+      height: 1.25rem;
+      width: 1.25rem;
+      cursor: pointer;
+    }
+  }
+
+  .login-btn {
+    border-radius: 2.5rem !important;
+  }
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+.version {
+  position: absolute;
+  bottom: 0;
+  opacity: 0.5;
+  font-size: 12px;
+  font-weight: 200;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.fullLoader {
+  background: rgba(0, 0, 0, 0.2);
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999999999999999;
+  overflow: hidden;
+
+  .loader-content {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 50%;
+    top: 50%;
+
+    img {
+      width: 60%;
+    }
+  }
+}
+
+.loader {
+  @include prefixer(transform, rotate(20deg), webkit moz o ms);
+  @include prefixer(
+    animation,
+    loaderAnimation 3s linear infinite,
+    webkit moz o ms
+  );
+}
+
+@include KAnimation(loaderAnimation) {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(720deg);
+  }
+}
+
+.azure-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  i {
+    color: $main-color;
+    font-size: 100px;
+    margin-bottom: 30px;
+  }
+
+  span {
+    font-size: 22px;
+    color: #9a9a9a;
+    font-weight: 400;
+  }
+}
+
+.ar-font {
+  font-family: "Janna LT Regular", sans-serif !important;
+}
+
+.en-font {
+  font-family: "Roboto", sans-serif !important;
+}

@@ -1,0 +1,382 @@
+@import "src/assets/css/utils/variables.scss";
+
+.event-registration-container {
+    height: 100vh;
+
+    .bg-img-container {
+        height: auto;
+        max-height: 70vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        .logo {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+
+            @media (max-width:900px) {
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+
+                img {
+                    min-width: 300px;
+                }
+            }
+            @media (max-width:767px) {
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+
+                img {
+                    min-width: 50px;
+                }
+            }
+        }
+
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, .7);
+        }
+
+        .event-info {
+            z-index: 2;
+            margin-top: 180px;
+            display: flex;
+            flex-direction: column;
+            margin: 20vh auto 20px auto;
+
+            h1 {
+                text-align: center;
+                color: white;
+                font-size: clamp(2.2rem, 5vw, 3rem);
+                font-weight: 600;
+                margin-bottom: 40px;
+                line-height: 60px !important;
+            }
+
+            p {
+                color: white;
+                font-size: 18px;
+                margin-bottom: 20px;
+
+            }
+
+            ul {
+                list-style-position: inside;
+                color: white;
+
+            }
+        }
+
+        .bg-img {
+            top: 0;
+            left: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .form-container {
+        margin: 0 auto;
+        position: relative;
+        min-height: 500px;
+        background-color: white;
+        z-index: 2;
+        border-radius: 12px;
+        box-shadow: 6px 4px 24px #00000005;
+        padding: 30px;
+        margin-bottom: 40px;
+
+        .form-title {
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .empty-state {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+.profile-picture-input {
+    display: flex;
+    flex-direction: column;
+
+    img {
+        margin-top: 20px;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        align-self: flex-end;
+    }
+}
+
+.mb-60px {
+    margin-bottom: 60px;
+}
+
+.mt-60px {
+    margin-top: 60px;
+}
+
+.uploaded-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    padding: 0;
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+}
+
+.login-container {
+    background-color: #fafbfc;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .top-shape {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .bottom-shape {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .login-language-switch {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+
+        button {
+            color: $primary-color;
+            display: block;
+            text-transform: uppercase;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 0;
+            background-color: transparent;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+        }
+    }
+
+    .login-card {
+        background-color: $white-color;
+        width: 100%;
+        max-width: 1024px;
+        z-index: 100;
+        height: 492px;
+        border-radius: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid $gainsboro_color;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.04);
+        padding: 30px 67px;
+
+        & > * {
+            width: 100%;
+        }
+
+        .login-card-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 25%;
+            img{
+                width: 30%;
+            }
+        }
+
+        .login-card-text {
+            display: flex;
+            flex-direction: column;
+            height: 20%;
+            margin-bottom: 20px;
+
+            h1 {
+                font-weight: 700;
+                font-size: 32px;
+                color: $black_color;
+                margin-bottom: 6px;
+            }
+
+            p {
+                font-family: 400;
+                font-size: 18px;
+                color: $aluminium_color;
+            }
+        }
+
+        form {
+            height: 55%;
+
+            .login-input-container {
+                position: relative;
+
+                .form-input {
+                    width: 100%;
+                    padding: 12px 12px 12px 40px;
+
+                    &:focus + .bx-envelope, .bx-lock-alt {
+                        color: $primary-color;
+                    }
+
+                    &:focus + .bx-lock-alt {
+                        color: $primary-color;
+                    }
+
+                    &:focus + .bx-lock-open-alt {
+                        color: $primary-color;
+                    }
+                }
+
+                .bx-envelope {
+                    position: absolute;
+                    top: 50%;
+                    left: 10px;
+                    color: $gainsboro_color;
+                    font-size: 22px;
+                    transform: translateY(-50%);
+                }
+
+                .bx-lock-alt {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    left: 10px;
+                    color: $gainsboro_color;
+                    font-size: 22px;
+                }
+
+                .bx-show-alt {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 20px;
+                    color: $gainsboro_color;
+                    font-size: 22px;
+                    cursor: pointer;
+                }
+
+                .bx-hide {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 20px;
+                    color: $primary-color;
+                    font-size: 22px;
+                    cursor: pointer;
+                }
+
+                .bx-lock-open-alt {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    left: 10px;
+                    color: $gainsboro_color;
+                    font-size: 22px;
+                    cursor: pointer;
+                }
+
+                i {
+                    width: 10px;
+                }
+            }
+
+            .forget-password-link {
+                width: 100%;
+                display: flex;
+                justify-content: end;
+                margin-top: 6px;
+                font-weight: 500;
+                font-size: 16px;
+                color: $primary-color;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear
+{
+    display: none;
+}
+
+.version{
+    position: absolute;
+    bottom: 0;
+    opacity: .5;
+    font-size: 12px;
+    font-weight: 200;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.number{
+    color: #0b5ed7;
+    border: 1px solid #0b5ed7;
+    padding: 0.5em;
+    margin: 0.5em;
+    border-radius: 25px;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+}
+
+.number:hover , .number-active{
+    color: white;
+    background-color: #0b5ed7;
+    cursor: pointer;
+}
+
+.login-card-logo{
+    img{
+        background-color: white;
+        padding: 2em;
+        width: 50%;
+    }
+}
+
+.event-title{
+    display: inline-flex;
+    align-items: center;
+}
+
+p {
+    &.ar {
+        font-family: "Cairo", sans-serif;
+        direction: rtl;
+    }
+}

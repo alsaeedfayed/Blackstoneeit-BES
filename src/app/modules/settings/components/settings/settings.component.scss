@@ -1,0 +1,20 @@
+@import "src/assets/css/utils/variables.scss";
+
+.form-input {
+  padding: 6px 14px;
+  // width: 120px;
+}
+
+.input-with-spinner input {
+  width: 100% !important;
+}
+.input-with-spinner i {
+  top: 10px !important;
+}
+.switch-btn input:checked + label:after {
+  background-color: $success-color;
+}
+
+.switch-btn input:checked + label:before {
+  background-color: $light-success-color;
+}

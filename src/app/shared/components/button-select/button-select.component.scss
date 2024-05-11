@@ -1,0 +1,32 @@
+@import "../../../../assets/css/utils/variables.scss";
+
+.button-select {
+  border-radius: 40px;
+  padding: 4px 20px;
+  font-size: 1.15rem;
+  text-align: center;
+  cursor: pointer;
+  &.primary {
+    background: #DDEBFF;
+    color: #000;
+  }
+  &.danger {
+    background: #FF73732E;
+    color: #000;
+  }
+  &.success {
+    background: #C3F5DD;
+    color: #000;
+  }
+  &.secondary {
+    background: #ACB5C126;
+    color: #000;
+  }
+  &.warning {
+    background: #FFDD9A;
+    color: #000;
+  }
+}
+.clicked{
+  border: 0.5px solid rgb(75, 75, 75) !important;
+}

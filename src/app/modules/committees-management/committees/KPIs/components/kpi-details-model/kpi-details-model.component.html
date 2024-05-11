@@ -1,0 +1,179 @@
+<!-- <ng-container *ngIf="loadingData; else details_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container> -->
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer d-flex">
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="progressForm.invalid || updatingProgress || uploadingFile"
+    (click)="updateProgress()"
+  >
+    <i
+      *ngIf="updatingProgress || uploadingFile"
+      class="bx bx-loader-alt bx-spin ml-1"
+    ></i>
+    {{ "shared.update" | translate }}
+  </button>
+
+  <!--
+  <button class="btn btn-main flex-grow-1" (click)="updateProgress()">
+    {{ "shared.update" | translate }}
+  </button> -->
+</div>
+
+<div #details_data  [formGroup]="progressForm">
+  <div class="new-model-dialog-body d-flex flex-column">
+    <div class="justify-content-between mt-4 row">
+      <h3 class="fs-6 kpi-name">
+        {{ language == "en" ? progress?.periodEn : progress?.periodAr }}
+      </h3>
+      <!-- <div class="kpi-frequency">
+        {{
+          measurementRecurrences[progress?.measurementRecurrence]?.title[language]
+        }}
+      </div> -->
+    </div>
+
+
+    <table class="highlight-table mb-4">
+      <!-- <tr>
+        <th>{{ "committeeKPIs.details.weight" | translate }}</th>
+        <td>{{ progress?.weight }}%</td>
+      </tr> -->
+      <tr>
+        <th>{{ "committeeKPIs.details.target" | translate }}</th>
+        <td *ngIf="commingMeasurmentType == measurmentType.number">{{ progress?.target }}#</td>
+        <td *ngIf="commingMeasurmentType == measurmentType.percent">{{ progress?.target }}%</td>
+        <td *ngIf="commingMeasurmentType == measurmentType.currency">{{ progress?.target }}AED</td>
+      </tr>
+      
+      <tr *ngIf="commingMeasurmentType == measurmentType.number">  
+        <th>{{ "committeeKPIs.details.actual" | translate }}</th>
+        <td>
+          <app-filed
+          [id]="'actual-progress'"
+          [dir]="'ltr'"
+          [isNumber]="true"
+          formControlName="actual"
+      ></app-filed>
+        </td>
+    </tr>
+      <tr *ngIf="commingMeasurmentType == measurmentType.percent">  
+        <th>{{ "committeeKPIs.details.actual" | translate }}</th>
+        <td>{{ progress?.actual }}%</td>
+      </tr>
+      <tr *ngIf="commingMeasurmentType == measurmentType.currency">  
+        <th>{{ "committeeKPIs.details.actual" | translate }}</th>
+        <td>    <app-filed
+          [id]="'actual-progress'"
+          [dir]="'ltr'"
+          [isNumber]="true"
+          formControlName="actual"
+      ></app-filed></td>
+      </tr>
+      <!-- <tr *ngIf="kpi?.duePeriod && kpi?.duePeriodAr">
+        <th>{{ "committeeKPIs.details.duration" | translate }}</th>
+        <td>{{ language == "en" ? kpi?.duePeriod : kpi?.duePeriodAr }}</td>
+      </tr> -->
+    </table>
+    <!-- progress par header-->
+    <div class="row" *ngIf="commingMeasurmentType != measurmentType.number && commingMeasurmentType != measurmentType.currency">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="block-title">
+          {{ "committeeKPIs.details.progress" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <!-- update progress Form -->
+    <div
+      class="w-100 border border-1 rounded-3 px-3 my-2 update-form"
+      *ngIf="true"
+     
+    >
+      <div *ngIf="commingMeasurmentType != measurmentType.number && commingMeasurmentType != measurmentType.currency" class="d-flex align-items-center gap-2">
+        <app-custom-range-control
+          class="d-block flex-grow-1"
+          formControlName="progress"
+          [control]="progressForm | getControl : 'progress'"
+          [minRange]="0"
+          [maxRange]="100"
+          [step]="5"
+          [unit]="'%'"
+        ></app-custom-range-control>
+
+        <!-- <button
+          class="btn update-task-btn"
+          [disabled]="progressForm.validate || uploadingFile"
+          (click)="updateProgress()"
+        >
+          <i
+            *ngIf="!updatingProgress"
+            class="bx bx-send m-0 {{ language == 'en' ? '' : 'bx-rotate-180' }}"
+          ></i>
+          <i *ngIf="updatingProgress" class="bx bx-loader-alt bx-spin m-0"></i>
+        </button> -->
+      </div>
+      <div
+        class="drop-zone"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+      >
+        <p class="fw-bold text-black">
+          {{ "committeeKPIs.details.drag" | translate }}
+        </p>
+        <div>
+          <span class="text-secondary">{{ "shared.or" | translate }}</span>
+          <a (click)="attachments.click()" class="text-primary">
+            {{ "committeeKPIs.details.browse" | translate }}
+          </a>
+          <span class="text-secondary">
+            {{ "committeeKPIs.details.choose" | translate }}
+          </span>
+        </div>
+      </div>
+
+      <input
+        hidden
+        #attachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event)"
+      />
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAttachments"
+        (viewFile)="onViewLocalFile($event, 'old')"
+        [supportedTypes]="'committeeTasks.addModal.descriptionAttachmentsTypes' | translate"
+        [maxSize]="maxFileSizeInMB"
+        [canDeleted]="false"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        (deleteFile)="onDeleteFile($event, 'new')"
+        (viewFile)="onViewLocalFile($event, 'new')"
+      ></uploaded-attachments-files>
+    </div>
+  </div>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

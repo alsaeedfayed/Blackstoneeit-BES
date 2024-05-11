@@ -1,0 +1,25 @@
+{
+    "delegations": {
+        "delegations" : "التفويضات",
+        "delegationsList" : "قائمة التفويضات",
+        "delegator" : "المفوض",
+        "delegatedTo" : "المفوض إليه",
+        "from" : "من",
+        "to" : "إلى",
+        "period" : "المدة",
+        "day" : "يوم",
+        "days" : "أيام",
+        "addDelegation" : "اضافه تفويض",
+        "editDelegation" : "تعديل تفويض",
+        "cancelDelegation" : "هل انت متأكد من الغاء تفويض",
+        "addSuccessMsg" : "تم انشاء التفويض بنجاح",
+        "editSuccessMsg" : "تم تعديل التفويض بنجاح",
+        "cancelSuccessMsg" : "تم الغاء التفويض بنجاح",
+        "noDataMsg" : "يبدو أنه ليس لديك أي تفويضات",
+        "active" : "مفعل",
+        "completed" : "مكتمل",
+        "cancelled" : "ملغى",
+        "questionMark" : "؟",
+        "pleaseEnterData" : "من فضلك ادخل كل البيانات المطلوبة"
+    }
+}

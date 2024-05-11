@@ -1,0 +1,59 @@
+@import"../../../../../assets/css/utils/variables.scss";
+
+.noData {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    align-items: center;
+    @media (max-width: 900px) {
+      flex-direction: column;
+    }
+    .options {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      @media(max-width: 900px) {
+        display: block;
+      }
+    }
+    .buttons {
+      display: flex;
+      @media(max-width: 900px) {
+        display: block;
+      }
+      button {
+        margin: 5px;
+        @media(max-width: 900px) {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .export-btn {
+      display: flex;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    color: $tertiary-color;
+    .icon {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $tertiary-color;
+      padding: 3px;
+      width: 29px;
+      height: 29px;
+      i {
+        color: #fff;
+        margin: 0;
+      }
+    }
+  }

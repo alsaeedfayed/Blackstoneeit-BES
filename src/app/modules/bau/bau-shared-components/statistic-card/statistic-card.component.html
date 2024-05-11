@@ -1,0 +1,52 @@
+<div class="card-container">
+  <div class="card-container-left-col">
+    <div class="card-container-left-col-title">
+      {{ title }}
+    </div>
+    <div class="card-container-left-col-total">
+      <span *ngIf="!isChart; else isChartProgress">
+        {{ statistics?.total }}
+      </span>
+      <ng-template #isChartProgress>{{ statistics?.overallProgress }}%</ng-template>
+    </div>
+  </div>
+  <div class="card-container-right-col">
+    <ng-container *ngIf="!isChart; else chart">
+      <div class="d-flex gap-2">
+        <i [ngStyle]="{ color: statusColor }" [ngClass]="iconsClass"></i>
+        <span [ngStyle]="{ color: statusColor }">{{ statistics?.delayedCount }}</span>
+        <span>{{ statusText }}</span>
+      </div>
+    </ng-container>
+    <ng-template #chart>
+      <div class="task-progress">
+        <circle-progress
+          [percent]="statistics?.overallProgress"
+          [showUnits]="false"
+          [showTitle]="false"
+          [showSubtitle]="false"
+          [radius]="20"
+          [outerStrokeWidth]="5"
+          [outerStrokeColor]="'yellowGreen'"
+          [innerStrokeColor]="'#96A6BD26'"
+          [showInnerStroke]="true"
+          [innerStrokeWidth]="8"
+          [space]="-8"
+          [showBackground]="false"
+          [animation]="true"
+          [animationDuration]="200"
+        ></circle-progress>
+        <div
+          class="d-flex justify-content-center align-items-center tasks-status-icon h-100 w-100"
+        >
+          <span class="">
+            <i
+              style="color: yellowgreen"
+              class="bx bx-arrow-back bx-rotate-90"
+            ></i>
+          </span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

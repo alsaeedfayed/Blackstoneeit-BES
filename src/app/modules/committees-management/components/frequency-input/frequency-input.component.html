@@ -1,0 +1,60 @@
+<div class="freq-wrapper">
+  <!-- Number Template -->
+  <div *ngIf="model.numberType" class="input-wrapper">
+    <label for="num" *ngIf="title">{{ title }}</label>
+    <input
+      type="number"
+      id="num"
+      class="form-control"
+      [disabled]="disabled"
+      [ngClass]="{ disabled: disabled }"
+      (input)="change()"
+      [(ngModel)]="value"
+      min="0"
+    />
+  </div>
+  <!-- Percent Template -->
+  <div *ngIf="model.percentType">
+    <div class="input-wrapper">
+      <label for="percent" *ngIf="title">{{ title }}</label>
+      <input
+        type="number"
+        id="percent"
+        class="form-control"
+        [disabled]="disabled"
+        [ngClass]="{ disabled: disabled }"
+        [min]="0"
+        [max]="100"
+        (input)="change()"
+        [(ngModel)]="value"
+
+      />
+      <span>%</span>
+    </div>
+  </div>
+  <!-- Currency Template -->
+  <div *ngIf="model.currencyType">
+    <div class="input-wrapper">
+      <label for="curr">{{ title }}</label>
+      <input
+        type="number"
+        id="curr"
+        class="form-control"
+        [disabled]="disabled"
+        (input)="change()"
+        [(ngModel)]="value"
+        [ngClass]="{ disabled: disabled }"
+        min="0"
+      />
+      <span>{{'shared.AED' | translate}}</span>
+    </div>
+  </div>
+
+</div>
+
+
+<app-validation
+  *ngIf="(control?.dirty|| isSubmitted) && control?.invalid"
+  [control]="control"
+></app-validation>
+

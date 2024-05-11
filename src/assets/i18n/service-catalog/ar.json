@@ -1,0 +1,19 @@
+{
+  "serviceCatalog": {
+    "startService": "إبدأ الخدمة",
+    "removeFavoriteConfirmationMsg": "هل أنت متأكد من أنك تريد إزالة الخدمة من القائمة المفضلة",
+    "favoriteConfirmationMsg": "هل أنت متأكد من أنك تريد إضافة الخدمة للقائمة المفضلة ؟",
+    "service": "خدمة",
+    "serviceCatalog": "قائمة الخدمات",
+    "requestTitle": "عنوان الطلب",
+    "enterRequestTitle": "أدخل عنوان الطلب",
+    "requestAttachments": "مرفقات الطلب",
+    "serviceSavedSuccessfully": "تم حفظ الخدمة بنجاح",
+    "somethingWentWrong": "حدث خطأ ما في النظام",
+    "favoriteServices": "الخدمات المفضلة",
+    "allServices": "كل الخدمات",
+    "noDataMsg": "لا توجد اي خدمات في هاته القائمة",
+    "notEqualValue": "يجب ألا تتطابق اسم المكتبة الأولى مع الثانية.",
+    "noForm":"تحتاج إلى تحديد نموذج لهذه الخدمة في لوحة التحكم لبدء الخدمة."
+  }
+}

@@ -1,0 +1,28 @@
+<div>
+  <label class="form-label" *ngIf="!!title">
+    {{ title }}
+    <span *ngIf="isRequired" class="astrix-red">*</span>
+  </label>
+
+  <nz-tree-select
+    class="tree-select"
+    [nzNodes]="nodes"
+    [(ngModel)]="initValue"
+    nzNotFoundContent="{{ 'shared.noData' | translate }}"
+    [nzHideUnMatched]="true"
+    [nzMultiple]="multiple"
+    [nzCheckable]="multiple"
+    [nzCheckStrictly]="CheckStrictly"
+    nzShowSearch
+    nzCheckable
+    (ngModelChange)="changeValue($event)"
+    [nzPlaceHolder]="placeholder ?? ('shared.PleaseSelect' | translate)"
+    [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+    [nzDropdownStyle]="{ dir: lang === 'en' ? 'ltr' : 'rtl' }"
+  ></nz-tree-select>
+
+  <app-validation
+    *ngIf="(control?.dirty || isSubmitted) && control?.invalid"
+    [control]="control"
+  ></app-validation>
+</div>

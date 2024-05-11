@@ -1,0 +1,85 @@
+<!-- <h3 class="title">History</h3> -->
+
+<div class="comment-card" *ngIf="options?.length > 0">
+  <h3>{{ 'requests.takeAction' | translate }}</h3>
+  <div class="body">
+    <div class="wrapper">
+      <div class="info">
+        <person-item [item]="personItem"></person-item>
+      </div>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <textarea
+            placeholder="{{ 'requests.writeYourCommentHere' | translate }}"
+            [formControl]="comment"
+          ></textarea>
+          <div class="upload-file-btn">
+            <label for="input-file">{{ 'requests.uploadFiles' | translate }}</label>
+            <input
+              (change)="onUploadFile($event)"
+              id="input-file"
+              type="file"
+            />
+          </div>
+        </div>
+        <ul class="uploaded-files" *ngIf="uploadedFiles.length !== 0">
+          <li *ngFor="let file of uploadedFiles; let i = index">
+            <div class="file-details">
+              <i [class]="'bx ' + 'bxs-file-' + file?.extension"></i>
+              <div>
+                <span class="name">{{ file?.name }}</span>
+                <span class="size">{{ file?.size }}MB</span>
+              </div>
+            </div>
+            <button (click)="onDeleteFile(i)" class="file-delete-btn">
+              <i class="bx bx-trash"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="btns">
+      <!-- <button
+        class="btn return-btn"
+        [disabled]="!comment.value.trim()"
+        (click)="sendAction()"
+      >
+        Return to Requester
+      </button>
+      <button
+        class="btn approve-btn"
+        [disabled]="!comment.value.trim()"
+        (click)="sendAction()"
+      >
+        Approve
+      </button>
+      <button
+        class="btn reject-btn"
+        [disabled]="!comment.value.trim()"
+        (click)="sendAction()"
+      >
+        Reject
+      </button>
+      <button
+        class="btn close-btn"
+        [disabled]="!comment.value.trim()"
+        (click)="sendAction()"
+      >
+        Close
+      </button> -->
+      <button
+        *ngFor="let option of options"
+        class="btn btn-{{ option.buttonTag }}"
+        [disabled]="!comment.value.trim() || isSubmit"
+        (click)="sendAction(option)"
+      >
+        {{ lang == 'en' ? option.label.en : option.label.ar }}
+        <i class="bx bx-loader-alt bx-spin ml-2" *ngIf="option.isSubmit"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- <app-history-list></app-history-list> -->

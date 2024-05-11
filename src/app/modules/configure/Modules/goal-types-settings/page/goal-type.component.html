@@ -1,0 +1,79 @@
+<div class="wrapper">
+  <ng-container *ngIf="!loading; else skeleton">
+    <ng-container [ngTemplateOutlet]="types"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #types>
+  <app-header-page
+    [title]="'shared.items' | translate"
+    [totalItems]="FilteredGoalTypes?.length"
+    [isSearch]="true"
+    (search)="handleSearchValueFilter($event)"
+    [titleBtn]="'configuration.goalTypesObj.createGoalType' | translate"
+    (btnClick)="openPopup()"
+  ></app-header-page>
+
+  <div class="filters">
+    <div class="filter">
+      <label class="form-label">
+        {{ "configuration.goalTypesObj.category" | translate }}
+      </label>
+
+      <app-select
+        [placeholder]="'shared.all' | translate"
+        [items]="categories"
+        [bindLabel]="'label'"
+        [bindVlaue]="'id'"
+        [multiple]="false"
+        [clearable]="true"
+        [dropdownPosition]="'bottom'"
+        (change)="handlecateoriesFilter($event)"
+      ></app-select>
+    </div>
+  </div>
+
+  <app-goal-types-table
+    *ngIf="FilteredGoalTypes && FilteredGoalTypes?.length > 0"
+    [goalTypes]="FilteredGoalTypes"
+    (typeDeleteEvent)="deleteTypeHandler($event)"
+    (typeEditedEvent)="editTypeHandler($event)"
+  ></app-goal-types-table>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="FilteredGoalTypes?.length == 0">
+    <app-no-data [msg]="'configuration.goalTypesObj.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'create-goal'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="goalType-edit-model-header w-100">
+    <label class="modal-title">
+      {{ 'configuration.goalTypesObj.createGoalType' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="goalType-edit-model-content border-top">
+    <app-create-goal
+      *ngIf="isShowCreateTypePopup"
+      (typeCreatedEvent)="getAllGoalTypes(); isShowCreateTypePopup = false"
+    ></app-create-goal>
+  </div>
+</app-model>

@@ -1,0 +1,14 @@
+<p class="mb-0">
+  <input
+    [id]="id"
+    type="checkbox"
+    [disabled]="disabled"
+    (input)="emitValue.emit(this.identity)"
+    [(ngModel)]="value"
+    (change)="change()"
+  />
+
+  <label *ngIf="!!title" [for]="id">{{ title }}</label>
+</p>
+
+<ng-content select="[other]"></ng-content>

@@ -1,0 +1,21 @@
+<div class="entity-box" *ngIf="drag">
+  <div>
+    <img [src]="img" />
+    <p class="text-label">{{ label }}</p>
+  </div>
+</div>
+
+<div
+  *ngIf="!drag"
+  class="entity-box"
+  ondragstart="return false"
+  draggable="false"
+  ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"  
+  ondragover="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"  
+  ondrop="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
+>
+  <div>
+    <img [src]="img" />
+    <p class="text-label">{{ label }}</p>
+  </div>
+</div>

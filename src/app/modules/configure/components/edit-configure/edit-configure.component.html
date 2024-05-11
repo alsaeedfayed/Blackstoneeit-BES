@@ -1,0 +1,73 @@
+<div class="new-model-dialog-body">
+  <ng-container *ngIf="loading; else formData">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #formData>
+  <div class="config-edit-form pb-2" [formGroup]="form">
+    <div class="mt-3">
+      <app-select
+        formControlName="startDay"
+        [control]="form | getControl: 'startDay'"
+        [title]="'configuration.startDate' | translate"
+        [placeholder]="'configuration.startDate' | translate"
+        [items]="monthDays"
+        [bindVlaue]="'day'"
+        [bindLabel]="'day'"
+        (change)="onChangeStartDay($event)"
+      ></app-select>
+    </div>
+
+    <div class="mt-3">
+      <app-select
+        formControlName="duration"
+        [control]="form | getControl: 'duration'"
+        [title]="'configuration.duration' | translate"
+        [placeholder]="'configuration.duration' | translate"
+        [items]="monthDays"
+        [bindVlaue]="'day'"
+        [bindLabel]="'day'"
+        (change)="onChangeDuration($event)"
+      ></app-select>
+    </div>
+
+    <div class="mt-3">
+      <label class="form-label">
+        {{ "configuration.endDate" | translate }}
+      </label>
+      <p class="end-date mb-0">
+        {{ endDate | date : "dd MMMM" }}
+      </p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form?.invalid || isBtnLoading"
+    (click)="updateConfig()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

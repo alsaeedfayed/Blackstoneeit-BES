@@ -1,0 +1,111 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="goal-index">#</th>
+          <th scope="col">
+            {{ "configuration.goalTypesObj.typeName" | translate }}
+          </th>
+          <th scope="col">
+            {{ "configuration.goalTypesObj.arabicTypeName" | translate }}
+          </th>
+          <th scope="col">
+            {{ "configuration.goalTypesObj.goalDescription" | translate }}
+          </th>
+          <th scope="col">
+            {{ "configuration.goalTypesObj.goalColor" | translate }}
+          </th>
+          <th scope="col">
+            {{ "configuration.goalTypesObj.category" | translate }}
+          </th>
+          <th scope="col">
+            {{ "configuration.goalTypesObj.isEnabled" | translate }}
+          </th>
+          <th scope="col" class="goal-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let goal of goalTypes; let i = index">
+          <td class="goal-index">
+            {{ i + 1 }}
+          </td>
+          <!-- goal Name -->
+          <td>
+            {{ goal?.name }}
+          </td>
+          <!-- arabic goal type name -->
+          <td class="Arabic-font">{{ goal?.arabicName }}</td>
+          <!-- goal  Desc -->
+          <td>
+            <span class="desc-span" *ngIf="goal?.description">{{ goal?.description }}</span>
+            <span class="rectangle-badge badge-muted" *ngIf="!goal?.description">
+              {{ "shared.N/A" | translate }}
+            </span>
+          </td>
+          <!-- goal Color -->
+          <td>
+            <span class="dot" [ngStyle]="{ backgroundColor: goal?.color }"></span>
+          </td>
+          <!-- Type Category-->
+          <td>
+            {{ getCategoryName(goal?.category) }}
+          </td>
+          <!-- goal category-->
+          <td>
+            <app-switch
+              [disabled]="true"
+              [(ngModel)]="goal.isEnabled"
+              (click)="openModel(goal)"
+            ></app-switch>
+
+            <app-confirm-modal
+              [id]="'confrontation-msg' + goal?.id"
+              [content]="msgText(goal)"
+              [btnStyle]="'main'"
+              [btnContent]="'shared.confirm' | translate"
+              (confirm)="toggleActive(goal)"
+            ></app-confirm-modal>
+          </td>
+          <td class="goal-actions">
+            <div>
+              <app-dropdown
+                [items]="options"
+                (select)="onOptionSelect($event, goal)"
+              ></app-dropdown>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'edit-goalType'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeEditPopup()"
+>
+  <div modal-header class="goalType-edit-model-header w-100">
+    <label class="modal-title">
+      {{ 'configuration.goalTypesObj.editGoalType' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="goalType-edit-model-content border-top">
+    <app-create-goal
+      *ngIf="isShowEditTypePopup"
+      (typeEditedEvent)="typeEditedHandler($event)"
+    ></app-create-goal>
+  </div>
+</app-model>
+
+<app-confirm-modal
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteGoalConfirmed()"
+></app-confirm-modal>

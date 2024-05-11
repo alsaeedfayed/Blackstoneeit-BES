@@ -1,0 +1,21 @@
+nz-range-picker {
+    width: 100%;
+    height: 45px;
+    border-radius: 8px;
+    &.arabic{
+        ::ng-deep .ant-picker-clear{
+            left: 11px;
+            right: auto;
+        }
+    }
+    &.english{
+        ::ng-deep .ant-picker-clear{
+            right: 11px;
+            left: auto;
+        }
+    }
+}
+
+.astrix-red{
+    color: red;
+}

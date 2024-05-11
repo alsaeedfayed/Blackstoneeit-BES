@@ -1,0 +1,121 @@
+<div class="new-model-dialog-body">
+  <!-- tabs -->
+  <div class="table-wrapper mt-4 chrtabs">
+    <app-tabs class="d-block mt-1">
+      <!-- changed data details items tab -->
+      <app-tab [title]="'changeRequests.details.changedData' | translate">
+        <div>
+          <app-basic-information-rows
+            [basicInfoList]="changedDataKpis"
+            [lang]="language"
+            [noDataMsg]="'changeRequests.details.noDataChangedData' | translate"
+          ></app-basic-information-rows>
+        </div>
+      </app-tab>
+      <!-- full details  tab -->
+      <app-tab [title]="'changeRequests.details.fullDetails' | translate">
+        <div *ngIf="!isAddedKpi; else isAddKpi" class="full-container">
+          <div class="full-header">
+            <div class="full-title mt-3">
+              {{ language === "en" ? kpiDetails?.name : kpiDetails?.nameAr }}
+            </div>
+            <app-badge
+            [className]="'draft'"
+            [label]="
+              language === 'en'
+                  ? MeasurementRecurrences[kpiDetails?.measurementRecurrence]
+                      ?.title.en
+                  : MeasurementRecurrences[kpiDetails?.measurementRecurrence]
+                      ?.title.ar
+            "
+          ></app-badge>
+          </div>
+
+          <div class="weight-target mt-2">
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.weight" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ kpiDetails?.weight }}%</span>
+            </div>
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.target" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ kpiDetails?.target }}%</span>
+            </div>
+          </div>
+
+          <div class="full-description mt-3">
+            <span class="full-description-lable">
+              {{ "changeRequests.details.description" | translate }}
+            </span>
+            <span
+              class="full-description-body mt-2"
+              [innerHTML]="kpiDetails?.description"
+            ></span>
+          </div>
+
+          <div class="full-attatchments mt-3">
+            <span class="full-attatchments-lable">
+              {{ "changeRequests.details.attatchmens" | translate }}
+            </span>
+            <div class="my-3">
+              <uploaded-attachments-files
+                *ngIf="attatchments?.length > 0; else noAttatchments"
+                class="d-block mt-3"
+                [files]="attatchments"
+                [canDeleted]="false"
+              ></uploaded-attachments-files>
+              <ng-template #noAttatchments>
+                {{ "changeRequests.details.noAtt" | translate }}
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <ng-template #isAddKpi>
+          <!-- added kpis  -->
+          <div class="weight-target mt-2" style="padding: 2rem">
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.titleEn" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ kpiDetails?.title }}</span>
+            </div>
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.titleAr" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ kpiDetails?.titleAr }}</span>
+            </div>
+
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.changeType" | translate }}
+              </span>
+              <span
+                class="weight-target mt-2"
+                [ngClass]="changedTypes[kpiDetails?.recordingStatus]?.className"
+              >
+                {{
+                  language === "en"
+                    ? changedTypes[kpiDetails?.recordingStatus]?.name
+                    : changedTypes[kpiDetails?.recordingStatus]?.nameAr
+                }}
+              </span>
+            </div>
+          </div>
+        </ng-template>
+      </app-tab>
+    </app-tabs>
+  </div>
+
+
+</div>
+ <!-- footer buttons -->
+ <div class="new-model-dialog-footer">
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+</div>

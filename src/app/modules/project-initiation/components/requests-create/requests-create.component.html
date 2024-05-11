@@ -1,0 +1,196 @@
+<app-stepper
+  #cdkStepper
+  [readonly]="readonly"
+  [linear]="readonly ? false : true"
+>
+  <!-- Workflow Actions -->
+  <workflow-action-options
+    *ngIf="requestData && requestData?.status?.code !== 'Draft'  && !requestData?.canEdit"
+    [ngClass]="{ 'd-block mb-4': requestData?.task }"
+    [title]="''"
+    [task]="requestData?.task"
+    [options]="requestData?.task?.options"
+    [instanceId]="instanceId"
+    (onSaveAction)="onActionConfirmed($event)"
+  ></workflow-action-options>
+
+  <div class="d-flex flex-wrap gap-2 justify-content-end my-2" buttons *ngIf="requestData?.canEdit && requestData?.status?.code !== 'Draft'">
+    <button class="btn btn-main" (click)="saveRequest()">
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+
+  <!-- Approval Timeline Section -->
+  <div
+    class="mb-4"
+    *ngIf="requestData && requestData?.status?.code !== 'Draft'"
+  >
+    <h3 class="form-title mb-3">
+      {{ "initiationForm.approvalTimeline" | translate }}
+    </h3>
+
+    <workflow-states [steps]="requestData?.states"></workflow-states>
+  </div>
+
+  <!-- Project Overview -->
+  <cdk-step
+    [label]="'initiationForm.projectOverview' | translate"
+    [completed]="overviewForm?.valid"
+    [stepControl]="overviewForm"
+    [optional]="false"
+  >
+    <app-requests-overview-form
+      [lang]="lang"
+      [readOnly]="readonly"
+      [projectCategories]="overviewCategories"
+      [projectTypes]="overviewTypes"
+      [projectOrigins]="overviewOrigins"
+      [isFormSubmitted]="isFormSubmitted"
+      [data]="requestData"
+      (setPriority)="onSetPriority()"
+      (onUpdateData)="onUpdateData()"
+    ></app-requests-overview-form>
+  </cdk-step>
+
+  <!-- Project Organization -->
+  <cdk-step
+    [label]="'initiationForm.projectOrganization' | translate"
+    [completed]="oraganizationForm?.valid"
+    [stepControl]="oraganizationForm"
+    [optional]="false"
+  >
+    <app-requests-organization-form
+      [projectDeliveryTypes]="organizationDeliveryTypes"
+      [data]="requestData"
+      [isFormSubmitted]="isFormSubmitted"
+      [lang]="lang"
+      [readOnly]="readonly"
+    ></app-requests-organization-form>
+  </cdk-step>
+
+  <!-- Strategic Impact -->
+  <cdk-step
+    [label]="'initiationForm.strategicImpact' | translate"
+    [completed]="strategicImpactForm?.valid"
+    [stepControl]="strategicImpactForm"
+    [optional]="false"
+  >
+    <app-requests-strategic-impact
+      [data]="requestData"
+      [treeData]="treeData"
+      [lang]="lang"
+      [selectedDepartmentId]="
+        requestsOrganizationFormComponent?.oraganizationForm?.value?.department
+      "
+      [isFormSubmitted]="isFormSubmitted"
+      [readOnly]="readonly"
+    ></app-requests-strategic-impact>
+  </cdk-step>
+
+  <!-- Project Planning -->
+  <cdk-step
+    [label]="'initiationForm.projectPlanning' | translate"
+    [completed]="planningForm?.valid"
+    [stepControl]="planningForm"
+    [optional]="false"
+  >
+    <app-requests-planning-form
+      [lang]="lang"
+      [data]="requestData"
+      [isFormSubmitted]="isFormSubmitted"
+      [readOnly]="readonly"
+    ></app-requests-planning-form>
+  </cdk-step>
+
+  <!-- Project Documents -->
+  <cdk-step label="Documents" [optional]="true">
+    <app-project-document-list
+      [saveInMemory]="true"
+      [projectId]="requestData?.id"
+      [projectStatus]="requestData?.status"
+    ></app-project-document-list>
+  </cdk-step>
+
+  <!-- Project Translation -->
+  <cdk-step label="Translation" [optional]="true" *ngIf="!readonly">
+    <app-requests-translations
+      [lang]="lang"
+      [overviewForm]="overviewForm?.value"
+      [requestData]="requestData"
+      [isTranslationRequired]="isTranslationRequired"
+      [organizationForm]="oraganizationForm?.value"
+    ></app-requests-translations>
+  </cdk-step>
+</app-stepper>
+
+<!-- Stepper Controls -->
+<div
+  *ngIf="requestData?.status?.code === 'Draft' || !requestData"
+  class="d-flex justify-content-between flex-wrap gap-2 stepper-footer"
+>
+  <!-- previous button -->
+  <button class="btn btn-outline-main" (click)="onPrev()">
+    {{ "initiationForm.prev" | translate }}
+  </button>
+
+  <div class="d-flex flex-wrap gap-2">
+    <!-- delete button -->
+    <button
+      *ngIf="
+        (isOwner || isPm || isPmo) && requestData?.status?.code === 'Draft'
+      "
+      class="btn btn-danger"
+      (click)="onDelete()"
+    >
+      {{ "shared.delete" | translate }}
+    </button>
+
+    <!-- save draft button -->
+    <button
+      *ngIf="(isOwner && requestData?.status?.code === 'Draft') || !requestData"
+      class="btn btn-outline-secondary"
+      (click)="saveAsDraft()"
+    >
+      {{ "initiationForm.saveAsDraft" | translate }}
+    </button>
+
+    <!-- submit/next button -->
+    <button
+      class="btn btn-main"
+      (click)="isStepperValid ? saveRequest() : onNext()"
+    >
+      {{
+        (isStepperValid
+          ? "initiationForm.submitRequest"
+          : "initiationForm.next"
+        ) | translate
+      }}
+    </button>
+  </div>
+</div>
+
+<!-- Requests Modal -->
+<app-requests-modal
+  [lang]="lang"
+  [isFormSubmitted]="isFormSubmitted"
+  [requestData]="requestData"
+  [isTranslationRequired]="isTranslationRequired"
+  [popupConfig]="popupConfig"
+  (getTranslatedFieldsValues)="submitRequestConfirmed($event, false)"
+  (getPriorityValues)="onSubmitPriority($event)"
+  (actionConfirmed)="onActionConfirmed($event)"
+></app-requests-modal>
+
+<!-- Loading Modal -->
+<app-loading-modal
+  [displayModal]="displayLoadingModal"
+  [content]="'Loading'"
+></app-loading-modal>
+
+<!------ Confirm Modal ------>
+<app-confirm-modal
+  [content]="'shared.confirmModalText' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteDraft()"
+></app-confirm-modal>

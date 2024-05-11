@@ -1,0 +1,722 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.block-item {
+  background-color: #ffffff;
+  padding: 1rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 10px;
+  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  overflow: auto;
+}
+
+.block-item-tabs {
+  background-color: #ffffff;
+  padding: 1rem 0px;
+  border: 0.0625rem solid #efefef;
+  border-radius: 10px;
+  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  overflow: auto;
+
+  .committee-performance-blocks {
+    display: flex;
+    gap: 12px;
+    padding: 0.7rem;
+    flex-wrap: wrap;
+    &-block {
+      border: 1px solid #efefef;
+      border-radius: 10px;
+      padding: 3rem;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      flex-grow: 1;
+      align-items: center;
+      &-info {
+        &-lable {
+          color: #96a6bd;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+          &::before {
+            content: "";
+            display: inline-flex;
+            width: 13px;
+            height: 13px;
+            border-radius: 3px;
+            background-color: #5271ff;
+            margin-right: 0.3rem;
+          }
+        }
+
+        &-lable-offtrack {
+          color: #96a6bd;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+          &::before {
+            content: "";
+            display: inline-flex;
+            width: 13px;
+            height: 13px;
+            border-radius: 3px;
+            background-color: #f72929;
+            margin-right: 0.3rem;
+          }
+        }
+
+        &-lable-ontrack {
+          color: #96a6bd;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+          &::before {
+            content: "";
+            display: inline-flex;
+            width: 13px;
+            height: 13px;
+            border-radius: 3px;
+            background-color: #0fc161;
+            margin-right: 0.3rem;
+          }
+        }
+
+        &-lable-completed {
+          color: #96a6bd;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+          &::before {
+            content: "";
+            display: inline-flex;
+            width: 13px;
+            height: 13px;
+            border-radius: 3px;
+            background-color: #d6d6d6;
+            margin-right: 0.3rem;
+          }
+        }
+
+        &-value {
+          font-weight: 600;
+          color: #121824;
+          font-size: 14px;
+          line-height: 20px;
+        }
+      }
+    }
+  }
+
+  .ar {
+    .committee-performance-blocks-block-info-lable::before {
+      margin-left: 0.3rem;
+      align-items: end;
+    }
+  }
+}
+
+::ng-deep {
+  .block-item-tabs {
+    .tabs-items {
+      // width: 50% !important;
+    }
+  }
+}
+.details-container {
+  background-color: #ffffff;
+  padding: 1rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 1.25rem;
+  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  overflow: auto;
+}
+
+.creationBasicInfo {
+  &-period {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .en {
+    padding-right: 7rem;
+    border-right: 0.5px solid #e4ede4;
+  }
+  .ar {
+    padding-left: 7rem;
+    border-left: 0.5px solid #e4ede4;
+  }
+}
+
+::ng-deep {
+  .block-item-tabs {
+    .en {
+      li {
+        justify-content: left !important;
+        i {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+
+    .ar {
+      li {
+        justify-content: right !important;
+        i {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-subtitle {
+    color: #96a6bd;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+  &-main-title {
+    color: #87909b;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.125rem !important;
+  }
+  &-sub-main-title {
+    color: #000000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.125rem !important;
+  }
+}
+::ng-deep app-badge {
+  .badge-status::before {
+    display: none;
+  }
+}
+.see-more-btn {
+  display: inline-block;
+  color: $info_color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.horizontal-line {
+  height: 0.0625rem;
+  background-color: #efefef;
+  margin: 0.5rem 0;
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1rem 2rem;
+
+  ::ng-deep app-no-data {
+    .no-data {
+      position: static;
+      top: initial;
+      left: initial;
+      transform: none;
+    }
+
+    img {
+      display: block;
+      margin: auto;
+      width: 101px;
+      height: 83px;
+    }
+
+    p {
+      width: auto;
+      font-size: 0.875rem;
+      margin: 1.5rem 0 0;
+    }
+  }
+}
+
+table {
+  width: 100%;
+
+  tr {
+    &:not(:first-of-type) {
+     // border-bottom: 1px solid #efefef;
+    }
+
+    th {
+      color: $info_color;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0 1.25rem;
+    }
+
+    td {
+      font-weight: 400;
+      padding: 0.625rem 1.25rem;
+    }
+
+    .observation-title {
+      min-width: 150px;
+      max-width: 300px;
+      word-break: break-word;
+    }
+    .observation-description {
+      max-width: 400px;
+      min-width: 200px;
+      word-break: break-word;
+
+      .see-more {
+        display: inline-block;
+        color: $main-color;
+        font-size: 0.875rem;
+        font-weight: 400;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    .observation-actions {
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+.recommendations {
+  // border: 1px solid #dbdee7;
+  // border-radius: 7px;
+  // box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.05);
+}
+::ng-deep {
+  .angular-editor-description {
+    ol,
+    ul {
+      list-style: revert;
+      padding: revert;
+      margin: revert;
+    }
+  }
+}
+::ng-deep app-stats-widget {
+  .stats-widget {
+    // height: 100%;
+  }
+}
+.statistics {
+  &-container {
+    // justify-content: flex-start;
+    margin: 1rem;
+
+    & > * {
+      margin: 1rem;
+    }
+  }
+  &-item {
+    border: 0.0625rem solid #efefef;
+    border-radius: 1.25rem;
+    box-shadow: 0 0.05rem 0.475rem rgba(0, 0, 0, 0.1);
+    &-data {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+    }
+  }
+}
+.task-progress {
+  .progress-percentage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: $black-color;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+  }
+
+  .progress-bar {
+    position: relative;
+    height: 0.25rem;
+    background-color: #ebedef;
+    margin-top: 0.5rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+
+    .fill {
+      display: block;
+      position: absolute;
+      top: 0;
+      @include rtl_value(left, 0, auto);
+      @include rtl_value(right, auto, 0);
+      height: 100%;
+      width: 0%;
+    }
+    .none {
+      background: linear-gradient(to right, #808080, #b6b6b6);
+    }
+    .half {
+      background: linear-gradient(to right, #ffa800, #ffcc6a);
+    }
+    .afterHalf {
+      background: linear-gradient(to right, #840aff, #b75bd8);
+    }
+    .done {
+      background: linear-gradient(to right, #52af31, #3ed126);
+    }
+  }
+
+  &:not(.done) {
+    .progress-bar {
+      .fill {
+        background-color: #ffa800;
+      }
+    }
+  }
+
+  &.done {
+    .progress-bar {
+      .fill {
+        background-color: #0fc161;
+      }
+    }
+  }
+}
+.analytics-widgets {
+  container: analytics-widgets / inline-size;
+
+  &-items {
+    display: grid;
+    gap: 1rem;
+
+    @container analytics-widgets (min-width: 800px) {
+      & {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @container analytics-widgets (min-width: 500px) and (max-width: 799px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+.progress-chart {
+  height: 6rem;
+  border-radius: 1rem;
+  border: 1px solid #efefef;
+  flex-grow: 1;
+  background: transparent;
+  padding: 1.5rem;
+  &-info {
+    position: relative;
+    top: 0.5rem;
+    //left: 1rem;
+    &-data {
+      font-weight: 400;
+      font-size: 14px;
+      &-coloriezed {
+        color: #0fc161;
+      }
+      &-percentage {
+        font-weight: 700;
+        font-size: 22px;
+      }
+    }
+  }
+  &-chart {
+    position: relative;
+    &-icon {
+      color: #0fc161;
+      position: absolute;
+      font-size: 1.4rem;
+      right: 34%;
+      top: 31%;
+    }
+  }
+}
+
+::ng-deep {
+  .progress-chart-chart {
+    .reading-block {
+      display: none;
+    }
+  }
+
+  .guage-container {
+    gap: 12px;
+    flex-wrap: wrap;
+    &-total-count {
+      background-color: #fff;
+      border: 1px solid #efefef;
+      border-radius: 10px;
+      padding: 1rem;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .guage-container-icon {
+        color: #eb9400 !important;
+      }
+    }
+
+    &-off-track-on-track {
+      background-color: #fff;
+      border: 1px solid #efefef;
+      border-radius: 10px;
+      padding: 1rem;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .guage-container-icon {
+        color: #eb9400 !important;
+      }
+    }
+
+    &-performance {
+      background-color: #fff;
+      border: 1px solid #efefef;
+      border-radius: 10px;
+      padding: 1rem;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .guage-container-icon {
+        color: #eb9400 !important;
+      }
+    }
+  }
+}
+.statistics-container {
+  margin: unset !important;
+}
+
+.analytics-widgets-items {
+  margin-top: 1rem;
+}
+
+::ng-deep {
+  .guage-container-off-track-on-track {
+    .reading-block {
+      color: blue;
+    }
+  }
+
+  .progress-chart-chart {
+    .reading-label {
+      display: none !important;
+    }
+  }
+  .guage-container-total-count {
+    .reading-affix {
+      display: none !important;
+    }
+  }
+}
+
+.guage-container-box {
+  border: 1px solid gray !important;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    --id-width: 50px;
+    width: 100%;
+
+    .id {
+      width: var(--id-width);
+    }
+  }
+}
+
+.rotateIcon {
+  transform: rotate(180deg);
+}
+
+::ng-deep {
+  .evaluationTabs{
+    .tabs-items {
+      border-bottom: 0.0625rem solid rgba(102, 102, 102, 0.2) !important;
+      justify-content: unset !important;
+      gap: 20px;
+      .item {
+        border-bottom: unset !important;
+        flex: unset !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+      }
+      .active {
+        border-bottom: 2px solid #5271ff !important;
+      }
+    }
+  }
+
+}
+
+.col-header-performance {
+  color: #96a6bd;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+.table-tr {
+  cursor: pointer;
+ // border-bottom: 1px solid gray;
+}
+
+.progress-bar {
+  position: relative;
+  height: 0.25rem;
+  background-color: #ebedef;
+  border-radius: 0.625rem;
+  overflow: hidden;
+
+  .fill {
+    display: block;
+    position: absolute;
+    top: 0;
+    @include rtl_value(left, 0, auto);
+    @include rtl_value(right, auto, 0);
+    height: 100%;
+    width: 0%;
+    background-color: #ffa800;
+  }
+
+  .none {
+    background: linear-gradient(to right, #808080, #b6b6b6);
+  }
+
+  .half {
+    background: linear-gradient(to right, #ffa800, #ffcc6a);
+  }
+
+  .afterHalf {
+    background: linear-gradient(to right, #840aff, #b75bd8);
+  }
+
+  .done {
+    background: linear-gradient(to right, #52af31, #3ed126);
+  }
+}
+
+.percentage {
+  color: $black-color;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+}
+
+.AttendStatus {
+  color: #96a6bd;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.attendCount {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  color: #121824;
+}
+
+.attendCountAbsent {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  color: #fe5656;
+}
+
+.progressPresent {
+  width: 12rem;
+}
+
+::ng-deep {
+  .memberPerformanceTable{
+    table {
+      tbody {
+        tr {
+          td {
+            border-bottom: 1px solid #e6e6e6 !important;
+          }
+        }
+      }
+    }
+    table {
+      tr {
+        height: 1rem;
+        -webkit-transition: height 1000ms linear !important;
+        -ms-transition: height 1000ms linear !important;
+        transition: height 1000ms linear !important;
+        border-bottom: 1px solid #e6e6e6 !important;
+      }
+    }
+
+    table.table tbody tr:nth-of-type(even) {
+      background-color: white;
+    }
+  }
+
+}
+
+.sperateBorder {
+  display: inline-block;
+  border-right: 1px solid #d8dee6;
+  width: 1px;
+}
+
+.ev-tbody {
+  .trActiveBackgroun {
+    background-color: #f9f9f9 !important;
+    -webkit-transition: height 1000ms linear !important;
+    -ms-transition: height 1000ms linear !important;
+    transition: height 1000ms linear !important;
+  }
+}
+
+
+.attRate {
+  width: 600px;
+}
+.taskProg {
+  width: 500px;
+}
+.personName {
+  width: 600px;
+}
+.expandTable {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.activePersonItem {
+  padding-bottom: 5.5rem !important;
+}

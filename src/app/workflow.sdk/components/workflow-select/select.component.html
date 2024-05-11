@@ -1,0 +1,31 @@
+<label *ngIf="!!title" class="form-label"
+  >{{ title }}
+  <span  [ngClass]="{'astrix-red': isRequired,'no-astrix':!isRequired}">*</span>
+</label>
+
+<ng-select
+  (blur)="focus()"
+  class="input-select"
+  [ngClass]="{ valid: control?.valid }"
+  [readonly]="disabled"
+  [(ngModel)]="initValue"
+  [clearable]="clearable"
+  [searchable]="search"
+  [placeholder]="placeholder"
+  [bindValue]="bindVlaue"
+  [bindLabel]="bindLabel"
+  [items]="itemsList"
+  [multiple]="multiple"
+  (change)="changeValue($event)"
+  [loading]="loadingValue"
+  [notFoundText]="noItemsText | translate"
+  [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+  (change)="change.emit($event)"
+  (clear)="clearHandler($event)"
+>
+</ng-select>
+
+<app-validation
+  *ngIf="(control?.dirty || isSubmitted ) && control?.invalid"
+  [control]="control"
+></app-validation>

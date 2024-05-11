@@ -1,0 +1,125 @@
+<button
+  class="add-new-btn"
+  *ngIf="list?.length > 0 && isUpdating"
+  (click)="openCreateTaskModel()"
+>
+  <i class="bx bx-plus"></i>
+  {{ "committeeNewMeeting.meetingForm.addNewItem" | translate }}
+</button>
+
+<div class="tasks-list pt-3">
+  <table *ngIf="list?.length > 0">
+    <tr>
+      <th class="task-title">
+        {{ "committeeMeetingDetails.tasks.taskTitle" | translate }}
+      </th>
+      <th class="task-status">
+        {{ "committeeMeetingDetails.tasks.priority" | translate }}
+      </th>
+      <th class="task-progress">
+        {{ "committeeMeetingDetails.tasks.progress" | translate }}
+      </th>
+      <th class="task-created-on">
+        {{ "committeeMeetingDetails.tasks.createdOn" | translate }}
+      </th>
+      <th class="task-assigned-to">
+        {{ "committeeMeetingDetails.tasks.assignedTo" | translate }}
+      </th>
+      <th *ngIf="isUpdating" class="task-actions"></th>
+    </tr>
+    <tr *ngFor="let item of list">
+      <td class="task-title">
+        {{ language == 'en'? item?.title :item?.titleAr }}
+      </td>
+      <td class="task-status">
+        <app-badge
+          [className]="importanceLevels[item?.importanceLevel]['className']"
+          [label]="
+            language == 'en'
+              ? importanceLevels[item?.importanceLevel]['name']
+              : importanceLevels[item?.importanceLevel]['nameAr']
+          "
+        ></app-badge>
+      </td>
+      <td class="task-progress">
+        <div class="d-flex align-items-center gap-2">
+          <div class="progress-bar flex-grow-1">
+            <span
+              class="fill {{ item?.progress | progressColor }}"
+              [ngStyle]="{ width: item?.progress + '%' }"
+            ></span>
+          </div>
+          <span class="percentage">{{ item?.progress }}%</span>
+        </div>
+      </td>
+      <td class="task-created-on">
+        <span *ngIf="item?.creationDate">
+          {{
+            language === "en"
+              ? (convertUTCDateToLocalDate(item?.creationDate).toLocaleString()
+                | date : "d MMM y")
+              : (convertUTCDateToLocalDate(item?.creationDate).toLocaleString()
+                | localizeDate : "d MMM y")
+          }}
+        </span>
+      </td>
+      <td class="task-assigned-to">
+        <person-item
+          [requesterItem]="item?.assignedToInfo"
+          [noCursor]="true"
+          [isUserCardFixed]="true"
+        ></person-item>
+      </td>
+      <td *ngIf="isUpdating" class="task-actions">
+        <button class="edit-grid-item-btn" (click)="openCreateTaskModel(item)">
+          <i class="bx bx-edit-alt"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeMeetingDetails.tasks.noDataMsg' | translate"
+    ></app-no-data>
+    <button
+      *ngIf="isUpdating"
+      class="btn btn-main"
+      (click)="openCreateTaskModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "committeeNewMeeting.meetingForm.addNewItem" | translate }}
+    </button>
+  </div>
+
+  <!-- create/edit task model -->
+  <app-model
+    [dimensions]="{ width: 620, height: 750 }"
+    [id]="'create-task'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="closeCreateTaskModel()"
+  >
+    <div modal-header class="create-task-model-header w-100">
+      <label class="modal-title">
+        {{
+          "committeeMeetingDetails.tasks.taskModel" +
+            (taskItem ? ".editItem" : ".addNewItem") | translate
+        }}
+      </label>
+    </div>
+
+    <div modal-content class="create-task-model-content border-top">
+      <create-task-model
+        *ngIf="isTaskModelOpened"
+        [committeeId]="committeeId"
+        [meetingId]="meetingId"
+        [taskId]="taskItem?.id"
+        (taskAdded)="getAllTasks()"
+        [isTask]="true"
+
+      ></create-task-model>
+    </div>
+  </app-model>
+</div>

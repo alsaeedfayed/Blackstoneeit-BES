@@ -1,0 +1,383 @@
+<div class="control" *ngIf="controlShow?.value == 'true' || controlShow?.value == true || entityBuilderConfig.mode == entityBuilderModeEnum.View ">
+  <ng-container *ngIf="isFiledType" [ngTemplateOutlet]="text"></ng-container>
+  <ng-container *ngIf="isTextareaType" [ngTemplateOutlet]="textarea"></ng-container>
+  <ng-container *ngIf="isSelectType" [ngTemplateOutlet]="select"></ng-container>
+  <ng-container *ngIf="isCheckbox" [ngTemplateOutlet]="checkbox"></ng-container>
+  <ng-container *ngIf="isDateType" [ngTemplateOutlet]="date"></ng-container>
+  <ng-container *ngIf="isRadioButtonType" [ngTemplateOutlet]="radio"></ng-container>
+  <ng-container *ngIf="isFileUpload" [ngTemplateOutlet]="file"></ng-container>
+  <ng-container *ngIf="isLink" [ngTemplateOutlet]="link"></ng-container>
+  <ng-container *ngIf="isRepeaterType" [ngTemplateOutlet]="repeater"></ng-container>
+  <ng-container *ngIf="isDateRangeType" [ngTemplateOutlet]="dateRange" ></ng-container>
+  <ng-container [ngTemplateOutlet]="hintText"></ng-container>
+  <ng-container [ngTemplateOutlet]="buttons"></ng-container>
+</div>
+<ng-container [ngTemplateOutlet]="errorMassage"></ng-container>
+
+<ng-template #text>
+  <ng-container [formGroup]="form">
+    <app-filed
+      class="d-block"
+      [formControlName]="controlName"
+      [title]="controlTitle?.value | local : controlTitle?.valueAr : translateService.currentLang"
+      [control]="form | getControl : control.name"
+      [minLength]="control?.validations?.minimumLength"
+      [length]="control?.validations?.maximumLength"
+      [disabled]="isDisabled"
+      [onlyNumber]="isFiledNumber"
+      [placeholder]="controlPlaceholder?.value ? (controlPlaceholder?.value | local : controlPlaceholder?.valueAr : translateService.currentLang) : ''"
+      [showValidations]="false"
+    ></app-filed>
+  </ng-container>
+</ng-template>
+
+<ng-template #textarea>
+  <ng-container [formGroup]="form">
+    <app-textarea-filed
+      class="d-block"
+      [formControlName]="controlName"
+      [minLength]="control?.validations?.minimumLength"
+      [length]="control?.validations?.maximumLength"
+      [title]="controlTitle?.value | local : controlTitle?.valueAr : translateService.currentLang"
+      [control]="form | getControl : control.name"
+      [disabled]="isDisabled"
+      [placeholder]=" controlPlaceholder?.value ? (controlPlaceholder?.value | local : controlPlaceholder?.valueAr : translateService.currentLang) : ''"
+      [showValidations]="false"
+    ></app-textarea-filed>
+  </ng-container>
+</ng-template>
+
+<ng-template #select>
+  <ng-container [formGroup]="form">
+    <app-select
+      class="d-block"
+      [formControlName]="controlName"
+      [title]="controlTitle?.value | local : controlTitle?.valueAr : translateService.currentLang "
+      [items]="controOptionsApi?.values"
+      [control]="form | getControl : control.name"
+      [disabled]="isDisabled || loadingUsers || loadingApi"
+      [placeholder]="controlPlaceholder?.value | local : controlPlaceholder?.valueAr : translateService.currentLang"
+      [multiple]="isMultipleSelectType || isMultipleValuesType"
+      [bindLabel]="selectValue"
+      [bindVlaue]="controlApi?.value ? 'code' : 'id'"
+      [loading]="loadingUsers || loadingApi"
+      [showValidations]="false"
+      (change)="handelShowMultipleOtherOption(); handleConditionalControl(isMultipleSelectType ? controlValue.selectedValues : controlValue.value); handelNotEqual()"
+      (onSearch)="searchUsers($event)"
+    ></app-select>
+
+    <small
+      *ngIf="
+        control?.errorDuplicate &&
+        (entityBuilderConfig.mode == entityBuilderModeEnum.Preview ||
+          entityBuilderConfig.mode == entityBuilderModeEnum.Editable)
+      "
+      class="form-error"
+    >
+      <i class="bx bxs-error-circle"></i>
+      <span>{{ "shared.validations.errorDuplicate" | translate }}</span>
+    </small>
+    <ng-container *ngFor="let item of controOptions?.values; let i = index">
+      <app-other-control
+        class="d-block my-2"
+        *ngIf="
+          item?.other?.showOther &&
+          isMultipleSelectType &&
+          entityBuilderConfig.mode != entityBuilderModeEnum.View
+        "
+        [other]="item?.other"
+        (handelChange)="handelOtherValue($event, item)"
+      ></app-other-control>
+      <!-- <app-other-control
+        class="d-block my-2"
+        *ngIf="
+          item?.isOther &&
+          entityBuilderConfig.mode != entityBuilderModeEnum.View
+        "
+        [other]="item?.other"
+        [formDataDetails]="_formDataDetails"
+        (handelChange)="handelOtherValue($event, item)"
+      ></app-other-control> -->
+    </ng-container>
+
+    <app-other-control
+      class="d-block my-2"
+      *ngIf="
+        selectedOption?.other?.showOther &&
+        entityBuilderConfig.mode != entityBuilderModeEnum.View
+      "
+      [other]="selectedOption?.other"
+      (handelChange)="handelOtherValue($event, selectedOption)"
+    ></app-other-control>
+  </ng-container>
+</ng-template>
+
+<ng-template #checkbox>
+  <ng-container [formGroup]="form">
+    <checkbox-group
+      class="d-block"
+      [title]="controlTitle?.value | local : controlTitle?.valueAr : translateService.currentLang"
+      [disabled]="isDisabled"
+      [formControlName]="controlName"
+      [control]="form | getControl : control.name"
+      (valueChanged)="handleConditionalControl($event)"
+      [showValidations]="false"
+    >
+      <app-checkbox
+        [disabled]="isDisabled"
+        (valueChnaged)="handlShowOther(option);"
+        *ngFor="let option of controOptions?.values"
+        class="d-block" [identity]="option.id"
+        [title]="translateService.currentLang == 'ar' ? option?.textAr : option?.text"
+      >
+      <!-- [formDataDetails]="_formDataDetails" -->
+        <app-other-control
+          class="block my-2"
+          other
+          *ngIf="option?.other?.showOther && entityBuilderConfig.mode != entityBuilderModeEnum.View"
+          [other]="option?.other"
+          (handelChange)="handelOtherValue($event, option)"
+        ></app-other-control>
+      </app-checkbox>
+    </checkbox-group>
+  </ng-container>
+</ng-template>
+
+<ng-template #radio>
+  <ng-container [formGroup]="form">
+    <app-radio-group
+      class="d-block"
+      bindValue="id"
+      [title]="controlTitle?.value | local : controlTitle?.valueAr : translateService.currentLang"
+      [disabled]="isDisabled"
+      [formControlName]="controlName"
+      [control]="form | getControl : control.name"
+      [showValidations]="false"
+    >
+      <app-radio-box
+        *ngFor="let option of controOptions?.values"
+        class="mt-3 d-block"
+        [disabled]="isDisabled"
+        [value]="option.id"
+        (emitValue)="
+          handlShowOther(option); handleConditionalControl(option.id, $event)
+        "
+      >
+        {{ translateService.currentLang == "ar" ? option?.textAr : option?.text }}
+        <!-- [formDataDetails]="_formDataDetails" -->
+        <app-other-control
+          *ngIf="
+            option?.other?.showOther &&
+            entityBuilderConfig.mode != entityBuilderModeEnum.View
+          "
+          class="block my-2"
+          other
+          [other]="option?.other"
+          (handelChange)="handelOtherValue($event, option)"
+        ></app-other-control>
+      </app-radio-box>
+    </app-radio-group>
+  </ng-container>
+</ng-template>
+
+<ng-template #date>
+  <ng-container [formGroup]="form">
+    <app-nz-date-picker
+      class="d-block"
+      [minDate]="
+        controlMaxDateToday?.value ||
+        handelMaxDateFromControl?.value ||
+        controlMinDate?.value
+      "
+      [title]="
+        controlTitle?.value
+          | local : controlTitle?.valueAr : translateService.currentLang
+      "
+      [placeholder]="
+        controlPlaceholder?.value
+          | local : controlPlaceholder?.valueAr : translateService.currentLang
+      "
+      [disabled]="isDisabled"
+      [formControlName]="controlName"
+      [control]="form | getControl : control.name"
+      [showValidations]="false"
+    ></app-nz-date-picker>
+  </ng-container>
+</ng-template>
+
+<ng-template #file>
+  <ng-container [formGroup]="form">
+    <app-attachments-files
+      [title]="
+        controlTitle?.value
+          | local : controlTitle?.valueAr : translateService.currentLang
+      "
+      [formControlName]="controlName"
+      [maxSize]="
+        ((controlFileSize?.isSaved || controlFileSize?.isSaved == null) &&
+          controlFileSize?.value) ||
+        controlFileSize?.oldValue ||
+        0
+      "
+      [accept]="
+        ((controlFileTypes?.isSaved || controlFileTypes?.isSaved == null) &&
+          controlFileTypes?.value) ||
+        controlFileTypes?.oldValue ||
+        'png'
+      "
+      [disabled]="isDisabled"
+      [control]="form | getControl : control.name"
+      (attachmentUploadEvent)="getUploadedFiles($event)"
+    ></app-attachments-files>
+  </ng-container>
+</ng-template>
+
+<ng-template #link>
+  <ng-container [formGroup]="form">
+    <download-template
+      [title]="controlTitleFeild?.value| local : controlTitleFeild?.valueAr : translateService.currentLang"
+      [formControlName]="controlName"
+      [control]="form | getControl : control.name"
+      [text]="controlText?.value| local : controlText?.valueAr : translateService.currentLang"
+      [icon]="controlLinkAttachmentFiles.linkIcon" [uri]="controlLinkAttachmentFiles.linkUri"
+    ></download-template>
+  </ng-container>
+</ng-template>
+
+<ng-template #dateRange>
+  <ng-container [formGroup]="form">
+    <app-date-range-picker
+      [title]="
+        controlTitle?.value
+          | local : controlTitle?.valueAr : translateService.currentLang
+      "
+      [formControlName]="controlName"
+      [disabled]="isDisabled"
+      [control]="form | getControl : control.name"
+    ></app-date-range-picker>
+  </ng-container>
+</ng-template>
+
+<ng-template #repeater>
+  <ng-container [formGroup]="form">
+    <p class="repeater-label" >{{ lang == 'ar' ? controlTitle.valueAr : controlTitle.value }}
+      <span *ngIf="controlRequired" class="astrix-red">*</span>
+    </p>
+    <div class="repeater" dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event)" >
+      <app-entity-builder [entity]="control.innerControls" ></app-entity-builder>
+      <div class="placholder" dndPlaceholderRef>Drag Your Controls Here</div>
+      <div class="add" *ngIf="control.innerControls?.formData[0]?.controls.length > 0">
+        <button class="btn btn-main" [disabled]="control.innerControls?.formData[0]?.formGroup?.invalid"
+        (click)="addDynamicControls(control.innerControls?.formData[0]?.controls)">{{'shared.add' | translate}}</button>
+      </div>
+    </div >
+  </ng-container>
+</ng-template >
+
+<ng-template #buttons>
+  <div
+    class="absolute width-100"
+    [ngClass]="{
+      'top-3':
+        control.type == 1 ||
+        control.type == 2 ||
+        control.type == 3 ||
+        control.type == 4 ||
+        control.type == 5 ||
+        control.type == 11,
+      'top-4': control.type == 8 || control.type == 9 || control.type == 14,
+      'top-1': control.type == 6 || control.type == 7,
+      ar: lang == 'ar',
+      en: lang == 'en',
+      number: control.type == 2,
+      'short-text': control.type == 1
+    }"
+  >
+    <div
+      class="buttons-step"
+      *ngIf="entityBuilderConfig.mode == entityBuilderModeEnum.View"
+      [ngClass]="{ 'float-right': lang == 'en', 'float-left': lang == 'ar' }"
+    >
+      <button
+        (click)="moveDownControl()"
+        *ngIf="indexControl + 1 != controls.length"
+      >
+        <i class="bx bx-chevron-down"></i>
+      </button>
+      <button (click)="moveUpControl()" *ngIf="indexControl != 0">
+        <i class="bx bx-chevron-up"></i>
+      </button>
+      <button (click)="editModel()">
+        <i class="bx bx-edit-alt"></i>
+      </button>
+      <button (click)="deleteControl()">
+        <i class="bx bx-trash"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #errorMassage>
+  <div class="msg" *ngIf="formControl?.invalid && (formControl?.dirty || isRepeaterType)">
+    <span class="font-medium" *ngIf="!!formControl.errors.required">
+      {{ controlRequired | getMassage : translateService.currentLang }}
+    </span>
+    <span class="font-medium" *ngIf="!!formControl.errors.minlength">
+      {{ controlMinimumLength | getMassage : translateService.currentLang }}
+    </span>
+    <span class="font-medium" *ngIf="!!formControl.errors.maxlength">
+      {{ controlMaximumLength | getMassage : translateService.currentLang }}
+    </span>
+    <span class="font-medium" *ngIf="!!formControl.errors.pattern">
+      {{ controlPattern | getMassage : translateService.currentLang }}
+    </span>
+  </div>
+</ng-template>
+
+<!-- {{ ( translateService.currentLang == 'en' && controHint?.value) || ( translateService.currentLang == 'ar' && controHint?.valueAr) ? ('shared.hint' | translate)+' : '  : ''}} -->
+
+<ng-template #hintText>
+  <p
+    class="hint mt-2"
+    [innerHTML]="
+      translateService.currentLang == 'en'
+        ? controHint?.value
+        : controHint?.valueAr
+    "
+  ></p>
+</ng-template>
+
+<!--  -->
+<ng-container
+  *ngIf="
+    entityBuilderConfig.mode == entityBuilderModeEnum.Preview ||
+    entityBuilderConfig.mode == entityBuilderModeEnum.View
+  "
+>
+  <app-model
+    [dimensions]="{ width: 620, height: 750 }"
+    [id]="'entity-modal' + control.id"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="onPopupClose()"
+  >
+    <div modal-header class="entity-model-header w-100">
+      <label class="modal-title">
+        {{ "entityDesigner.editField" | translate }}
+      </label>
+    </div>
+
+    <div modal-content class="entity-model-content border-top">
+      <app-entity-modal
+        [formControl]="formControl"
+        [control]="control"
+        [Controls]="controls"
+      ></app-entity-modal>
+    </div>
+  </app-model>
+</ng-container>
+
+<div class="dynamicTable" #dynamicTable *ngIf="dynamicData.length > 0" >
+  <control-dynamic-table [rows]="dynamicData" [columns]="columns" (itemDeletedHandler)="itemDeletedHandler($event)"></control-dynamic-table>
+</div>

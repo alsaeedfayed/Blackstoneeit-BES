@@ -1,0 +1,26 @@
+.module-title {
+    h3 {
+        font-size: 24px;
+        color: $tertiary-color;
+
+        .sub-title {
+            color: $dark-gray-color;
+        }
+    }
+}
+
+.cards-title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 23px;
+    color: $tertiary-color;
+    margin-bottom: 24px;
+}
+
+.paragraph {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 31px;
+    color: $tertiary-color;
+    letter-spacing: 0.02em;
+}

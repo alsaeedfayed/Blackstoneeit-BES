@@ -1,0 +1,80 @@
+// Variables
+@import "../../../../../../assets/css/utils/variables.scss";
+
+.container {
+  container: container / border-box;
+}
+
+app-skeleton-loader {
+  width: 200px;
+}
+
+.l0-badge {
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
+
+label {
+  color: $black-color;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.operation-btn {
+  color: #fff;
+  background-color: #06f;
+  min-width: 90px;
+}
+
+.btn-primary {
+  background-color: #0066ff;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  border-radius: 0.3645rem;
+  color: #fff;
+  padding: 0.3rem 1.3rem 0.3rem 1rem;
+  font-weight: 500;
+  width: 140px;
+  i {
+    font-size: 1rem;
+  }
+}
+
+.new-event-form {
+  background: #ffffff;
+  padding: 25px 20px 20px;
+  padding-inline-start: 15px;
+  border-radius: 0.625rem;
+  border: 1px solid #efefef;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.01);
+  &.ng-valid {
+    border: 1px solid #efefef !important;
+  }
+}
+
+.selectors-wrapper {
+  display: flex;
+  gap: 5px;
+  .filter {
+    min-width: 170px;
+
+    &.year {
+      min-width: 100px;
+    }
+  }
+}
+
+::ng-deep {
+  .ng-select-container {
+    // min-width: 170px;
+    .ng-placeholder {
+      color: #25364f;
+      text-transform: capitalize;
+      margin-top: 3px;
+    }
+  }
+}
+

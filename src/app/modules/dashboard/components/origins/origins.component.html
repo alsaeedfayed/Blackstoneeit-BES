@@ -1,0 +1,45 @@
+<div class="origins-container">
+  <div class="header">
+    <span class="title">{{ "dashboard.origins" | translate }}</span>
+  </div>
+
+  <!-- <div class="chart">
+    <canvas
+      class="my-chart"
+      id="myChart"
+      width="181"
+      height="181"
+      #myChart
+    ></canvas>
+  </div> -->
+
+  <div class="origin-progress-bars">
+    <div
+      class="origin-progress"
+      *ngFor="let origin of originsData; let i = index"
+    >
+      <span
+        [ngStyle]="{ 'background-color': colors[i], width: origin.percentage }"
+      ></span>
+    </div>
+  </div>
+
+  <div class="origins">
+    <ul>
+      <li *ngFor="let origin of originsData; let i = index">
+        <div class="first-col">
+          <span
+            class="dot"
+            [ngStyle]="{ 'background-color': colors[i] }"
+          ></span>
+          <span class="status">{{ origin.origin.title[lang] }}</span>
+        </div>
+        <div class="second-col">
+          <span class="count" [ngStyle]="{ color: colors[i] }">
+            {{ origin.count }}
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

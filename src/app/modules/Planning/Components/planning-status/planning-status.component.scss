@@ -1,0 +1,65 @@
+// Planning Steps Style
+@import "../../../../../assets/css/utils/mixins.scss";
+@import "../../../../../assets/css/utils/variables.scss";
+
+.planningSteps {
+  &.disabled {
+    // cursor: not-allowed;
+  }
+
+  &.openToggle {
+    .text {
+      margin-top: 60px;
+      font-size: 14px;
+      line-height: 21px;
+      font-weight: 700;
+    }
+  }
+
+  .text {
+    color: $tertiary-color;
+
+    i {
+      font-size: 30px;
+    }
+  }
+}
+
+.start-planning {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: $main-color;
+  font-weight: 600;
+  font-size: 14px;
+  background: $white-color;
+  padding: 2rem 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+  margin: 15px 0;
+}
+
+.no-status-data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  color: $main-color;
+  font-weight: 600;
+  font-size: 14px;
+  background: $white-color;
+  padding: 2rem 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+  margin: 15px 0;
+}
+
+.loader {
+  margin: 15px 0;
+}
+
+p.lv {
+  width: min-content;
+}

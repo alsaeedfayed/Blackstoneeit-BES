@@ -1,0 +1,85 @@
+@import "../../../assets/css/utils/variables.scss";
+@import "../../../assets/css/utils/mixins.scss";
+
+.range-input-container {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px;
+
+  // overflow: hidden;
+  &:hover > li {
+    background: $main-color;
+    cursor: pointer;
+    border-color: $main-color;
+    transition: background 0.5s;
+    // span {
+    //     color: $main-color;
+    // }
+
+    &:hover ~ li {
+      background: $light-main-color;
+
+      span {
+        color: $secondary-color;
+      }
+    }
+  }
+
+  li {
+    flex-grow: 1;
+    flex-basis: 0;
+    background: $light-main-color;
+    position: relative;
+    height: 23px;
+    margin-inline-end: 3px;
+    border-radius: 4px;
+
+    .value {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 12px;
+      color: $secondary-color;
+      display: none;
+
+      &.visible {
+        display: flex;
+      }
+    }
+
+    &.highlighted {
+      background-color: $main-color;
+
+      span {
+        align-items: center;
+        color: $main-color;
+      }
+    }
+
+    &:hover {
+      span {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    &::after {
+      content: "";
+      width: 3px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: -3px;
+    }
+
+    &:last-child,
+    &:first-child {
+      &::before {
+      }
+    }
+  }
+}

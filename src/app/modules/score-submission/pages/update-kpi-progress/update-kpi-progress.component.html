@@ -1,0 +1,1588 @@
+<div [style.display]="loading ? 'none' : 'block'" #table_data>
+  <div class="allData" [style.display]="goal ? 'flex' : 'none'">
+    <div class="mainData">
+      <div class="main-header">
+        <button class="new-back-btn" (click)="back()">
+          <i class="bx bx-left-arrow-alt"></i>
+          <span class="module-title">{{ "scoreSubmission.updateKPIProgress" | translate }}</span>
+        </button>
+        <!-- <span class="status" [ngClass]="TrackStatusStyle">{{ TrackStatus }}</span> -->
+      </div>
+
+      <!-- Info -->
+      <div class="info block-content">
+        <div class="details">
+          <span class="current">
+            {{ lang === "en" ? goal?.Level.label : goal?.Level.labelAr }}
+          </span>
+
+          <span class="meta-level" *ngIf="goal?.group?.code">
+            {{ goal?.group?.code }}
+          </span>
+
+          <span
+            class="type"
+            *ngIf="goal?.goalType?.color"
+            [style.background]="goal?.goalType?.color"
+          >
+            {{ lang == "en" ? goal?.goalType?.name : goal?.goalType?.arabicName }}
+          </span>
+        </div>
+
+        <div>
+          <person-item [item]="personItem"></person-item>
+        </div>
+      </div>
+
+      <!-- Automatically Tag -->
+      <div class="automaticallyTag" *ngIf="goal?.automaticCalculation">
+        <span>{{ "scoreSubmission.automaticCalculation" | translate }}</span>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section block-content">
+        <div class="header">
+          <h3 class="title">
+            {{ lang === "en" ? goal?.title : goal?.titleAr }}
+          </h3>
+
+          <div>
+            <span *ngIf="!Date">
+              {{ lang === "en" ? goal?.duePeriod : goal?.duePeriodAr }}
+            </span>
+            <span>{{ MeasurementMethodText }}</span>
+            <span *ngIf="goal?.isCentralizedKPI" class="centeralized-badge">
+              {{ "scoreSubmission.centeralized" | translate }}
+            </span>
+            <label *ngIf="goal?.baseLine" class="base-line">
+              {{ BaseLine }}
+            </label>
+          </div>
+        </div>
+
+        <p class="description" *ngIf="goal?.description">
+          {{ goal?.description }}
+        </p>
+
+        <div class="bar">
+          <div class="title">
+            <h4 class="block-subtitle" *ngIf="progress?.value >= 0">
+              {{ "scoreSubmission.progressToDate" | translate }}
+
+              <span class="status-div">
+                <span class="status" [ngClass]="TrackStatusStyle">
+                  {{ TrackStatus }}
+                </span>
+              </span>
+            </h4>
+            <span>{{ progress.value }}%</span>
+          </div>
+
+          <div class="range" *ngIf="progress?.value >= 0">
+            <!-- <app-custom-range-control
+              [minRange]="0" [maxRange]="100" [step]="1"
+              [unit]="'%'" [formControl]="progress" [preventAction]="true">
+            </app-custom-range-control> -->
+            <ngb-progressbar
+              type="success"
+              [value]="progress.value"
+            ></ngb-progressbar>
+          </div>
+
+          <div class="row percentages">
+            <p *ngIf="goal?.internalWeight" class="col-md-4 col-sm-6 mb-0">
+              <span class="block-subtitle">{{ "scoreSubmission.weight" | translate }}: </span>
+              <span class="block-content-text">{{ goal?.internalWeight }}%</span>
+            </p>
+            <p *ngIf="goal?.contributionWeight" class="col-md-4 col-sm-6 mb-0">
+              <span class="block-subtitle">{{ "scoreSubmission.contributionWeight" | translate }}: </span>
+              <span class="block-content-text">{{ goal?.contributionWeight }}%</span>
+            </p>
+            <p
+              class="col-md-4 col-sm-6 mb-0"
+              *ngIf="!goal?.automaticCalculation && goal?.score"
+            >
+              <span class="block-subtitle">{{ "scoreSubmission.score" | translate }}: </span>
+              <span class="block-content-text">{{ goal?.score | number : "1.2-2" }}%</span>
+            </p>
+            <p
+              class="col-md-4 col-sm-6 mb-0"
+              *ngIf="goal?.automaticCalculation && goal?.childrenProgress?.score"
+            >
+              <span class="block-subtitle">{{ "scoreSubmission.score" | translate }}: </span>
+              <span class="block-content-text">{{ goal?.childrenProgress?.score | number : "1.2-2" }}%</span>
+            </p>
+            <!-- <p
+              class="col-md-4 col-sm-6"
+              *ngIf="
+                goal?.automaticCalculation && goal?.childrenProgress?.actualTD
+              "
+            >
+              <span> {{ "scoreSubmission.ActualTD" | translate }}: </span>
+              <span
+                >{{ goal?.childrenProgress?.actualTD }}
+                {{ addittion(goal?.measurementMethod) }}</span
+              >
+            </p>
+            <p
+              class="col-md-4 col-sm-6"
+              *ngIf="
+                goal?.automaticCalculation &&
+                goal?.childrenProgress?.periodActual
+              "
+            >
+              <span> {{ "scoreSubmission.PeriodActual" | translate }}: </span>
+              <span
+                >{{ goal?.childrenProgress?.periodActual }}
+                {{ addittion(goal?.measurementMethod) }}</span
+              >
+            </p>
+            <p
+              class="col-md-4 col-sm-6"
+              *ngIf="
+                goal?.automaticCalculation &&
+                goal?.childrenProgress?.periodTarget
+              "
+            >
+              <span> {{ "scoreSubmission.PeriodTarget" | translate }}: </span>
+              <span
+                >{{ goal?.childrenProgress?.periodTarget }}
+                {{ addittion(goal?.measurementMethod) }}</span
+              >
+            </p>
+            <p
+              class="col-md-4 col-sm-6"
+              *ngIf="
+                goal?.automaticCalculation && goal?.childrenProgress?.targetTD
+              "
+            >
+              <span> {{ "scoreSubmission.TargetTD" | translate }}: </span>
+              <span
+                >{{ goal?.childrenProgress?.targetTD }}
+                {{ addittion(goal?.measurementMethod) }}</span
+              >
+            </p> -->
+          </div>
+
+          <!-- <div class="row">
+            <p *ngIf="goal?.internalWeight" class="col-sm-4">
+              <span class="min-width-95px">
+                {{ "scoreSubmission.weight" | translate }}
+              </span>
+              <span class="min-width-95px">{{ goal?.internalWeight }}%</span>
+            </p>
+            <p *ngIf="goal?.contributionWeight" class="col-sm-4">
+              <span class="min-width-195px">
+                {{ "scoreSubmission.contributionWeight" | translate }}
+              </span>
+              <span>{{ goal?.contributionWeight }}%</span>
+            </p>
+          </div> -->
+
+          <!-- <div class="weight" *ngIf="goal?.automaticCalculation">
+            <p class="score" *ngIf="!goal?.automaticCalculation && goal?.score">
+              <span class="min-width-95px"> {{ "scoreSubmission.score" | translate }} </span>
+              <span>{{ goal?.score | number : '1.2-2'}}%</span>
+            </p>
+            <p class="score" *ngIf="goal?.automaticCalculation && goal?.childrenProgress?.score">
+              <span class="min-width-95px"> {{ "scoreSubmission.score" | translate }} </span>
+              <span>{{ goal?.childrenProgress?.score | number : '1.2-2'}}%</span>
+            </p>
+            <p *ngIf="goal?.childrenProgress?.actualTD">
+              <span class="min-width-95px"> {{ "scoreSubmission.ActualTD" | translate }} </span>
+              <span class="min-width-95px">{{ goal?.childrenProgress?.actualTD }} {{addittion(goal?.measurementMethod)}}</span>
+            </p>
+             <p *ngIf="goal?.childrenProgress?.periodActual">
+              <span class="min-width-95px"> {{ "scoreSubmission.PeriodActual" | translate }} </span>
+              <span>{{ goal?.childrenProgress?.periodActual }} {{addittion(goal?.measurementMethod)}}</span>
+            </p>
+            <p *ngIf="goal?.childrenProgress?.periodTarget">
+              <span class="min-width-95px"> {{ "scoreSubmission.PeriodTarget" | translate }} </span>
+              <span class="min-width-95px">{{ goal?.childrenProgress?.periodTarget }} {{addittion(goal?.measurementMethod)}}</span>
+            </p>
+            <p *ngIf="goal?.childrenProgress?.targetTD">
+              <span class="min-width-95px"> {{ "scoreSubmission.TargetTD" | translate }} </span>
+              <span>{{ goal?.childrenProgress?.targetTD }} {{addittion(goal?.measurementMethod)}}</span>
+            </p>
+          </div> -->
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="description block-content" *ngIf="goal?.formula || goal?.risk || goal?.achievementRequirements">
+        <div class="item" *ngIf="goal?.formula">
+          <h5 class="block-subtitle">{{ "scoreSubmission.formula" | translate }}</h5>
+          <p class="block-content-text">{{ goal?.formula }}</p>
+        </div>
+
+        <div class="item" *ngIf="goal?.risk">
+          <h5 class="block-subtitle">{{ "scoreSubmission.risk" | translate }}</h5>
+          <p class="block-content-text">{{ goal?.risk }}</p>
+        </div>
+
+        <div class="item" *ngIf="goal?.achievementRequirements">
+          <h5 class="block-subtitle">{{ "scoreSubmission.achievementRequirements" | translate }}</h5>
+          <p class="block-content-text">{{ goal?.achievementRequirements }}</p>
+        </div>
+      </div>
+
+      <!-- Frequency -->
+      <div class="frequency block-content" *ngIf="!goal?.baseLine && !goal?.automaticCalculation">
+        <div class="title-header">
+          <h3 class="block-title">
+            {{ "scoreSubmission.frequencyUpdate" | translate }}
+          </h3>
+          <label *ngIf="goal?.isMaintainTargetForFrequency" class="base-line">
+            {{ "scoreSubmission.MaintainTargetForFrequency" | translate }}
+          </label>
+        </div>
+
+        <!-- Date Target -->
+        <div class="values-container" *ngIf="Date">
+          <div class="values">
+            <div class="value date_value">
+              <span class="target-label">
+                {{ "scoreSubmission.target" | translate }}
+              </span>
+              <span>
+                {{
+                  lang === "en" ?
+                  ((goal?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                  ((goal?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                }}
+              </span>
+            </div>
+            <div
+              class="value date_value"
+              [ngClass]="stateClass(goal?.dateGoalTarget?.submission?.status)"
+            >
+              <span
+                class="actual-label"
+                [ngClass]="stateClass(goal?.dateGoalTarget?.submission?.status)"
+              >
+                {{ "scoreSubmission.actual" | translate }}
+              </span>
+              <!-- {{ goal?.dateGoalTarget?.submission?.actualValue || 0 }} {{addittion(goal?.measurementMethod)}} -->
+              <span
+                *ngIf="
+                  goal?.dateGoalTarget?.submission &&
+                  goal?.dateGoalTarget?.submission.submitted
+                "
+              >
+                {{
+                  lang === "en" ?
+                  ((goal?.dateGoalTarget?.submission?.updatedDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                  ((goal?.dateGoalTarget?.submission?.updatedDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                }}
+              </span>
+              <span
+                *ngIf="
+                  !goal?.dateGoalTarget?.submission ||
+                  !goal?.dateGoalTarget?.submission.submitted
+                "
+              >
+                {{ "scoreSubmission.notReported" | translate }}
+              </span>
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.dateGoalTarget?.submission?.status, -1)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'Date',
+                  goal?.dateGoalTarget?.target,
+                  goal?.dateGoalTarget
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              *ngIf
+              [ngClass]="stateClass(goal?.dateGoalTarget?.submission?.status)"
+            >
+              {{
+                state(goal?.dateGoalTarget?.submission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.dateGoalTarget?.submission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Yearly Target -->
+        <div class="values-container" *ngIf="Yearly">
+          <div class="values">
+            <div class="value">
+              <span class="target-label">
+                {{ "scoreSubmission.target" | translate }}
+              </span>
+              {{ goal?.yearlyTarget?.value || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.yearlyTarget?.yearSubmission?.status)"
+            >
+              <span
+                class="actual-label"
+                [ngClass]="
+                  stateClass(goal?.yearlyTarget?.yearSubmission?.status)
+                "
+              >
+                {{ "scoreSubmission.actual" | translate }}
+              </span>
+              {{ goal?.yearlyTarget?.yearSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(goal?.yearlyTarget?.yearSubmission?.status, 12)
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'yearly',
+                  goal?.yearlyTarget?.value,
+                  goal?.yearlyTarget?.yearSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.yearlyTarget?.yearSubmission?.status)"
+            >
+              {{
+                state(goal?.yearlyTarget?.yearSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.yearlyTarget?.yearSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+        </div>
+
+        <!-- BiYearly Target -->
+        <div class="values-container" *ngIf="BiYearly">
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-120px' : ''">
+              {{ "scoreSubmission.h1" | translate }}
+            </span>
+            <div class="value">
+              <span class="target-label">
+                {{ "scoreSubmission.target" | translate }}
+              </span>
+              {{ goal?.biYearlyTarget?.fisrtHalf || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.biYearlyTarget?.firsttHalfSubmission?.status)
+              "
+            >
+              <span
+                class="actual-label"
+                [ngClass]="
+                  stateClass(
+                    goal?.biYearlyTarget?.firsttHalfSubmission?.status
+                  ) ||
+                  stateClass(goal?.biYearlyTarget?.secondHalfSubmission?.status)
+                "
+              >
+                {{ "scoreSubmission.actual" | translate }}
+              </span>
+              {{ goal?.biYearlyTarget?.firsttHalfSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(
+                  goal?.biYearlyTarget?.firsttHalfSubmission?.status,
+                  6
+                )
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'h1',
+                  goal?.biYearlyTarget?.fisrtHalf,
+                  goal?.biYearlyTarget?.firsttHalfSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.biYearlyTarget?.firsttHalfSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.biYearlyTarget?.firsttHalfSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.biYearlyTarget?.firsttHalfSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-120px' : ''">
+              {{ "scoreSubmission.h2" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.biYearlyTarget?.secondHalf || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.biYearlyTarget?.secondHalfSubmission?.status)
+              "
+            >
+              {{ goal?.biYearlyTarget?.secondHalfSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(
+                  goal?.biYearlyTarget?.secondHalfSubmission?.status,
+                  12
+                )
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'h2',
+                  goal?.biYearlyTarget?.secondHalf,
+                  goal?.biYearlyTarget?.secondHalfSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.biYearlyTarget?.secondHalfSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.biYearlyTarget?.secondHalfSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.biYearlyTarget?.secondHalfSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Quarter Target -->
+        <div class="values-container" *ngIf="Quarterly">
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-70px' : ''">
+              {{ "scoreSubmission.q1" | translate }}
+            </span>
+            <div class="value">
+              <span class="target-label">
+                {{ "scoreSubmission.target" | translate }}
+              </span>
+              {{ goal?.quarterTarget?.firstQuarterValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.firstQuarterSubmission?.status)
+              "
+            >
+              <span
+                class="actual-label"
+                [ngClass]="
+                  stateClass(
+                    goal?.quarterTarget?.firstQuarterSubmission?.status
+                  ) ||
+                  stateClass(
+                    goal?.quarterTarget?.secondQuarterSubmission?.status
+                  ) ||
+                  stateClass(
+                    goal?.quarterTarget?.thirdQuarterSubmission?.status
+                  ) ||
+                  stateClass(
+                    goal?.quarterTarget?.fourthQuarterSubmission?.status
+                  )
+                "
+              >
+                {{ "scoreSubmission.actual" | translate }}
+              </span>
+              {{
+                goal?.quarterTarget?.firstQuarterSubmission?.actualValue || 0
+              }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(
+                  goal?.quarterTarget?.firstQuarterSubmission?.status,
+                  3
+                )
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'q1',
+                  goal?.quarterTarget?.firstQuarterValue,
+                  goal?.quarterTarget?.firstQuarterSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.firstQuarterSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.quarterTarget?.firstQuarterSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.quarterTarget?.firstQuarterSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-70px' : ''">
+              {{ "scoreSubmission.q2" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.quarterTarget?.secondQuarterValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.secondQuarterSubmission?.status)
+              "
+            >
+              {{
+                goal?.quarterTarget?.secondQuarterSubmission?.actualValue || 0
+              }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(
+                  goal?.quarterTarget?.secondQuarterSubmission?.status,
+                  6
+                )
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'q2',
+                  goal?.quarterTarget?.secondQuarterValue,
+                  goal?.quarterTarget?.secondQuarterSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.secondQuarterSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.quarterTarget?.secondQuarterSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(
+                        goal?.quarterTarget?.secondQuarterSubmission?.status
+                      ) | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-70px' : ''">
+              {{ "scoreSubmission.q3" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.quarterTarget?.thirdQuarterValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.thirdQuarterSubmission?.status)
+              "
+            >
+              {{
+                goal?.quarterTarget?.thirdQuarterSubmission?.actualValue || 0
+              }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(
+                  goal?.quarterTarget?.thirdQuarterSubmission?.status,
+                  9
+                )
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'q3',
+                  goal?.quarterTarget?.thirdQuarterValue,
+                  goal?.quarterTarget?.thirdQuarterSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.thirdQuarterSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.quarterTarget?.thirdQuarterSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.quarterTarget?.thirdQuarterSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-70px' : ''">
+              {{ "scoreSubmission.q4" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.quarterTarget?.fourthQuarterValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.fourthQuarterSubmission?.status)
+              "
+            >
+              {{
+                goal?.quarterTarget?.fourthQuarterSubmission?.actualValue || 0
+              }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(
+                  goal?.quarterTarget?.fourthQuarterSubmission?.status,
+                  12
+                )
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'q4',
+                  goal?.quarterTarget?.fourthQuarterValue,
+                  goal?.quarterTarget?.fourthQuarterSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.quarterTarget?.fourthQuarterSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.quarterTarget?.fourthQuarterSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(
+                        goal?.quarterTarget?.fourthQuarterSubmission?.status
+                      ) | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Monthly Target -->
+        <div class="values-container" *ngIf="Monthly">
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.jan" | translate }}
+            </span>
+            <div class="value">
+              <span class="target-label">
+                {{ "scoreSubmission.target" | translate }}
+              </span>
+              {{ goal?.monthlyTarget?.janValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.janSubmission?.status)"
+            >
+              <span
+                class="actual-label"
+                [ngClass]="
+                  stateClass(goal?.monthlyTarget?.janSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.febSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.marchSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.aprSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.maySubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.junSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.julSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.augSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.sepSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.octSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.novSubmission?.status) ||
+                  stateClass(goal?.monthlyTarget?.decSubmission?.status)
+                "
+              >
+                {{ "scoreSubmission.actual" | translate }}
+              </span>
+              {{ goal?.monthlyTarget?.janSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.janSubmission?.status, 1)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'jan',
+                  goal?.monthlyTarget?.janValue,
+                  goal?.monthlyTarget?.janSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.janSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.janSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.janSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.feb" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.febValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.febSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.febSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.febSubmission?.status, 2)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'feb',
+                  goal?.monthlyTarget?.febValue,
+                  goal?.monthlyTarget?.febSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.febSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.febSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.febSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.mar" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.marValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="
+                stateClass(goal?.monthlyTarget?.marchSubmission?.status)
+              "
+            >
+              {{ goal?.monthlyTarget?.marchSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(goal?.monthlyTarget?.marchSubmission?.status, 3)
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'mar',
+                  goal?.monthlyTarget?.marValue,
+                  goal?.monthlyTarget?.marchSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="
+                stateClass(goal?.monthlyTarget?.marchSubmission?.status)
+              "
+            >
+              {{
+                state(goal?.monthlyTarget?.marchSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.marchSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.apr" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.aprValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.aprSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.aprSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.aprSubmission?.status, 4)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'apr',
+                  goal?.monthlyTarget?.aprValue,
+                  goal?.monthlyTarget?.aprSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.aprSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.aprSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.aprSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.may" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.mayValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.maySubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.maySubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.maySubmission?.status, 5)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'may',
+                  goal?.monthlyTarget?.mayValue,
+                  goal?.monthlyTarget?.maySubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.maySubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.maySubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.maySubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.jun" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.junValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.junSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.junSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.junSubmission?.status, 6)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'jun',
+                  goal?.monthlyTarget?.junValue,
+                  goal?.monthlyTarget?.junSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.junSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.junSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.junSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.jul" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.julValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.julSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.julSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.julSubmission?.status, 7)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'jul',
+                  goal?.monthlyTarget?.julValue,
+                  goal?.monthlyTarget?.julSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.julSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.julSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.julSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.aug" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.augValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.augSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.augSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.augSubmission?.status, 8)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'aug',
+                  goal?.monthlyTarget?.augValue,
+                  goal?.monthlyTarget?.augSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.augSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.augSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.augSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.sep" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.sepValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.sepSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.sepSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="showEditBtn(goal?.monthlyTarget?.sepSubmission?.status, 9)"
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'sep',
+                  goal?.monthlyTarget?.sepValue,
+                  goal?.monthlyTarget?.sepSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.sepSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.sepSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.sepSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.oct" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.octValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.octSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.octSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(goal?.monthlyTarget?.octSubmission?.status, 10)
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'oct',
+                  goal?.monthlyTarget?.octValue,
+                  goal?.monthlyTarget?.octSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.octSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.octSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.octSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.nov" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.novValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.novSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.novSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(goal?.monthlyTarget?.novSubmission?.status, 11)
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'nov',
+                  goal?.monthlyTarget?.novValue,
+                  goal?.monthlyTarget?.novSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.novSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.novSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.novSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="values">
+            <span class="label" [ngClass]="lang === 'ar' ? 'w-60px' : ''">
+              {{ "scoreSubmission.dec" | translate }}
+            </span>
+            <div class="value">
+              {{ goal?.monthlyTarget?.decValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <div
+              class="value"
+              [ngClass]="stateClass(goal?.monthlyTarget?.decSubmission?.status)"
+            >
+              {{ goal?.monthlyTarget?.decSubmission?.actualValue || 0 }}
+              {{ addittion(goal?.measurementMethod) }}
+            </div>
+            <button
+              *ngIf="
+                showEditBtn(goal?.monthlyTarget?.decSubmission?.status, 12)
+              "
+              class="edit-btn"
+              (click)="
+                onEdit(
+                  'dec',
+                  goal?.monthlyTarget?.decValue,
+                  goal?.monthlyTarget?.decSubmission
+                )
+              "
+            >
+              {{ "scoreSubmission.enterResults" | translate }}
+            </button>
+            <span
+              class="state"
+              [ngClass]="stateClass(goal?.monthlyTarget?.decSubmission?.status)"
+            >
+              {{
+                state(goal?.monthlyTarget?.decSubmission?.status)
+                  ? ("scoreSubmission." +
+                      state(goal?.monthlyTarget?.decSubmission?.status)
+                    | translate)
+                  : ""
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <!-- <div class="chart block-content">
+        <h3 class="block-title">
+          {{ "scoreSubmission.comments" | translate }}
+          {{ commentsNumber ? commentsNumber : "" }}
+        </h3>
+
+        <div class="bar-chart">
+          <canvas class="my-chart" id="myChart" #myChart></canvas>
+        </div>
+      </div> -->
+
+      <!-- Progress History -->
+      <div
+        *ngIf="!goal?.baseLine && !goal?.automaticCalculation"
+        class="chart block-content"
+        [ngClass]="{ 'd-none': historyList?.length < 1 }"
+      >
+        <h3 class="block-title" *ngIf="!loading">
+          {{ "scoreSubmission.updateProgressHistory" | translate }}
+          {{ commentsNumber ? commentsNumber : "" }}
+        </h3>
+
+        <div class="bar-chart">
+          <canvas class="my-chart" id="myChart" #myChart></canvas>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="block-content" *ngIf="goal?.automaticCalculation">
+        <h3 class="block-title">{{ "scoreSubmission.children" | translate }}</h3>
+
+        <div class="goals-table">
+          <div class="goals-table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col" class="scoreSubmission-index">#</th>
+                  <th scope="col">{{ "shared.level" | translate }}</th>
+                  <th scope="col" class="scoreSubmission-title">{{ "shared.title" | translate }}</th>
+                  <th scope="col">{{ "scoreSubmission.KPI-Weight" | translate }}</th>
+                  <!-- <th scope="col">{{ "scoreSubmission.yearlyTarget" | translate }}</th> -->
+                  <!-- <th scope="col">{{ "scoreSubmission.DuePeriod" | translate }}</th> -->
+                  <th scope="col">{{ "scoreSubmission.PeriodTarget" | translate }}</th>
+                  <th scope="col">{{ "scoreSubmission.PeriodActual" | translate }}</th>
+                  <th scope="col">{{ "scoreSubmission.TargetTD" | translate }}</th>
+                  <th scope="col">{{ "scoreSubmission.ActualTD" | translate }}</th>
+                  <!-- <th scope="col">{{ "scoreSubmission.by" | translate }}</th> -->
+                  <th scope="col">{{ "scoreSubmission.Score" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody class="details">
+                <ng-container
+                  *ngFor="
+                    let item of children
+                      | paginate
+                        : {
+                            itemsPerPage: paginationModle?.pageSize,
+                            currentPage: paginationModle?.pageIndex,
+                            totalItems: children?.length
+                          };
+                    let i = index
+                  "
+                >
+                  <tr style="position: relative">
+
+                    <!-- Index -->
+                    <td class="scoreSubmission-index">
+                      {{ i | tableItemIndex : paginationModle?.pageSize : paginationModle?.pageIndex }}
+                    </td>
+
+                    <!-- Level -->
+                    <td>
+                      <div class="level-col">
+                        <div class="level" [style.gap]="item.group?.code ? '5px' : '0'">
+                          <span class="current">
+                            {{ GoalLevelText(item.level) }}
+                          </span>
+                          <span>
+                            <span class="meta-level" *ngIf="item.group?.code">
+                              {{ item.group?.code }}
+                            </span>
+                          </span>
+                        </div>
+                        <div class="type id-type">
+                          <span class="type id">{{ item.id }}</span>
+                        </div>
+                        <div class="type" [style.background]="item.goalType.color">
+                          <span>
+                            {{
+                              lang == "en"
+                                ? item.goalType.name
+                                : item.goalType.arabicName
+                            }}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Title -->
+                    <td class="scoreSubmission-title">
+                      {{ lang == "en" ? item.title : item.titleAr }}
+                    </td>
+
+                    <!-- Weight -->
+                    <td>{{ item.internalWeight ?? "-" }}%</td>
+
+                    <!-- yearly Target -->
+                    <!-- <td> {{item.totalTarget}} </td> -->
+
+                    <!-- due Period -->
+                    <!-- <td> {{item.duePeriod}} </td> -->
+
+                    <!-- period Target -->
+                    <td>
+                      <ng-container *ngIf="!item.automaticCalculation">
+                        {{ item.periodTarget }}
+                        {{ addittion(item.measurementMethod) }}
+                      </ng-container>
+                    </td>
+
+                    <!-- Period Actual -->
+                    <td>
+                      <ng-container *ngIf="!item.automaticCalculation">
+                        <span *ngIf="item.periodActual > 0">
+                          {{ item.periodActual }}
+                          {{ addittion(item.measurementMethod) }}
+                        </span>
+                        <span *ngIf="item.periodActual == 0" class="notReported">
+                          {{ "scoreSubmission.notReported" | translate }}
+                        </span>
+                      </ng-container>
+                    </td>
+
+                    <!-- Target TD -->
+                    <td>
+                      <ng-container *ngIf="!item.automaticCalculation">
+                        {{ item.targetTD }}
+                        {{ addittion(item.measurementMethod) }}
+                      </ng-container>
+                    </td>
+
+                    <!-- Actual TD -->
+                    <td>
+                      <ng-container *ngIf="!item.automaticCalculation">
+                        {{ item.actualTD }}
+                        {{ addittion(item.measurementMethod) }}
+                      </ng-container>
+                    </td>
+
+                    <td>
+                      <span class="automaticCalculation" *ngIf="item.automaticCalculation">
+                        {{ "scoreSubmission.automaticCalculation" | translate }}
+                      </span>
+                    </td>
+
+                    <!-- By -->
+                    <!-- <td>
+                      <person-item [requesterItem]="item.owner" [noCursor]="true"></person-item>
+                    </td>
+                    -->
+
+                    <!-- Score -->
+                    <td>
+                      {{ item.score | number : "1.2-2" }}%
+                      <!-- <img *ngIf="item.automaticCalculation" src="assets/icons/refresh.svg" (click)="refresh(item)" />  -->
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <tfoot>
+                <tr style="position: relative">
+                  <!-- Level -->
+                  <td></td>
+
+                  <!-- Title -->
+                  <td></td>
+
+                  <!-- Weight -->
+                  <td>{{ goal?.childrenProgress?.weight ?? "-" }}%</td>
+
+                  <!-- yearly Target -->
+                  <!-- <td> {{item.totalTarget}} </td> -->
+
+                  <!-- due Period -->
+                  <!-- <td> {{item.duePeriod}} </td> -->
+
+                  <!-- period Target -->
+                  <td>
+                    <!-- {{ goal?.childrenProgress?.periodTarget }}
+                    {{ addittion(goal?.measurementMethod) }} -->
+                    -
+                  </td>
+
+                  <!-- Period Actual -->
+                  <td>
+                    <!-- <span
+                      >{{ goal?.childrenProgress?.periodActual }}
+                      {{ addittion(goal?.measurementMethod) }}</span> -->
+                    -
+                  </td>
+
+                  <!-- Target TD -->
+                  <td>
+                    <!-- {{ goal?.childrenProgress?.targetTD }}
+                    {{ addittion(goal?.measurementMethod) }} -->
+                    -
+                  </td>
+
+                  <!-- Actual TD -->
+                  <td>
+                    <!-- <span
+                      >{{ goal?.childrenProgress?.actualTD }}
+                      {{ addittion(goal?.measurementMethod) }}</span> -->
+                    -
+                  </td>
+
+                  <!-- By -->
+                  <!-- <td>
+                    <person-item [requesterItem]="item.owner" [noCursor]="true"></person-item>
+                  </td>
+                  -->
+
+                  <!-- Score -->
+                  <td>
+                    <ng-container *ngIf="goal?.childrenProgress?.score">
+                      {{ goal?.childrenProgress?.score | number : "1.2-2" }}%
+                      <!-- <img *ngIf="item.automaticCalculation" src="assets/icons/refresh.svg" (click)="refresh(item)" />  -->
+                    </ng-container>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <pagination-controls
+          (pageChange)="onPaginate($event)"
+          class="my-pagination"
+          maxSize="5"
+          responsive="true"
+          [previousLabel]="'shared.prev' | translate"
+          [nextLabel]="'shared.next' | translate"
+        ></pagination-controls>
+      </div>
+    </div>
+
+    <div class="secondaryData">
+      <div class="parentGoal">
+        <h3 class="box-title">{{ "scoreSubmission.parentGoal" | translate }}</h3>
+
+        <div class="box block-content">
+          <div *ngIf="goal?.parent" class="info">
+            <div class="details">
+              <span class="current">
+                {{
+                  lang === "en"
+                    ? goal?.parent?.Level.label
+                    : goal?.parent?.Level.labelAr
+                }}
+              </span>
+              <span class="meta-level" *ngIf="goal?.parent?.group?.code">
+                {{ goal?.parent?.group?.code }}
+              </span>
+              <span
+                class="type"
+                *ngIf="goal?.parent?.goalType?.color"
+                [style.background]="goal?.parent?.goalType?.color"
+              >
+                {{
+                  lang == "en"
+                    ? goal?.parent?.goalType?.name
+                    : goal?.parent?.goalType?.arabicName
+                }}
+              </span>
+            </div>
+            <div class="parent-person">
+              <person-item [item]="parentPersonItem"></person-item>
+            </div>
+            <h4 class="title">
+              {{ lang === "en" ? goal?.parent?.title : goal?.parent?.titleAr }}
+            </h4>
+          </div>
+
+          <p *ngIf="!goal?.parent">
+            {{ "scoreSubmission.noParent" | translate }}
+          </p>
+        </div>
+      </div>
+
+      <div class="relatedProjects">
+        <h3 class="box-title">{{ "scoreSubmission.relatedProjects" | translate }}</h3>
+
+        <div class="box block-content">
+          <p>{{ "scoreSubmission.noRelatedProjects" | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" [style.display]="goal ? 'none' : 'block'">
+    <app-no-data [msg]="'scoreSubmission.noGoalDataMsg' | translate"></app-no-data>
+  </div>
+</div>
+
+<!-- Update Progress Modal -->
+<!-- [Mode]="editMode" -->
+<app-update-progress-modal
+  *ngIf="isShowModel"
+  [data]="modalData"
+  [goalId]="goalId"
+  [scoreCardSubmissionId]="scoreCardSubmissionId"
+  (update)="loadDetails()"
+></app-update-progress-modal>
+
+<!-- History Update Modal -->
+<!-- <app-update-progress-modal
+  [Mode]="viewMode"
+  [data]="selectedHistory"
+  [goalId]="goalId"
+  [scoreCardSubmissionId]="scoreCardSubmissionId"
+></app-update-progress-modal> -->
+<app-history-modal [data]="selectedHistory"></app-history-modal>
+
+<div [style.display]="loading ? 'block' : 'none'" #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</div>

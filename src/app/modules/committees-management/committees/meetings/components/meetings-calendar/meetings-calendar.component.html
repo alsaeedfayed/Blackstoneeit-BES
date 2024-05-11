@@ -1,0 +1,66 @@
+<div class="calendar-wrapper mt-4">
+  <full-calendar
+    #fullcalendar
+    [options]="calendarOptions"
+  ></full-calendar>
+
+  <div class="next-meetings" [hidden]="!isDayView">
+
+    <!-- meetings header -->
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+      <h4 class="meetings-title mb-1">{{ 'committeeDashboard.meetings.title' | translate }}</h4>
+
+      <div class="meetings-length mb-1">2 Meetings</div>
+    </div>
+
+    <!-- meetings list -->
+    <div class="meetings-list">
+      <!-- <meeting-card
+        [lang]="language"
+        [title]="'Design System update - DON project'"
+        [start]="'2023-05-29T10:30:00'"
+        [end]="'2023-05-29T11:30:00'"
+        [status]="'warning'"
+        [location]="'video'"
+      ></meeting-card>
+      <meeting-card
+        [lang]="language"
+        [title]="'Design System update - DON project'"
+        [start]="'2023-05-29T10:30:00'"
+        [end]="'2023-05-29T11:30:00'"
+        [status]="'success'"
+        [location]="'office'"
+      ></meeting-card>
+      <meeting-card
+        [lang]="language"
+        [title]="'Design System update - DON project'"
+        [start]="'2023-05-29T10:30:00'"
+        [end]="'2023-05-29T11:30:00'"
+        [status]="'warning'"
+        [location]="'video'"
+      ></meeting-card> -->
+    </div>
+  </div>
+</div>
+
+<!-- meeting highlight modal -->
+<app-model
+  [dimensions]="{ width: 480, height: 750 }"
+  [id]="'meeting-highlight'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeMeetingHighlightModel()"
+>
+  <div modal-header class="meeting-highlight-model-header w-100">
+    <label class="modal-title">{{ 'committeeMeetings.highlightModel.title' | translate }}</label>
+  </div>
+
+  <div modal-content class="meeting-highlight-model-content border-top">
+    <meeting-highlight-model
+      *ngIf="isMeetingHighlighted"
+      [lang]="language"
+      [meetingId]="meetingId"
+    ></meeting-highlight-model>
+  </div>
+</app-model>

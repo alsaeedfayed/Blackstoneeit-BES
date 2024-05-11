@@ -1,0 +1,52 @@
+.goalInfo {
+  .types {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    .type {
+      button {
+        color: #cbcbcb;
+        border: 1px solid #cbcbcb;
+        border-radius: 4px;
+        padding: 15px 30px;
+        font-size: 14px;
+        font-weight: 600;
+        &.active {
+          color: #fff;
+          border: none;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .ant-tree-list {
+  max-height: 400px !important;
+}
+
+:host ::ng-deep .ant-select-selector {
+  height: 42px !important;
+}
+
+:hoat ::ng-deep frequency-input label {
+  width: 180px !important;
+}
+
+.internalWeight {
+  h6 {
+    color: #3c557a;
+    font-weight: 500;
+    font-size: 20px;
+    text-transform: capitalize;
+    margin: 20px 0 15px;
+  }
+  .val {
+    label {
+      color: #717986;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 19px;
+      letter-spacing: 0.02em;
+    }
+  }
+}

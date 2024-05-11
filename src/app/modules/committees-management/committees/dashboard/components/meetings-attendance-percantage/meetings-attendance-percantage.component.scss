@@ -1,0 +1,98 @@
+.attendance-card {
+  position: relative;
+  &-header {
+    background-color: #28a71c;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: none;
+    padding: 1rem;
+    &-title {
+      color: #FFFF;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    &-percantage{
+      color: #FFF;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 20px;
+    }
+  }
+  &-body{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    &-member-name {
+      color: #121824;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    &-body-percentage{
+      color: #121824;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20;
+
+    }
+
+  }
+
+}
+
+
+
+.attendance-card-header-chart svg{
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.tasks-status  {
+ position: relative
+
+}
+
+.tasks-status-icon{
+  position: absolute;
+  top: .1rem;
+  right: .2rem;
+  transform: rotate(45deg);
+  color: #fff;
+}
+
+.member-percentage {
+  color: #121824;
+  font-weight: 600;
+  font-size: 16px;
+
+}
+
+:host ::ng-deep person-item {
+  .job {
+    display: none !important;
+  }
+}
+
+
+@media only screen and (min-width: 993px) and (max-width: 1090px)  {
+  .attendance-card-header-title{
+    color: #FFFF;
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 12px;
+
+  }
+
+  .attendance-card-header-percantage{
+
+  }
+
+}

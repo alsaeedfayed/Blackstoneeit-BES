@@ -1,0 +1,28 @@
+{
+  "eventRegistration": {
+    "eventRegistration": "Event Registration",
+    "emptyState": {
+      "title": "Oops, registration for this event is now closed",
+      "desc": "The registration deadline has passed"
+    },
+    "successState": {
+      "title": "Congratulations, Your request has been submitted successfully"
+    },
+    "form": {
+      "title": "Please fill out the form to register for this event",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter Full Name",
+      "position": "Position",
+      "positionPlaceholder": "Enter Position",
+      "email": "Email",
+      "emailPlaceholder": "Enter Email",
+      "phoneNumber": "Phone Number",
+      "phoneNumberPlaceholder": "Enter Phone Number",
+      "profilePicture": "Profile Picture",
+      "selectFiles": "Click to select files from your computer",
+      "supportedFiles": "Supports jpeg, png",
+      "submitRequest": "Submit Request",
+      "thisFieldIsRequired": "This field is required"
+    }
+  }
+}

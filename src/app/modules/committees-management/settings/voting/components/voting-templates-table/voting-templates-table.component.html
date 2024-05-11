@@ -1,0 +1,81 @@
+<div class="table mt-4">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="index">#</th>
+        <th scope="col" class="voting">
+          <div class="sortable-row" (click)="sort(sortKey.name)" *ngIf="language === 'en'">
+            {{ "committeeVotingTemplates.table.voting" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.name && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.name && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+          <div class="sortable-row" (click)="sort(sortKey.nameAr)" *ngIf="language === 'ar'">
+            {{ "committeeVotingTemplates.table.voting" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == sortKey.nameAr && ascMode,
+              'sort-down': sortedCol && sortedCol == sortKey.nameAr && descMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+        <th scope="col" class="actions">{{ "shared.actions" | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="
+        let item of list
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems
+              };
+        let i = index
+      ">
+        <td class="index">
+          {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+        </td>
+        <td class="voting">
+          {{ language === "en" ? item?.name : item?.nameAr }}
+        </td>
+        <td class="actions">
+          <div *ngIf="getItems(item) && getItems(item).length > 0">
+            <app-dropdown (select)="onOptionSelect($event, item)" [items]="getItems(item)">
+            </app-dropdown>
+
+            <!-- voting edit modal -->
+            <app-model [dimensions]="{ width: 480, height: 750 }" [id]="'edit-voting' + item?.id" [hasBackBtn]="false"
+              [hasTitle]="false" [isNewModel]="true">
+              <div modal-header class="voting-edit-model-header w-100">
+                <label class="modal-title">{{ 'committeeVotingTemplates.editModel.title' | translate }}</label>
+              </div>
+
+              <div modal-content class="voting-edit-model-content border-top">
+                <voting-edit-model *ngIf="item?.edit" [id]="item?.id" (close)="onCloseChanged($event)"
+                  (update)="updateVotingTemplate($event)"></voting-edit-model>
+              </div>
+            </app-model>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

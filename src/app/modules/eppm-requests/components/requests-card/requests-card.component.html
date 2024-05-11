@@ -1,0 +1,89 @@
+<div class="request-card card-defaults">
+  <a [routerLink]="'/create-project/' + data.id">
+    <div class="request-card-header">
+      <person-item
+        *ngIf="data?.owner"
+        [ownerItem]="data?.owner"
+        [CompMode]="2"
+        [noCursor]="true"
+        [hasUserCard]="false"
+      ></person-item>
+
+      <app-badge
+        *ngIf="data?.status?.mappedStatusCode === 'Approved'"
+        [className]="'complete'"
+        [label]="data?.status.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="data?.status?.code === 'Draft'"
+        [className]="'draft'"
+        [label]="data?.status.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="data?.status?.mappedStatusCode === 'ReturnedForCorrection'"
+        [className]="'started'"
+        [label]="data?.status.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="data?.status?.mappedStatusCode === 'PendingForReview'"
+        [className]="'inProgress'"
+        [label]="data?.status.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="data?.status?.mappedStatusCode === 'Rejected'"
+        [className]="'rejected'"
+        [label]="data?.status.title[lang]"
+      ></app-badge>
+    </div>
+
+    <div class="request-card-body">
+      <h3>
+        {{
+          data?.name[lang]?.length < 47 ?
+          data?.name[lang] :
+          data?.name[lang].slice(0, 47) + '...'
+        }}
+      </h3>
+
+      <div class="project-types">
+        <div class="type" *ngFor="let type of data?.types; let index = i">
+          <span>{{ type?.title[lang] }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="request-card-footer">
+      <div class="card-stats">
+        <div class="card-stats-col">
+          <span class="count">{{ data?.milestones?.length }}</span>
+          <span class="count-label">{{ 'eppmRequests.milestones' | translate }}</span>
+        </div>
+        <div class="separator"></div>
+
+        <div class="card-stats-col">
+          <span class="count">{{ data?.deliverablesCount }}</span>
+          <span class="count-label">{{ 'eppmRequests.deliverables' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="card-stats">
+        <div class="card-stats-col">
+          <span class="count">{{ data?.duration?.year }}</span>
+          <span class="count-label">{{ 'eppmRequests.years' | translate }}</span>
+        </div>
+        <div class="separator"></div>
+
+        <div class="card-stats-col">
+          <span class="count">{{ data?.duration?.month }}</span>
+          <span class="count-label">{{ 'eppmRequests.months' | translate }}</span>
+        </div>
+        <div class="separator"></div>
+
+        <div class="card-stats-col">
+          <span class="count">{{ data?.duration?.day }}</span>
+          <span class="count-label">{{ 'eppmRequests.days' | translate }}</span>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

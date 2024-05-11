@@ -1,0 +1,10 @@
+.segment {
+  padding: 0 25px;
+}
+
+@media only screen and (max-width: 740px) {
+  .segment {
+    width: 100%;
+    padding: 30px 0;
+  }
+}

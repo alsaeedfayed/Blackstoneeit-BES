@@ -1,0 +1,21 @@
+@import "src/assets/css/utils/variables.scss";
+
+.new-discussed-item-form {
+  .astrix-red {
+    color: red;
+  }
+}
+.initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $main-color;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 50%;
+  width: 31px;
+  height: 31px;
+  font-size: 0.625rem;
+  margin-right: 18px;
+  margin-left: 4px;
+}

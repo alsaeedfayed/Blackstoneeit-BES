@@ -1,0 +1,189 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+
+  ::ng-deep person-item {
+    .avatar {
+      .letters,
+      img {
+        height: 2rem !important;
+        width: 2rem !important;
+        margin: 0 !important;
+      }
+
+      .letters {
+        font-size: 0.75rem;
+      }
+    }
+
+    .info {
+      display: none !important;
+    }
+  }
+}
+
+.meeting-timeline-container {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.625rem;
+  width: 100%;
+  height: fit-content;
+  scrollbar-color: $dark-gray-color #f1f2f7;
+  scrollbar-width: thin;
+
+  .meeting-timeline-item {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 250px;
+    background-color: $white-color;
+    padding: 0.625rem;
+    margin-bottom: 0.5rem;
+    border: 0.0625rem solid transparent;
+    border-radius: 0.625rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+
+    &.notStarted {
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #a8a8a8 !important;
+    }
+
+    &.completed {
+      border-color: #0fc161;
+      pointer-events: all;
+
+      &:not(:first-child):not(.current) {
+        &::before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 2px;
+          width: 0.6875rem;
+          background-color: #0fc161;
+          @include rtl_value(right, 100%, auto);
+          @include rtl_value(left, auto, 100%);
+        }
+      }
+    }
+
+    &.current {
+      border: 0.0625rem dashed $main-color;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 0.4375rem;
+        width: 0.6875rem;
+        background-color: #0fc161;
+        @include rtl_value(right, 100%, auto);
+        @include rtl_value(left, auto, 100%);
+        @include rtl_value(
+          clip-path,
+          polygon(0 30%, 60% 30%, 60% 0%, 100% 50%, 60% 100%, 60% 60%, 0 60%),
+          polygon(100% 30%, 40% 30%, 40% 0%, 0 50%, 40% 100%, 40% 60%, 100% 60%)
+        );
+      }
+
+      .timeline-card-header {
+        .step-number {
+          color: $black-color !important;
+        }
+      }
+
+      ~ .meeting-timeline-item {
+        opacity: 0.7;
+      }
+    }
+
+    &.upcoming {
+      pointer-events: none;
+    }
+
+    // &:hover {
+    //   border: 0.0625rem solid #ebebeb;
+    //   cursor: pointer;
+    // }
+
+    .timeline-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.625rem;
+      margin-bottom: 1rem;
+
+      .first-col {
+        display: flex;
+        flex-direction: column;
+
+        span {
+          font-weight: 400;
+          line-height: 1.125rem;
+          color: #878fa7;
+        }
+      }
+
+      .step-status {
+        display: flex;
+        align-items: center;
+        gap: 0.4375rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 2.5rem;
+
+        &.completed {
+          background-color: rgba(114, 215, 149, 0.15);
+          color: #0fc161;
+        }
+
+        &.pending {
+          background-color: #edeff1;
+          color: #64748b;
+        }
+
+        &.upcoming {
+          background-color: rgba(255, 243, 219, 0.7);
+          color: #eb9400;
+        }
+      }
+    }
+
+    .timeline-card-body {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin-bottom: 0.375;
+
+      .author-img {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+        background-color: hsla(0, 0%, 0%, 0.15);
+
+        img {
+          display: block;
+          height: 100%;
+          width: 100%;
+          border-radius: inherit;
+          object-fit: cover;
+        }
+      }
+
+      .status-name {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<!-- <ng-container *ngIf="entityBuilderModeEnum.View === mode; else formName"> -->
+<!-- <p class="title-entity">
+    {{ entity?.name }}
+  </p> -->
+<!-- </ng-container> -->
+<ng-container *ngFor="let form of entity?.formData">
+  <!-- [formDataDetails]="_formDataDetails" -->
+  <app-form-container
+    [formData]="form"
+    (updateHandler)="emitUpdate($event)"
+    (dynamicRowsAndColumnsHandler)="emitDynamicRowsAndColumns($event)"
+  ></app-form-container>
+</ng-container>
+
+<ng-template #formName>
+  <app-filed
+    *ngIf="entityBuilderModeEnum.Editable === mode"
+    class="d-block"
+    [(ngModel)]="entity.name"
+    [title]="'Form Name'"
+  ></app-filed>
+</ng-template>

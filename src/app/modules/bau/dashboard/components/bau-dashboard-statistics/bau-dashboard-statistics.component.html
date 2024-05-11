@@ -1,0 +1,36 @@
+<div class="d-flex flex-wrap w-100">
+  <!-- TODO -- MAIN TASKS -->
+  <app-statistic-card
+    class="bau-dashboard-statistic-card"
+    [isChart]="false"
+    [statusColor]="'red'"
+    [language]="language"
+    [iconsClass]="'bx bx-up-arrow-alt'"
+    [statistics]="mainTasks"
+    [title]="'bau.dashboard.mainTasksTotal' | translate"
+    [statusText]="'bau.dashboard.delayed' | translate"
+  ></app-statistic-card>
+
+  <!-- TODO --  TASKS -->
+
+  <app-statistic-card
+    class="bau-dashboard-statistic-card"
+    [isChart]="false"
+    [statusColor]="'red'"
+    [language]="language"
+    [iconsClass]="'bx bx-up-arrow-alt'"
+    [statistics]="totalTasks"
+    [title]="'bau.dashboard.totalTasks' | translate"
+    [statusText]="'bau.dashboard.delayed' | translate"
+  ></app-statistic-card>
+
+  <!-- TODO --  OVERALL PROGRESS -->
+
+  <app-statistic-card
+    style="flex-grow: 1"
+    [isChart]="true"
+    [language]="language"
+    [title]="'bau.dashboard.overallProgress' | translate"
+    [statistics]="overallProgress"
+  ></app-statistic-card>
+</div>

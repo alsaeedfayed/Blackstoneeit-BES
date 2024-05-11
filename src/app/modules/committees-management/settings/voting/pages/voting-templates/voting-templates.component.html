@@ -1,0 +1,94 @@
+<div class="page">
+  <app-header-page
+    [title]="'committeeVotingTemplates.votingTemplates' | translate"
+    [totalItems]="totalItems"
+    [isAddBtn]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <app-button [permission]="createVotingTemplatePermission">
+        <button class="btn btn-main" (click)="goToAddVotingTemplate()">
+          <i class="bx bx-plus"></i>
+          {{ "committeeVotingTemplates.add" | translate }}
+        </button>
+      </app-button>
+    </div>
+  </app-header-page>
+
+  <!-- page filters -->
+  <app-page-filters
+    [searchPlaceHolder]="
+      'committeeVotingTemplates.searchPlaceholder' | translate
+    "
+    (search)="onSearch($event)"
+  ></app-page-filters>
+
+  <!-- table -->
+  <ng-container *ngIf="loading; else table_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- voting templates table -->
+<ng-template #table_data>
+  <voting-templates-table
+    *ngIf="list?.length > 0"
+    [SortedCol]="sortedCol"
+    [SortDirection]="sortDirection"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (sortFilter)="handleSortFilter($event)"
+    (itemUpdatedHandler)="refreshData()"
+    (itemDeletedHandler)="deleteVotingTemplate($event)"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></voting-templates-table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeVotingTemplates.noDataMsg' | translate"
+    ></app-no-data>
+  </div>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 480, height: 750 }"
+  [id]="'add-voting'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="voting-edit-model-header w-100">
+    <label class="modal-title">
+      {{ "committeeVotingTemplates.addModal.title" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="voting-edit-model-content border-top">
+    <voting-edit-model
+      [id]="0"
+      (close)="onCloseChanged($event)"
+    ></voting-edit-model>
+  </div>
+</app-model>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- modal to confirm voting template deletion -->
+<app-confirm-modal
+  [id]="'delete-voting'"
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteVotingTemplateConfirmed()"
+></app-confirm-modal>

@@ -1,0 +1,115 @@
+<ng-container *ngIf="loadingComments; else details_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <button class="btn btn-dark w-100" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+</div>
+
+<!-- loader skeleton for the table -->
+<ng-template #details_data>
+  <div class="new-model-dialog-body d-flex flex-column">
+    <div class="comments-area d-flex flex-column h-100">
+      <!-- comments list -->
+      <ng-container *ngIf="comments?.length > 0; else noComments">
+        <ul class="comments-list flex-grow-1 mt-4 mb-5">
+          <li
+            class="comments-list-item"
+            *ngFor="let comment of comments; let i = index"
+          >
+            <div class="comments-list-item-head">
+              <person-item
+                [requesterItem]="comment?.commentor"
+                [noCursor]="true"
+              ></person-item>
+              <span class="comments-list-item-head-date">
+                {{ comment?.time | uTCToLocalDate | timePassed : language }}
+              </span>
+            </div>
+            <div class="comments-list-item-body text-break">
+              <app-mention-div [comment]="comment?.text"></app-mention-div>
+            </div>
+            <uploaded-attachments-files
+              *ngIf="comment.attachments.length > 0"
+              class="d-block mt-4"
+              [files]="comment?.attachments"
+              [maxSize]="maxFileSizeInMB"
+              [showHint]="false"
+              [canDeleted]="false"
+              (viewFile)="onViewLocalFile($event, 'comment', i)"
+            ></uploaded-attachments-files>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #noComments>
+        <div class="flex-grow-1 py-5 text-center">
+          {{ "shared.noCommentsYet" | translate }}
+        </div>
+      </ng-template>
+
+      <!-- comment box -->
+      <div
+        *ngIf="canAddComment"
+        class="comment-box"
+        [formGroup]="form"
+        (keyup.enter)="addNewComment()"
+      >
+        <app-filed
+          class="d-block"
+          formControlName="text"
+          [control]="form | getControl : 'text'"
+          [placeholder]="
+            'committeeTasks.detailsModel.commentPlaceholder' | translate
+          "
+        ></app-filed>
+        <!-- upload files button -->
+        <button
+          class="upload-files-btn btn"
+          title="Attachment"
+          (click)="attachments.click()"
+        >
+          <i class="bx bx-paperclip"></i>
+        </button>
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+        <!-- post comment button -->
+        <button
+          class="post-btn btn"
+          (click)="addNewComment()"
+          [disabled]="sendingComment"
+        >
+          <i *ngIf="!sendingComment" class="bx bx-send"></i>
+          <i *ngIf="sendingComment" class="bx bx-loader-alt bx-spin ml-1"></i>
+        </button>
+      </div>
+      <uploaded-attachments-files
+        *ngIf="uploadedFiles?.length > 0"
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        [maxSize]="maxFileSizeInMB"
+        [showHint]="false"
+        (viewFile)="onViewLocalFile($event, 'new')"
+        (deleteFile)="onDeleteFile($event)"
+      ></uploaded-attachments-files>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

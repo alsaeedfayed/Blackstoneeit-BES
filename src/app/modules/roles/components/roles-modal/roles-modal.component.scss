@@ -1,0 +1,112 @@
+@import "src/assets/css/utils/variables.scss";
+
+.modal-body {
+  padding-top: 10px;
+  overflow-x: hidden;
+}
+
+.modal-body ::ng-deep .dropdown-menu.show {
+  transform: translate(0px, 90px) !important;
+  width: 100% !important;
+}
+
+.members-body {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+
+.sub-title {
+  font-size: 20px;
+  line-height: 32px !important;
+  font-weight: 400;
+  color: $aluminium_color;
+  margin-bottom: 20px;
+  padding-inline-start: 48px;
+  padding-inline-end: 48px;
+}
+
+.empty-state-container {
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar-row {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-inline-start: 48px;
+  margin-inline-end: 48px;
+  margin-bottom: 20px;
+
+  .search-bar-container {
+    width: 100%;
+  }
+}
+
+.checkboxes-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+
+.btn-link {
+  text-decoration: none;
+  box-shadow: none !important;
+
+  &:last-child {
+    padding-inline-end: 0px;
+  }
+}
+
+::ng-deep ngb-typeahead-window {
+  width: 100% !important;
+  max-height: 250px;
+  overflow-y: auto;
+
+  button:hover,
+  button.active {
+    background-color: #00db99 !important;
+  }
+}
+
+.permissions-container {
+  display: flex;
+  gap: 1.25rem 10%;
+  flex-wrap: wrap;
+}
+
+.permission-group {
+  width: 45%;
+
+  @media (max-width: 992px) {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+
+  .input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-inline-start: 1rem;
+
+    :not(:last-child) {
+      margin-bottom: 0.3125rem;
+    }
+
+    // input {
+    //   accent-color: $main-color;
+    // }
+  }
+}
+
+.gap-10px {
+  gap: 10px;
+}
+
+.astrix-red {
+  color: red;
+}

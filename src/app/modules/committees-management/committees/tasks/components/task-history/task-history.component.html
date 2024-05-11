@@ -1,0 +1,69 @@
+<ng-container *ngIf="loading; else history_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #history_data>
+  <div class="history-list-container">
+    <div class="history-list" *ngIf=" taskHistory.length > 0; else noData">
+      <table>
+        <tr *ngFor="let item of taskHistory">
+          <!-- user -->
+          <td class="history-creator">
+            <person-item
+              [requesterItem]="item?.creatorInfo"
+              [noCursor]="true"
+            ></person-item>
+          </td>
+          <!-- message -->
+          <td class="history-message">
+            <div>{{ item?.message }}</div>
+          </td>
+          <!-- date -->
+          <td class="history-date">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+          <!-- time -->
+          <td class="history-time">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "shortTime")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "shortTime")
+              }}
+            </span>
+          </td>
+          <!-- details -->
+          <td>
+            <a (click)="goTo(item)">
+              {{ "shared.viewDetails" | translate }}
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<ng-template #noData>
+  {{'shared.noData' | translate}}
+</ng-template>

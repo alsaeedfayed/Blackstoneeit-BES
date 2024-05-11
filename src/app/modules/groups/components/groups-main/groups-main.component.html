@@ -1,0 +1,177 @@
+<app-header-page
+  [title]="'groups.groups' | translate"
+  [totalItems]="groupsTotal"
+  [backButton]="true"
+></app-header-page>
+
+<!-- page filters -->
+<app-page-filters
+  class="d-block mb-4"
+  [lang]="lang"
+  [searchPlaceHolder]="'shared.search' | translate"
+  [hasListViewBtn]="true"
+  [hasMapViewBtn]="true"
+  [viewMode]="'list'"
+  [hasAddBtn]="true"
+  [addBtnLabel]="'groups.createGroup' | translate"
+  (search)="onSearch($event)"
+  (onAddBtnCLicked)="onCreateGroup()"
+  (onViewModeChange)="changeViewMode($event)"
+></app-page-filters>
+
+<div class="req-table" *ngIf="groups.length && (groups | search: query).length && !loading && isListView">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="group-index">#</th>
+          <th scope="col">{{ "groups.name" | translate }}</th>
+          <th scope="col">{{ "groups.arabicName" | translate }}</th>
+          <th scope="col">{{ "groups.parentGroup" | translate }}</th>
+          <th scope="col">{{ "groups.level" | translate }}</th>
+          <th scope="col">{{ "groups.groupCode" | translate }}</th>
+          <th scope="col">{{ "groups.lastUpdate" | translate }}</th>
+          <th scope="col" class="group-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+          let item of groups
+            | paginate
+              : {
+                  itemsPerPage: paginationModel?.pageSize,
+                  currentPage: paginationModel?.pageIndex,
+                  totalItems: groupsTotal
+                };
+          let i = index
+        ">
+          <td class="group-index">
+            {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+          </td>
+          <td>
+            {{ item?.name }}
+          </td>
+          <td>
+            {{ item?.arabicName }}
+          </td>
+          <td>
+            {{ lang === 'en'? item?.parent?.name :  item?.parent?.arabicName }}
+            <span *ngIf="!item?.parent" class="rectangle-badge badge-muted">{{'groups.N/A' | translate}}</span>
+          </td>
+          <td>
+            {{ lang === 'en'? item.Level.label : item.Level.labelAr }}
+          </td>
+          <td>
+            {{ item?.code }}
+          </td>
+          <td>
+            {{
+              this.lang === "en" ?
+              ((item?.updatedDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+              ((item?.updatedDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <td class="group-actions">
+            <div class="d-flex justify-content-end">
+              <app-dropdown (select)="onOptionSelect($event, item)" [items]="item?.options"></app-dropdown>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="mt-2" *ngIf="groups?.length === 0 && loading">
+  <app-skeleton-loader
+    class="w-100"
+    [mode]="'table'"
+    *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+  ></app-skeleton-loader>
+</div>
+
+<app-no-data
+  *ngIf="(groups.length === 0 || (groups | search: query).length === 0) && isListView && !loading"
+  [msg]="'groups.noDataMsg' | translate"
+></app-no-data>
+
+<pagination-controls
+  *ngIf="!loading && isListView && groupsTotal > paginationModel?.pageSize"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+  (pageChange)="onPaginate($event)"
+></pagination-controls>
+
+<!-- create/edit group model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'groups'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeGroupModel()"
+>
+  <div modal-header class="groups-model-header w-100">
+    <label class="modal-title">
+      {{ groupModelTitle }}
+    </label>
+  </div>
+
+  <div modal-content class="groups-model-content border-top">
+    <app-groups-modal
+      *ngIf="isGroupModelOpened"
+      [groups]="groups"
+      (refreshParentComponent)="refreshPage()"
+    ></app-groups-modal>
+  </div>
+</app-model>
+
+<app-confirm-modal
+  [content]="
+    'groups.confirmDeleteMsg'
+    | translate : { name: (lang == 'ar' ? groupToDelete?.arabicName : groupToDelete?.name) }  
+  "
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteGroupConfirmed()"
+></app-confirm-modal>
+
+<!-------------------------------->
+<!-- Groups Tree -->
+<!-------------------------------->
+<!-- <div *ngIf="tree" class="margin-cards tree-chart-container"> -->
+<!-- <angular-org-chart
+    [nodeTemplate]="nodeTemplate"
+    [data]="tree"
+    #exampleChart="orgChart"
+    direction="vertical"
+    dir="vertical"
+  >
+  </angular-org-chart> -->
+
+<!-- Node Template -->
+<!-- <ng-template #nodeTemplate let-node direction="vertical" dir="vertical">
+    <div class="chart-node">
+      <div class="d-flex justify-content-end" *ngIf="getItems(node) && node.id">
+        <app-dropdown
+          (select)="onOptionSelect($event, node)"
+          [items]="getItems(node)"
+        ></app-dropdown>
+      </div>
+      <img [src]="node?.image" />
+      <div class="name">
+        {{ lang === "en" ? node?.name : node?.arabicName }}
+      </div>
+    </div>
+  </ng-template> -->
+<!-- </div> -->
+
+<!-------------------------------->
+<!-- Groups Tree -->
+<!-------------------------------->
+<div *ngIf="tree && !isListView">
+  <org-chart [nodes]="tree" direction="horizontal"></org-chart>
+</div>

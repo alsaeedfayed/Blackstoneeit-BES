@@ -1,0 +1,61 @@
+.w-8 {
+  width: 8% !important;
+}
+
+p {
+  margin: 0;
+}
+
+tr {
+  height: 70px;
+}
+
+a {
+  color: #5271ff !important;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 22px;
+  background-color: #00db99;
+  color: #fff;
+  line-height: 17px;
+}
+
+// sort buttons styles
+.bx {
+  cursor: pointer;
+  font-size: 14px;
+  color: #96a6bd ;
+  font-weight: 400 !important;
+  vertical-align: middle;
+  border-width: 0 0 1px !important;
+}
+
+// style for deleted services
+.deleted {
+  color: #888;
+  opacity: 0.6;
+}
+
+@media only screen and (max-width: 740px) {
+  .req-table {
+    width: 100%;
+    overflow-x: auto;
+    table {
+      min-width: 650px;
+    }
+
+    td {
+      font-weight: 400;
+      font-size: 12px;
+    }
+    p {
+      cursor: pointer;
+    }
+  }
+}
+

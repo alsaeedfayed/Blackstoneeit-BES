@@ -1,0 +1,95 @@
+.committee-dashboard-types {
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  background-color: #fff;
+  height: 320px;
+  align-items: center;
+  &-canvas {
+    position: relative;
+    &-total {
+      position: absolute;
+      top: 45%;
+      font-weight: 500;
+      font-size: 18px;
+      color: #121824;
+    }
+  }
+  &-info {
+    &-title {
+      font-weight: 500;
+      font-size: 16px;
+      color: #121824;
+    }
+
+    &-financial {
+      &-square {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        display: block;
+        background-color: #015bff;
+      }
+      &-lable {
+        font-weight: 400;
+        font-size: 14px;
+        color: #96a6bd;
+      }
+    }
+    &-leadership {
+      &-square {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        display: block;
+        background-color: #ff7373;
+      }
+      &-lable {
+        font-weight: 400;
+        font-size: 14px;
+        color: #96a6bd;
+      }
+    }
+    &-operational {
+      &-square {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        display: block;
+        background-color: #dae0e8;
+      }
+      &-lable {
+        font-weight: 400;
+        font-size: 14px;
+        color: #96a6bd;
+      }
+    }
+  }
+}
+
+.committees-categories {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0px 1rem;
+  width: 100%;
+  &-category {
+    // flex: 1;
+    padding-left: 1rem;
+    width: 33%;
+  }
+}
+
+@media screen and(max-width: 1000px) {
+  .committees-categories {
+    &-category {
+      width: 50%;
+    }
+  }
+}
+
+@media screen and(max-width: 767px) {
+  .committees-categories {
+    &-category {
+      width: 100%;
+    }
+  }
+}

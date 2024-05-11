@@ -1,0 +1,1163 @@
+<div class="form-wrapper">
+  <app-change-request-stepper #cdkStepper>
+    <cdk-step
+      [label]="
+        ('projects.crOverview' | translate) != 'projects.crOverview'
+          ? ('projects.crOverview' | translate)
+          : ('changeRequests.crOverview' | translate)
+      "
+    >
+      <form class="projects-form" [formGroup]="form">
+        <div class="row">
+          <div class="form-group mb-4 col-12">
+            <label for="" class="form-label">
+              {{ "shared.title" | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+            <input type="text" formControlName="title" class="form-control" />
+          </div>
+          <label for="" class="form-label">
+            {{
+              ("projects.changeType" | translate) != "projects.changeType"
+                ? ("projects.changeType" | translate)
+                : ("changeRequests.changeType" | translate)
+            }}
+            <span class="astrix-red">*</span>
+          </label>
+
+          <div
+            class="row col-12 m-0"
+            *ngFor="let type of changeRequestTypes; let i = index"
+          >
+            <div
+              class="form-group mb-4 col-12 type-box-container"
+              *ngIf="
+                (form.get('requestType').value.includes(type?.code) &&
+                  isEdit) ||
+                !isEdit
+              "
+            >
+              <label class="type-box" [for]="type?.id">
+                <input
+                  *ngIf="!isEdit"
+                  type="checkbox"
+                  [id]="type?.id"
+                  (change)="
+                    onRequestTypeChange(type?.code, $event?.target?.checked, i)
+                  "
+                  [value]="type?.code"
+                  [checked]="form.get('requestType').value.includes(type?.code)"
+                />
+                <label
+                  *ngIf="!isEdit"
+                  [for]="type?.id"
+                  class="form-custom-checkbox-box"
+                >
+                  <i class="bx bx-check"></i>
+                </label>
+                <label [for]="type?.id" class="form-label">
+                  <i class="bx bx-money" *ngIf="type?.code === 'Cost'"></i>
+                  <i class="bx bx-box" *ngIf="type?.code === 'Scope'"></i>
+                  <i
+                    class="bx bx-calendar"
+                    *ngIf="type?.code === 'Schedule'"
+                  ></i>
+                  <i
+                    class="bx bx-list-ul"
+                    *ngIf="type?.code === 'Organization'"
+                  ></i>
+                  <i
+                    class="bx bx-detail"
+                    *ngIf="type?.code === 'Information'"
+                  ></i>
+                  {{ type?.title[lang] }}
+                </label>
+              </label>
+
+              <ng-container
+                *ngIf="
+                  getForm.requestType?.value?.includes('Information') &&
+                  type?.code === 'Information'
+                "
+              >
+                <div class="mt-3" formGroupName="information">
+                  <div class="row">
+                    <div class="col-6 mb-4">
+                      <label for="" class="form-label">
+                        {{
+                          ("projects.projectName" | translate) !=
+                          "projects.projectName"
+                            ? ("projects.projectName" | translate)
+                            : ("changeRequests.projectName" | translate)
+                        }}
+                        <span class="astrix-red">*</span>
+                        :
+                      </label>
+                      <input
+                        type="text"
+                        formControlName="projectName"
+                        class="form-control"
+                      />
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectName?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="getOverviewForm.projectName?.errors?.pattern"
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowEnglishLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="col-6 mb-4">
+                      <label for="" class="form-label">
+                        {{ "projects.projectName" | translate }} ({{
+                          "projects.arabic" | translate
+                        }})
+                        <span class="astrix-red">*</span>
+                        :
+                      </label>
+                      <input
+                        type="text"
+                        formControlName="projectNameAr"
+                        class="form-control"
+                      />
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectNameAr?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="getOverviewForm.projectNameAr?.errors?.pattern"
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowArabicLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group mb-4 col-12">
+                      <label for="" class="form-label">
+                        {{ "projects.projectCategory" | translate }}
+                        <span class="astrix-red">*</span>
+                        :
+                      </label>
+
+                      <app-custom-checkboxes-control
+                        [cardHeight]="44"
+                        formControlName="projectCategory"
+                        [items]="projectCategories"
+                      ></app-custom-checkboxes-control>
+
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectCategory?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-12">
+                      <label for="" class="form-label">
+                        {{ "projects.projectType" | translate }}
+                        <span class="astrix-red">*</span>
+                        :
+                      </label>
+
+                      <app-custom-checkboxes-control
+                        (ngModelChange)="onTypeChange($event)"
+                        [cardHeight]="44"
+                        formControlName="projectType"
+                        [items]="projectTypes"
+                      ></app-custom-checkboxes-control>
+
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectType?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group mb-4 col">
+                      <label for="" class="form-label">
+                        {{ "projects.projectOrigin" | translate }}
+                        <span class="astrix-red">*</span>
+                        :
+                      </label>
+                      <app-custom-checkboxes-control
+                        (ngModelChange)="onOriginChange($event)"
+                        [cardHeight]="44"
+                        formControlName="projectOrigin"
+                        [items]="projectOrigins"
+                      ></app-custom-checkboxes-control>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOrigin?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-6" *ngIf="isIdea">
+                    <div class="mb-4">
+                      <label for="" class="form-label">
+                        {{ "projects.idea" | translate }}:
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="projectIdea"
+                        #input
+                        [ngbTypeahead]="searchIdeas"
+                        [resultFormatter]="formatter"
+                        [inputFormatter]="formatter"
+                        placeholder="{{ 'shared.search' | translate }}"
+                      />
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectIdea?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group mb-4">
+                      <label for="" class="form-label">
+                        {{ "projects.projectDescription" | translate }}:
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectDescription"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectDescription?.errors
+                            ?.required && isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectDescription?.errors?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowEnglishLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4">
+                      <label for="" class="form-label">
+                        {{ "projects.projectDescription" | translate }} ({{
+                          "projects.arabic" | translate
+                        }}):
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectDescriptionAr"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectDescriptionAr?.errors
+                            ?.required && isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectDescriptionAr?.errors?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowArabicLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.inScope" | translate }}:
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectScope"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectScope?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="getOverviewForm.projectScope?.errors?.pattern"
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowEnglishLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.inScope" | translate }} ({{
+                          "projects.arabic" | translate
+                        }}):
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectScopeAr"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectScopeAr?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="getOverviewForm.projectScopeAr?.errors?.pattern"
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowArabicLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.outOfscope" | translate }}:
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectOutOfScope"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutOfScope?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutOfScope?.errors?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowEnglishLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.outOfscope" | translate }} ({{
+                          "projects.arabic" | translate
+                        }}):
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectOutOfScopeAr"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutOfScopeAr?.errors
+                            ?.required && isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutOfScopeAr?.errors?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowArabicLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.expectedOutcomes" | translate }}:
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectOutcomes"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutcomes?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="getOverviewForm.projectOutcomes?.errors?.pattern"
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowEnglishLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.expectedOutcomes" | translate }} ({{
+                          "projects.arabic" | translate
+                        }}):
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectOutcomesAr"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutcomesAr?.errors?.required &&
+                          isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectOutcomesAr?.errors?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowArabicLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.expectedBenefits" | translate }}:
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectExpectedBenefits"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectExpectedBenefits?.errors
+                            ?.required && isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectExpectedBenefits?.errors
+                            ?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowEnglishLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+
+                    <div class="form-group mb-4 col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.expectedBenefits" | translate }} ({{
+                          "projects.arabic" | translate
+                        }}):
+                      </label>
+                      <textarea
+                        class="form-textarea"
+                        formControlName="projectExpectedBenefitsAr"
+                      ></textarea>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectExpectedBenefitsAr?.errors
+                            ?.required && isFormSubmitted
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{ "shared.validations.required" | translate }}
+                      </small>
+                      <small
+                        class="form-error"
+                        *ngIf="
+                          getOverviewForm.projectExpectedBenefitsAr?.errors
+                            ?.pattern
+                        "
+                      >
+                        <i class="bx bx-error-circle mr-2"></i>
+                        {{
+                          "shared.validations.allowArabicLanguageOnly"
+                            | translate
+                        }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group mb-4 col-12">
+                      <label for="" class="form-label">
+                        {{ "projects.changeReasons" | translate }}
+                        <span class="astrix-red">*</span>
+                      </label>
+                      <textarea
+                        formControlName="reasons"
+                        class="form-textarea"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  getForm.requestType?.value?.includes('Organization') &&
+                  type?.code === 'Organization'
+                "
+              >
+                <div class="mt-3" formGroupName="organization">
+                  <div class="form-group mb-4">
+                    <label for="" class="form-label">
+                      {{ "projects.projectManager" | translate }}:
+                    </label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="typeahead-prevent-manual-entry"
+                        [editable]="false"
+                        formControlName="managerId"
+                        #projectManagerInput
+                        [ngbTypeahead]="searchUsers"
+                        [resultFormatter]="formatter"
+                        [inputFormatter]="formatter"
+                        placeholder="{{ 'projects.searchUsers' | translate }}"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label for="" class="form-label">
+                      {{ "projects.projectSponsors" | translate }}:
+                    </label>
+                    <div class="position-relative">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="typeahead-prevent-manual-entry"
+                        [editable]="false"
+                        formArrayName="sponserIds"
+                        #sponsorsInput
+                        (selectItem)="onSelectSponsor($event, sponsorsInput)"
+                        [ngbTypeahead]="searchUsers"
+                        [resultFormatter]="formatter"
+                        [inputFormatter]="formatter"
+                        placeholder="{{ 'projects.searchUsers' | translate }}"
+                      />
+                    </div>
+                    <ul
+                      class="selected-users-list mt-4 mb-0"
+                      *ngIf="getSponsors?.controls?.length !== 0; let i = index"
+                    >
+                      <li *ngFor="let user of getSponsors?.controls">
+                        <span class="project-card-status-badge primary">
+                          {{
+                            user?.value?.name
+                              ? user?.value?.name[lang]
+                              : user?.value?.fullName
+                          }}
+                          <i class="bx bx-x" (click)="onUnselectSponsor(i)"></i>
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <app-select
+                      formControlName="sectorId"
+                      [control]="form | getControl: 'sectorId'"
+                      [title]="'projects.projectSector' | translate"
+                      [placeholder]="'projects.selectSector' | translate"
+                      [items]="sectorsList"
+                      [bindVlaue]="'id'"
+                      [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                      (change)="getDepartments($event.id)"
+                    ></app-select>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <app-select
+                      formControlName="departmentId"
+                      [control]="form | getControl: 'departmentId'"
+                      [title]="'projects.projectDepartment' | translate"
+                      [placeholder]="'projects.selectDepartment' | translate"
+                      [items]="departmentsList"
+                      [bindVlaue]="'id'"
+                      [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                    ></app-select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="" class="form-label">
+                      {{ "projects.changeReasons" | translate }}
+                      <span class="astrix-red">*</span>
+                    </label>
+                    <textarea
+                      formControlName="reasons"
+                      class="form-textarea"
+                    ></textarea>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  getForm.requestType?.value?.includes('Schedule') &&
+                  type?.code === 'Schedule'
+                "
+              >
+                <div class="mt-3" formGroupName="schedule">
+                  <div class="form-group mb-4">
+                    <label for="" class="form-label">
+                      {{ "projects.changeType" | translate }}:
+                    </label>
+                    <app-custom-radio-buttons-control
+                      [cardHeight]="44"
+                      (change)="onChangeTypeChange($event, 'schedule')"
+                      formControlName="changeType"
+                      [items]="scheduleOptions"
+                      [optionsDesc]="scheduleOptionsDesc"
+                    ></app-custom-radio-buttons-control>
+                  </div>
+                  <div class="row">
+                    <div
+                      class="form-group mb-4 col-6"
+                      *ngIf="
+                        getForm?.schedule?.value?.changeType?.code ===
+                          'Increase' ||
+                        getForm?.schedule?.value?.changeType?.code ===
+                          'Decrease'
+                      "
+                    >
+                      <label for="" class="form-label">
+                        {{ "projects.newProjectEndDate" | translate }}:
+                      </label>
+                      <app-datepicker
+                        [allowPastDate]="true"
+                        formControlName="endDate"
+                      ></app-datepicker>
+                    </div>
+                    <div
+                      class="form-group mb-4 col-6"
+                      *ngIf="
+                        getForm?.schedule?.value?.changeType?.code ===
+                          'Increase' ||
+                        getForm?.schedule?.value?.changeType?.code ===
+                          'Decrease'
+                      "
+                    >
+                      <label for="" class="form-label">
+                        {{ "projects.currentEndDate" | translate }}:
+                      </label>
+                      <app-datepicker
+                        [disabled]="true"
+                        [date]="projectEndDate"
+                      ></app-datepicker>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="" class="form-label">
+                      {{ "projects.changeReasons" | translate }}
+                      <span class="astrix-red">*</span>
+                    </label>
+                    <textarea
+                      formControlName="reasons"
+                      class="form-textarea"
+                    ></textarea>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  getForm.requestType?.value?.includes('Scope') &&
+                  type?.code === 'Scope'
+                "
+              >
+                <div class="mt-3" formGroupName="scope">
+                  <div class="form-group mb-4">
+                    <label for="" class="form-label">
+                      {{ "projects.changeType" | translate }}
+                      <span class="astrix-red">*</span>
+                    </label>
+                    <app-custom-radio-buttons-control
+                      [cardHeight]="44"
+                      formControlName="changeType"
+                      [items]="changeRequestOptions"
+                      [optionsDesc]="scopeOptionsDesc"
+                    ></app-custom-radio-buttons-control>
+                  </div>
+                  <div class="form-group">
+                    <label for="" class="form-label">
+                      {{ "projects.changeReasons" | translate }}
+                      <span class="astrix-red">*</span>
+                    </label>
+                    <textarea
+                      formControlName="reasons"
+                      class="form-textarea"
+                    ></textarea>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  getForm.requestType?.value?.includes('Cost') &&
+                  type?.code === 'Cost'
+                "
+              >
+                <div class="mt-3" formGroupName="cost">
+                  <div class="form-group mb-4">
+                    <label for="" class="form-label">
+                      {{ "projects.changeType" | translate }}
+                      <span class="astrix-red">*</span>
+                    </label>
+                    <app-custom-radio-buttons-control
+                      [cardHeight]="44"
+                      (change)="onChangeTypeChange($event, 'cost')"
+                      formControlName="changeType"
+                      [items]="changeRequestOptions"
+                      [optionsDesc]="costOptionsDesc"
+                    ></app-custom-radio-buttons-control>
+                  </div>
+                  <div
+                    class="row mb-4"
+                    *ngIf="
+                      getForm?.cost?.value?.changeType?.code === 'Increase' ||
+                      getForm?.cost?.value?.changeType?.code === 'Decrease'
+                    "
+                  >
+                    <div class="form-group col-6">
+                      <label for="" class="form-label">
+                        {{ "projects.amount" | translate }}:
+                      </label>
+                      <div class="input-with-currency">
+                        <input
+                          type="text"
+                          formControlName="amount"
+                          type="number"
+                          class="form-control"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                          placeholder="00.0000"
+                        />
+                        <div class="currency-label">
+                          {{ "shared.AED" | translate }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-6">
+                      <label class="form-label">
+                        {{ "projects.newProjectBudget" | translate }}:
+                      </label>
+                      <div
+                        class="input-with-currency"
+                        *ngIf="
+                          getForm?.cost?.value?.changeType?.code === 'Decrease'
+                        "
+                      >
+                        <input
+                          readonly
+                          [value]="
+                            projectData?.budget - getForm?.cost?.value.amount
+                          "
+                          type="number"
+                          class="form-control"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                          placeholder="00.0000"
+                        />
+                        <div class="currency-label">
+                          {{ "shared.AED" | translate }}
+                        </div>
+                      </div>
+                      <div
+                        class="input-with-currency"
+                        *ngIf="
+                          getForm?.cost?.value?.changeType?.code === 'Increase'
+                        "
+                      >
+                        <input
+                          #input
+                          readonly
+                          [value]="
+                            +projectData?.budget + +getForm?.cost?.value.amount
+                          "
+                          type="number"
+                          class="form-control"
+                          oninput="this.input.value = this.input.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                          placeholder="00.0000"
+                        />
+                        <div class="currency-label">
+                          {{ "shared.AED" | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="" class="form-label">
+                      {{ "projects.changeReasons" | translate }}
+                      <span class="astrix-red">*</span>
+                    </label>
+                    <textarea
+                      formControlName="reasons"
+                      class="form-textarea"
+                    ></textarea>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="" class="form-label">
+              {{ "shared.documents" | translate }}:
+            </label>
+            <div class="file-input-container mb-2 w-100 mr-2">
+              <label for="invoice-file-input" class="file-input">
+                <i class="bx bx-upload"></i>
+                <span class="cta-text">
+                  {{
+                    ("projects.clickToSelectFile" | translate) !=
+                    "projects.clickToSelectFile"
+                      ? ("projects.clickToSelectFile" | translate)
+                      : ("changeRequests.clickToSelectFile" | translate)
+                  }}
+                </span>
+                <!-- <span class="supported-files-text">{{'projects.supportedFormats' | translate}}</span> -->
+                <input
+                  type="file"
+                  (change)="onAttachmentChange($event)"
+                  id="invoice-file-input"
+                />
+              </label>
+              <div *ngIf="selectedAttachments !== 0" class="selected-files">
+                <div
+                  *ngFor="let file of selectedAttachments; let i = index"
+                  class="file mb-1"
+                >
+                  <i class="bx bx-paperclip"></i>
+                  <span class="file-name">{{ file.title }}</span>
+                  <button (click)="onAttachmentDelete(i)">
+                    {{ "shared.delete" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </cdk-step>
+
+    <cdk-step
+      [label]="
+        ('projects.updatedPlan' | translate) != 'projects.updatedPlan'
+          ? ('projects.updatedPlan' | translate)
+          : ('changeRequests.updatedPlan' | translate)
+      "
+    >
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="form-title mb-0">{{ "projects.milestones" | translate }}</h3>
+
+        <button
+          (click)="onAddMilestone()"
+          *ngIf="getForm.requestType?.value?.includes('Schedule')"
+          class="btn btn-main"
+        >
+          {{ "projects.addMilestone" | translate }}
+        </button>
+      </div>
+
+      <div
+        *ngFor="let item of milestones; let i = index"
+        class="milestone-card mb-4"
+        [class.disabled]="item?.isClosed"
+      >
+        <div class="text-end mb-3">
+          <app-badge
+            *ngIf="item?.status?.code == 'Deleted'"
+            class="d-inline-block"
+            [className]="'rejected'"
+            [label]="'shared.removed' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="item?.isClosed"
+            class="d-inline-block"
+            [className]="'closed'"
+            [label]="'projects.closed' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="item?.status === 'Updated'"
+            class="d-inline-block"
+            [className]="'inProgress'"
+            [label]="'projects.edited' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="item?.status === 'New'"
+            class="d-inline-block"
+            [className]="'new'"
+            [label]="'projects.new' | translate"
+          ></app-badge>
+        </div>
+        <div class="inner row">
+          <div class="card-options">
+            <app-dropdown
+              (select)="onDropDownSelect($event, item, i)"
+              *ngIf="
+                (getForm.requestType?.value?.includes('Schedule') ||
+                  getForm.requestType?.value?.includes('Cost') ||
+                  getForm.requestType?.value?.includes('Scope')) &&
+                !item?.isClosed
+              "
+              [items]="cardActions"
+            ></app-dropdown>
+          </div>
+          <div class="card-details-col col-6 d-flex">
+            <div class="mr-2">
+              <circle-progress
+                [percent]="item?.weight"
+                [radius]="45"
+                [space]="-10"
+                [outerStrokeGradient]="false"
+                [outerStrokeWidth]="10"
+                [outerStrokeColor]="'#3c81fb'"
+                [innerStrokeColor]="'#d2daff'"
+                [innerStrokeWidth]="10"
+                [animateTitle]="false"
+                [animationDuration]="1000"
+                [showUnits]="true"
+                [showBackground]="false"
+                [clockwise]="false"
+                [startFromZero]="false"
+                [lazy]="false"
+                [showTitle]="true"
+                [showSubtitle]="false"
+                [unitsFontSize]="18"
+                [titleFontSize]="18"
+                [unitsFontWeight]="400"
+                [titleFontWeight]="400"
+                [title]="'auto'"
+                [titleColor]="'#353535'"
+                [unitsColor]="'#353535'"
+              ></circle-progress>
+            </div>
+            <div>
+              <h3 class="col-title">
+                {{ item?.name[lang] ? item?.name[lang] : item.name }}
+                <!-- <span class="old-data"
+                      *ngIf="item?.oldName"> ({{item?.oldName[lang] ? item?.oldName[lang] : item.oldName}})</span> -->
+              </h3>
+              <div>
+                <span class="col-date" *ngIf="item?.dueDate">
+                  {{ "projects.dueDate" | translate }} :
+                  {{
+                    lang === "en"
+                      ? ((item?.dueDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a")
+                      : ((item?.dueDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                  }}
+                  <!-- <span class="old-data"
+                        *ngIf=" item?.oldDueDate">({{item?.oldDueDate |
+                    date:
+                    'dd/MM/yyyy'}})</span> -->
+                </span>
+              </div>
+              <div>
+                <span class="col-date" *ngIf="item?.cost">
+                  {{ "projects.cost" | translate }}: {{ item?.cost | number}}
+                  {{ "shared.AED" | translate }}
+                </span>
+                <span class="col-date" *ngIf="!item?.cost">
+                  {{ "projects.cost" | translate }}: 0
+                  {{ "shared.AED" | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card-details-col col-5">
+            <h3 class="col-title">{{ "projects.deliverables" | translate }}</h3>
+            <ul>
+              <li *ngFor="let deliverable of filter(item?.deliverables)">
+                {{ deliverable?.title }}
+              </li>
+            </ul>
+          </div>
+          <!-- <div class="card-details-col col-4">
+            <h3 class="col-title">{{'projects.tasks' | translate}}</h3>
+            <ul>
+              <li *ngFor="let task of item?.tasks">{{(task?.name[lang] || task)}}</li>
+            </ul>
+            <p class="empty-state"
+               *ngIf="item?.tasks?.length === 0 || !item?.tasks">{{'projects.tasksEmptyText' |
+              translate}}</p>
+          </div> -->
+        </div>
+
+        <div class="d-flex flex-column" *ngIf="item?.description">
+          <label for="" class="form-label">
+            {{ "projects.description" | translate }}
+          </label>
+          <p>
+            {{
+              item?.description[lang]
+                ? item?.description[lang]
+                : item.description
+            }}
+          </p>
+        </div>
+      </div>
+
+      <app-empty-state
+        *ngIf="milestones?.length === 0"
+        class="d-block my-4"
+        [title]="'projects.milestoneEmpty' | translate"
+      ></app-empty-state>
+    </cdk-step>
+  </app-change-request-stepper>
+
+  <div class="d-flex justify-content-between mt-4">
+    <!-- previous button -->
+    <button class="btn btn-outline-main" (click)="onPrevious()">
+      {{ "shared.previous" | translate }}
+    </button>
+
+    <button
+      class="btn btn-main"
+      *ngIf="
+        !hideActions ||
+        (submitBtnText != 'submit' &&
+          (getForm.requestType?.value?.includes('Scope') ||
+            getForm.requestType?.value?.includes('Schedule') ||
+            getForm.requestType?.value?.includes('Cost')))
+      "
+      [disabled]="
+        getForm.title.invalid ||
+        getForm.requestType.invalid ||
+        returnSharedInputs().get('reasons').invalid ||
+        returnSharedInputs().get('changeType').invalid ||
+        (!form.get('requestType').value.includes('Scope') &&
+          !form.get('requestType').value.includes('Schedule') &&
+          !form.get('requestType').value.includes('Cost') &&
+          !form.get('requestType').value.includes('Organization') &&
+          !form.get('requestType').value.includes('Information'))
+      "
+      (click)="onStepperNavigate()"
+    >
+     <!-- TODO add validation on cost changeType up ^  -->
+      {{
+        ("projects." + submitBtnText | translate) != "projects." + submitBtnText
+          ? ("projects." + submitBtnText | translate)
+          : ("changeRequests." + submitBtnText | translate)
+      }}
+    </button>
+  </div>
+</div>

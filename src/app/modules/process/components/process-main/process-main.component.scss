@@ -1,0 +1,11 @@
+@import "src/assets/css/utils/variables.scss";
+
+.card-container{
+  margin: 0 16px 16px 0;
+}
+
+.process-grid-layout{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+}

@@ -1,0 +1,42 @@
+    <!-- decision notes
+    <div class="mt-4">
+      <label class="form-label" *ngIf="title">
+        {{ title | translate }}
+        <span  [class]="required ?'astrix-red':'astrix-transparent'">*</span>
+      </label>
+      <angular-editor formControlName="notes" [config]="editorConfig">
+        <ng-template #customButtons>
+          <ae-toolbar-set>
+            <ae-button
+              iconClass="fa fa-paperclip fa-lg"
+              title="Attachment"
+              (buttonClick)="attachments.click()"
+            ></ae-button>
+          </ae-toolbar-set>
+        </ng-template>
+      </angular-editor>
+      <input
+        hidden
+        #attachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event)"
+      />
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        [supportedTypes]="
+          'committeeNewDecision.decisionForm.notesAttachmentsTypes' | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'new')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAttachments"
+        (deleteFile)="onDeleteFile($event, 'old')"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </div> -->

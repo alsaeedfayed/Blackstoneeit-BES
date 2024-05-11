@@ -1,0 +1,38 @@
+.table {
+  --index-width: 50px;
+  --actions-width: 70px;
+
+  .scorecard-index {
+    width: var(--index-width);
+  }
+
+  .scorecard-actions {
+    width: var(--actions-width);
+  }
+}
+
+.w-8 {
+  width: 8% !important;
+}
+
+p {
+  margin: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 22px;
+  background-color: #00db99;
+  color: #fff;
+}
+
+.Arabic {
+  font-family: "Janna LT Regular", sans-serif !important;
+}
+
+.min-width-date {
+  min-width: 12em;
+}

@@ -1,0 +1,110 @@
+<app-header-page
+  [title]="'shared.items' | translate"
+  [totalItems]="filteredConfigures?.length"
+  [isSearch]="true"
+  (search)="handleSearchValueFilter($event)"
+></app-header-page>
+
+<div class="page-data">
+  <ng-container *ngIf="loading; else table_data">
+    <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <!-- <app-header-page
+    [title]="'configuration.submissionWindow' | translate"
+  ></app-header-page> -->
+
+  <div class="req-table" *ngIf="filteredConfigures?.length > 0">
+    <div class="req-table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="config-index">{{ "configuration.No" | translate }}</th>
+            <th scope="col">{{ "configuration.month" | translate }}</th>
+            <th scope="col">{{ "configuration.startDate" | translate }}</th>
+            <th scope="col">{{ "configuration.endDate" | translate }}</th>
+            <th scope="col">{{ "configuration.duration" | translate }}</th>
+            <th scope="col" class="config-actions">{{ "shared.actions" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let configure of filteredConfigures">
+            <td class="config-index">{{ configure.number }}</td>
+            <td>
+              {{ language == "en" ? configure.month : configure.monthAr }}
+            </td>
+            <!-- <td> {{ convertUTCDateToLocalDate(configure.startDate) | date: 'dd/MM/yyyy' }} </td>
+            <td> {{ convertUTCDateToLocalDate(configure.endDate) | date: 'dd/MM/yyyy' }} </td> -->
+            <td>{{ configure.startDay }} {{ language == "en" ? configure.month : configure.monthAr }}</td>
+            <td>
+              {{
+                language == "en" ?
+                (calculateEndDate(configure) | date : "dd MMMM") :
+                calculateEndDate(configure) | date : "dd MMM":"":"ar"
+              }}
+            </td>
+            <td>
+              {{ configure.duration }} {{ "configuration.days" | translate }}
+            </td>
+            <td class="config-actions">
+              <div>
+                <app-dropdown
+                  [items]="options"
+                  (select)="onOptionSelect($event, configure)"
+                ></app-dropdown>
+              </div>
+
+              <app-model
+                [dimensions]="{ width: 500, height: 750 }"
+                [id]="'edit-config' + configure.id"
+                [hasBackBtn]="false"
+                [hasTitle]="false"
+                [isNewModel]="true"
+                (close)="closePopup()"
+              >
+                <div modal-header class="config-edit-model-header w-100">
+                  <label class="modal-title">
+                    {{ 'configuration.editConfig' | translate }}
+                  </label>
+                </div>
+
+                <div modal-content class="config-edit-model-content border-top">
+                  <app-edit-configure
+                    *ngIf="isOpenModal && selectedConfigure.id == configure.id"
+                    [configure]="selectedConfigure"
+                    (update)="update($event)"
+                  ></app-edit-configure>
+                </div>
+              </app-model>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="filteredConfigures?.length == 0">
+    <app-no-data [msg]="'configuration.noDataMsg' | translate"></app-no-data>
+  </div>
+
+  <app-confirm-modal
+    [id]="'open-period'"
+    [content]="openConfirmMsg"
+    [btnContent]="'shared.openPeriod' | translate"
+    [btnStyle]="'main'"
+    (confirm)="openPeriod()"
+  ></app-confirm-modal>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

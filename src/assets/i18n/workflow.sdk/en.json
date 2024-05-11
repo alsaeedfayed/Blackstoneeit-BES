@@ -1,0 +1,28 @@
+{
+  "manageWorkflow": {
+    "textCopiedToClipboard": "Text copied to clipboard",
+    "errorCopyingToClipboard": "Error copying to clipboard",
+    "copyEmail": "Copy Email",
+    "addAction": "Add Action",
+    "searchUsers" : "Search Users",
+    "users": "Users",
+    "selectUser": "Select User",
+    "step": "Step",
+    "selectStep": "Select Step",
+    "stepHistory": "Step History",
+    "tasksHistory": "Tasks History",
+    "reviewHistory": "Review History",
+    "comments": "Comments",
+    "completed": "Completed",
+    "pending": "Pending",
+    "upcoming": "Upcoming",
+    "noContent": "No Content",
+    "noItemsFound": "No items found",
+    "cancel": "Cancel",
+    "back": "Back",
+    "save": "Save",
+    "logout": "Logout",
+    "successfullyDone": "The action ( {{ action }} ) has been successfully completed",
+    "somethingWentWrong": "Something went wrong"
+  }
+}

@@ -1,0 +1,82 @@
+<app-header-page
+  [title]="'serviceCatalog.serviceCatalog' | translate"
+  [showTotalItems]="false"
+  [isSearch]="true"
+  [searchKey]="serviceName"
+  (search)="handleSearch($event)"
+></app-header-page>
+
+<div class="content-segment">
+  <ng-container *ngIf="!loading; else skeleton">
+    <ng-container [ngTemplateOutlet]="segments"> </ng-container>
+  </ng-container>
+</div>
+
+<!-- segments buttons or tabs -->
+<ng-template #segments>
+  <app-segments [(ngModel)]="cateogryId" (changeButton)="handleGetServises()">
+    <app-segment-button [value]="0" title="{{ 'serviceCatalog.allServices' | translate }}">
+      <ng-container [ngTemplateOutlet]="content"> </ng-container>
+    </app-segment-button>
+
+    <app-segment-button
+      value="favorite"
+      title="{{ 'serviceCatalog.favoriteServices' | translate }}"
+      [icon]="
+        cateogryId == 'favorite'
+          ? 'assets/icons/favorite-red.svg'
+          : 'assets/icons/favorite.svg'
+      "
+    >
+      <ng-container [ngTemplateOutlet]="content"> </ng-container>
+    </app-segment-button>
+
+    <app-segment-button
+      *ngFor="let category of categories"
+      [value]="category.id"
+      [title]="lang === 'en'? category.nameEn : category.nameAr"
+    >
+      <ng-container [ngTemplateOutlet]="content"> </ng-container>
+    </app-segment-button>
+  </app-segments>
+</ng-template>
+
+<ng-template #content>
+  <ng-container *ngIf="!loading; else skeleton">
+    <ng-container [ngTemplateOutlet]="service_list"> </ng-container>
+  </ng-container>
+</ng-template>
+
+<!-- service catalog list -->
+<ng-template #service_list>
+  <div
+    class="services"
+    *ngIf="(servicesFilter | search: serviceName).length != 0"
+  >
+    <div
+      class="service"
+      *ngFor="let service of servicesFilter | search: serviceName"
+    >
+    <!-- (onRating)="setServiceRating($event)" -->
+      <app-box-services
+        [service]="service"
+        (favourite)="toggleFavouriteService($event)"
+      ></app-box-services>
+    </div>
+  </div>
+  <div
+    class="no-data"
+    *ngIf="(servicesFilter | search: serviceName).length == 0"
+  >
+    <app-no-data msg="{{ 'serviceCatalog.noDataMsg' | translate }}"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- skeleton loading -->
+<ng-template #skeleton>
+  <div class="services">
+    <div class="service" *ngFor="let item of [1, 2, 3, 4, 5, 6]">
+      <app-skeleton-loader class="w-100" [mode]="'card'"></app-skeleton-loader>
+    </div>
+  </div>
+</ng-template>

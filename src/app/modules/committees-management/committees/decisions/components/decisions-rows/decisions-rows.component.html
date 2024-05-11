@@ -1,0 +1,205 @@
+<div class="mt-4">
+  <ul class="horizontal-cards">
+    <li
+      class="horizontal-cards-item"
+      *ngFor="
+        let item of list
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems
+              };
+        let i = index
+      "
+    >
+      <div class="card-container">
+        <div class="card-content">
+          <div class="horizontal-cards-item-cell decision-title">
+            <div class="cell-title">
+              {{ "committeeDecisions.list.decisionTitle" | translate }}
+            </div>
+            <div class="cell-content">
+              <a class="hoverableLink" [routerLink]="
+              '/committees-management/committee/' +
+              item.committeeId +
+              '/decisions/' +
+              item?.id
+            "> {{ language === "en" ? item?.name : item?.nameAr }}</a>
+
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell created-by">
+            <div class="cell-title">
+              {{ "committeeDecisions.list.createdBy" | translate }}
+            </div>
+            <div class="cell-content">
+              {{
+                language == "ar"
+                  ? item?.creatorInfo?.fullArabicName
+                  : item?.creatorInfo?.fullName
+              }}
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell decision-voting ">
+            <div class="cell-title">
+              {{ "committeeDecisions.list.voting" | translate }}
+            </div>
+            <div class="cell-content" [ngClass]="language">
+              <!-- <vote-percentage
+                *ngIf="item?.decisionVoting; else no_vote"
+                class="d-block"
+                [yesPercentage]="item?.yesPercentage"
+                [noPercentage]="item?.noPercentage"
+                [color]="'#D1CDFD'"
+              ></vote-percentage> -->
+
+              <div class="votingBar noVoting"  *ngIf="item?.votingStatus == 0">
+                <app-voting-bar
+                  [vote]="{
+                    title: { en: 'Abstain', ar: 'أمتنع' },
+                    votersCount: 0,
+                    voterPercentage: 0,
+                    color: 'secondary'
+                  }"
+                  [language]="language"
+                ></app-voting-bar>
+              </div>
+              <app-voting-bar
+                *ngIf="item?.votingStatus == 1"
+                class="votingBar votingBarYes"
+                [vote]="{
+                  title: { en: 'Yes', ar: 'نعم' },
+                  votersCount: item?.yesCount,
+                  voterPercentage: item?.yesPercentage,
+                  color: 'success'
+                }"
+                [language]="language"
+              ></app-voting-bar>
+
+              <app-voting-bar
+                *ngIf="item?.votingStatus == 2"
+                class="votingBar votingBarNo"
+                [vote]="{
+                  title: { en: 'No', ar: 'لا' },
+                  votersCount: item?.noCount,
+                  voterPercentage: item?.noPercentage,
+                  color: 'danger'
+                }"
+                [language]="language"
+              ></app-voting-bar>
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell created-on">
+            <div class="cell-title">
+              {{ "committeeDecisions.list.createdOn" | translate }}
+            </div>
+            <div class="cell-content" *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </div>
+          </div>
+          <!-- <div class="horizontal-cards-item-cell closing-date">
+            <div class="cell-title">
+              {{ "committeeDecisions.list.closingDate" | translate }}
+            </div>
+            <div
+              class="cell-content"
+              *ngIf="
+                item?.decisionVoting?.closingDate && item?.decisionVoting;
+                else no_vote
+              "
+            >
+              {{
+                language === "en"
+                  ? ((
+                      item?.decisionVoting?.closingDate | uTCToLocalDate
+                    ).toLocaleString() | date : "d MMM y")
+                  : ((
+                      item?.decisionVoting?.closingDate | uTCToLocalDate
+                    ).toLocaleString() | localizeDate : "d MMM y")
+              }}
+            </div>
+          </div> -->
+          <div class="horizontal-cards-item-cell decision-type">
+            <div class="cell-title">
+              {{ "committeeDecisions.list.type" | translate }}
+            </div>
+            <div class="cell-content">
+              <app-badge
+                [className]="decisionStatus[item?.status]['className']"
+                [label]="
+                  language == 'en'
+                    ? decisionStatus[item?.status]['name']
+                    : decisionStatus[item?.status]['nameAr']
+                "
+              ></app-badge>
+            </div>
+          </div>
+
+          <div class="horizontal-cards-item-cell decision-actions">
+            <!-- <button (click)="openDecisionDetailsModel(item)">
+              {{ "committeeDecisions.list.highlight" | translate }}
+            </button>
+            <span class="separator">|</span> -->
+            <a
+              [routerLink]="
+                '/committees-management/committee/' +
+                item.committeeId +
+                '/decisions/' +
+                item?.id
+              "
+            >
+              {{ "committeeDecisions.list.details" | translate }}
+            </a>
+            <!-- <button (click)="goToCommitteeDetails(item?.id)">{{ "committeeDecisions.list.details" | translate }}</button> -->
+          </div>
+          <!-- </div> -->
+        </div>
+      </div>
+
+      <!-- decision details modal -->
+      <app-model
+        [dimensions]="{ width: 480, height: 750 }"
+        [id]="'decision-details' + item?.id"
+        [hasBackBtn]="false"
+        [hasTitle]="false"
+        [isNewModel]="true"
+      >
+        <div modal-header class="decision-details-model-header w-100">
+          <label class="modal-title">
+            {{ "committeeDecisions.detailsModel.title" | translate }}
+          </label>
+        </div>
+
+        <div modal-content class="decision-details-model-content border-top">
+          <decision-details-model
+            *ngIf="item?.isDetailsOpened"
+            [decisionId]="item?.id"
+            [committeeId]="committeeId"
+            (onVote)="onVoteChanged($event)"
+          ></decision-details-model>
+        </div>
+      </app-model>
+    </li>
+  </ul>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+<ng-template #no_vote>
+  {{ "committeeDecisions.list.noVotes" | translate }}
+</ng-template>

@@ -1,0 +1,13 @@
+<div class="segments">
+  <ul>
+    <li
+      *ngFor="let segment of segments; let i = index"
+      (click)="selectSegment(segment)"
+      [class.active]="segment.active"
+    >
+      {{ segment.title }}
+      <img [src]="segment.icon" />
+    </li>
+  </ul>
+  <ng-content></ng-content>
+</div>

@@ -1,0 +1,139 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.user-card {
+  min-height: 200px;
+  height: fit-content;
+  padding: 20px;
+  position: relative;
+
+  .header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .roles-groups {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .role {
+      font-size: 13px;
+      line-height: 16px;
+      color: $white-color;
+      background-color: $main-color;
+      padding: 3px 8px;
+      border-radius: 25px;
+      text-transform: capitalize;
+      margin-inline-end: 5px;
+    }
+  }
+
+  .title {
+    text-transform: capitalize;
+    margin-bottom: 0;
+    color: $secondary-color;
+  }
+
+  .sub-title {
+    font-size: 14px;
+    line-height: 17px;
+    color: $aluminium_color;
+    margin-bottom: 17px;
+    margin-top: 7px;
+    text-transform: capitalize;
+  }
+
+  .b-group {
+    background-color: $dark-info-color;
+
+    &:hover {
+      background-color: $info_color;
+    }
+  }
+
+  .b-role {
+    background-color: $main-color;
+
+    &:hover {
+      background-color: $light-main-color;
+    }
+  }
+
+  .card-options {
+    position: absolute;
+    z-index: 2;
+    top: 15px;
+
+    // right: 15px;
+    @include rtl_value(right, 15px, auto);
+    @include rtl_value(left, auto, 15px);
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .position {
+    font-size: 14px;
+    line-height: 20px;
+    color: $aluminium_color;
+    margin: 0 0 8px;
+    font-style: italic;
+  }
+
+  .email {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      color: $aluminium_color;
+      font-size: 17.7px;
+      margin-top: 3px;
+      margin-inline-end: 12px;
+      line-height: 17px;
+    }
+
+    .text {
+      font-size: 14px;
+      line-height: 17px;
+      color: $aluminium_color;
+      word-break: break-word;
+    }
+  }
+
+  .emailInEnglish {
+    margin-bottom: 7px;
+  }
+
+  .phone {
+    display: flex;
+    align-items: center;
+
+    .icon {
+      color: $aluminium_color;
+      font-size: 18px;
+      // margin-top: 3px;
+      margin-inline-end: 12px;
+      line-height: 17px;
+    }
+
+    .text {
+      font-size: 14px;
+      line-height: 17px;
+      color: $aluminium_color;
+    }
+  }
+
+  > p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

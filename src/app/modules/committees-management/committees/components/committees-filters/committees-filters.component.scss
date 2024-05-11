@@ -1,0 +1,20 @@
+.committees-filters-container {
+  position: relative;
+  z-index: 1;
+  container: committees-filters / inline-size;
+
+  .committees-filters {
+    display: grid;
+    gap: 1rem;
+
+    @container committees-filters (min-width: 700px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+.text-transparent {
+  color: transparent;
+}

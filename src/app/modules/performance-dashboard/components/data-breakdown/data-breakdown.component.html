@@ -1,0 +1,92 @@
+<div class="data-breakdown">
+    <div class="top">
+        <div class="title">
+            <strong>{{ 'performanceDashboard.dataBreakdown' | translate}}</strong>
+        </div>
+        <div class="right-controls" *ngIf="_data?.length > 0">
+            <div class="tree-controls">
+                <div class="control" (click)="toggleViewGoals(true)" *ngIf="allowExpandAll">
+                    <span>{{ "performanceDashboard.expnadAll" | translate }}</span>
+                    <i class="bx bx-chevrons-down"></i>
+                </div>
+                <div class="control" (click)="toggleViewGoals(false)" *ngIf="!allowExpandAll">
+                    <span>{{ "performanceDashboard.collapseAll" | translate }}</span>
+                    <i class="bx bx-chevrons-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="data" *ngIf="_data?.length > 0">
+        <div class="table-header">
+            <div class="free-space"></div>
+            <div class="columns">
+                <div class="column">
+                    <strong>{{ 'performanceDashboard.weight' | translate}}</strong>
+                </div>
+                <div class="column">
+                    <strong>{{ 'performanceDashboard.Target' | translate}}</strong>
+                </div>
+                <div class="column">
+                    <strong>{{ 'performanceDashboard.Actual' | translate}}</strong>
+                </div>
+                <div class="column status">
+                    <strong>{{ 'shared.status' | translate}}</strong>
+                </div>
+                <div class="column">
+                    <strong>{{ 'performanceDashboard.performance' | translate}}</strong>
+                </div>
+            </div>
+        </div>
+        <ul>
+            <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ list: _data, parent: null }"></ng-container>
+        </ul>
+        <ng-template #recursiveListTmpl let-list="list" let-parent="parent">
+            <li *ngFor="let goal of list">
+                <div class="panel-header">
+                    <div class="header">
+                        <div class="icons">
+                            <i [style.display]="!goal?.open && goal?.childrenGoals?.length > 0 ? 'block' : 'none'" [ngClass]="'bx bx-chevron-right'" (click)="toggleNestedList(goal)"></i>
+                            <i [style.display]="goal?.open && goal?.childrenGoals?.length > 0 ? 'block' : 'none'" class="bx bx-chevron-down" (click)="toggleNestedList(goal)"></i>
+                        </div>
+                        <span class="level"> {{ GoalLevelText(goal?.level) }}</span>
+                        <span class="goalId">{{goal?.goalId}}</span>
+                        <div class="type" [style.background]="goal?.goalType?.color">
+                            <span>{{lang == 'ar' ? goal?.goalType?.arabicName : goal?.goalType?.name }}</span>
+                        </div>
+                        <div class="hd-title">
+                            <strong>{{lang == 'ar' ? goal?.titleAr : goal?.title }}</strong>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <span *ngIf="goal?.type != 1">{{goal?.weight}}%</span>
+                        </div>
+                        <div class="column">
+                            <span>{{goal?.target | number : "1.1-1"}}{{goal?.target != null && goal?.measurementMethod && goal?.measurementMethod != 5 ? addittion(goal?.measurementMethod) : ''}}</span>
+                        </div>
+                        <div class="column">
+                            <span>{{goal?.actual | number : "1.1-1"}}{{goal?.actual != null && goal?.measurementMethod && goal?.measurementMethod != 5 ? addittion(goal?.measurementMethod) : ''}}</span>
+                        </div>
+                        <div class="column status">
+                            <app-badge *ngIf="goal?.status != null && goal?.status == status.OffTrack" [className]="'offTrack'" [label]="getLabel('offTrack')"></app-badge>
+                            <app-badge *ngIf="goal?.status != null && goal?.status == status.OnTrack" [className]="'onTrack'" [label]="getLabel('onTrack')"></app-badge>
+                            <app-badge *ngIf="goal?.status != null && goal?.status == status.OverAcheived" [className]="'overAchived'" [label]="getLabel('overAchived')"></app-badge>
+                            <app-badge *ngIf="goal?.status != null && goal?.status == status.BaseLine" [className]="'baseLine'" [label]="getLabel('baseLine')"></app-badge>
+                            <app-badge *ngIf="goal?.status != null && goal?.status == status.NotDue" [className]="'notDue'" [label]="getLabel('notDue')"></app-badge>
+                        </div>
+                        <div class="column">
+                            <span>{{goal?.progress | number : "1.1-1"}}{{goal?.progress != null ? '%': ''}}</span>
+                        </div>
+                    </div>
+                </div>
+                <ul [style.display]="goal?.open ? 'block' : 'none'" *ngIf="goal?.childrenGoals?.length > 0">
+                    <ng-container *ngTemplateOutlet="recursiveListTmpl; context:{ list: goal?.childrenGoals, parent: goal }"></ng-container>
+                </ul>
+            </li>
+        </ng-template>
+    </div>
+    <div class="noData" *ngIf="_data.length == 0">
+        <img src="assets/img/no-data.png" />
+        <p>{{ 'shared.noData' | translate}}</p>
+    </div>
+</div>

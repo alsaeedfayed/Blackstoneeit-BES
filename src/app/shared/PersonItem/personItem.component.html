@@ -1,0 +1,232 @@
+<!-- Person Item -->
+<div *ngIf="personMode">
+  <div
+    class="personItem header-person"
+    [ngClass]="{ 'cursor-pointer': hasUserCard }"
+    (click)="
+      model.clickItem(); toggleDropdown(); hasUserCard && toggleUserCard($event)
+    "
+    #personItemAvatar
+  >
+    <div
+      class="avatar"
+      [ngClass]="{
+        'no-cursor': model.noCursor && !hasUserCard,
+        'cursor-pointer': hasUserCard
+      }"
+    >
+      <span class="avatar-icon" *ngIf="showIcon">
+        <i class="avatar-icon-i bx bxs-user {{ language }}-icon"></i>
+      </span>
+      <ng-container [ngTemplateOutlet]="avatar"></ng-container>
+    </div>
+
+    <angular-popper
+      *ngIf="hasUserCard"
+      [show]="displayUserCard"
+      [target]="personItemAvatar"
+      [positionFixed]="isUserCardFixed"
+    >
+      <div class="user-popup-card" content>
+        <div class="avatar">
+          <ng-container [ngTemplateOutlet]="avatar"></ng-container>
+        </div>
+
+        <div class="info">
+          <div class="name info-item">
+            {{
+            isTwoWordsOnly
+              ? model.data?.name.split(" ").slice(0, 2).join(" ")
+              : (model.data?.name | titlecase)
+            }}
+          </div>
+
+          <div class="email info-item" *ngIf="model.data?.email">
+            <div class="copy-text" #email>
+              {{ model.data?.email }}
+            </div>
+
+            <button
+              class="copy-btn"
+              [title]="'shared.copyEmail' | translate"
+              [copyToClipboard]="email"
+            >
+              <i class="bx bx-copy"></i>
+              <i class="bx bxs-copy"></i>
+            </button>
+          </div>
+
+          <div class="job info-item" *ngIf="model.data?.position">
+            {{ model.data?.position }}
+          </div>
+        </div>
+      </div>
+    </angular-popper>
+
+    <!-- Info -->
+    <div
+      style="display: flex; flex-direction: column"
+      class="info"
+      #toggleButton
+    >
+      <p class="name">
+        {{
+        isTwoWordsOnly
+          ? model.data?.name.split(" ").slice(0, 2).join(" ")
+          : (model.data?.name | titlecase)
+        }}
+      </p>
+      <span class="job">{{ model.data?.position }}</span>
+    </div>
+
+    <ng-template #avatar>
+      <img  *ngIf="model.getImage()" [src]="model.getImage()"/>
+      <!-- <img src="assets/img/excel.png"/> -->
+      <div
+        *ngIf="
+          !model.getImage() && model.data?.backgroundColor && model.data?.name
+        "
+        class="letters"
+        [style.background]="model.data?.backgroundColor"
+      >
+        {{ model.Name | titlecase }}
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- profile dropdown menu -->
+  <div
+    id="profileDropdown"
+    class="profile-dropdown"
+    #dropdown
+    *ngIf="displayDropdown"
+  >
+    <!-- profile details -->
+    <div class="profile-dropdown-details">
+      <div class="profile-image">
+        <img [src]="model.getImage()" *ngIf="model.getImage()"/>
+        <span class="initials" *ngIf="!model.getImage()">
+          {{ model.data?.name | initials }}
+        </span>
+
+        <input
+          *ngIf="isAllowedToChangePhoto"
+          type="file"
+          [id]="uniqueId || 'fileInput'"
+          [title]="'shared.uploadImage' | translate"
+          [disabled]="model.isImageUploading"
+          (change)="model.uploadFile($event)"
+        />
+
+        <div
+          class="background"
+          *ngIf="isAllowedToChangePhoto"
+          [ngStyle]="{ display: model.isImageUploading ? 'flex' : '' }"
+          [ngClass]="{ 'no-cursor': model.noCursor }"
+        >
+          <i class="bx bx-upload" *ngIf="!model.isImageUploading"></i>
+        </div>
+      </div>
+      <span class="fullname">{{ model.data?.name }}</span>
+      <span class="position">{{ model.data?.position }}</span>
+      <span class="version">v7</span>
+    </div>
+
+    <!-- profile actions -->
+    <ul class="profile-dropdown-actions">
+      <!-- <li class="profile-dropdown-actions-item settings">
+        <a class="profile-dropdown-actions-link" routerLink="/settings">
+          <i class="bx bx-cog"></i>
+          <span>{{ 'shared.settings' |translate }}</span>
+        </a>
+      </li> -->
+      <li class="profile-dropdown-actions-item logout" (click)="onLogout()">
+        <i class="bx bx-log-out"></i>
+        <span>{{ "shared.logout" | translate }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Owner Item -->
+<div *ngIf="ownerMode">
+  <div
+    class="personItem"
+    [ngClass]="{ 'cursor-pointer': hasUserCard }"
+    (click)="model.clickItem(); hasUserCard && toggleUserCard($event)"
+    #personItemAvatar
+  >
+    <div class="avatar">
+      <ng-container [ngTemplateOutlet]="avatar"></ng-container>
+    </div>
+
+    <angular-popper
+      *ngIf="hasUserCard"
+      [show]="displayUserCard"
+      [target]="personItemAvatar"
+      [positionFixed]="isUserCardFixed"
+    >
+      <div class="user-popup-card" content>
+        <div class="avatar">
+          <ng-container [ngTemplateOutlet]="avatar"></ng-container>
+        </div>
+
+        <div class="info">
+          <div class="name info-item">
+            {{ model.ownerData?.name?.en | titlecase }}
+          </div>
+
+          <div class="email info-item" *ngIf="model.ownerData?.email">
+            <div class="copy-text" #email>
+              {{ model.ownerData?.email }}
+            </div>
+
+            <button
+              class="copy-btn"
+              [title]="'shared.copyEmail' | translate"
+              [copyToClipboard]="email"
+            >
+              <i class="bx bx-copy"></i>
+              <i class="bx bxs-copy"></i>
+            </button>
+          </div>
+
+          <div class="job info-item" *ngIf="model.ownerData?.position">
+            {{ model.ownerData?.position }}
+          </div>
+        </div>
+      </div>
+    </angular-popper>
+
+    <!-- Info -->
+    <div>
+      <p class="name">
+        {{ model.ownerData?.name?.en | titlecase }}
+      </p>
+      <span class="job" *ngIf="model.ownerData?.position">
+        {{ model.ownerData?.position }}
+      </span>
+    </div>
+
+    <ng-template #avatar>
+      <img
+        *ngIf="model.getImage()"
+        [src]="model.getImage()"
+        width="50"
+        height="50"
+      />
+      <div
+        *ngIf="!model.getImage()"
+        class="letters"
+        [style.background]="model.data?.backgroundColor || '#5271ff'"
+      >
+        {{ model.ownerName | titlecase }}
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- name only -->
+<div *ngIf="nameMode">
+  <span class="fullname fw-bold text-primary">{{ model.data?.name }}</span>
+</div>

@@ -1,0 +1,29 @@
+<div class="modal fade"
+     [id]="id"
+     data-bs-backdrop="static"
+     (hidden.bs.modal)="closeModelOnBackdropClick()">
+  <div class="modal-dialog popup"
+       [ngClass]="{ 'new-model-dialog' : isNewModel }"
+       [ngStyle]="{ 'min-width': dimensions?.width + 'px' }"
+  >
+    <div class="modal-content">
+      <ng-container [ngTemplateOutlet]="header"></ng-container>
+      <ng-content select="[modal-content]"></ng-content>
+    </div>
+  </div>
+</div>
+
+<ng-template #header>
+  <div [ngClass]="{
+    'new-model-dialog-header' : isNewModel,
+    'back-button-container d-flex align-items-center py-4 px-4' : !isNewModel
+  }">
+    <div class="back-button" *ngIf="hasBackBtn" (click)="closePopup()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.3327 5.46134H3.21935L6.94602 1.73468L5.99935 0.794678L0.666016 6.12801L5.99935 11.4613L6.93935 10.5213L3.21935 6.79468H11.3327V5.46134Z" fill="#717986" />
+      </svg>
+    </div>
+    <label class="back-button-label" *ngIf="hasTitle">{{ title }}</label>
+    <ng-content select="[modal-header]"></ng-content>    
+  </div>
+</ng-template>

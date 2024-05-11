@@ -1,0 +1,110 @@
+<aside class="sideMenu" [ngClass]="{ 'is-sidebar-collapsed': isCollapsed }">
+  <div class="sideMenu__minimal">
+    <div class="sideMenu__minimal__head">
+
+      <!-- brand logo -->
+      <a class="sideMenu__minimal__head__link" routerLink="/">
+        <img src="assets/img/dc-logo.svg" alt="dc-logo">
+      </a>
+
+      <!-- burger button -->
+      <button class="sideMenu__minimal__head__toggler" (click)="toggleSidebarMenu()">
+        <i class='bx bx-menu'></i>
+      </button>
+    </div>
+
+    <div class="sideMenu__minimal__content">
+
+      <!-- main categories -->
+      <ul class="sideMenu__categories">
+        <li *ngFor="let category of categories">
+          <button
+            class="sideMenu__categories__item"
+            [ngClass]="{ 'active': selectedCategory?.id == category?.id }"
+            (click)="selectCategory(category); openSidebarMenu();"
+          >
+            <i [ngClass]="category?.icon"></i>
+            <span class="sideMenu__categories__name">{{ category?.name[lang] }}</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sideMenu__maximal">
+    <div class="sideMenu__maximal__head">
+
+      <!-- category title -->
+      <h3 class="sideMenu__catTitle" *ngIf="selectedCategory?.name[lang]">
+        {{ selectedCategory?.name[lang] }}
+      </h3>
+    </div>
+
+    <div class="sideMenu__maximal__content">
+
+      <!-- search field -->
+      <app-search
+        [searchPlaceHolder]="'shared.search' | translate"
+        (search)="searchMenuItems($event)"
+      ></app-search>
+
+      <!-- category menus -->
+      <ul class="sideMenu__menus" *ngIf="filteredMenuItems?.children?.length > 0; else no_items_found">
+        <li
+          *ngFor="let menu of filteredMenuItems?.children; trackBy: trackByFn"
+          class="sideMenu__menus__item"
+          [ngClass]="{ 'has-children': menu?.children?.length > 0 }"
+        >
+
+          <!-- menu link -->
+          <a
+            class="sideMenu__menus__link"
+            [routerLink]="menu?.routerLink || null"
+            routerLinkActive="active"
+            (click)="setBrowserTitle(menu); toggleSidebarSubMenu($event);"
+          >
+            <i [ngClass]="menu?.icon"></i>
+            <span class="sideMenu__menus__name">{{ menu?.name[lang] }}</span>
+            <span
+              class="sideMenu__menus__count"
+              *ngIf="
+                menu?.hasCounter &&
+                sidebarCounts &&
+                sidebarCounts[menu?.name.en] != 0
+              "
+            >{{ sidebarCounts[menu?.name.en] }}</span>
+          </a>
+
+          <ng-container *ngIf="menu?.children?.length > 0">
+            <!-- submenu collapser button -->
+            <button class="sideMenu__menus__collapser" (click)="toggleSidebarSubMenu($event)">
+              <i class="bx bx-chevron-right"></i>
+            </button>
+
+            <!-- submenu items -->
+            <div class="sideMenu__subMenuWrapper">
+              <ul class="sideMenu__subMenu">
+                <li class="sideMenu__subMenu__item" *ngFor="let item of menu?.children; trackBy: trackByFn">
+                  <a
+                    class="sideMenu__subMenu__link"
+                    [routerLink]="item?.routerLink"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="setBrowserTitle(item)"
+                  >
+                    {{ item?.name[lang] }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+        </li>
+      </ul>
+
+      <!-- no items found msg -->
+      <ng-template #no_items_found>
+        <div class="text-center">{{ 'shared.noItemsFound' | translate }}</div>
+      </ng-template>
+    </div>
+  </div>
+</aside>

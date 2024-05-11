@@ -1,0 +1,18 @@
+{
+  "PerformanceShared": {
+    "groupName": "اسم المجموعة",
+    "groupNameAr": "اسم المجموعة باللغة العربية",
+    "creationDate": "تاريخ الإنشاء",
+    "excutionYear": "عام التنفيذ",
+    "name": "الاسم",
+    "nameAr": "الاسم باللغة العربية",
+    "status": "الحالة",
+    "L0": "L0",
+    "L1": "L1",
+    "L2": "L2",
+    "L3": "L3",
+    "Planning": "تحت النخطيط",
+    "Approved": "معتمد",
+    "Approval": "معتمد"
+  }
+}

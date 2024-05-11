@@ -1,0 +1,314 @@
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="committee-name">
+            <div class="sortable-row" (click)="sort(sortKey.name)">
+              {{ "committeeDashboard.dashboard.committeeTitle" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up': sortedCol && sortedCol == sortKey.name && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.name && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="status">
+            <div class="sortable-row" (click)="sort(sortKey.activeStatus)">
+              {{ "committeeDashboard.dashboard.activeStatus" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.activeStatus && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.activeStatus && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <!-- <th scope="col" class="created-by">
+            <div class="sortable-row" (click)="sort(sortKey.decisionNumber)">
+              {{ "committeeDashboard.dashboard.DecisionN" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.decisionNumber && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.decisionNumber && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th> -->
+<!--
+          <th scope="col" class="assigned-to">
+
+            <div class="sortable-row" (click)="sort(sortKey.creationDate)">
+              {{ "committeeDashboard.dashboard.createDate" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.creationDate && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.creationDate && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+
+          </th> -->
+
+          <th scope="col" class="assigned-to">
+
+            <div class="sortable-row" (click)="sort(sortKey.attendanceRate)">
+              {{ "committeeDashboard.dashboard.attendanceRate" | translate }}              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.attendanceRate && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.attendanceRate && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+
+          </th>
+
+          <th scope="col" class="assigned-to">
+
+            <div class="sortable-row" (click)="sort(sortKey.kpiPerformance)">
+              {{ "committeeDashboard.dashboard.kpiPerformance" | translate }}
+
+                         <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.kpiPerformance && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.kpiPerformance && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+
+          </th>
+
+          <th scope="col" class="assigned-to">
+            <div class="sortable-row" (click)="sort(sortKey.MainTaskProgress)">
+              {{ "committeeDashboard.dashboard.taskProgress" | translate }}
+
+                         <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.MainTaskProgress && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.MainTaskProgress && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+
+
+
+          </th>
+
+          <th scope="col" class="created-on">
+            <div class="sortable-row" (click)="sort(sortKey.effictivenessPercentage)">
+              {{
+                "committeeDashboard.dashboard.effectivnessPercentage"
+                  | translate
+              }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.effictivenessPercentage && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.effictivenessPercentage && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <td class="committee-name">
+            <a>
+              {{ language === "en" ? item?.name : item?.nameAr }}
+            </a>
+          </td>
+
+          <td class="status">
+            <app-badge
+              [className]="statuses[item?.activeStatus]['className']"
+              [label]="language == 'ar' ? statuses[item?.activeStatus]['nameAr'] : statuses[item?.activeStatus]['name']"
+            ></app-badge>
+          </td>
+
+          <!-- <td class="created-by">
+            {{ item?.decisionNumber }}
+          </td> -->
+
+          <!-- <td class="created-on">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td> -->
+
+          <td class="assigned-to">
+
+            <span class="">
+              {{ item?.attendanceRate | number }}%
+            </span>
+            <!-- <div class="d-flex align-items-center gap-2">
+              <div class="progress-bar flex-grow-1">
+                <span
+                  class="fill {{ item?.attendanceRate | progressColor }}"
+                  [ngStyle]="{ width: item?.attendanceRate + '%' }"
+                ></span>
+              </div>
+              <span class="percentage">
+                {{ item?.attendanceRate | number }}%
+              </span>
+            </div> -->
+            <!-- <app-progressbar
+              [progressWidth]="item?.attendanceRate"
+              [bgColor]="'#96A6BD'"
+              [lable]="item?.attendanceRate"
+            ></app-progressbar> -->
+          </td>
+
+          <td class="assigned-to">
+            <span class="percentage">
+              {{ item?.kpiPerformance | number }}%
+            </span>
+            <!-- <div class="d-flex align-items-center gap-2">
+              <div class="progress-bar flex-grow-1">
+                <span
+                  class="fill {{ item?.kpiPerformance | progressColor }}"
+                  [ngStyle]="{ width: item?.kpiPerformance + '%' }"
+                ></span>
+              </div>
+              <span class="percentage">
+                {{ item?.kpiPerformance | number }}%
+              </span>
+            </div> -->
+
+
+            <!-- <app-progressbar
+              [progressWidth]="item?.kpiPerformance"
+              [bgColor]="'#96A6BD'"
+              [lable]="item?.kpiPerformance"
+            ></app-progressbar> -->
+          </td>
+
+          <td class="assigned-to ">
+            <span class="percentage">
+              {{ item?.mainTaskProgress | number }}%
+            </span>
+            <!-- <div class="d-flex align-items-center gap-2">
+              <div class="progress-bar flex-grow-1">
+                <span
+                  class="fill {{ item?.mainTaskProgress | progressColor }}"
+                  [ngStyle]="{ width: item?.mainTaskProgress + '%' }"
+                ></span>
+              </div>
+              <span class="percentage">
+                {{ item?.mainTaskProgress | number }}%
+              </span>
+            </div> -->
+
+
+
+            <!-- <app-progressbar
+              [progressWidth]="item?.mainTaskProgress"
+              [bgColor]="'#96A6BD'"
+              [lable]="item?.mainTaskProgress"
+            ></app-progressbar> -->
+          </td>
+
+          <td class="assigned-to">
+
+            <div class="d-flex align-items-center gap-2">
+              <div class="progress-bar flex-grow-1">
+                <span
+                  class="fill {{ item?.effictivenessPercentage | progressColor }}"
+                  [ngStyle]="{ width: item?.effictivenessPercentage + '%' }"
+                ></span>
+              </div>
+              <span class="percentage">
+                {{ item?.effictivenessPercentage | number }}%
+              </span>
+            </div>
+
+
+
+            <!-- <app-progressbar
+              [progressWidth]="item?.effictivenessPercentage"
+              [bgColor]="'#96A6BD'"
+              [lable]="item?.effictivenessPercentage"
+            ></app-progressbar> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

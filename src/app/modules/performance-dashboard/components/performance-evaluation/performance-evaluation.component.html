@@ -1,0 +1,23 @@
+
+<div class="performance-evaluation">
+    <div class="title">
+        <strong>{{'performanceDashboard.performanceEvaluation' | translate}}</strong>
+        <!-- <div class="data">
+            <div class="item">
+                <div class="rectangle first"></div>
+                <span>{{'performanceDashboard.Actual' | translate}}</span>
+            </div>
+            <div class="item">
+                <div class="rectangle second"></div>
+                <span>{{'performanceDashboard.planned' | translate}}</span>
+            </div>
+        </div> -->
+    </div>
+    <div class="chart" [style.display]="_data?.length > 0 ? 'block': 'none'">
+        <canvas class="my-chart" style="height: 300px; width: 100%" id="myEvalChart" #myEvalChart></canvas>
+    </div>
+    <div class="noData" *ngIf="_data.length == 0">
+        <img src="assets/img/no-data.png" />
+        <p>{{ 'shared.noData' | translate}}</p>
+    </div>
+</div>

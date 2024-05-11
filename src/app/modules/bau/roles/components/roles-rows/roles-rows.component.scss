@@ -1,0 +1,32 @@
+.table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    --id-width: 50px;
+    width: 100%;
+
+    .id {
+      width: var(--id-width);
+    }
+
+    .role-title {
+      width: 300px;
+      min-width: 200px;
+    }
+
+    .role-created-on {
+      width: 150px;
+    }
+    .role-actions {
+      width: 100px;
+      ::ng-deep {
+        div {
+          display: inline-block;
+        }
+      }
+      a {
+        margin-right: 7px;
+      }
+    }
+  }
+}

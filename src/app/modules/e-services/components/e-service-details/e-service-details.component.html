@@ -1,0 +1,96 @@
+<app-header-page
+  [backButton]="true"
+  [isAddBtn]="false"
+  [showTotalItems]="false"
+  title="{{ 'EServices.details.serviceDetails' | translate }}"
+>
+  <ng-container buttons>
+    <button
+      class="btn btn-info export-btn"
+      [disabled]="isCapturing"
+      (click)="exportDataAsImage()"
+    >
+      <i class="bx bxs-download" *ngIf="!isCapturing"></i>
+      <i class="bx bx-loader-alt bx-spin" *ngIf="isCapturing"></i>
+      {{ "shared.export" | translate }}
+    </button>
+  </ng-container>
+</app-header-page>
+
+<div class="page-data mt-4">
+  <ng-container *ngIf="isLoading; else service">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #service>
+  <div class="service details-image mt-4">
+    <!-- <div class="service-header d-flex gap-3">
+      <h6 class="field-key col-md-4 col-sm-5 col">
+        {{ "EServices.details.serviceTitle" | translate }}
+      </h6>
+      <h4 class="field-value col">
+        {{ lang == "en" ? EService.serviceTitle : EService.serviceTitleAr }}
+      </h4>
+    </div> -->
+
+    <div class="service-data">
+      <div *ngFor="let field of EService.eServiceFields">
+        <div *ngIf="!field.hidden">
+          <div class="field-wrapper d-flex gap-3 mt-4">
+            <h6 class="field-key col-lg-3 col-md-4 col-sm-5 col">
+              {{ lang == "en" ? field.name : field.arName }}
+            </h6>
+            <h4
+              class="field-value col"
+              *ngIf="
+                field.type != 17 &&
+                field.type != 9 &&
+                field.type != 5 &&
+                field.type != 6
+              "
+            >
+              {{ lang == "en" ? field.valueText : field.valueTextAr }}
+            </h4>
+            <!-- for reach text  -->
+            <div class="field-value col text-editor" *ngIf="field.type == 17">
+              <div [innerHTML]="field.valueText"></div>
+            </div>
+            <!-- for radio buttons  -->
+            <div class="field-value col" *ngIf="field.type == 6">
+              <span *ngIf="this.lang != 'ar'">
+                {{ field.value === "true" ? "Yes" : "No" }}
+              </span>
+              <span *ngIf="this.lang == 'ar'">
+                {{ field.value === "true" ? "نعم" : "لا" }}
+              </span>
+            </div>
+            <!-- for multi data  -->
+            <div class="field-value col" *ngIf="field.type == 5">
+              <div class="field-value" *ngIf="this.lang != 'ar'">
+                <div *ngFor="let part of field.valueText.split(',')">
+                  <li>{{ part }}</li>
+                </div>
+              </div>
+              <div class="field-value" *ngIf="this.lang == 'ar'">
+                <div *ngFor="let part of field.valueTextAr.split(',')">
+                  <li>{{ part }}</li>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

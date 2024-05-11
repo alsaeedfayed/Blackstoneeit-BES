@@ -1,0 +1,24 @@
+<div class="d-flex align-items-center w-100">
+  <!-- <span class="dropdown-label">{{ title | translate }}</span> -->
+  <div class="dropdown-container">
+    <button #toggleButton
+            [ngStyle]="{ 'min-width': width + 'px' }"
+            (click)="isOpened = !isOpened"
+            [disabled]="disabled">
+      {{ lang === "en" ? selectedItem?.title?.en : selectedItem?.title?.ar }}
+    </button>
+    <ul #dropdown
+        [ngClass]="{ active: isOpened }">
+      <li *ngFor="let item of items"
+          (click)="onSelect(item)">
+        {{ item?.title[lang] }}
+      </li>
+    </ul>
+    <!-- <select class="form-select form-control"
+            (change)="onSelect($event)">
+      <option>{{title}}</option>
+      <option *ngFor="let item of items"
+              [value]="item.id">{{item?.title[lang]}}</option>
+    </select> -->
+  </div>
+</div>

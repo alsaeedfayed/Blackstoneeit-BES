@@ -1,0 +1,122 @@
+.input-group-append {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 8px;
+    border-radius: 0 !important;
+
+    button {
+        height: fit-content !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        background-color: transparent;
+        min-width: 0;
+
+        &:focus,
+        &:active {
+            background-color: transparent !important;
+        }
+
+        i {
+            margin: 0;
+            color: #b5b5b5;
+            font-size: 24px;
+        }
+
+        &:hover {
+            background-color: transparent;
+
+            i {
+                color: #dcdcdc;
+            }
+        }
+    }
+}
+
+::ng-deep ngb-datepicker {
+    width: 100% !important;
+    min-width: 0 !important;
+    transform: translate(0px, 51px) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+
+    .ngb-dp-header {
+        margin: 8px 0;
+
+        .ngb-dp-arrow {
+            .ngb-dp-arrow-btn {
+                height: auto;
+                min-width: 30px !important;
+
+                &:active {
+                    outline: none !important;
+                    box-shadow: none !important;
+                }
+
+                &:focus {
+                    outline: none !important;
+                    box-shadow: none !important;
+                }
+            }
+        }
+
+
+    }
+
+    .ngb-dp-month {
+        width: 100% !important;
+    }
+
+    .ngb-dp-week,
+    .ngb-dp-week {
+        display: flex !important;
+        justify-content: space-between !important;
+        padding: 0 5px !important;
+
+        &:last-child {
+            margin-bottom: 21px;
+        }
+    }
+
+    .ngb-dp-weekday {
+        color: #d0d0d0;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        font-style: normal !important;
+    }
+
+    .custom-select {
+        flex: 1 1 auto;
+        padding: 0 0.5rem;
+        font-size: 0.875rem;
+        height: 42px;
+        display: inline-block;
+        width: 126px;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 1.5;
+        color: $black_color;
+        vertical-align: middle;
+        background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+        &:first-child {
+            margin-inline-end: 16px;
+        }
+    }
+
+    .ngb-dp-arrow-btn {
+        box-shadow: none !important;
+    }
+}

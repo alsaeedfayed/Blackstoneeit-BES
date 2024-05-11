@@ -1,0 +1,5 @@
+<div class="d-flex align-items-center">
+  <input type="radio" [id]="id" (input)="emitValue.emit(this.value)" [checked]="checked" [disabled]="disabled" />
+  <label [for]="id"><ng-content></ng-content></label>
+</div>
+<ng-content select="[other]"></ng-content>

@@ -1,0 +1,18 @@
+{
+  "PerformanceShared": {
+    "groupName": "Group Name",
+    "groupNameAr": "Arabic Group Name",
+    "creationDate": "Creation Date",
+    "excutionYear": "Execution Year",
+    "name": "Name",
+    "nameAr": "Arabic Name",
+    "status": "Status",
+    "L0": "L0",
+    "L1": "L1",
+    "L2": "L2",
+    "L3": "L3",
+    "Planning": "Planning",
+    "Approved": "Approved",
+    "Approval": "Approval"
+  }
+}

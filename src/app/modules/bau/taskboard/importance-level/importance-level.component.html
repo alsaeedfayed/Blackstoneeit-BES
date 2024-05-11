@@ -1,0 +1,30 @@
+<label for="priority" class="title">
+  {{ title }}
+  <span class="required">*</span>
+</label>
+<div class="btn-group d-flex justify-content-between mt-3 gap-2">
+  <button
+    type="button"
+    [class]="'border btn ' + (selectedButton === 3 ? 'btn-' + 'danger' : '')"
+    (click)="selectButton(3)"
+    class="button"
+  >
+    {{ lang == "ar" ? "عالي" : "High" }}
+  </button>
+  <button
+    type="button"
+    [class]="'border btn ' + (selectedButton === 2 ? 'btn-' + 'warning' : '')"
+    (click)="selectButton(2)"
+    class="button"
+  >
+    {{ lang == "ar" ? "متوسط" : "Medium" }}
+  </button>
+  <button
+    type="button"
+    [class]="'border btn ' + (selectedButton === 1 ? 'btn-' + 'info' : '')"
+    (click)="selectButton(1)"
+    class="button"
+  >
+    {{ lang == "ar" ? "منخفض" : "Low" }}
+  </button>
+</div>

@@ -1,0 +1,41 @@
+<div class="form-group">
+  <label for="" class="form-label"
+    >{{ title }}
+
+    <span *ngIf="isRequired" class="astrix-red">*</span>
+  </label>
+  <div class="wrapper">
+    <div class="colors" *ngIf="suggestedColors && suggestedColors.length > 0">
+      <span
+        class="color"
+        *ngFor="let color of suggestedColors"
+        [ngStyle]="{ backgroundColor: color }"
+        [ngClass]="{active: value == color}"
+        (click)="selectPredefinedColorHandler(color)"
+      ></span>
+    </div>
+    <div class="input-container">
+      <input
+        [disabled]="disabled"
+        [(ngModel)]="value"
+        type="color"
+        [ngClass]="{ valid: control?.valid }"
+        class="form-control"
+        (change)="onChangeHandler()"
+      />
+      <button class="btn btn-outline-main">
+        {{ "shared.change" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-container>
+  <app-validation
+    [title]="title"
+    [length]="length"
+    [minLength]="minLength"
+    *ngIf="(control?.touched || isSubmitted) && control?.invalid"
+    [control]="control"
+  ></app-validation>
+</ng-container>

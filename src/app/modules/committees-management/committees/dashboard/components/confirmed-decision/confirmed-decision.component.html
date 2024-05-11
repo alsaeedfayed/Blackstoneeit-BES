@@ -1,0 +1,100 @@
+<section class="confirmed-decisions-container mb-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <h3 class="content-block-title">
+      {{ "committeeDashboard.confirmedDecisions.title" | translate }}
+    </h3>
+    <a class="see-more" (click)="goToDecisions()">
+      {{ "committeeDashboard.confirmedDecisions.seeAllDecisions" | translate }}
+    </a>
+  </div>
+
+   <!-- Tasks Table -->
+   <div class="decisions-list-container mt-4" *ngIf="decisions?.length >0">
+    <div class="decisions-list">
+      <table>
+        <tr>
+          <th class="decision-title">
+            {{ "committeeDashboard.confirmedDecisions.table.decisionName" | translate }}
+          </th>
+          <th class="decision-date">
+            {{ "committeeDashboard.confirmedDecisions.table.date" | translate }}
+          </th>
+          <th class="decision-poll">
+            {{ "committeeDashboard.confirmedDecisions.table.poll" | translate }}
+          </th>
+          <th class="decision-actions"></th>
+        </tr>
+        <tr *ngFor="let decision of decisions">
+          <td class="decision-title">
+            {{language =='en'? decision?.name : decision?.nameAr}}
+          </td>
+          <td class="decision-date">
+            <span *ngIf="decision?.creationDate">
+              {{
+              language === "en"
+              ? ((decision?.creationDate | uTCToLocalDate).toLocaleString()
+              | date : "d MMM y")
+              : ((decision?.creationDate | uTCToLocalDate).toLocaleString()
+              | localizeDate : "d MMM y")
+              }}
+
+            </span>
+          </td>
+          <td class="decision-poll dashh">
+
+            <div class="votingBar noVoting"  *ngIf="decision?.votingStatus == 0">
+              <app-voting-bar
+                [vote]="{
+                  title: { en: 'Abstain', ar: 'أمتنع' },
+                  votersCount: 0,
+                  voterPercentage: 0,
+                  color: 'secondary'
+                }"
+                [language]="language"
+              ></app-voting-bar>
+            </div>
+
+            <app-voting-bar
+            *ngIf="decision?.votingStatus == 1"
+                class="votingBar"
+                [vote]="{
+                  title: { en: 'Yes', ar: 'نعم' },
+                  votersCount: decision?.yesCount,
+                  voterPercentage: decision?.yesPercentage,
+                  color: 'success'
+                }"
+                [language]="language"
+              ></app-voting-bar>
+
+
+                <app-voting-bar
+                *ngIf="decision?.votingStatus == 2"
+                  class="votingBar"
+                  [vote]="{
+                    title: { en: 'No', ar: 'لا' },
+                    votersCount: decision?.noCount,
+                    voterPercentage: decision?.noPercentage,
+                    color: 'danger'
+                  }"
+                  [language]="language"
+                ></app-voting-bar>
+
+
+            <!-- <vote-progress [users]="decision.votersInfo"
+              [percent]="decision.yesPercentage" [color]="'#E4E2FC'"></vote-progress> -->
+
+          </td>
+          <td class="decision-actions">
+            <a class="hoverableLink"
+                  [routerLink]="'/committees-management/committee/'+committeeId+'/decisions/' + decision?.id">
+                  {{'committeeDashboard.confirmedDecisions.table.details'|translate}}
+                </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="no-data" *ngIf="decisions?.length ==0 || !decisions">
+    <app-no-data [msg]="'committeeDashboard.confirmedDecisions.noConfirmedDecisions' | translate"></app-no-data>
+  </div>
+</section>

@@ -1,0 +1,199 @@
+<button
+  class="add-new-btn"
+  *ngIf="list?.length > 0 && isUpdating"
+  (click)="openCreateDecisionModel()"
+>
+  <i class="bx bx-plus"></i>
+  {{ "committeeNewMeeting.meetingForm.addNewItem" | translate }}
+</button>
+
+<div class="decisions-list pt-3">
+  <table *ngIf="list?.length > 0">
+    <tr>
+      <th class="decisions-title">
+        {{ "committeeMeetingDetails.decisions.title" | translate }}
+      </th>
+      <th class="decisions-created-by">
+        {{ "committeeMeetingDetails.decisions.createdBy" | translate }}
+      </th>
+      <th class="decisions-poll">
+        {{ "committeeDecisions.list.voting" | translate }}
+      </th>
+      <th class="decisions-created-on">
+        {{ "committeeMeetingDetails.decisions.createdOn" | translate }}
+      </th>
+      <!-- <th class="decisions-closing-date">
+        {{ "committeeMeetingDetails.decisions.closingDate" | translate }}
+      </th> -->
+      <th class="decisions-status">
+        {{ "committeeMeetingDetails.decisions.status" | translate }}
+      </th>
+      <th *ngIf="isUpdating" class="decisions-actions"></th>
+    </tr>
+    <tr *ngFor="let item of list">
+      <td class="decisions-title">
+        <a
+          class="hoverableLink"
+          [routerLink]="
+            '/committees-management/committee/' +
+            item?.committeeId +
+            '/decisions/' +
+            item?.id
+          "
+        >
+          {{ language == "ar" ? item?.nameAr : item?.name }}
+        </a>
+      </td>
+      <td class="decisions-created-by">
+        {{ item?.creatorInfo?.fullName }}
+      </td>
+
+      <td [ngClass]="language">
+
+        <div class="votingBar noVoting"  *ngIf="item?.votingStatus == 0">
+          <app-voting-bar
+            [vote]="{
+              title: { en: 'Abstain', ar: 'أمتنع' },
+              votersCount: 0,
+              voterPercentage: 0,
+              color: 'secondary'
+            }"
+            [language]="language"
+          ></app-voting-bar>
+        </div>
+        <app-voting-bar
+          *ngIf="item?.votingStatus == 1"
+          class="votingBar votingBarYes"
+          [vote]="{
+            title: { en: 'Yes', ar: 'نعم' },
+            votersCount: item?.yesCount,
+            voterPercentage: item?.yesPercentage,
+            color: 'success'
+          }"
+          [language]="language"
+        ></app-voting-bar>
+
+        <app-voting-bar
+          *ngIf="item?.votingStatus == 2"
+          class="votingBar votingBarNo"
+          [vote]="{
+            title: { en: 'No', ar: 'لا' },
+            votersCount: item?.noCount,
+            voterPercentage: item?.noPercentage,
+            color: 'danger'
+          }"
+          [language]="language"
+        ></app-voting-bar>
+
+      </td>
+      <!-- <td class="decisions-poll">
+        <div
+          *ngIf="
+            item?.decisionVoting?.closingDate && item?.decisionVoting;
+            else no_vote
+          "
+        >
+          <vote-percentage
+            [yesPercentage]="item?.yesPercentage"
+            [noPercentage]="item?.noPercentage"
+            [color]="'#D1CDFD'"
+          ></vote-percentage>
+        </div>
+      </td> -->
+      <td class="decisions-created-on">
+        <span *ngIf="item?.creationDate">
+          {{
+            language === "en"
+              ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                | date : "d MMM y")
+              : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                | localizeDate : "d MMM y")
+          }}
+        </span>
+      </td>
+      <!-- <td class="decisions-closing-date">
+        <span
+          *ngIf="
+            item?.decisionVoting?.closingDate && item?.decisionVoting;
+            else no_vote
+          "
+        >
+          {{
+            language === "en"
+              ? ((
+                  item?.decisionVoting?.closingDate | uTCToLocalDate
+                ).toLocaleString() | date : "d MMM y")
+              : ((
+                  item?.decisionVoting?.closingDate | uTCToLocalDate
+                ).toLocaleString() | localizeDate : "d MMM y")
+          }}
+        </span>
+      </td> -->
+      <td class="decisions-status">
+        <app-badge
+          [className]="decisionStatus[item?.status]['className']"
+          [label]="
+            language == 'en'
+              ? decisionStatus[item?.status]['name']
+              : decisionStatus[item?.status]['nameAr']
+          "
+        ></app-badge>
+      </td>
+      <td *ngIf="isUpdating" class="decisions-actions">
+        <button
+          class="edit-grid-item-btn"
+          (click)="openCreateDecisionModel(item)"
+          *ngIf="item.status == 0"
+        >
+          <i class="bx bx-edit-alt"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeMeetingDetails.decisions.noDataMsg' | translate"
+    ></app-no-data>
+    <button
+      *ngIf="isUpdating"
+      class="btn btn-main"
+      (click)="openCreateDecisionModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "committeeNewMeeting.meetingForm.addNewItem" | translate }}
+    </button>
+  </div>
+
+  <!-- create/edit decision model -->
+  <app-model
+    [dimensions]="{ width: 620, height: 750 }"
+    [id]="'create-decision'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="closeCreateDecisionModel()"
+  >
+    <div modal-header class="create-decision-model-header w-100">
+      <label class="modal-title">
+        {{
+          "committeeMeetingDetails.decisions.decisionModel" +
+            (decisionItem ? ".editItem" : ".addNewItem") | translate
+        }}
+      </label>
+    </div>
+
+    <div modal-content class="create-decision-model-content border-top">
+      <create-decision-model
+        *ngIf="isDecisionModelOpened"
+        [committeeId]="committeeId"
+        [decisionId]="decisionItem?.id"
+        [meetingId]="meetingId"
+        (decisionCreated)="getAllDecisions()"
+      ></create-decision-model>
+    </div>
+  </app-model>
+</div>
+<ng-template #no_vote>
+  {{ "committeeDecisions.list.noVotes" | translate }}
+</ng-template>

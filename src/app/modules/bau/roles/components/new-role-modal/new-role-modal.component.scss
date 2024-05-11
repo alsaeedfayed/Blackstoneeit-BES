@@ -1,0 +1,7 @@
+.section-select {
+  ::ng-deep {
+    label span {
+      line-height: unset !important;
+    }
+  }
+}

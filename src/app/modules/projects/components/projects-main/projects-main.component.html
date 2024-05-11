@@ -1,0 +1,96 @@
+<app-header-page
+  [title]="'projects.approvedProjects' | translate"
+  [totalItems]="projectsTotal"
+  [backButton]="true"
+></app-header-page>
+
+<!-- page filters -->
+<app-page-filters
+  [searchValue]="searchModel?.keyword"
+  [hasAssignedSwitch]="true"
+  [assignedSwitchId]="'onlyMe'"
+  [assignedSwitchLabel]="'projects.assignedToMe' | translate"
+  [assignedSwitchValue]="filterModel?.assignedToMe"
+  [hasAdvancedFilter]="true"
+  [popupAdvancedFilter]="true"
+  [appliedFiltersCount]="filterModel?.appliedFiltersCount"
+  (onSwitch)="onAssignedToMeChange($event)"
+  (search)="handleSearchFilter($event)"
+  (onOpenAdvancedFilterModel)="onFilter()"
+></app-page-filters>
+
+<div class="filters d-flex align-items-center gap-2 my-4" *ngIf="!isFilterDisplayed">
+  <app-select
+    [placeholder]="'shared.status' | translate"
+    [items]="projectsStatusDropdownList"
+    [value]="filterModel.status"
+    [bindVlaue]="'id'"
+    [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+    [clearable]="true"
+    [dropdownPosition]="'bottom'"
+    (change)="onStatusSelect($event)"
+  ></app-select>
+
+  <!-- <app-select
+    [placeholder]="'shared.sortBy' | translate"
+    [items]="sortItems"
+    [value]="resolveSort(searchModel.sortBy)"
+    [bindVlaue]="'id'"
+    [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+    [dropdownPosition]="'bottom'"
+    (change)="onSort($event)"
+  ></app-select> -->
+</div>
+
+<!-- data-aos="fade-up" data-aos-once="true" -->
+<div *ngIf="!loading && projectsList.length >0">
+  <div class="col-12 mb-3"  *ngFor="let project of projectsList; let i=index">
+    <app-projects-card [_projectData]="project" [index]="i"></app-projects-card>
+  </div>
+</div>
+
+<div class="no-data" *ngIf="!loading && noData">
+  <app-no-data [msg]="'projects.noProjectsAvailable' | translate"></app-no-data>
+</div>
+
+<div class="row mt-4"
+     *ngIf="loading">
+  <div class="col-12 d-flex justify-content-center mb-16"
+       *ngFor="let i of [1, 2, 3, 4, 5, 6]">
+    <app-skeleton-loader class="w-100"
+                         [mode]="'project-card'"></app-skeleton-loader>
+  </div>
+</div>
+<div class="row mt-4"
+     *ngIf="loadingExtra">
+  <div class="col-12 d-flex justify-content-center mb-16">
+    <app-skeleton-loader class="w-100"
+                         [mode]="'project-card'"></app-skeleton-loader>
+  </div>
+</div>
+
+<div class="mt-2" *ngIf="loading && (!projectsList || projectsTotal == 0)">
+  <app-skeleton-loader
+    *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+    class="d-block w-100 mb-3"
+    [mode]="'project-card'"
+  ></app-skeleton-loader>
+</div>
+
+<!-- <div class="mt-4 d-flex justify-content-center"
+     *ngIf="projectsList?.length !== projectsTotal && !loading">
+  <button type="button"
+          (click)="onLoadMore()"
+          class="see-more-btn"> {{'projects.seeMore'| translate}} ({{projectsTotal -
+    projectsList?.length}})
+    <i class='bx bx-chevron-down'></i>
+  </button>
+</div> -->
+
+<app-projects-advanced-filter
+  [popupConfig]="popupConfig"
+  [projectsStates]="projectsStatus"
+  [filters]="filterModel"
+  (onFilterReset)="onFilterReset()"
+  (onFilterConfirmed)="onFilterConfirmed($event)"
+></app-projects-advanced-filter>

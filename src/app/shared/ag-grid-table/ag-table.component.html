@@ -1,0 +1,23 @@
+<div *ngIf="search">
+  <app-search (search)="onFilterTextBoxChanged($event)"></app-search>
+</div>
+<ag-grid-angular
+  *ngIf="data"
+  style=" height: 800px; width: auto"
+  class="ag-theme-alpine"
+  [class]="themeClass"
+  [defaultColDef]="defaultColDef"
+  [sideBar]="sideBar"
+  [rowData]="rowData"
+  [getRowHeight]="getRowHeight"
+  [gridOptions]="gridOptions"
+  [columnDefs]="colDefs"
+  [context]="context"
+  [enableRtl]="language == 'ar'? !rtl : rtl"
+  [isRowSelectable]="isRowSelectable"
+  (selectionChanged)="onselectChanged($event)"
+  (firstDataRendered)="onFirstDataRendered($event)"
+  (paginationChanged)="OnPaginateChange($event)"
+  (gridReady)="onGridReady($event)"
+>
+</ag-grid-angular>

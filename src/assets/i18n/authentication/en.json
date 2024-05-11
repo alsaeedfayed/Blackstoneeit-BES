@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "loginToYourAccount": "Login to your account",
+    "email": "Email",
+    "typeEmailAddress": "Type email address",
+    "password": "Password",
+    "typePassword": "Type password",
+    "rememberMe": "Remember Me",
+    "forgotPassword": "Forgot password?",
+    "login": "Login",
+    "or": "or",
+    "loginWithMicrosoft": "Login with Microsoft",
+    "azureIsProcessing": "Azure 365 authentication is processing...",
+    "pleaseEnterValidEmailAndPassword": "Please Enter valid Email and Password",
+    "invalidEmailFormat": "Invalid email format"
+  }
+}

@@ -1,0 +1,48 @@
+<div class="wrapper">
+  <div class="filter-expier-time">
+    <sector-department-function
+      (onSelect)="groupSelectedHandler($event)"
+    ></sector-department-function>
+  </div>
+
+  <div class="left-filter">
+    <div class="goal-select">
+      <!-- <app-select-tree
+        [placeholder]="'performanceReports.filterByGoal' | translate"
+        [items]="filteredGoals"
+        [multiple]="false"
+        [CheckStrictly]="true"
+        (chnageValue)="chaneGoalHandler($event)"
+      >
+      </app-select-tree> -->
+
+      <nz-tree-select
+        class="tree-select"
+        [(ngModel)]="selectedGoal"
+        [nzNodes]="filteredGoals"
+        [nzNotFoundContent]="'shared.noData' | translate"
+        [nzHideUnMatched]="true"
+        [nzMultiple]="false"
+        [nzCheckable]="false"
+        [nzCheckStrictly]="true"
+        nzShowSearch
+        nzCheckable
+        (ngModelChange)="chaneGoalHandler($event)"
+        [nzPlaceHolder]="'performanceReports.filterByGoal' | translate"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [nzDropdownStyle]="{ dir: language === 'en' ? 'ltr' : 'rtl' }"
+      ></nz-tree-select>
+    </div>
+
+    <button
+      *ngIf="isShowExport"
+      class="btn btn-info"
+      [disabled]="isDownloading"
+      (click)="exportDataHandler()"
+    >
+      <i class='bx bxs-download' *ngIf="!isDownloading"></i>
+      <i class="bx bx-loader-alt bx-spin" *ngIf="isDownloading"></i>
+      {{ "shared.export" | translate }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+<app-header-page
+  [title]="'eppmRequests.requests' | translate"
+  [totalItems]="requestsTotal"
+  [backButton]="true"
+  [titleBtn]="'eppmRequests.createProject' | translate"
+  (btnClick)="goToCreateProject()"
+>
+  <div buttons>
+    <button
+      class="btn btn-info"
+      [disabled]="isExport"
+      (click)="exportData()"
+    >
+      <i class='bx bxs-download' *ngIf="!isExport"></i>
+      <i class="bx bx-loader-alt bx-spin" *ngIf="isExport"></i>
+      {{ "shared.export" | translate }}
+    </button>
+  </div>
+</app-header-page>
+
+<!-- page filters -->
+<app-page-filters
+  [searchValue]="searchModel?.keyword"
+  [hasAssignedSwitch]="true"
+  [assignedSwitchId]="'onlyMe'"
+  [assignedSwitchLabel]="'eppmRequests.assignedToMe' | translate"
+  [assignedSwitchValue]="filterModel?.hasTask"
+  [hasAdvancedFilter]="true"
+  [popupAdvancedFilter]="true"
+  [appliedFiltersCount]="filterModel?.appliedFiltersCount"
+  [hasListViewBtn]="true"
+  [hasCardsViewBtn]="true"
+  [viewMode]="isListView ? 'list' : 'cards'"
+  (onSwitch)="onAssignedToMeChange($event)"
+  (search)="handleSearchFilter($event)"
+  (onOpenAdvancedFilterModel)="onFilter()"
+  (onViewModeChange)="changeViewMode($event)"
+></app-page-filters>
+
+<!-- filters -->
+<div class="my-4">
+  <div class="filters d-flex align-items-center flex-wrap" *ngIf="!isFilterDisplayed">
+    <div class="mr-3 mb-2">
+      <app-select
+        [placeholder]="'shared.status' | translate"
+        [items]="requestsStates"
+        [bindVlaue]="'name'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [clearable]="true"
+        [dropdownPosition]="'bottom'"
+        [value]="filterModel?.stateTitle"
+        (change)="onStateSelect($event)"
+      ></app-select>
+    </div>
+
+    <!-- <div class="mr-auto mb-2">
+      <app-select
+        [placeholder]="'shared.sortBy' | translate"
+        [items]="sortItems"
+        [bindVlaue]="'name'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [dropdownPosition]="'bottom'"
+        [(value)]="filterModel.sortBy"
+        (change)="onSort($event)"
+      ></app-select>
+    </div> -->
+  </div>
+</div>
+
+<!-- requests skeleton -->
+<ng-container *ngIf="loading; else requests_data">
+  <div class="my-4">
+    <ng-container *ngIf="isListView" [ngTemplateOutlet]="table_skeleton"></ng-container>
+    <ng-container *ngIf="!isListView" [ngTemplateOutlet]="cards_skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- requests data -->
+<ng-template #requests_data>
+
+  <!-- table view -->
+  <requests-table
+    *ngIf="requestsList?.length > 0 && isListView"
+    [totalItems]="requestsTotal"
+    [list]="requestsList"
+    [sortedCol]="filterModel?.sortBy"
+    [sortDirection]="filterModel?.sortDirection"
+    [paginationModel]="{pageIndex: searchModel?.page, pageSize: searchModel?.pageSize}"
+    (onSort)="handleSortFilter($event)"
+  ></requests-table>
+
+  <!-- cards view -->
+  <div class="row g-4" *ngIf="requestsList?.length > 0 && !isListView">
+    <div class="col-12 col-xl-6 col-xxl-4" *ngFor="
+      let request of requestsList
+        | paginate
+          : {
+              itemsPerPage: searchModel?.pageSize,
+              currentPage: searchModel?.page,
+              totalItems: requestsTotal
+            };
+      let i = index;
+    ">
+      <app-requests-card
+        class="d-block h-100"
+        [lang]="lang"
+        [index]="i"
+        [data]="request"
+        (dropdownSelect)="onCardDropdownSelect($event)"
+      ></app-requests-card>
+    </div>
+  </div>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="requestsList?.length == 0 || !requestsList">
+    <app-no-data [msg]="'eppmRequests.noRequestsFound' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #table_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the cards -->
+<ng-template #cards_skeleton>
+  <div class="row">
+    <div
+      class="col-12 col-xl-6 col-xxl-4 d-flex justify-content-center mb-16"
+      *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]"
+    >
+      <app-skeleton-loader class="w-100" [mode]="'userCard'"></app-skeleton-loader>
+    </div>
+  </div>
+</ng-template>
+
+<pagination-controls
+  *ngIf="requestsTotal > searchModel?.pageSize"
+  (pageChange)="handlePagination($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+<app-requests-advanced-filter
+  [lang]="lang"
+  [requestsStates]="requestsStates"
+  [requestsOrigins]="requestsOrigins"
+  [requestsCategories]="requestsCategories"
+  [requestsSectors]="requestsSectors"
+  [requestsPriorities]="requestsPriorities"
+  [requestsDepartments]="requestsDepartments"
+  [popupConfig]="popupConfig"
+  [requestsTypes]="requestsTypes"
+  [filters]="filterModel"
+  (onFilterReset)="onFilterReset()"
+  (onFilterConfirmed)="onFilterConfirmed($event)"
+></app-requests-advanced-filter>

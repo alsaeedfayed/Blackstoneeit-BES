@@ -1,0 +1,63 @@
+<div class="dashboardFilters d-flex justify-content-right">
+  <div class="d-flex align-items-center justify-content-right flex-wrap gap-1">
+    <div class="dashboardFilters-item">
+      <app-select
+        [clearable]="true"
+        [placeholder]="'date-localization.year' | translate"
+        [items]="status"
+        [(ngModel)]="filterValues.year"
+        (ngModelChange)="changeFilter()"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+      ></app-select>
+    </div>
+
+    <div class="dashboardFilters-item">
+      <app-select
+        [clearable]="true"
+        [placeholder]="'date-localization.month' | translate"
+        [items]="status"
+        [(ngModel)]="filterValues.month"
+        (ngModelChange)="changeFilter()"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+      ></app-select>
+    </div>
+
+    <div class="dashboardFilters-item" *ngIf="OnlyShowForServicesAndRequests">
+      <app-select
+        [clearable]="true"
+        [placeholder]="'servicesDashboard.category' | translate"
+        [items]="status"
+        [(ngModel)]="filterValues.category"
+        (ngModelChange)="changeFilter()"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+      ></app-select>
+    </div>
+
+    <div class="dashboardFilters-item" *ngIf="!OnlyShowForServicesAndRequests">
+      <app-select
+        [clearable]="true"
+        [placeholder]="'servicesDashboard.department' | translate"
+        [items]="status"
+        [(ngModel)]="filterValues.department"
+        (ngModelChange)="changeFilter()"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+      ></app-select>
+    </div>
+
+    <div class="dashboardFilters-item" *ngIf="!OnlyShowForServicesAndRequests">
+      <app-select
+        [clearable]="true"
+        [placeholder]="'servicesDashboard.section' | translate"
+        [items]="status"
+        [(ngModel)]="filterValues.section"
+        (ngModelChange)="changeFilter()"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+      ></app-select>
+    </div>
+  </div>
+</div>

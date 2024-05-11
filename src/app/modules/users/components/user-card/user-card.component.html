@@ -1,0 +1,56 @@
+<!----------- user card ---------->
+<div class="user-card card-defaults">
+  <div class="card-options">
+    <app-dropdown (select)="onOptionClick($event, data)" [items]="cardActions">
+    </app-dropdown>
+  </div>
+
+  <div class="header">
+    <div class="roles-groups">
+      <span *ngIf="data?.usersGroups?.length !== 0" class="_badge b-group" (click)="onViewGroupsAndRoles(data)">
+        {{ data?.usersGroups?.length }} {{ 'users.groups' | translate }}
+      </span>
+      <span *ngIf="data?.usersRoles?.length !== 0" class="_badge b-role" (click)="onViewGroupsAndRoles(data)">
+        {{ data?.usersRoles?.length }} {{ 'users.roles' | translate }}
+      </span>
+    </div>
+
+    <!-- <div class="d-flex flex-column w-100">
+      <div class="d-inline-block w-100" *ngIf="data?.usersGroups?.length !== 0">
+        <span
+          class="_badge b-group mr-1 mb-1"
+          *ngFor="let group of data?.usersGroups; let i = index">
+          {{ lang === 'en'? group.name : group.arabicName }}
+        </span>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="card-title">
+      <h6 class="title">{{ data?.fullName }}</h6>
+      <app-badge label="{{ 'users.inactive' | translate }}" [className]="'closed'" *ngIf="!data.active"></app-badge>
+  </div>
+
+  <p class="position" *ngIf="data?.position">
+    ({{ data?.position }})
+  </p>
+
+  <p class="email" [ngClass]="lang === 'en' ? 'emailInEnglish' : ''">
+    <span class="icon"> <i class="bx bx-envelope"></i> </span>
+    <span class="text"> {{ data?.email }} </span>
+  </p>
+
+  <p class="phone" *ngIf="data?.phoneNumber">
+    <span class="icon"> <i class="bx bx-phone" [ngClass]="{'bx-rotate-270' : lang==='ar'}"></i> </span>
+    <span class="text"> +971 {{ data?.phoneNumber }} </span>
+  </p>
+
+  <!-- <div class="d-inline-block mb-2 w-100" *ngIf="data?.usersRoles?.length !== 0">
+    <span
+      class="_badge b-role mr-1 mb-1"
+      *ngFor="let role of data?.usersRoles; let i = index"
+    >
+      {{ role.name }}
+    </span>
+  </div> -->
+</div>

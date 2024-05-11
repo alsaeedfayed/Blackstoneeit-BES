@@ -1,0 +1,66 @@
+<!-- filters container -->
+<ng-container *ngIf="filtersLoading; else filters">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton_filters"></ng-container>
+  </div>
+</ng-container>
+<!-- table container -->
+<ng-container *ngIf="loading; else work_groups_items">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- page filters -->
+<ng-template #filters>
+
+  <app-page-filters
+    [searchPlaceHolder]="'committeeWorkGroups.searchPlaceholder' | translate"
+    [hasAddBtn]="ableToAddNewGroup"
+    [addBtnLabel]="'committeeWorkGroups.add' | translate"
+    [hasAdvancedFilter]="true"
+    [appliedFiltersCount]="appliedFiltersCount"
+    (search)="onSearch($event)"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+    (onClear)="clearFilter()"
+    (onAddBtnCLicked)="goToCreateWorkGroup()"
+  >
+    <app-work-groups-filters
+      [isFiltersEmpty]="emptyFIlters"
+      [Objectives]="objectives"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-work-groups-filters>
+  </app-page-filters>
+
+</ng-template>
+<!-- work groups items -->
+<ng-template #work_groups_items>
+  <work-groups-cards
+    *ngIf="list?.length > 0"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></work-groups-cards>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data [msg]="'committeeWorkGroups.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton_filters>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

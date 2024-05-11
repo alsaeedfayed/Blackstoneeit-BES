@@ -1,0 +1,32 @@
+@media only screen and (max-width: 740px) {
+    .req-table {
+      width: 100%;
+      overflow-x: auto;
+    }
+  }
+  
+  .table {
+    --index-width: 50px;
+    --switch-width: 80px;
+    --actions-width: 70px;
+  
+    .form-index {
+      width: var(--index-width);
+    }
+  
+    .form-switch {
+      width: var(--switch-width);
+    }
+  
+    .form-actions {
+      width: var(--actions-width);
+    }
+  }
+  
+  td {
+    i {
+      cursor: pointer;
+      font-size: 17px;
+      color: red;
+    }
+  }

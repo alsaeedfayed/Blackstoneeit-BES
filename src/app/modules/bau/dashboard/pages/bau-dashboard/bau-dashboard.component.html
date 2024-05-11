@@ -1,0 +1,461 @@
+<app-header-page
+  [title]="'bau.dashboard.dashboard' | translate"
+  [backButton]="false"
+  [showTotalItems]="false"
+  [isAddBtn]="false"
+>
+  <div
+    class="d-flex align-items-center justify-content-between flex-wrap gap-2 header-btns-row"
+    buttons
+  ></div>
+</app-header-page>
+
+<div class="page-filters">
+  <app-bau-dashboard-filters
+    [isFiltersEmpty]="emptyFIlters"
+    (filtersNumber)="getFiltersCount($event)"
+    (filter)="handelFilter($event)"
+  ></app-bau-dashboard-filters>
+  <br />
+  <hr style="color: #d7d2d2" />
+  <div class="d-flex justify-content-end align-items-center">
+    <button class="my-1 btn searchBtn" (click)="onSearchBtnCLicked()">
+      {{ "bau.dashboard.search" | translate }}
+    </button>
+  </div>
+</div>
+
+<ng-container
+  *ngIf="
+    isLoadingMainTasks ||
+      isLoadingTotalTasks ||
+      isLoadingOverallProgress ||
+      isLoadingBudget ||
+      isLoadingImplelementationStatus ||
+      isLoadingTasksPerQuarter ||
+      isLoadingRolesCoverages;
+    else BAUDSHBOARD
+  "
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #BAUDSHBOARD>
+  <div id="elementID">
+    <div class="bau-dashboard-filters my-3"></div>
+    <!-- TODO -- STATISTICS -->
+    <app-bau-dashboard-statistics
+      [language]="language"
+      [mainTasks]="mainTasks"
+      [totalTasks]="totalTasks"
+      [overallProgress]="overAllProgress"
+    ></app-bau-dashboard-statistics>
+
+    <!-- TODO -- SECTOR PERFORMANCE & BEST CONTRIBUTER -->
+    <div class="my-3">
+      <div class="d-flex gap-2 flex-wrap w-100">
+        <!-- TODO -- SECTOR PERFORMANCE -->
+        <div class="sector-performance-container containerr unit-performance">
+          <!-- TODO CARD HEADER -->
+          <div
+            class="sector-performance-container-header d-flex justify-content-between"
+          >
+            <div class="sector-performance-container-header-title">
+              <h5 class="block-title">
+                {{ "bau.dashboard.unitPerformance" | translate }}
+              </h5>
+            </div>
+            <div
+              class="sector-performance-container-header-switcher d-flex gap-2"
+            >
+              <div>
+                <!-- switch button -->
+                <app-switch-btn
+                  style="margin-left: 10px"
+                  [onlyForDestroyedChart]="false"
+                  (onChange)="onSwitchChange($event)"
+                ></app-switch-btn>
+              </div>
+              <!-- TODO SEARCH  -->
+
+              <div
+                *ngIf="isMainTasksPerformance"
+                class="sector-performance-container-header-mainTasks"
+              >
+                {{ "bau.dashboard.mainTasks" | translate }}
+              </div>
+              <div
+                *ngIf="!isMainTasksPerformance"
+                class="sector-performance-container-header-tasks"
+              >
+                {{ "bau.dashboard.tasks" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <ng-container
+            *ngIf="
+              isLoadingSpcificPerformance || isLoadingTasksPerformance;
+              else SECTORPERFORMANCE
+            "
+          >
+            <div class="my-4">
+              <ng-container [ngTemplateOutlet]="sectorSkeleton"></ng-container>
+            </div>
+          </ng-container>
+
+          <ng-template #SECTORPERFORMANCE>
+            <div class="px-3">
+              <div class="my-2 w-50">
+                <input
+                  [placeholder]="
+                    language == 'en'
+                      ? 'Search By Name ....'
+                      : 'ابحث بالاسم ....'
+                  "
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="searchKey"
+                  (keyup)="filterPerformance()"
+                />
+              </div>
+
+              <app-bau-dashboard-sector-performance
+                *ngIf="isMainTasksPerformance"
+                class="sector-performance"
+                [language]="language"
+                [sectorPerformanceData]="sectorPerformance"
+              ></app-bau-dashboard-sector-performance>
+
+              <div>
+                <app-bau-dashboard-sector-performance
+                  *ngIf="!isMainTasksPerformance"
+                  class="sector-performance"
+                  [language]="language"
+                  [sectorPerformanceData]="sectorPerformance"
+                ></app-bau-dashboard-sector-performance>
+              </div>
+
+              <div
+                class="no-dataunit"
+                *ngIf="sectorPerformance?.length == 0 || !sectorPerformance"
+              >
+                <app-no-data
+                  [msg]="'bau.dashboard.noDataMsgUnitPerformance' | translate"
+                ></app-no-data>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- TODO BEST -- CONTRIBUTERS -->
+        <div class="containerr bestcont-container">
+          <div class="d-flex justify-content-between mb-3">
+            <div class="row mt-3 justify-content-start workload-section">
+              <h5
+                style="
+                  font-weight: 600;
+                  font-size: 14px;
+                  line-height: 30px;
+                  color: #7a838f;
+                "
+              >
+                {{ "bau.dashboard.bestContributers" | translate }}
+              </h5>
+            </div>
+            <!-- switch button -->
+            <div class="d-flex justify-content-between">
+              <app-switch-btn
+                style="margin-left: 10px"
+                [onlyForDestroyedChart]="false"
+                (onChange)="onSwitchChangeContributers($event)"
+              ></app-switch-btn>
+
+              <div
+                *ngIf="isMainTaskscontributers"
+                class="sector-performance-container-header-mainTasks"
+              >
+                {{ "bau.dashboard.mainTasks" | translate }}
+              </div>
+              <div
+                *ngIf="!isMainTaskscontributers"
+                class="sector-performance-container-header-tasks"
+              >
+                {{ "bau.dashboard.tasks" | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- TODO BEST CONTRIBUTERS BODY  -->
+
+          <ng-container *ngIf="isLoadingContributers; else BEST_CONTRIBUTERS">
+            <div class="my-4">
+              <ng-container
+                [ngTemplateOutlet]="bestContributersSkeletons"
+              ></ng-container>
+            </div>
+          </ng-container>
+
+          <ng-template #BEST_CONTRIBUTERS>
+            <div class="workloadbody">
+              <app-workload
+                [language]="language"
+                [colsData]="colsDataBestContributers"
+                [workLoadData]="bestContributers"
+              ></app-workload>
+            </div>
+            <div
+              class="no-dataunit"
+              *ngIf="bestContributers?.length == 0 || !bestContributers"
+            >
+              <app-no-data
+                [msg]="'bau.dashboard.noDataMsgBestCont' | translate"
+              ></app-no-data>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODO -- TASK IMPLEMENTATIONS -->
+  <div class="row my-3">
+    <div class="col-12 task-implementation-container container">
+      <!-- TODO CARD HEADER -->
+      <div
+        class="task-implementation-header d-flex justify-content-between header"
+      >
+        <div class="task-implementation-header-title">
+          <h5 class="block-title">
+            {{ "bau.dashboard.taskImplementation" | translate }}
+          </h5>
+        </div>
+      </div>
+      <!-- TODO -- CARD BODY -->
+      <app-task-implementations
+        [data]="tasksImplementationData"
+        [language]="language"
+      ></app-task-implementations>
+    </div>
+  </div>
+
+  <!-- TODO -- IMPLEMENTATION STATUS -->
+  <div class="row my-3 containerr w-100">
+    <div class="col-12 col-md-7">
+      <!-- TODO CARD HEADER -->
+      <div
+        class="implementation-status-container-header d-flex justify-content-between header"
+      >
+        <div class="implementation-status-container-header-title">
+          <h5 class="block-title">
+            {{ "bau.dashboard.implementationStatus" | translate }}
+          </h5>
+        </div>
+      </div>
+      <!-- TODO -- CARD BODY -->
+      <app-implementation-status
+        [data]="implementationStatusData"
+        [language]="language"
+      ></app-implementation-status>
+    </div>
+    <div
+      class="col-12 col-md-5 d-flex align-items-center flex-column"
+      style="border-left: 0.5px solid #f5eeee"
+    >
+      <div
+        style="
+          width: 100%;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 30px;
+          color: #7a838f;
+        "
+      >
+        {{ "bau.dashboard.budget" | translate }}
+      </div>
+      <!-- TODO CARD HEADER -->
+      <div
+        class="implementation-status-container-header d-flex justify-content-between header mt-4"
+        style="width: 90%"
+      >
+        <div class="implementation-status-container-header-title">
+          <h5 class="block-title-inner">
+            {{ "bau.dashboard.spent" | translate }}
+          </h5>
+          <div class="spent-inner d-flex gap-1">
+            <span>{{ BudgetData?.spentAmount | formatMoney }}</span>
+            <span>{{ "bau.AED" | translate }}</span>
+          </div>
+        </div>
+
+        <div class="implementation-status-container-header-title">
+          <h5 class="block-title-inner">
+            {{ "bau.dashboard.total" | translate }}
+          </h5>
+
+          <div class="total-inner d-flex gap-1">
+            <span>{{ BudgetData?.totalBudget | formatMoney }}</span>
+            <span>{{ "bau.AED" | translate }}</span>
+          </div>
+        </div>
+      </div>
+      <!-- TODO -- CARD BODY -->
+      <div class="d-flex justify-content-center align-items-center">
+        <app-spent-total-tasks [data]="BudgetData"></app-spent-total-tasks>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODO -- TASKS PER QUARTER -->
+  <div class="d-flex flex-wrap gap-2">
+    <div class="tasks-status-container containerr">
+      <!-- TODO CARD HEADER -->
+      <div
+        class="tasks-status-container-header d-flex justify-content-between header"
+      >
+        <div class="implementation-status-container-header-title">
+          <h5 class="block-title">
+            {{ "bau.dashboard.tasksStatus" | translate }}
+          </h5>
+        </div>
+      </div>
+      <!-- TODO -- CARD BODY -->
+      <app-tasks-status
+        [data]="tasksPerQuarter"
+        [language]="language"
+      ></app-tasks-status>
+    </div>
+
+    <div class="rolescoverages-container containerr">
+      <!-- TODO CARD HEADER -->
+      <div
+        class="roles-coverage-container-header d-flex justify-content-between header"
+      >
+        <!-- <div class="implementation-status-container-header-title">
+          <h5 class="block-title">
+            {{ "bau.rolesCoverage" | translate }}
+          </h5>
+        </div> -->
+      </div>
+      <!-- TODO -- CARD BODY -->
+      <div
+        class="d-flex justify-content-center align-items-center"
+        style="margin-top: -2rem"
+      >
+        <app-roles-coverages
+          class="w-100"
+          [language]="language"
+          [rolesCoverage]="rolesCoverage"
+        ></app-roles-coverages>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODO --  TASKS LIST -->
+  <div class="row my-3">
+    <div class="col-12 col-md-12 implementation-status-container container">
+      <!-- TODO CARD HEADER -->
+      <div
+        class="implementation-status-container-header d-flex justify-content-between header"
+      >
+        <div class="implementation-status-container-header-title">
+          <h5 class="block-title">
+            {{ "bau.tasks" | translate }}
+          </h5>
+        </div>
+
+        <!-- TODO TASKS TABLE FILTERS -->
+        <div
+          class="implementation-status-container-header-filters d-flex gap-2"
+        >
+          <button
+            (click)="filterTasksTable(0)"
+            class="tasks-table-btn"
+            [ngClass]="{ active: clickedBtn == 0 }"
+          >
+            {{ "bau.dashboard.all" | translate }}
+          </button>
+          <button
+            (click)="filterTasksTable(1)"
+            class="tasks-table-btn"
+            [ngClass]="{ active: clickedBtn == 1 }"
+          >
+            {{ "bau.onTrack" | translate }}
+          </button>
+          <button
+            (click)="filterTasksTable(2)"
+            class="tasks-table-btn"
+            [ngClass]="{ active: clickedBtn == 2 }"
+          >
+            {{ "bau.offTrack" | translate }}
+          </button>
+          <!-- <button
+            (click)="filterTasksTable(3)"
+            class="tasks-table-btn"
+            [ngClass]="{ active: clickedBtn == 3 }"
+          >
+            {{ "bau.notStarted" | translate }}
+          </button> -->
+        </div>
+      </div>
+      <!-- TODO -- CARD BODY -->
+      <ng-container *ngIf="isLoadingTasksList; else TASKSLIST">
+        <div class="my-4">
+          <ng-container [ngTemplateOutlet]="listskeleton"></ng-container>
+        </div>
+      </ng-container>
+
+      <ng-template #TASKSLIST>
+        <app-tasks-rows
+          *ngIf="tasks?.length > 0"
+          class="d-block mt-4"
+          [language]="language"
+          [list]="tasks"
+          [totalItems]="totalItems"
+          [paginationModel]="paginationModel"
+          [sortQuery]="sortTaskTableQuery"
+          (sortFilter)="handleSortTaskTableFilter($event)"
+          (onPaginateEvent)="handlePaginationChange($event)"
+          (changeHappened)="updateTasksData()"
+        ></app-tasks-rows>
+
+        <div class="no-data-list" *ngIf="tasks?.length == 0 || !tasks">
+          <app-no-data
+            [msg]="'bau.dashboard.noDataMsgList' | translate"
+          ></app-no-data>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+
+<!-- TODO SKELETON -->
+<ng-template #skeleton>
+  <app-skeleton-loader
+    mode="table"
+    *ngFor="let item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+  ></app-skeleton-loader>
+</ng-template>
+
+<ng-template #listskeleton>
+  <app-skeleton-loader
+    mode="table"
+    *ngFor="let item of [1, 2, 3, 4, 5]"
+  ></app-skeleton-loader>
+</ng-template>
+
+<ng-template #sectorSkeleton>
+  <app-skeleton-loader
+    mode="table"
+    *ngFor="let item of [1, 2, 3, 4, 5]"
+  ></app-skeleton-loader>
+</ng-template>
+
+<ng-template #bestContributersSkeletons>
+  <app-skeleton-loader
+    mode="table"
+    *ngFor="let item of [1, 2, 3, 4, 5]"
+  ></app-skeleton-loader>
+</ng-template>

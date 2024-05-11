@@ -1,0 +1,28 @@
+{
+  "manageWorkflow": {
+    "textCopiedToClipboard": "تم نسخ النص إلى الحافظة",
+    "errorCopyingToClipboard": "حدث خطأ أثناء النسخ إلى الحافظة",
+    "copyEmail": "نسخ البريد الإلكتروني",
+    "addAction": "أضف إجراء",
+    "searchUsers" : "البحث عن الأشخاص",
+    "users": "الأشخاص",
+    "selectUser": "اختر الشخص",
+    "step": "الخطوة",
+    "selectStep": "اختر الخطوة",
+    "stepHistory": "تاريخ الخطوة",
+    "tasksHistory": "تاريخ المهام",
+    "reviewHistory": "تاريخ المراجعة",
+    "comments": "التعليقات",
+    "completed": "مكتمل",
+    "pending": "قيد الانتظار",
+    "upcoming": "قادمة",
+    "noContent": "لا يوجد محتوى",
+    "noItemsFound": "لم يتم العثور على عناصر",
+    "cancel": "إلغاء",
+    "back": "الرجوع",
+    "save": "حفظ",
+    "logout": "تسجيل الخروج",
+    "successfullyDone": "تم إتخاذ الاجراء ( {{action}} ) بنجاح ",
+    "somethingWentWrong": "هناك خطأ ما"
+  }
+}

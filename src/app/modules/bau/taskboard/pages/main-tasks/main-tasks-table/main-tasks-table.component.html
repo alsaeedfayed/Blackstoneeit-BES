@@ -1,0 +1,313 @@
+<div class="container p-0">
+  <!-- if loading show skeleton -->
+  <!-- <app-filters (fetchMainTasks)="performSearch($event)"></app-filters> -->
+  <div class="page-data">
+    <ng-container *ngIf="isLoading; else page_data">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </ng-container>
+  </div>
+
+  <ng-template #page_data>
+    <!-- if empty show empty and create btn -->
+    <ng-container *ngIf="mainTasks?.length === 0; else tasks_table">
+      <ng-container [ngTemplateOutlet]="empty"></ng-container>
+    </ng-container>
+
+    <ng-template #empty>
+      <div class="empty-taskboard">
+        <div class="content-wrapper">
+          <img class="" src="assets/img/calendar.svg" alt="delete" />
+          <div [ngSwitch]="canCreateTask">
+            <p *ngSwitchCase="false">
+              {{ "bau.emptyTaskListCanNotCreate" | translate }}
+            </p>
+            <p *ngSwitchCase="true">
+              {{ "bau.emptyTaskListCanCreate" | translate }}
+            </p>
+          </div>
+          <button
+            class="btn btn-primary"
+            *ngIf="canCreateTask"
+            [routerLink]="[
+              '/bau/taskboard/' + selectedYear + '/main-task/management/create'
+            ]"
+          >
+            {{ "bau.createNewMainTask" | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #emptyTable>
+      <div class="empty-taskboard-table empty-taskboard">
+        <div class="content-wrapper">
+          <img class="" src="assets/img/calendar.svg" alt="delete" />
+          <div>
+            <p>
+              {{ "bau.noTaskFound" | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #tasks_table class="table-wrapper">
+      <ng-container *ngIf="isFetchingBoard; else main_tasks">
+        <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+      </ng-container>
+
+      <ng-template #main_tasks>
+        <div class="header d-flex justify-content-between bg-white">
+          <div class="info d-flex align-items-center">
+            <h2>{{ "bau.mainTasks" | translate }}</h2>
+            <p>{{ "bau.overallProgress" | translate }}</p>
+            <span>{{ mainTaskProgress }} %</span>
+          </div>
+          <button
+            class="black-btn"
+            [routerLink]="[
+              '/bau/taskboard/' + selectedYear + '/main-task/management/create'
+            ]"
+          >
+            <i class="bx bx-plus"></i>
+            {{ "bau.addNewTask" | translate }}
+          </button>
+        </div>
+        <table class="table main-task">
+          <thead>
+            <tr>
+              <th>{{ "bau.mainTaskTitle" | translate }}</th>
+              <th>
+                <div class="filter-th track-filter">
+                  {{ "bau.progress" | translate }}
+                  <app-dropdown
+                    [icon]="true"
+                    [items]="trackStatusFilterItems"
+                    (select)="filterTrackActions($event)"
+                    [ngClass]="getTrackStatusFilterClass()"
+                  ></app-dropdown>
+                </div>
+              </th>
+              <th>
+                <div class="filter-th status-filter">
+                  {{ "bau.importance" | translate }}
+                  <app-dropdown
+                    [icon]="true"
+                    [items]="taskStatusFilterItems"
+                    (select)="filterTaskActions($event)"
+                    [ngClass]="getTaskStatusFilterClass()"
+                  ></app-dropdown>
+                </div>
+              </th>
+              <th>
+                {{ "bau.tasksCount" | translate }}
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="position-relative" *ngIf="mainTasks">
+            <ng-container *ngIf="filteredTasks?.length != 0">
+              <ng-container
+                *ngFor="let mainTask of filteredTasks; let i = index"
+              >
+                <tr>
+                  <td
+                    class="main-task-title"
+                    [ngClass]="{
+                      'max-ar-width': lang == 'ar'
+                    }"
+                  >
+                    <h5
+                      class="d-flex"
+                      [ngClass]="{
+                        ' cursor-pointer': mainTask.tasks.length != 0
+                      }"
+                      (click)="toggleRow(i)"
+                    >
+                      <i
+                        class="bx bx-chevron-right fs-4"
+                        [ngClass]="{
+                          'arrow-down': expandedRow !== i,
+                          'arrow-up': expandedRow === i,
+                          'hide-arrow': mainTask.tasks.length == 0,
+                          ar: lang == 'ar'
+                        }"
+                      ></i>
+                      <div class="cursor-pointer truncate-text" (click)="
+                      mainTaskActions(detialsLabel, mainTask.id);
+                      event.stopPropagation()
+                    ">
+                        {{ lang === "ar" ? mainTask.titleAr : mainTask.titleEn }}
+                      </div>
+                    </h5>
+                  </td>
+                  <td class="main-progress pe-3">
+                    <span>{{ mainTask.progress }}%</span>
+                    <span
+                      class="status"
+                      [ngClass]="getStatusClass(mainTask.progressStatus)"
+                    >
+                      {{ getProgressStatus(mainTask.progressStatus) }}
+                    </span>
+                  </td>
+                  <td>
+                    <app-badge
+                      class="priority d-block"
+                      [className]="
+                        importanceLevels[mainTask?.importance]['className']
+                      "
+                      [label]="
+                        lang == 'en'
+                          ? importanceLevels[mainTask?.importance]['name']
+                          : importanceLevels[mainTask?.importance]['nameAr']
+                      "
+                    ></app-badge>
+                  </td>
+                  <td class="progress-bar">
+                    <div class="d-flex gap-1 align-items-center">
+                      <app-progress-bar-zones
+                        class="priority d-block col"
+                        [zones]="{
+                          completed: mainTask.onTrackTasksCount,
+                          inProgress: mainTask.offTrackTasksCount
+                        }"
+                      ></app-progress-bar-zones>
+                      <span>( {{ mainTask.tasksCount }} )</span>
+                    </div>
+                  </td>
+                  <td class="actions">
+                    <app-dropdown
+                      (select)="mainTaskActions($event, mainTask.id)"
+                      class="d-flex justify-content-center"
+                      [items]="mainTask.actions"
+                    ></app-dropdown>
+                  </td>
+                </tr>
+                <ng-container
+                  *ngIf="expandedRow === i && mainTask?.tasks?.length != 0"
+                  #expandedContent
+                >
+                  <tr
+                    class="expanded-row subtask"
+                    *ngFor="let task of mainTask.tasks"
+                  >
+                    <td class="sub-task-title">
+                      <h4>
+                        <i class="bx bx-chevron-right fs-4 hide-arrow"></i>
+                        <a
+                          (click)="openTaskDetailsModel(task)"
+                          class="ps-2 opacity-75 truncate-text"
+                        >
+                          {{ lang == "ar" ? task.titleAr : task.titleEn }}
+                        </a>
+                      </h4>
+                    </td>
+                    <td class="sub-progress pe-3">
+                      <span>{{ task.progress }}%</span>
+                      <span
+                        class="status"
+                        [ngClass]="getStatusClass(task.progressStatus)"
+                      >
+                        {{ getProgressStatus(task.progressStatus) }}
+                      </span>
+                    </td>
+                    <td>
+                      <app-badge
+                        class="priority d-block"
+                        [className]="
+                          importanceLevels[task?.importance]['className']
+                        "
+                        [label]="
+                          lang == 'en'
+                            ? importanceLevels[task?.importance]['name']
+                            : importanceLevels[task?.importance]['nameAr']
+                        "
+                      ></app-badge>
+                    </td>
+                    <td class="task-status d-flex justify-content-between">
+                      <app-badge
+                        [className]="taskStatuses[task?.status]['className']"
+                        [label]="
+                          lang == 'en'
+                            ? taskStatuses[task?.status]['name']
+                            : taskStatuses[task?.status]['nameAr']
+                        "
+                      ></app-badge>
+                      <span>
+                        <!-- {{ task.dueDate | date : "dd, MMM" }} -->
+                        {{
+                          lang === "en"
+                            ? ((task.dueDate | uTCToLocalDate : true).toLocaleString()
+                              | date : "dd, MMM")
+                            : ((task.dueDate | uTCToLocalDate : true).toLocaleString()
+                              | localizeDate : "dd, MMM")
+                        }}
+                      </span>
+                    </td>
+                    <td class="actions">
+                      <app-dropdown
+                        (select)="subTaskActions($event, task.id)"
+                        class="d-flex justify-content-center"
+                        [items]="subtaskActions"
+                      ></app-dropdown>
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="filteredTasks?.length === 0">
+              <ng-container [ngTemplateOutlet]="emptyTable"></ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </ng-template>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </ng-template>
+</div>
+
+<!-- task details modal -->
+<app-model
+  [dimensions]="{ width: isDetailsModelOpened ? 900 : 500, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+    <label class="modal-title" *ngIf="isDetailsModelOpened">
+      {{ "bau.bauTasks.detailsModel.title" | translate }}
+    </label>
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">
+      {{ "bau.bauTasks.detailsModel.title" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+    <app-task-details-modal
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdateStatus)="updateTaskStatus($event)"
+    ></app-task-details-modal>
+
+    <app-update-task-progress-modal
+      *ngIf="isUpdateProgressModelOpened"
+      [task]="openedTask"
+      [language]="lang"
+      (onBack)="openTaskDetailsModel(openedTask)"
+      (onUpdate)="onUpdateTaskProgress()"
+    ></app-update-task-progress-modal>
+  </div>
+</app-model>

@@ -1,0 +1,25 @@
+<div class="new-model-dialog-body">
+  <div class="pb-2" [formGroup]="form">
+    <app-filed class="d-block mt-4" formControlName="name" [control]="form | getControl: 'name'"
+      [title]="'committeeVotingTemplates.editModel.votingQuestion' | translate"
+      [placeholder]="'committeeVotingTemplates.editModel.votingQuestion' | translate"></app-filed>
+    <app-filed class="d-block mt-4 rtl-text" formControlName="nameAr" [control]="form | getControl: 'nameAr'"
+      [title]="'committeeVotingTemplates.editModel.votingQuestionAr' | translate"
+      [placeholder]="'committeeVotingTemplates.editModel.votingQuestionAr' | translate"></app-filed>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button class="btn btn-main flex-grow-1" [disabled]="form.invalid || isBtnLoading" (click)="saveVotingTemplate()">
+    <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

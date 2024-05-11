@@ -1,0 +1,26 @@
+<div class="form-group mt-3">
+  <label class="form-label" *ngIf="!!title">
+    {{ title }}
+
+    <span *ngIf="isRequired" class="astrix-red">*</span>
+  </label>
+
+  <nz-date-picker
+    [(ngModel)]="value"
+    nzFormat="yyyy-MM-dd"
+    [nzDisabledDate]="disabledDate"
+    [nzShowTime]="ShowTime"
+    [nzPlaceHolder]="placeholder"
+    [nzDisabled]="disabled"
+    [nzShowToday]="ShowToday"
+    (nzOnOpenChange)="change()"
+    (ngModelChange)="inputChange()"
+  ></nz-date-picker>
+
+  <app-validation
+    [title]="title"
+    [length]="length"
+    *ngIf="isSubmitted && control?.invalid"
+    [control]="control"
+  ></app-validation>
+</div>

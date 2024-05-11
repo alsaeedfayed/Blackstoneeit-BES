@@ -1,0 +1,214 @@
+<!-- Add | Edit Mode -->
+<div *ngIf="!isViewMode">
+  <div class="wrapper">
+
+    <!-- <app-header-page
+      [title]="'Meetings.minutesOfTheMeeting' | translate"
+      [titleBtn]="'Meetings.saveDraft' | translate"
+      [isAddBtn]="false"
+    ></app-header-page> -->
+
+    <form [formGroup]="form">
+
+      <!-- Meeting Title -->
+      <app-filed
+        class="d-block"
+        [isSubmitted]="isSubmitted"
+        formControlName="title"
+        [control]="form | getControl : 'title'"
+        [title]="'Meetings.meetingTitle' | translate"
+        [placeholder]="'Meetings.meetingTitle' | translate"
+      ></app-filed>
+
+      <div class="row">
+        <!-- Date -->
+        <div class="col-md-6 mt-3">
+          <label class="form-label">
+            {{ "Meetings.Date" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+
+          <app-nz-date-picker
+            formControlName="date"
+            [isSubmitted]="isSubmitted"
+            [control]="form | getControl : 'date'"
+            [placeholder]="'shared.selectDate' | translate"
+            minDate="today"
+          ></app-nz-date-picker>
+        </div>
+
+        <!-- Time -->
+        <div class="col-md-6 d-flex time-wrapper flex-wrap">
+          <div class="col-md-6 mt-3">
+            <label class="form-label">
+              {{ "Meetings.from" | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+
+            <app-nz-time-picker
+              formControlName="timeFrom"
+              [isSubmitted]="isSubmitted"
+              [control]="form | getControl : 'timeFrom'"
+              [placeholder]="'shared.selectTime' | translate"
+              [minuteStep]="15"
+            ></app-nz-time-picker>
+          </div>
+
+          <div class="col-md-6 mt-3">
+            <label class="form-label">
+              {{ "Meetings.to" | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+
+            <app-nz-time-picker
+              formControlName="timeTo"
+              [isSubmitted]="isSubmitted"
+              [control]="form | getControl : 'timeTo'"
+              [placeholder]="'shared.selectTime' | translate"
+              [minuteStep]="15"
+            ></app-nz-time-picker>
+          </div>
+
+          <!-- invalid time alert -->
+          <div class="validation" *ngIf="isInvalidTimeRange || isDateInPast">
+            <span *ngIf="isInvalidTimeRange">{{ 'Meetings.invalidTimeRange' | translate }}</span>
+            <span *ngIf="isDateInPast">{{ 'Meetings.dateInPast' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <!-- Committee Name -->
+        <div class="col-md-6">
+          <!-- [bindVlaue]="'code'" -->
+          <!-- [bindLabel]="language === 'en' ? 'nameEn' : 'nameAr'" -->
+          <app-select
+            class="d-block mt-3"
+            [isSubmitted]="isSubmitted"
+            formControlName="commiteeId"
+            [control]="form | getControl : 'commiteeId'"
+            [title]="'Meetings.committeeName' | translate"
+            [placeholder]="'Meetings.committeeName' | translate"
+            [items]="commiteeNames"
+            [bindVlaue]="'id'"
+            [bindLabel]="language === 'en' ? 'name' : 'nameAr'"
+            [search]="true"
+            [clearable]="true"
+          ></app-select>
+        </div>
+
+        <!-- Meeting Location -->
+        <div class="col-md-6">
+          <app-filed
+            class="d-block mt-3"
+            [isSubmitted]="isSubmitted"
+            formControlName="location"
+            [control]="form | getControl : 'location'"
+            [title]="'Meetings.meetingLocation' | translate"
+            [placeholder]="'Meetings.meetingLocation' | translate"
+          ></app-filed>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Meeting Chairperson -->
+        <div class="col-md-6">
+          <app-select
+            class="d-block mt-3"
+            [isSubmitted]="isSubmitted"
+            formControlName="chairperson"
+            [control]="form | getControl : 'chairperson'"
+            [title]="'Meetings.meetingChairperson' | translate"
+            [placeholder]="'Meetings.meetingChairpersonPlacholder' | translate"
+            [items]="users"
+            [search]="true"
+            [bindLabel]="'fullName'"
+          ></app-select>
+        </div>
+
+        <!-- Meeting Initiator -->
+        <div class="col-md-6">
+          <app-select
+            class="d-block mt-3"
+            [isSubmitted]="isSubmitted"
+            formControlName="initiator"
+            [control]="form | getControl : 'initiator'"
+            [title]="'Meetings.meetingInitiator' | translate"
+            [placeholder]="'Meetings.meetingInitiator' | translate"
+            [items]="users"
+            [bindLabel]="'fullName'"
+            [search]="true"
+          ></app-select>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- View Mode -->
+<div *ngIf="isViewMode">
+  <div class="details-wrapper">
+    <div class="block-content meeting-info">
+      <ul class="meeting-info-list">
+        <li class="meeting-info-list-item">
+          <h4 class="block-title mb-2">{{ 'Meetings.meetingTitle' | translate }}</h4>
+  
+          <div class="meeting-info-list-item-content">
+            {{ data?.title || "-" }}
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-title mb-2">{{ 'Meetings.meetingChairperson' | translate }}</h4>
+  
+          <div class="meeting-info-list-item-content">
+            <person-item
+              *ngIf="data?.chairpersonInfo"
+              [requesterItem]="data?.chairpersonInfo"
+              [noCursor]="true"
+              [isUserCardFixed]="false"
+            ></person-item>
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-title mb-2">{{ 'Meetings.meetingInitiator' | translate }}</h4>
+  
+          <div class="meeting-info-list-item-content">
+            <person-item
+              *ngIf="data?.initiatorInfo"
+              [requesterItem]="data?.initiatorInfo"
+              [noCursor]="true"
+              [isUserCardFixed]="false"
+            ></person-item>
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-title mb-2">{{ 'Meetings.date&time' | translate }}</h4>
+  
+          <div class="meeting-info-list-item-content">
+            <span *ngIf="data?.date">
+              {{ (data?.date | uTCToLocalDate) | date : "dd/MM/yyyy, h:mm a" || "-" }},
+              {{ (data?.timeFrom | uTCToLocalDate) | date : "h:mm a" || "-" }}
+              -
+              {{ (data?.timeTo | uTCToLocalDate) | date : "h:mm a" }}
+            </span>
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-title mb-2">{{ 'Meetings.committeeName' | translate }}</h4>
+  
+          <div class="meeting-info-list-item-content">
+            {{ CommitteName || "-" }}
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-title mb-2">{{ 'Meetings.meetingLocation' | translate }}</h4>
+  
+          <div class="meeting-info-list-item-content">
+            {{ data?.location || "-" }}
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+@import "src/assets/css/utils/variables.scss";
+section {
+  position: relative;
+  display: inline-block;
+}
+
+.mention-box {
+  height: auto !important;
+  width: 100%;
+  border: none !important;
+  z-index: 2;
+}
+
+.mention-box  b{
+  color: #0f6ffd !important;
+}
+:host ::ng-deep {
+  ng-select {
+    position: absolute;
+    width: 100%;
+    top: -2%;
+    left: 6px;
+    z-index: 1;
+    .ng-select-container {
+      display: none !important;
+    }
+  }
+}
+.up {
+  bottom: 45px;
+}
+.down {
+  bottom: 0px;
+}

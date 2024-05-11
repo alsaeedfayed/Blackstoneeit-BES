@@ -1,0 +1,43 @@
+<div class="steeper container">
+  <div class="md-stepper-horizontal orange">
+    <div class="md-step" *ngFor="let step of steps; let i = index" [ngClass]="{active: i + 1 == activeStep,
+    pastStep: i + 1 < activeStep}" [ngStyle]="{width: 'calc(100% / ' +steps.length +')'}">
+      <div class="md-step-circle inactive">
+        <span>{{ i + 1 }}</span>
+      </div>
+      <div class="md-step-title inactive">{{ step.stepTitle }}</div>
+      <div class="md-step-bar-left"></div>
+    </div>
+  </div>
+
+  <div class="step-content">
+    <ng-content></ng-content>
+  </div>
+  <div class="controls">
+    <!-- <div>
+      <button
+        class="btn cancel"
+        (click)="cancelForm()"
+        *ngIf="activeStep !== 1"
+      >
+      {{'shared.actions.previous' |translate}}
+      </button>
+    </div> -->
+    <div class="actions">
+      <!-- <button class="btn cancel"  *ngIf="!hideCancel"  (click)="submit(true)">
+
+        {{'shared.actions.draft' |translate}}
+      </button>
+      <button class="btn next" *ngIf="activeStep == steps.length" (click)="submit(false)">
+       {{'shared.actions.submit' |translate}}
+      </button>
+      <button class="btn next" *ngIf="activeStep != steps.length" (click)="nextStep()">
+        {{'shared.actions.next' |translate}}
+      </button> -->
+
+    </div>
+
+
+  </div>
+
+</div>

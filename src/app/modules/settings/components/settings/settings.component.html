@@ -1,0 +1,229 @@
+<div class="row align-items-center mb-35">
+  <div class="col-sm-6 mb-sm-15 module-title">
+    <h3>
+      {{ "Settings" | translate }}
+      <span *ngIf="!loading && totalSettings != undefined" class="sub-title">
+        ({{ "total" | translate }} {{ totalSettings }})
+      </span>
+    </h3>
+  </div>
+
+  <div class="col-sm-6">
+    <div class="d-flex align-items-center justify-content-end">
+      <div class="search-bar-container w-50 h-auto">
+        <input
+          [placeholder]="lang == 'en' ? 'Search Settings' : 'ابحث في الإعدادات'"
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="getSettings()"
+        />
+        <i class="bx bx-search"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th scope="col">{{ "Setting" | translate }}</th>
+        <th scope="col">{{ "Description" | translate }}</th>
+        <th scope="col">{{ "Type" | translate }}</th>
+        <th scope="col">{{ "Value" | translate }}</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="!loading">
+      <tr
+        *ngFor="
+          let setting of settings
+            | paginate
+              : {
+                  itemsPerPage: pageSize,
+                  currentPage: page,
+                  totalItems: totalSettings
+                };
+          let i = index
+        "
+      ></tr>
+
+      <tr *ngFor="let setting of settings; let i = index">
+        <td>
+          {{ setting.title }}
+        </td>
+        <td>
+          <span class="description">{{ setting.description }}</span>
+        </td>
+        <td>
+          <span
+            class="type"
+            *ngIf="
+              setting.dataType?.toLowerCase() == 'int' ||
+              setting.dataType?.toLowerCase() == 'decimal'
+            "
+          >
+            {{ "Number" | translate }}
+          </span>
+          <span
+            class="type"
+            *ngIf="setting.dataType?.toLowerCase() == 'boolean'"
+          >
+            {{ "On/Off" | translate }}
+          </span>
+          <span
+            class="type"
+            *ngIf="setting.dataType?.toLowerCase() == 'string'"
+          >
+            {{ "Text" | translate }}
+          </span>
+          <span
+            class="type"
+            *ngIf="setting.dataType?.toLowerCase() == 'financialaccount'"
+          >
+            {{ "Financial Account" | translate }}
+          </span>
+        </td>
+        <td>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span
+                *ngIf="
+                  !setting.editMode &&
+                  setting.dataType?.toLowerCase() !== 'boolean'
+                "
+              >
+                {{
+                  setting.dataType?.toLowerCase() === "financialaccount"
+                    ? setting?.financialAccount?.name &&
+                      setting?.financialAccount?.name[lang]
+                    : setting.value
+                }}
+              </span>
+              <div *ngIf="setting.dataType?.toLowerCase() === 'boolean'">
+                <div class="switch-btn">
+                  <input
+                    type="checkbox"
+                    id="switch2"
+                    [checked]="setting.value?.toLowerCase() == 'true'"
+                    [disabled]="disabled | async"
+                    (click)="editBooleanSetting(setting)"
+                  />
+                  <label for="switch2">
+                    <span class="input-state"></span>
+                  </label>
+                </div>
+                <i *ngIf="editSwitch" class="bx bx-loader-alt bx-spin ml-2"></i>
+              </div>
+              <form
+                *ngIf="setting.editMode"
+                #form="ngForm"
+                class="d-inline-block"
+              >
+                <div class="input-with-spinner">
+                  <input
+                    id="typeahead-prevent-manual-entry"
+                    *ngIf="
+                      setting.dataType?.toLowerCase() === 'financialaccount'
+                    "
+                    type="text"
+                    [(ngModel)]="setting.financialAccount"
+                    [ngbTypeahead]="searchFinancial"
+                    [inputFormatter]="titleFormatter"
+                    [resultFormatter]="titleResultFormatter"
+                    (selectItem)="onFinancialSelect($event)"
+                    placeholder="{{ 'Type title' | translate }}"
+                    class="form-input"
+                    [ngModelOptions]="{ standalone: true }"
+                    [editable]="false"
+                    name="value"
+                    required
+                    #value="ngModel"
+                  />
+                  <i
+                    *ngIf="searchFinancialLoading"
+                    class="bx bx-loader-alt bx-spin"
+                  ></i>
+                </div>
+                <input
+                  *ngIf="setting.dataType?.toLowerCase() == 'string'"
+                  type="text"
+                  class="form-input"
+                  [(ngModel)]="setting.value"
+                  name="value"
+                  required
+                  #value="ngModel"
+                />
+                <input
+                  *ngIf="setting.dataType?.toLowerCase() == 'int'"
+                  type="number"
+                  class="form-input"
+                  [(ngModel)]="setting.value"
+                  name="value"
+                  required
+                  #value="ngModel"
+                  min="1"
+                  step="1"
+                  onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                />
+                <input
+                  *ngIf="setting.dataType?.toLowerCase() == 'decimal'"
+                  type="number"
+                  class="form-input"
+                  [(ngModel)]="setting.value"
+                  name="value"
+                  required
+                  #value="ngModel"
+                />
+                <small
+                  *ngIf="form?.invalid && isFormSubmitted"
+                  class="form-error"
+                >
+                  <i class="bx bxs-error-circle"></i>
+                  <span>This field is required</span>
+                </small>
+              </form>
+            </div>
+            <div *ngIf="setting.dataType?.toLowerCase() !== 'boolean'">
+              <button
+                *ngIf="!setting.editMode"
+                type="button"
+                class="action-btn"
+                (click)="onEdit(setting, i)"
+              >
+                <i class="bx bx-edit-alt h5 cursor-pointer m-0"></i>
+              </button>
+              <button
+                *ngIf="setting.editMode"
+                type="submit"
+                class="btn btn-main"
+                [disabled]="disabled | async"
+                (click)="onSubmit(setting)"
+              >
+                <i *ngIf="isLoading" class="bx bx-loader-alt bx-spin mr-2"></i>
+                {{ "save" | translate }}
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!------ Loading Skeleton ------>
+  <div *ngIf="loading && (!settings || settings?.length == 0)" class="mt-2">
+    <app-skeleton-loader
+      *ngFor="let i of [1, 2, 3, 4, 5]"
+      class="w-100"
+      [mode]="'table'"
+    ></app-skeleton-loader>
+  </div>
+
+  <!------ Empty State ------>
+  <div class="mt-5" *ngIf="settings?.length == 0 && !loading">
+    <app-empty-state
+      [title]="
+        lang == 'en' ? 'No settings available...' : 'لم يتم العثور على نتيجة...'
+      "
+    ></app-empty-state>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+@import"../../../../../assets/css/utils/mixins.scss";
+
+.main-dashboard {
+    min-height: 550px;
+    .noGroup {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .data {
+        .performance {
+            display: flex;
+            margin-bottom: 30px;
+            .to-date {
+                width: 32.33%;
+                @include rtl_key(margin-, right, left, 1%);
+                @include rtl_key(margin-, left, right, 0);
+                //flex: 1;
+            }
+            .evaluation {
+                width: calc(100% - 32.33%);
+                flex: 1;
+            }
+        }
+        .analytics {
+            width: 100%;
+           // display: flex;
+            margin-bottom: 20px;
+        }
+        .levels-performance {
+            // background-color: #fff;
+            // box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.04);
+            // margin-bottom: 30px;
+        }
+        .level-performance {
+            margin-bottom: 30px;   
+        }
+    }
+}

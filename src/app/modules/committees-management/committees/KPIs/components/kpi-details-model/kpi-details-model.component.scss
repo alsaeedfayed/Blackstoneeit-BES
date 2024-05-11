@@ -1,0 +1,106 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+.kpi {
+  &-name {
+    width: 60%;
+    word-break: break-all;
+  }
+  &-frequency {
+    width: fit-content;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    background-color: rgba(150, 166, 189, 0.15);
+    color: #96a6bd;
+    font-weight: 400;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    padding: 0 0.625rem;
+    border-radius: 2.5rem;
+  }
+}
+.add-new-btn {
+  display: block;
+  background: none;
+  color: $main-color;
+  font-weight: 500;
+  padding-block: 0;
+  // padding-inline: 1.5rem;
+  margin-inline-start: auto;
+  border: 0;
+  text-decoration: underline;
+}
+.block-title {
+  color: $info_color;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+  .progress-percentage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: $black-color;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+  }
+
+  .progress-bar {
+    position: relative;
+    height: 0.25rem;
+    background-color: #ebedef;
+    margin-top: 0.5rem;
+    border-radius: 0.625rem;
+    overflow: hidden;
+
+    .fill {
+      display: block;
+      position: absolute;
+      top: 0;
+      @include rtl_value(left, 0, auto);
+      @include rtl_value(right, auto, 0);
+      height: 100%;
+      width: 0%;
+    }
+
+    .none{
+      background: linear-gradient(to right, #808080, #b6b6b6);
+    }
+    .half{
+      background: linear-gradient(to right, #FFA800, #FFCC6A);
+
+    }
+    .afterHalf{
+      background: linear-gradient(to right, #840AFF, #B75BD8);
+    }
+    .done{
+      background: linear-gradient(to right, #52AF31, #3ED126);
+    }
+
+  }
+  .drop-zone{
+    border: 2px dotted #9f9f9f;
+    border-radius: 7px;
+    text-align: center;
+    padding: 25px 10px;
+    margin-top: 20px;
+  }
+
+
+  .highlight-table {
+    width: 100%;
+
+    th {
+      color: $info_color;
+      font-weight: 500;
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+    }
+
+    td {
+      padding: 0.75rem 1.5rem;
+    }
+  }
+
+

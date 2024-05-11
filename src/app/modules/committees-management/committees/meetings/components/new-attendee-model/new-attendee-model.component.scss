@@ -1,0 +1,99 @@
+@import "src/assets/css/utils/variables.scss";
+
+.new-attendee-form {
+  .astrix-red {
+    color: red;
+  }
+}
+
+.initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $main-color;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 50%;
+  width: 33px;
+  height: 33px;
+  font-size: 0.725rem;
+  margin-right: 6px;
+}
+.evidenceArea{
+  height: 8rem !important;
+}
+
+:host ::ng-deep {
+  .members-select {
+    .ng-select-container {
+      height: auto !important;
+      min-height: 44px;
+
+      .ng-value {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 6px 4px 4px;
+        background-color: rgba(172, 181, 193, 0.15) !important;
+        border-radius: 2.5rem !important;
+
+        .ng-value-label {
+          padding: 0 !important;
+        }
+
+        .ng-value-icon {
+          height: 13px;
+          line-height: 13px;
+          font-size: 18px;
+          color: $tertiary-color;
+          background: none !important;
+          border: none !important;
+
+          &:hover {
+            color: $danger-color !important;
+          }
+        }
+      }
+    }
+
+    person-item {
+      .personItem {
+        &.header-person {
+          width: fit-content;
+        }
+
+        > .avatar {
+          .letters,
+          img {
+            height: 2rem !important;
+            width: 2rem !important;
+          }
+
+          .letters {
+            font-size: 0.75rem;
+          }
+        }
+
+        > .info {
+          .name {
+            font-size: 12px;
+            margin-bottom: 0;
+          }
+
+          .job {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  person-item {
+    .personItem {
+      &.header-person {
+        width: fit-content;
+      }
+    }
+  }
+}

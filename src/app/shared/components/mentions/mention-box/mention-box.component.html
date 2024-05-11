@@ -1,0 +1,26 @@
+<section  class="w-100">
+  <div
+  #mentionBox
+  class="form-control mention-box"
+  contenteditable="true"
+  (paste)="onPaste($event)"
+  (focus)="isInside = true"
+  (blur)="isInside = false"
+></div>
+
+<ng-select
+  class="input-select {{ listPlace }}"
+  #usersList
+  [notFoundText]="'shared.noItemsFound' | translate"
+  [closeOnSelect]="true"
+  (change)="selectName($event)"
+  [isOpen]="showAutocomplete"
+  (scrollToEnd)="loadMoreItems()"
+>
+  <!-- (focus)="onFocus('chairman')" -->
+  <ng-option *ngFor="let user of list" [value]="user">
+    {{ user.fullName }}
+  </ng-option>
+</ng-select>
+</section>
+

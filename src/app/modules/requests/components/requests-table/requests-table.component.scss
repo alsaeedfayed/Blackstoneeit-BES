@@ -1,0 +1,15 @@
+@import "src/assets/css/utils/variables.scss";
+
+.request-title {
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.req-table-wrapper {
+  overflow-x: auto;
+}
+
+.details {
+  color: $main-color;
+  cursor: pointer;
+}

@@ -1,0 +1,33 @@
+.card-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  background-color: #fff;
+  padding: 1.5rem;
+
+  &-left-col{
+    &-title{
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: #121824;
+    }
+
+    &-total {
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 40px;
+      color: #121824;
+    }
+  }
+
+  .task-progress{
+    position: relative;
+  }
+  .tasks-status-icon{
+    position: absolute;
+    top: 1%;
+  }
+}
+
+

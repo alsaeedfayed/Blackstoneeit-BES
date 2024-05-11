@@ -1,0 +1,89 @@
+<div>
+  <!-- tabs -->
+  <div class="table-wrapper mt-4 chrtabs new-model-dialog-body"> 
+    <!-- full details  tab -->
+    <div class="full-container">
+      <div class="task-upper-details d-flex justify-content-between align-items-center mb-2"  >
+         <span class="task-code">{{ taskDetails?.code ? taskDetails?.code : ''  }}</span>
+        <app-badge
+         [className]="importanceLevels[taskDetails?.importanceLevel]['className']"
+         [label]="
+         language === 'en'
+         ? importanceLevels[taskDetails?.importanceLevel]['name']
+         : importanceLevels[taskDetails?.importanceLevel]['nameAr']
+         "
+        ></app-badge>
+      </div>
+
+      <div class="task-details d-flex">
+        <span class="task-title">{{ taskDetails?.title }}</span>
+        <span class="task-title task-ar-title">{{ taskDetails?.titleAr }}</span>
+      </div>
+
+      <div class="my-4 d-flex align-items-center more-details">
+        <div class="assignedTo-details">
+          <span class="weight-target-lable">
+            {{ "committeeTasks.assignedTo" | translate }}
+          </span>
+          
+          <person-item
+          [requesterItem]="taskDetails?.assignedToInfo"
+          [noCursor]="true"
+          [isUserCardFixed]="true"
+        ></person-item>
+        </div>
+        
+      <div class="full-description">
+        <label class="weight-target-lable">
+          {{ "changeRequests.details.dueDate" | translate }}
+        </label>
+        <span class="full-description-body mt-2">
+          {{
+            language === "en"
+              ? ((taskDetails?.dueDate | uTCToLocalDate).toLocaleString()
+                | date : "d MMM y")
+              : ((taskDetails?.dueDate | uTCToLocalDate).toLocaleString()
+                | localizeDate : "d MMM y")
+          }}
+        </span>
+      </div>
+      </div>
+
+      <div class="row mt-3" *ngIf="taskDetails?.description">
+        <label class="weight-target-lable" >
+          {{ "changeRequests.details.description" | translate }}
+        </label>
+        <div
+          class="full-description-body mt-2"
+          [innerHTML]="taskDetails?.description"
+        ></div>
+      </div>
+
+      <ng-container  *ngIf="oldAttachments.length > 0">
+        <div class="row my-3">
+          <div class="weight-target-lable">
+            {{ "changeRequests.details.attatchmens" | translate }}
+          </div>
+          <div class="my-1">
+            <uploaded-attachments-files
+             
+              class="d-block mt-3"
+              [files]="oldAttachments"
+              [old]="true"
+              [canDeleted]="false"
+            ></uploaded-attachments-files>
+          </div>
+        </div>
+      </ng-container>
+      
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+  </div>
+</div>

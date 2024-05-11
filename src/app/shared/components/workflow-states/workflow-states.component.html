@@ -1,0 +1,221 @@
+<div class="approval-timeline-container" *ngIf="steps && steps.length > 0">
+  <div
+    class="approval-timeline-item"
+    *ngFor="let item of steps; let i = index"
+    [ngClass]="{
+      completed:
+        item?.status?.code !== 'Upcoming' && item?.status?.code !== 'Pending',
+      current: item?.current,
+      upcoming: item?.status?.code === 'Upcoming'
+    }"
+    (click)="onItemClick(item)"
+  >
+    <div class="timeline-card-header">
+      <div class="first-col">
+        <span class="step-number">{{ "shared.step" | translate }} {{ item?.number }}</span>
+        <span class="step-date"
+              *ngIf="item?.date">{{
+          convertUTCDateToLocalDate(item?.date)
+          | date : "dd/MM/yyyy, h:mm a"
+          }}</span>
+      </div>
+      <span class="step-status">
+        {{
+          item?.status?.code !== "Upcoming" && item?.status?.code !== "Pending"
+            ? ("shared.completed" | translate)
+            : lang === "en"
+            ? item?.status?.en
+            : item?.status?.ar
+        }}
+      </span>
+    </div>
+    <div class="timeline-card-footer">
+      <span *ngIf="!item?.owner" class="step-state">
+        {{ lang === "en" ? item?.name?.en : item?.name?.ar }}
+      </span>
+      <div class="profile-container flex-row" *ngIf="item?.owner">
+        <!-- <app-initials *ngIf="!item?.owner?.profileImage"
+                      [dimensions]="{ width: 32, height: 32 }"
+                      [name]="item?.owner?.name?.en"></app-initials>
+        <img *ngIf="(setImage(item?.owner?.profileImage) | async)"
+             [src]="(setImage(item?.owner?.profileImage) | async)[0].fileUrl"
+             alt="test" />
+        <div class="profile-details">
+          <span class="name">{{ item?.owner?.name?.en }}</span>
+          <span class="position">{{
+            item?.owner?.position ?? item.status.en
+            }}</span>
+        </div> -->
+        <person-item [ownerItem]="item?.owner" [CompMode]="2"></person-item>
+      </div>
+    </div>
+    <div
+      class="status-txt"
+      *ngIf="item?.status && item?.status?.en && item?.status?.ar"
+    >
+      <app-badge
+        [label]="lang == 'en' ? item?.status?.en : item?.status?.ar"
+        [className]="'started'"
+      ></app-badge>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="steps && steps.length == 0" class="approval-timeline-container">
+  <div class="approval-timeline-item upcoming notStarted empty-state-container">
+    {{ emptyMsg | translate }}
+  </div>
+</div>
+
+<app-popup [dimensions]="{ height: 800, width: 800 }" [id]="modalID">
+  <ng-container modal-content class="h-100">
+    <div class="popup-header">
+      <button (click)="onClosePopup()" class="back-btn">
+        <div class="arrow"><i class="bx bx-left-arrow-alt"></i></div>
+        <span>{{ "shared.stepHistory" | translate }}</span>
+      </button>
+    </div>
+    <div class="popup-body">
+      <h3 class="form-title">{{ "shared.tasksHistory" | translate }}</h3>
+
+      <div class="tasks-timeline">
+        <ul *ngFor="let item of tasks">
+          <div class="line"></div>
+          <li>
+            <div
+              class="dot"
+              [class.active]="item?.status?.code === 'Completed'"
+            ></div>
+            <div class="d-flex flex-column">
+              <div class="datetime" *ngIf="item?.action?.createdDate">
+                <span>
+                  {{
+                    convertUTCDateToLocalDate(item?.action?.createdDate)
+                      | date : "dd/MM/yyyy, h:mm a"
+                  }}
+                </span>
+              </div>
+              <div class="task-details">
+                <div class="profile">
+                  <person-item
+                    [ownerItem]="item?.assignedTo"
+                    [CompMode]="2"
+                  ></person-item>
+                </div>
+                <div
+                  class="details"
+                  *ngIf="
+                    item?.action?.comments || item?.action?.attachments?.length
+                  "
+                >
+                  <p class="paragraph mb-3">{{ item?.action?.comments }}</p>
+                  <ul class="attachments-list">
+                    <li *ngFor="let attachment of item?.action?.attachments">
+                      <i class="bx bxs-file"></i>
+                      <a
+                        (click)="openFile(attachment?.fileName)"
+                        target="_blank"
+                      >
+                        {{ attachment?.uploadedFileName }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <span
+              class="status"
+              [ngClass]="{
+                warning:
+                  item?.status?.code === 'Pending' ||
+                  item?.status?.code === 'PendingForReview',
+                primary: item?.status?.code === 'Completed'
+              }"
+            >
+              {{ item?.status?.title[lang] }}
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="separator"
+        *ngIf="reviewHistory?.length !== 0 && showTasks"
+      ></div>
+
+      <h3 class="form-title" *ngIf="reviewHistory?.length !== 0 && showTasks">
+        {{ "shared.reviewHistory" | translate }}
+      </h3>
+
+      <div
+        class="review-timeline"
+        *ngIf="reviewHistory?.length !== 0 && showTasks"
+      >
+        <ul *ngFor="let item of reviewHistory">
+          <div class="line" [class.active]="lineState"></div>
+          <li>
+            <div
+              class="dot"
+              [class.active]="item?.status?.code === 'Completed'"
+            ></div>
+            <div class="d-flex flex-column">
+              <div class="datetime" *ngIf="item?.action?.createdDate">
+                <span>
+                  {{
+                    convertUTCDateToLocalDate(item?.action?.createdDate)
+                      | date : "dd/MM/yyyy, h:mm a"
+                  }}
+                </span>
+              </div>
+              <div class="task-details">
+                <div class="profile">
+                  <person-item
+                    [ownerItem]="item?.assignedTo"
+                    [CompMode]="2"
+                  ></person-item>
+                </div>
+                <div
+                  class="details"
+                  *ngIf="
+                    item?.action?.comments || item?.action?.attachments?.length
+                  "
+                >
+                  <p class="paragraph mb-3">{{ item?.action?.comments }}</p>
+                  <ul class="attachments-list">
+                    <li *ngFor="let attachment of item?.action?.attachments">
+                      <i class="bx bxs-file"></i>
+                      <a
+                        (click)="openFile(attachment?.fileName)"
+                        target="_blank"
+                      >
+                        {{ attachment?.uploadedFileName }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <span
+              class="status"
+              [ngClass]="{
+                warning:
+                  item?.status?.code === 'Pending' ||
+                  item?.status?.code === 'PendingForReview',
+                primary: item?.status?.code === 'Completed'
+              }"
+            >
+              {{ item?.status?.title[lang] }}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end popup-footer">
+      <div class="col-6 d-flex align-items-end justify-content-end">
+        <button class="btn btn-dark mr-2" (click)="onClosePopup()">
+          {{ "shared.back" | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</app-popup>

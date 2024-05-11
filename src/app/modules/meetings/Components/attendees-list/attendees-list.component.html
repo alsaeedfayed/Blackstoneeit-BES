@@ -1,0 +1,138 @@
+<div class="wrapper">
+  <div class="header">
+    <div class="section-title">
+      <!-- <h6>{{ "Meetings.attendeesList" | translate }}</h6> -->
+      <p *ngIf="items && items.length > 0" class="attendance-rate">
+        {{ "Meetings.attendanceRate" | translate }}:
+        {{ attendanceRate | number : "1.1-1" }}%
+      </p>
+    </div>
+
+    <button
+      class="btn btn-main createService"
+      *ngIf="!isViewMode && canAdd"
+      (click)="openAttendeesModal()"
+    >
+      <i class="bx bx-plus"></i>
+    </button>
+  </div>
+
+  <div class="table">
+    <div class="attendees-table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">{{ "Meetings.attendees" | translate }}</th>
+            <th scope="col">{{ "Meetings.attendeeType" | translate }}</th>
+            <th scope="col">{{ "Meetings.inviteePosition" | translate }}</th>
+            <!-- <th scope="col">{{ "Meetings.internal/external" | translate }}</th> -->
+            <!-- <th scope="col">{{ "Meetings.signInRequest" | translate }}</th> -->
+            <th scope="col">{{ "Meetings.attendance" | translate }}</th>
+            <th scope="col">{{ "Meetings.Description" | translate }}</th>
+            <th scope="col" class="meeting-actions" *ngIf="!isViewMode">
+              {{ "Meetings.actions" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <!-- attendees -->
+            <td>
+              <person-item
+                *ngIf="item.userInfo"
+                [requesterItem]="item.userInfo"
+                [noCursor]="true"
+              ></person-item>
+            </td>
+            <td>
+              <span *ngIf="item.attendeeType == 1">
+                {{ translateService.instant('Meetings.internal') }}
+              </span>
+              <span *ngIf="item.attendeeType == 2">
+                {{ translateService.instant('Meetings.external') }}
+              </span>
+            </td>
+            <!-- position -->
+            <td>{{ getPosition(item?.position) }}</td>
+            <!-- signInRequest -->
+            <!-- <td>
+              <app-switch
+                [disabled]="true"
+                [(ngModel)]="item.requestToSign"
+              ></app-switch>
+            </td> -->
+            <!-- attendance -->
+            <td>
+              <span *ngIf="!item?.attended">❌</span>
+              <span *ngIf="item?.attended" class="attended-style">✔</span>
+            </td>
+            <!-- notes -->
+            <td>
+              <see-more [text]="item?.notes" [maxWidth]="'300px'"></see-more>
+            </td>
+            <!-- Actions -->
+            <td class="meeting-actions" *ngIf="!isViewMode">
+              <!-- <div class="actions">
+                <button class="edit-icons" (click)="openEditPopup(item)">
+                  <i class="bx bxs-edit-alt"></i>
+                </button>
+                <button class="delete-icons" (click)="deleteAttendee(item)">
+                  <img src="assets/img/trash.svg" alt="delete" />
+                </button>
+              </div> -->
+              <div>
+                <app-dropdown (select)="onOptionSelect($event, item)" [items]="options"></app-dropdown>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="items && items.length == 0">
+            <td colspan="6" class="no-data-row">
+              {{ "Meetings.noAttendeeDataMsg" | translate }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- <div class="no-data" *ngIf="items.length == 0">
+    <app-no-data-custom
+      msg="{{ 'Meetings.noDataMsg' | translate }}"
+    ></app-no-data-custom>
+  </div> -->
+</div>
+
+<!-- add/edit attendees model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'add-attendee'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeAttendeesModal()"
+>
+  <div modal-header class="attendees-model-header w-100">
+    <label class="modal-title">
+      {{ editedAttendee ? ('Meetings.editAttendee' | translate) : ('Meetings.addAttendee' | translate) }}
+    </label>
+  </div>
+
+  <div modal-content class="attendees-model-content border-top">
+    <app-attendees-modal
+      *ngIf="isShowForm"
+      [Attendee]="editedAttendee"
+      [createdMeetingId]="createdMeetingId"
+      [AttendeesPoitions]="AttendeesPoitions"
+      [attendees]="items"
+      [isEdit]="isEdit"
+      (save)="addAttendee($event)"
+      (update)="editAttendeeHanlder($event)"
+    ></app-attendees-modal>
+  </div>
+</app-model>
+
+<app-confirm-modal
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteAttendeeConfirmed()"
+></app-confirm-modal>

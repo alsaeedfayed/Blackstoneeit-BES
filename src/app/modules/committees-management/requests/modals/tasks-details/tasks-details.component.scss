@@ -1,0 +1,83 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.full-container{
+  padding: 0px 1.8rem;
+}
+
+.task-details{
+  gap: 20px;
+  justify-content: space-between;
+  .task-title{
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.assignedTo-details{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.full-header{
+  display: flex;
+  justify-content: space-between;
+  &-year {
+    font-weight: 400;
+    font-size: 14px;
+    color: #292D32;
+  }
+  &-quarter {
+    font-weight: 400;
+    font-size: 12px;
+    color: #96A6BD;
+  }
+}
+
+.full-title{
+  font-weight: 700;
+  font-size: 16px;
+  color: #292D32;
+}
+
+.weight-target {
+  display: flex;
+  gap: 3rem;
+  &-lable{
+    font-weight: 500;
+    font-size: 14px;
+    color: #96A6BD;
+  }
+}
+.block-title {
+  color: $info_color;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 1rem;
+}
+
+.more-details{
+  gap: 80px;
+}
+.full-description {
+  height: 75px;
+  display: inline-grid;
+  &-lable {
+    font-weight: 400;
+    font-size: 14px;
+    color: #96A6BD;
+  }
+
+  &-body {
+    font-weight: 400;
+    font-size: 14px;
+    color: #121824;
+  }
+}
+
+::ng-deep {
+  .new-model-dialog-footer{
+   top: 98vh !important;
+  }
+ }

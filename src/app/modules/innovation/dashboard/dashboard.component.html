@@ -1,0 +1,38 @@
+<app-header-page
+  [title]="'innovationDashboard.pageTitle' | translate"
+  [backButton]="true"
+  [showTotalItems]="false"
+  [isAddBtn]="false"
+></app-header-page>
+<app-page-filters
+  class="mb-3"
+  [hasExportBtn]="true"
+  [hasSearch]="false"
+></app-page-filters>
+<div class="row">
+  <div class="col-8">
+    <div class="innovation-statics-items">
+      <app-statics-numbers></app-statics-numbers>
+       <app-dashboard-challenges></app-dashboard-challenges>
+    </div>
+  </div>
+  <div class="col-4"></div>
+</div>
+
+<ng-container
+>
+  <!--  <div class="my-4">-->
+  <!--    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>-->
+  <!--  </div>-->
+</ng-container>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

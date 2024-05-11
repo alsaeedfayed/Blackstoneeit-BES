@@ -1,0 +1,36 @@
+//mixins
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.actual,
+.target {
+  width: 49%;
+  // label {
+  //   min-height: 30px
+  // }
+}
+
+.actual {
+  @include rtl_key(margin-, right, left, 2%);
+  @include rtl_key(margin-, left, right, 0);
+}
+
+label {
+  color: #717986;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.actual-date {
+  margin-top: -15px;
+}
+
+.text-area {
+  height: 120px !important;
+}
+
+.astrix-red {
+  color: red;
+}

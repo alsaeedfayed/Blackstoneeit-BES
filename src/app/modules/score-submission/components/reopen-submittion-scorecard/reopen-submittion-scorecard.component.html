@@ -1,0 +1,33 @@
+<div class="new-model-dialog-body">
+  <div class="form pb-2" [formGroup]="form">
+    <div class="mt-3">
+      <app-textarea-filed
+        formControlName="reason"
+        [control]="form | getControl : 'reason'"
+        [title]="'scoreSubmission.reasons' | translate"
+        [placeholder]="'scoreSubmission.enterReasons' | translate"
+      ></app-textarea-filed>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form?.invalid"
+    (click)="saveReason()"
+  >
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

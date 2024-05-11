@@ -1,0 +1,250 @@
+
+<app-header-page
+  [title]="(event ? 'events.updateEvent' : 'events.createNewEvent') | translate"
+  [backButton]="true" 
+  [showTotalItems]="false"
+>
+  <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+
+    <!-- cancel button -->
+    <button
+      class="btn btn-transparent"
+      (click)="backToLastPage()"
+    >
+      {{ "shared.cancel" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main"
+      [disabled]="form?.invalid || isBtnLoading"
+      (click)="onSubmitEvent()"
+    >
+      <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</app-header-page>
+
+<form class="new-event-form" [formGroup]="form">
+
+  <!-- title controls -->
+  <div class="row">
+    <div class="form-group col-6 mt-4">
+      <app-filed
+        formControlName="title"
+        [control]="form | getControl: 'title'"
+        [title]="'events.form.englishTitle' | translate"
+        [placeholder]="'events.form.englishTitlePlaceholder' | translate"
+      ></app-filed>
+    </div>
+
+    <div class="form-group col-6 mt-4">
+      <app-filed
+        formControlName="arabicTitle"
+        [control]="form | getControl: 'arabicTitle'"
+        [title]="'events.form.arabicTitle' | translate"
+        [placeholder]="'events.form.arabicTitlePlaceholder' | translate"
+      ></app-filed>
+    </div>
+  </div>
+
+  <!-- description control -->
+  <div class="form-group mt-4">
+    <app-text-editor
+      [id]="'description'"
+      formControlName="description"
+      [control]="form | getControl: 'description'"
+      [title]="'events.form.description' | translate"
+      [placeholder]="'events.form.descriptionPlaceholder' | translate"
+      [hasAttachments]="true"
+      [attachmentsFiles]="documentsFiles"
+      [supportedAttachmentSize]="documentsMaxSize"
+      [supportedAttachmentHint]="'events.form.documentsTypes' | translate"
+      [supportedAttachmentTypes]="supportedDocumentsTypes"
+      (onUpload)="onAttachmentChange($event)"
+      (deleteFile)="onRemoveAttachmentItem($event)"
+      ></app-text-editor>
+  </div>
+
+  <!-- date controls -->
+  <div class="row">
+    <div class="form-group col-6 mt-4">
+      <label class="form-label">
+        {{ "events.form.startDate" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <app-nz-date-picker
+        formControlName="startDate"
+        [control]="form | getControl : 'startDate'"
+        [placeholder]="'shared.selectDate' | translate"
+        minDate="today"
+      ></app-nz-date-picker>
+    </div>
+
+    <div class="form-group col-6 mt-4">
+      <label class="form-label">
+        {{ "events.form.endDate" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <app-nz-date-picker
+        formControlName="endDate"
+        [control]="form | getControl : 'endDate'"
+        [placeholder]="'shared.selectDate' | translate"
+        minDate="today"
+      ></app-nz-date-picker>
+    </div>
+  </div>
+
+  <!-- time controls -->
+  <div class="row">
+    <div class="form-group col-6 mt-4">
+      <label class="form-label">
+        {{ "events.form.startTime" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <app-nz-time-picker
+        formControlName="startTime"
+        [control]="form | getControl : 'startTime'"
+        [placeholder]="'shared.selectTime' | translate"
+        [minuteStep]="15"
+      ></app-nz-time-picker>
+    </div>
+
+    <div class="form-group col-6 mt-4">
+      <label class="form-label">
+        {{ "events.form.endTime" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <app-nz-time-picker
+        formControlName="endTime"
+        [control]="form | getControl : 'endTime'"
+        [placeholder]="'shared.selectTime' | translate"
+        [minuteStep]="15"
+      ></app-nz-time-picker>
+    </div>
+  </div>
+
+  <!-- registration deadline control -->
+  <div class="row">
+    <div class="form-group col-6 mt-4">
+      <label class="form-label">
+        {{ "events.form.registrationDeadline" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <app-nz-date-picker
+        formControlName="registrationDeadline"
+        [control]="form | getControl : 'registrationDeadline'"
+        [placeholder]="'shared.selectDate' | translate"
+        minDate="today"
+      ></app-nz-date-picker>
+    </div>
+  </div>
+
+  <!-- location controls -->
+  <div class="row">
+    <div class="form-group col-6 mt-4">
+      <app-filed
+        formControlName="location"
+        [control]="form | getControl: 'location'"
+        [title]="'events.form.englishLocation' | translate"
+        [placeholder]="'events.form.englishLocationPlaceholder' | translate"
+      ></app-filed>
+    </div>
+
+    <div class="form-group col-6 mt-4">
+      <app-filed
+        formControlName="locationAr"
+        [control]="form | getControl: 'locationAr'"
+        [title]="'events.form.arabicLocation' | translate"
+        [placeholder]="'events.form.arabicLocationPlaceholder' | translate"
+      ></app-filed>
+    </div>
+  </div>
+
+  <!-- agenda control -->
+  <div class="form-group">
+    <div class="agenda-items-container">
+      <div class="agenda-items" *ngFor="let item of agendas?.controls | keyvalue">
+        <ng-container formArrayName="agenda">
+          <ng-container [formGroupName]="item?.key">
+
+            <!-- english agenda item -->
+            <app-filed
+              class="d-block mt-4"
+              formControlName="english"
+              [control]="item?.value | getControl: 'english'"
+              [title]="'events.form.englishAgendaItem' | translate"
+              [placeholder]="'events.form.englishAgendaItemPlaceholder' | translate"
+            ></app-filed>
+
+            <!-- arabic agenda item -->
+            <app-filed
+              class="d-block mt-4"
+              formControlName="arabic"
+              [control]="item?.value | getControl: 'arabic'"
+              [title]="'events.form.arabicAgendaItem' | translate"
+              [placeholder]="'events.form.arabicAgendaItemPlaceholder' | translate"
+            ></app-filed>
+
+            <!-- remove item button -->
+            <button
+              class="remove-item-btn text-secondary"
+              [title]="'shared.remove' | translate"
+              (click)="onRemoveAgendaItem(i)"
+            >
+              <i class='bx bx-x'></i>
+            </button>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- add new agenda item -->
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-transparent mt-4" (click)="onAddAgendaItem()">
+        <i class='bx bx-plus'></i>
+        {{ 'events.form.addItem' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- cover photo -->
+  <div class="cover-photo">
+    <div class="form-group">
+      <label for="" class="form-label">
+        {{ 'events.form.coverPhoto' | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <div class="file-input-container mb-2">
+        <label for="file-input" class="file-input">
+          <i class="bx bx-upload"></i>
+          <span class="cta-text">
+            {{ 'events.form.selectFiles' | translate }}
+          </span>
+          <span class="supported-files-text">
+            {{ 'events.form.supportedFiles' | translate }}
+          </span>
+
+          <input
+            id="file-input"
+            type="file"
+            formControlName="coverPhoto"
+            accept="image/*,"
+            (change)="onFileChange($event)"
+          />
+        </label>
+      </div>
+    </div>
+
+    <div class="uploaded-image border" *ngIf="imgUrl">
+      <img [src]="imgUrl" alt="" />
+    </div>
+  </div>
+</form>

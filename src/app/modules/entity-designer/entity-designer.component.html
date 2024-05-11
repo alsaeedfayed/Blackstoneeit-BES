@@ -1,0 +1,154 @@
+<app-header-page
+  class="w-100"
+  [title]="'shared.FormBuilder' | translate"
+  [showTotalItems]="false"
+  [backButton]="true"
+  [isSearch]="false"
+>
+  <div buttons>
+    <button
+      class="btn btn-main createService"
+      [disabled]="!findControl || !formData.name"
+      (click)="saveForm()"
+    >
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</app-header-page>
+
+<div class="d-flex entity-designer w-100" *ngIf="!loading">
+  <div class="main-area w-100 px-4">
+    <app-tabs (change)="changeTabs($event)">
+      <app-tab
+        [value]="entityBuilderModeEnum.View"
+        [title]="'shared.FormBuilder' | translate"
+        icon="bxs-edit-alt"
+      >
+        <!-- <p class="title-form" *ngIf="!editName">
+          {{formData.name}}
+          <button class="btn-edit" (click)="editName = true"><i class="bx bxs-edit-alt"></i></button>
+        </p>
+
+        <div class="edit-filed" *ngIf="editName">
+          <app-filed class="d-block" [(ngModel)]="formData.name" [title]="'Form name'"></app-filed>
+          <button (click)="editName = false" [disabled]="!formData.name">
+            save
+          </button>
+        </div>
+
+        <p class="titlesub-form" *ngIf="!editDescription">
+          {{formData.description}}
+          <button class="btn-edit" (click)="editDescription = true"><i class="bx bxs-edit-alt"></i></button>
+        </p>
+
+        <div class="edit-filed mt-3" *ngIf="editDescription">
+          <app-textarea-filed class="d-block" [(ngModel)]="formData.description"
+            [title]="'Form description'"></app-textarea-filed>
+          <button (click)="editDescription = false" [disabled]="!formData.description ">
+            save
+          </button>
+        </div> -->
+        <div class="my-4">
+          <div>
+            <app-filed
+              [title]="'shared.formName' | translate"
+              [placeholder]="'shared.formName' | translate"
+              [(ngModel)]="formData.name"
+            ></app-filed>
+          </div>
+
+          <div class="mt-4">
+            <app-textarea-filed
+              [title]="'shared.formDescription' | translate"
+              [placeholder]="'shared.formDescription' | translate"
+              [(ngModel)]="formData.description"
+            ></app-textarea-filed>
+          </div>
+        </div>
+
+        <div class="onDragover">
+          <p *ngIf="selectedStep.controls.length == 0" class="drag-hint">
+            {{ 'entityDesigner.startDrag' | translate }}
+          </p>
+          <!-- <div class="step-header w-100">
+            <div class="buttons-steps">
+              <p class="step-number"> {{'entityDesigner.step' | translate}}
+                {{selectedStep.stepNumber}} {{'entityDesigner.of' | translate}} {{formData.formData.length}}</p>
+              <div class="buttons-navgtion">
+                <button (click)="backStep()" class="button-step" *ngIf="selectedStep.stepNumber > 1">
+                  <i class='bx bx-chevron-left'></i>
+                  {{'entityDesigner.backStep' | translate}}
+                </button>
+                <button (click)="nextStep()" class="button-step"
+                  *ngIf="selectedStep.stepNumber < formData.formData.length">
+                  {{'entityDesigner.nextStep' | translate}}
+                  <i class='bx bx-chevron-right'></i>
+                </button>
+                <button (click)="onDeleteStep()" [title]="'entityDesigner.deleteStep' | translate"
+                  class="button-step delete" *ngIf="selectedStep.stepNumber > 1">
+                  <i class='bx bx-x-circle'></i>
+                </button>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="onDrop" dndDropzone (dndDragover)="onDragover($event)" (dndDrop)="onDrop($event)">
+            <app-entity-builder [entity]="formData"></app-entity-builder>
+            <div class="plasholder-element" dndPlaceholderRef>Addition</div>
+          </div>
+        </div>
+      </app-tab>
+
+      <app-tab
+        [value]="entityBuilderModeEnum.Preview"
+        [title]="'entityDesigner.Preview' | translate"
+        icon="bxs-low-vision"
+      >
+        <div class="onDragover mt-4" *ngIf="entityBuilderModeEnum.Preview == entityBuilderConfig.mode">
+          <app-entity-builder [entity]="formData"></app-entity-builder>
+        </div>
+      </app-tab>
+    </app-tabs>
+  </div>
+
+  <div class="side">
+    <div class="entity-boxes">
+      <ng-container *ngFor="let contrlo of contrlosBoxes">
+        <app-entity-box
+          [dndDraggable]="contrlo"
+          [dndEffectAllowed]="draggable.effectAllowed"
+          [dndDisableIf]="draggable.disable"
+          [img]="contrlo.icon"
+          [label]="lang == 'en' ? contrlo.title : contrlo.arTitle"
+          [drag]="entityBuilderModeEnum.Preview != entityBuilderConfig.mode"
+          (dndStart)="onDragStart($event)"
+          (dndCopied)="onDraggableCopied($event)"
+          (dndMoved)="onDraggableMoved($event)"
+          (dndCanceled)="onDragCanceled($event)"
+          (dndEnd)="onDragEnd($event)"
+        ></app-entity-box>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="loading">
+  <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+</ng-container>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-confirm-modal
+  [content]="msgText()"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="redirectFlag ? redirect() : deleteStep()"
+></app-confirm-modal>

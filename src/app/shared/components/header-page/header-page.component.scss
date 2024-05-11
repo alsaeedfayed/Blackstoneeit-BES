@@ -1,0 +1,124 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.page-header {
+  position: sticky;
+  z-index: 1060 !important;
+  top: var(--app-header-height);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: $page-bg-color;
+  box-shadow: 0 -1.5rem $page-bg-color;
+
+  .new-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    color: $info_color;
+    margin-inline-start: -0.1875rem;
+    background: none;
+    padding: 0;
+    border: none;
+
+    i {
+      font-size: 1.25rem;
+      @include rtl_value(transform, rotate(0deg), rotate(-180deg));
+      transition: transform 0.15s ease-in-out;
+    }
+
+    span {
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    &:hover {
+      i {
+        @include rtl_value(
+          transform,
+          translateX(-0.25rem) rotate(0deg),
+          translateX(0.25rem) rotate(-180deg)
+        );
+      }
+
+      span {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .module-title {
+    display: flex;
+    gap: 0.5rem;
+    color: $black-color;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.25rem;
+    max-width: 600px;
+    .title {
+      color: #9a9a9a;
+      font-weight: normal;
+    }
+  }
+
+  .advanced-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 38px;
+    // min-width: 100px;
+    padding: 12px 10px;
+    background-color: #ffffff;
+    border: 0.6px solid #e1e1e1;
+    border-radius: 8px;
+  }
+
+  .add-new-btn {
+    min-width: auto;
+  }
+
+  ::ng-deep {
+    app-search {
+      .search-bar-container {
+        margin-inline-end: 0 !important;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 740px) {
+  .add-new-btn {
+    min-height: 35px;
+    font-size: 14px;
+  }
+}
+
+.btnList {
+  gap: 15px;
+}
+
+.custom-gap {
+  @media (max-width: 992px) {
+    gap: 8px;
+  }
+}
+
+.custom-actions {
+  margin-inline-start: auto;
+}
+.filterCount-advanced{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+  background-color: #ffa800;
+  color: #ffffff;
+  font-size: 10px;
+  border-radius: 50%;
+}

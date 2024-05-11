@@ -1,0 +1,216 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-sectionTitle {
+    color: $info_color;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.125rem !important;
+  }
+  &-subtitle {
+    color: $info_color;
+    font-weight: 400;
+    font-size: 0.9rem;
+    line-height: 1.125rem !important;
+  }
+}
+.main-task {
+  &-info {
+    container: task-info / inline-size;
+    position: relative;
+    z-index: 1;
+
+    &-list {
+      display: grid;
+      margin-bottom: 2rem;
+      @container task-info (min-width: 700px) {
+        & {
+          grid-template-columns: repeat(6, 1fr);
+        }
+      }
+
+      @container task-info (min-width: 500px) and (max-width: 699px) {
+        & {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+        }
+      }
+
+      @container task-info (max-width: 500px) {
+        & {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+
+      &-item {
+        @container task-info (min-width: 700px) {
+          &:not(:first-of-type) {
+            padding-inline-start: 1rem;
+            border-inline-start: 0.0625rem solid #96a6bd36;
+          }
+        }
+
+        @container task-info (min-width: 500px) and (max-width: 699px) {
+          &:nth-of-type(-1n + 3) {
+            padding-bottom: 1rem;
+            border-bottom: 0.0625rem solid #96a6bd36;
+          }
+        }
+
+        @container task-info (max-width: 500px) {
+          &:not(:last-of-type) {
+            padding-bottom: 1rem;
+            border-bottom: 0.0625rem solid #96a6bd36;
+          }
+        }
+
+        &-content {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 0.875rem;
+          line-height: 1.25rem !important;
+
+          ::ng-deep person-item {
+            .personItem {
+              > .avatar {
+                .letters,
+                img {
+                  height: 2rem !important;
+                  width: 2rem !important;
+                }
+
+                .letters {
+                  font-size: 0.75rem;
+                }
+              }
+
+              > .info {
+                .name {
+                  font-size: 0.875rem;
+                  margin-bottom: 0;
+                }
+
+                .job {
+                  display: none;
+                }
+              }
+            }
+          }
+          &-priority{
+          }
+        }
+      }
+    }
+  }
+}
+::ng-deep app-badge {
+  .badge-status::before {
+    display: none !important;
+  }
+}
+.progress {
+  &-container {
+    background-color: #f1f3f6cc;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5%;
+    // width: 80%;
+    .task-progress {
+      width: 100%;
+      .progress-percentage {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        color: $black-color;
+        font-weight: 400;
+        font-size: 0.75rem;
+        line-height: 1.25rem;
+      }
+
+      .progress-bar {
+        position: relative;
+        height: 0.25rem;
+        background-color: #ebedef;
+        margin-top: 0.5rem;
+        border-radius: 0.625rem;
+        overflow: hidden;
+        height: 15px;
+
+        .fill {
+          display: block;
+          position: absolute;
+          top: 0;
+          @include rtl_value(left, 0, auto);
+          @include rtl_value(right, auto, 0);
+          height: 100%;
+          width: 0%;
+        }
+        .none {
+          background: linear-gradient(to right, #808080, #b6b6b6);
+        }
+        .half {
+          background: linear-gradient(to right, #ffa800, #ffcc6a);
+        }
+        .afterHalf {
+          background: linear-gradient(to right, #840aff, #b75bd8);
+        }
+        .done {
+          background: linear-gradient(to right, #52af31, #3ed126);
+        }
+      }
+      .percentage {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &:not(.done) {
+    .progress-bar {
+      .fill {
+        background-color: #ffa800;
+      }
+    }
+  }
+
+  &.done {
+    .progress-bar {
+      .fill {
+        background-color: #0fc161;
+      }
+    }
+  }
+}
+.see-more-btn {
+  display: inline-block;
+  color: $info_color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

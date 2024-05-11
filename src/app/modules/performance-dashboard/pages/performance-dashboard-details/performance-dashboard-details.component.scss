@@ -1,0 +1,29 @@
+// Variables
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.performance-dashboard-details {
+  //background: rgb(249, 249, 249);
+  .title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #3c557a;
+    margin-bottom: 20px;
+  }
+  .content {
+    margin-top: 20px;
+  }
+  .performance {
+      display: flex;
+      margin-bottom: 30px;
+      .to-date {
+          width: 32.33%;
+          @include rtl_key(margin-, right, left, 1%);
+          @include rtl_key(margin-, left, right, 0);
+      }
+      .digitalization {
+          width: calc(100% - 32.33%);
+      }
+  }
+}

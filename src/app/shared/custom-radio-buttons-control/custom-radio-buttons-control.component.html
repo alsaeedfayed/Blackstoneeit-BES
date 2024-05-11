@@ -1,0 +1,15 @@
+<div class="cards-container m-0 gx-1">
+  <div class="card-with-icon"
+       [ngStyle]="{height: cardHeight + 'px'}"
+       *ngFor="let item of items; let i = index"
+       (click)="onSelectItem(item)"
+       [ngClass]="{'active': selectedItem?.code === item?.code || (selectedItem === true && i == 0) || (selectedItem === false && i == 1)}">
+    <ng-container *ngIf="optionsDesc">
+      <span class="icon" [title]="optionsDesc[item.code.toLowerCase()][lang]">
+        <i class='bx bxs-info-circle'></i>
+      </span>
+    </ng-container>
+    <span>{{item?.title[lang]}}</span>
+  </div>
+
+</div>

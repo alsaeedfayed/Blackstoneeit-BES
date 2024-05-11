@@ -1,0 +1,9 @@
+<div class="widgets row">
+    <!-- <analysis-border-widget [Data]="widget" *ngFor="let widget of widgets"></analysis-border-widget> -->
+    <div *ngFor="let widget of widgets" class="col-3 col-md-3 col-sm-6 col-xs-12" >
+        <div class="widget" [style.borderColor]="widget?.borderColor">
+            <span [innerHTML]="widget?.title"></span>
+            <strong>{{widget?.count}}</strong>
+        </div>
+    </div>
+</div>

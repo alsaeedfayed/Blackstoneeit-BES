@@ -1,0 +1,58 @@
+<!-- <app-kpis-performance-status></app-kpis-performance-status> -->
+<div class="page">
+
+  <ng-container *ngIf="loading; else header">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+  <!-- tabs navigation menu -->
+  <div class="mb-4">
+    <tabs-menu [tabs]="tabs" [breakpoint]="'lg'"></tabs-menu>
+  </div>
+
+  <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+</div>
+
+<ng-template #header>
+  <app-header-page
+    [backButton]="true"
+    [titleBtn]="'committeeDetails.modifyCommittee' | translate"
+    [showButtons]="isAllowedCR"
+    (btnClick)="openModal()"
+    [title]="language == 'en' ? committeeDetails.name : committeeDetails.nameAr"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+    [backTo]="backToUrl"
+  ></app-header-page>
+
+  <app-page-filters
+    [hasExportBtn]="router.url.includes('dashboard')"
+    [hasSearch]="false"
+    (onExportBtnClicked)="capture($event)"
+  ></app-page-filters>
+</ng-template>
+
+<!-- loader skeleton for the header -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'create-change-request'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="create-task-model-header w-100">
+    <label class="modal-title">
+      {{ "committeeDetails.createChangeRequest" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <!-- <create-task-model [committeeId]="125"></create-task-model> -->
+    <app-change-request-model></app-change-request-model>
+  </div>
+</app-model>

@@ -1,0 +1,56 @@
+<div class="page-header py-2 mb-4">
+  <!-- back button & page title -->
+  <div class="d-flex flex-column gap-2">
+    <button class="new-back-btn" (click)="back()" *ngIf="backButton">
+      <i class="bx bx-left-arrow-alt"></i>
+      <span>{{ "shared.back" | translate }}</span>
+    </button>
+
+    <div class="module-title">
+      <span class="title" *ngIf="isStartServiseTitle">
+        {{ "shared.startService" | translate }}
+      </span>
+      <span>{{ title }}</span>
+      <span class="totalItems" *ngIf="showTotalItems">({{ totalItems }})</span>
+      <span>
+        <ng-content></ng-content>
+      </span>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap gap-2 custom-actions">
+    <!-- filter select -->
+    <ng-content select="[filters-select]"></ng-content>
+
+    <!-- search field -->
+    <app-search
+      *ngIf="isSearch"
+      (search)="changeSearch($event)"
+      [searchKey]="searchKey"
+      #search
+    ></app-search>
+
+    <!-- advanced filter button -->
+    <button
+      class="advanced-filter-btn"
+      *ngIf="hasAdvancedFilter"
+      (click)="advancedFilter()"
+    >
+      <img src="assets/icons/filter-2.svg" alt="filter" />
+      <span>{{ "shared.filter" | translate }}</span>
+      <span class="filterCount-advanced" *ngIf="showTotalFilterAdvanced && filterCount> 0">{{ filterCount }}</span>
+    </button>
+
+    <!-- add new button -->
+    <button
+      class="btn btn-main add-new-btn"
+      (click)="evnet()"
+      *ngIf="!!titleBtn && showButtons"
+    >
+      <i class="bx bx-plus" *ngIf="isAddBtn"></i>
+      {{ titleBtn }}
+    </button>
+  </div>
+
+  <ng-content select="[buttons]"></ng-content>
+</div>

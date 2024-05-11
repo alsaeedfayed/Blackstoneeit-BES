@@ -1,0 +1,41 @@
+@import "src/assets/css/utils/variables.scss";
+
+.see-more-btn {
+  display: inline-block;
+  color: $info_color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.block-title {
+  color: $info_color;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.meeting-creator,
+.meeting-mom-recorded {
+  ::ng-deep person-item {
+    .personItem {
+      &.header-person {
+        width: fit-content;
+      }
+
+      > .avatar {
+        .letters,
+        img {
+          height: 2rem !important;
+          width: 2rem !important;
+        }
+      }
+    }
+  }
+}

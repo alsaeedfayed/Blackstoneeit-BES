@@ -1,0 +1,26 @@
+.analytics-widgets {
+  container: analytics-widgets / inline-size;
+
+  &-items {
+    display: grid;
+    gap: 1rem;
+
+    @container analytics-widgets (min-width: 800px) {
+      & {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @container analytics-widgets (min-width: 500px) and (max-width: 799px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  ::ng-deep app-stats-widget {
+    .stats-widget {
+      height: 100%;
+    }
+  }
+}

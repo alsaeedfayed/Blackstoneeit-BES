@@ -1,0 +1,133 @@
+<div class="new-model-dialog-body">
+  <h3 class="fs-6 my-3">{{ language == "ar" ? item?.nameAr : item?.name }}</h3>
+
+  <!-- description -->
+  <div class="mb-4" *ngIf="item?.description">
+    <div class="angular-editor-description" [innerHTML]="item?.description | truncate: descTextLimit"></div>
+
+    <button
+      class="see-more-btn mt-2"
+      *ngIf="item?.description?.length > descTextInitialLimit"
+      (click)="toggleMoreText()">
+      <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+        {{ 'committeesManagement.seeMore' | translate }}
+      </ng-container>
+      <ng-template #seeLess>
+        {{ 'committeesManagement.seeLess' | translate }}
+      </ng-template>
+    </button>
+  </div>
+
+  <!-- chairman -->
+  <div class="chairman mb-4">
+    <div class="block-title">{{ 'committeesList.highlightModel.chairedBy' | translate }}</div>
+
+    <person-item [requesterItem]="item?.chairmanInfo" [noCursor]="true"></person-item>
+  </div>
+
+  <div class="d-flex gap-3 w-100">
+    <!-- members -->
+    <div class="members flex-grow-1">
+      <div class="block-title">{{ 'committeesList.highlightModel.members' | translate }}</div>
+
+      <div class="members-content">
+        <ng-container *ngIf="item?.membersCount > 0; else no_members">
+          <avatar-stack [members]="item?.members"></avatar-stack>
+
+          <span class="members-count">
+            {{ item?.membersCount | membersCount : language }}
+          </span>
+        </ng-container>
+
+        <ng-template #no_members>-</ng-template>
+      </div>
+    </div>
+
+    <!-- created -->
+    <div class="created flex-grow-1">
+      <div class="block-title">{{ 'committeesList.highlightModel.created' | translate }}</div>
+
+      <span *ngIf="item?.creationDate">
+        {{
+          language === "en" ?
+          ((item?.creationDate| uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+          ((item?.creationDate | uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+        }}
+      </span>
+    </div>
+  </div>
+
+  <!-- horizontal line -->
+  <div class="horizontal-line"></div>
+
+  <!-- meetings header -->
+  <div class="meetings d-flex align-items-center justify-content-between gap-3 mb-2">
+    <div class="block-title mb-0">{{ 'committeesList.highlightModel.upcomingMeetings' | translate }}</div>
+
+  </div>
+
+  <ng-container *ngIf="loading  else data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- cancel button -->
+  <button
+    class="btn btn-info flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.cancel' | translate }}
+  </button>
+
+  <button class="btn btn-main flex-grow-1" (click)="goToCommitteeDetails(item?.id)">
+    {{ 'committeesList.highlightModel.moreDetails' | translate }}
+  </button>
+</div>
+
+<ng-template #data>
+   <!-- meetings list -->
+   <ul class="meetings-list" *ngIf="upcomingMeetings.length > 0">
+    <li class="meetings-item" *ngFor="let meeting of upcomingMeetings">
+      <div class="meetings-item-date">
+        <strong class="meetings-item-date-day">{{meeting.date| date: 'd'}}</strong>
+        <strong class="meetings-item-date-month">{{meeting.date| date: 'MMM'}}</strong>
+      </div>
+
+      <div class="meetings-item-content">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-3">
+          <div>
+            <a (click)="goToMeetingDetails(meeting?.id)" class="meetings-item-title mb-1">{{meeting?.name}}</a>
+  
+            <div class="d-flex align-items-center gap-2">
+              <span class="meetings-item-status bg-{{ meetingStatuses[meeting?.status]['className'] }}"></span>
+              <span class="meetings-item-duration">
+                {{(meeting?.timeFrom| uTCToLocalDate).toLocaleString()| date: 'shortTime'}}
+                - 
+                {{(meeting?.timeTo| uTCToLocalDate).toLocaleString()| date: 'shortTime'}}</span>
+            </div>
+          </div>
+          <div class="meetings-item-time">{{ meeting?.date | meetingTimeLeft: meeting?.timeFrom: meeting?.timeTo :language }}</div>
+        </div>
+  
+        <div class="meetings-item-organizer d-flex align-items-center justify-content-between flex-wrap gap-3">
+          <span>{{ 'committeesList.highlightModel.organizer' | translate }}</span>
+  
+          <person-item [requesterItem]="meeting?.creatorInfo" [noCursor]="true"></person-item>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="no-data" *ngIf="upcomingMeetings.length == 0">
+    <app-no-data [msg]="'committeesList.highlightModel.noUpcomingMeetingsMsg'  | translate"></app-no-data>
+  </div>
+    <!-- <div *ngIf="upcomingMeetings.length == 0">{{'committeesList.highlightModel.noUpcomingMeetingsMsg' | translate}}</div> -->
+</ng-template>
+<!-- loader skeleton for the model -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

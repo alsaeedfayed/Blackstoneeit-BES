@@ -1,0 +1,163 @@
+<div class="new-model-dialog-body">
+  <div class="change-request-form pt-3 pb-2" [formGroup]="model.form">
+    <!-- Scrore card - level - group details -->
+    <div class="scorecard-details row">
+      <!-- <h5>
+        {{
+          model.lang == "en"
+            ? model.selectedScorecard.title
+            : model.selectedScorecard.titleAr
+        }}:
+      </h5> -->
+
+      <div class="d-flex align-center justify-content-between">
+        <div class="level col-md-3">
+        <label class="form-label">{{ "shared.level" | translate }}</label>
+        <ng-select
+          class="input-select"
+          style="display: none;"
+          placeholder="{{ 'cr.selectLevel' | translate }}"
+          formControlName="level"
+          [items]="model.levels"
+          bindLabel="txt"
+          bindValue="id"
+          [dropdownPosition]="'bottom'"
+          [clearable]="false"
+          [disbaled]="true"
+        >
+        </ng-select>
+        <p *ngIf="model.LevelText" class="inf-parag">{{ model.LevelText }}</p>
+      </div>
+
+      <div class="group col-md-8">
+        <label class="form-label">{{
+          model.f["level"].value == 2
+            ? model.sectorsLabel
+            : model.f["level"].value == 3
+            ? model.departmentsLabel
+            : model.sectionsLabel
+        }}</label>
+
+        <ng-select
+          style="display: none;"
+          class="select-ddl"
+          formControlName="groupId"
+          [clearable]="false"
+          [items]="model.filteredGroups"
+          [placeholder]="'cr.selectGroup' | translate"
+          [bindLabel]="model.lang === 'en' ? 'name' : 'arabicName'"
+          bindValue="id"
+          (change)="model.filterGoals()"
+        >
+        </ng-select>
+        <p *ngIf="model.selectedGroupName" class="inf-parag">{{ model.selectedGroupName }}</p>
+      </div>
+      </div>
+    </div>
+
+    <!-- Change Request Type -->
+    <div class="cr-types">
+      <h6>{{ "cr.changeRequestType" | translate }}</h6>
+
+      <div class="types" *ngIf="model.types && model.types.length > 0">
+        <div class="type" *ngFor="let type of model.types">
+          <button
+            (click)="model.toggleTypeActivation(type)"
+            class="btn"
+            [ngStyle]="{ backgroundColor: type.id === model.selectedType.id ? type.color : 'transparent' }"
+            [ngClass]="{ active: type.id === model.selectedType.id }"
+          >
+            {{ type.txt }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- cr form -->
+
+    <!-- select goal -->
+    <app-select
+      formControlName="changeRequestGoalIds"
+      bindValue="id"
+      [placeholder]="'cr.selectGoal' | translate"
+      [control]="model.form | getControl: 'changeRequestGoalIds'"
+      [bindLabel]="language == 'ar' ? 'titleAr' : 'title'"
+      [items]="model.filteredGoalsList"
+      [multiple]="true"
+      [title]=" 'cr.selectGoal' | translate"
+      [ngStyle]="{ display: model.IsRemoveGoal || model.isEditGoal ? 'block' : 'none' }"
+    ></app-select>
+
+    <!-- title -->
+    <app-filed
+      class="d-block mt-3"
+      formControlName="title"
+      [title]="'cr.serviceTitle' | translate"
+      [control]="model.form | getControl: 'title'"
+      [placeholder]="'cr.enterRequestTitle' | translate"
+      [isSubmitted]="model.isSubmitted"
+    ></app-filed>
+
+    <!-- title ar -->
+    <app-filed
+      class="d-block mt-3"
+      formControlName="titleAr"
+      [title]="'cr.serviceTitleAr' | translate"
+      [control]="model.form | getControl: 'titleAr'"
+      [placeholder]="'cr.enterArabicRequestTitle' | translate"
+      [isSubmitted]="model.isSubmitted"
+    ></app-filed>
+
+    <!-- In Case Add New Goal -->
+    <div [ngStyle]="{display: model.isaddGoal ? 'block' : 'none'}">
+      <app-filed
+        class="d-block mt-3"
+        formControlName="goalTitle"
+        [title]="'cr.goalName' | translate"
+        [control]="model.form | getControl: 'goalTitle'"
+        [placeholder]="'cr.enterRequestTitle' | translate"
+        [isSubmitted]="model.isSubmitted"
+      ></app-filed>
+
+      <app-filed
+        class="d-block mt-3"
+        formControlName="goalTitleAr"
+        [title]="'cr.goalNameAr' | translate"
+        [control]="model.form | getControl: 'goalTitleAr'"
+        [placeholder]="'cr.enterArabicRequestTitle' | translate"
+        [isSubmitted]="model.isSubmitted"
+      ></app-filed>
+    </div>
+
+    <app-description-input-with-attachments
+      class="d-block mt-3"
+      [title]="(model.isaddGoal ? 'cr.goalDescription'  :'cr.reason' )| translate"
+      formControlName="reason"
+      [control]="model.form | getControl: 'reason'"
+      (attachmentUploadEvent)="model.uploadFile($event)"
+      [isSubmitted]="model.isSubmitted"
+    ></app-description-input-with-attachments>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="model.isBtnLoading"
+    (click)="model.submit()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="model.isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

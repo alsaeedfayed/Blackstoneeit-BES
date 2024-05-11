@@ -1,0 +1,205 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+.astrix-red {
+  color: red;
+}
+
+:host ::ng-deep {
+  app-nz-date-picker {
+    .form-group {
+      margin-top: 0 !important;
+    }
+  }
+
+  .members-select {
+    .ng-select-container {
+      // height: auto !important;
+      // min-height: 44px;
+
+      .ng-value {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 6px 4px 4px;
+        background-color: rgba(172, 181, 193, 0.15) !important;
+        border-radius: 2.5rem !important;
+
+        .ng-value-label {
+          padding: 0 !important;
+        }
+
+        .ng-value-icon {
+          height: 13px;
+          line-height: 13px;
+          font-size: 18px;
+          color: $tertiary-color;
+          background: none !important;
+          border: none !important;
+
+          &:hover {
+            color: $danger-color !important;
+          }
+        }
+      }
+    }
+
+    person-item {
+      .avatar {
+        .letters,
+        img {
+          height: 2rem !important;
+          width: 2rem !important;
+        }
+
+        .letters {
+          font-size: 0.75rem;
+        }
+      }
+
+      .name {
+        font-size: 12px;
+        margin-bottom: 0;
+      }
+
+      .job {
+        display: none;
+      }
+    }
+  }
+}
+
+.measurment-type,
+.freq-type {
+  // margin: 15px 0;
+
+  .types {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    .type {
+      button {
+        color: #cbcbcb;
+        width: 100%;
+        border: 1px solid #cbcbcb;
+        border-radius: 4px;
+        padding: 15px 30px;
+        font-size: 14px;
+        font-weight: 600;
+
+        &.active {
+          color: #3c557a;
+          border-color: $main-color;
+        }
+      }
+    }
+  }
+}
+
+// tabs styles
+.tabsmenu {
+  --tab-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+
+  &__item {
+    flex-grow: 1;
+    &:hover {
+      & ~ .tabsmenu__item {
+        .tabsmenu__link {
+          &:before {
+            @include rtl_value(left, 0, 100%);
+            @include rtl_value(right, 100%, 0);
+          }
+        }
+      }
+
+      & .tabsmenu__link {
+        color: $black-color;
+
+        &:before {
+          @include rtl_value(left, 0, 0);
+          @include rtl_value(right, 0, 0);
+        }
+      }
+    }
+  }
+
+  &:not(:hover) {
+    .tabsmenu__item.active {
+      & .tabsmenu__link {
+        color: $black-color;
+
+        &:before {
+          @include rtl_value(left, 0, 0);
+          @include rtl_value(right, 0, 0);
+        }
+      }
+    }
+  }
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    height: var(--tab-height);
+    line-height: var(--tab-height);
+    color: $info_color;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0 1rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      @include rtl_value(left, 100%, 0);
+      @include rtl_value(right, 0, 100%);
+      bottom: -1px;
+      border-bottom: 2px solid $main-color;
+      transition: 0.16s all 0.025s;
+    }
+
+    i {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.kpiModalLanguageen {
+  .title-container {
+    flex-direction: column;
+  }
+}
+
+.kpiModalLanguagear {
+  .title-container {
+    flex-direction: column-reverse;
+  }
+}
+
+::ng-deep {
+  .kpiModalLanguagear {
+    .enNameLable {
+      .form-label {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 3px;
+      }
+    }
+  }
+
+  .kpiModalLanguageen {
+    .arNameLable {
+      .form-label {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 3px;
+      }
+    }
+  }
+}

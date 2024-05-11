@@ -1,0 +1,63 @@
+<div class="">
+  <div
+  class="d-flex justify-content-end gap-2 flex-wrap"
+>
+  <button
+    (click)="filterHistory(3)"
+    class="filterBtn"
+    [class.active]="selectedOption == 3"
+  >
+    {{ "committeeDecisions.details.voteOptions.abstain" | translate }}
+  </button>
+  <button
+    (click)="filterHistory(2)"
+    class="filterBtn"
+    [class.active]="selectedOption == 2"
+  >
+  {{ "committeeDecisions.details.voteOptions.no" | translate }}
+  </button>
+  <button
+    (click)="filterHistory(1)"
+    class="filterBtn"
+    [class.active]="selectedOption == 1"
+  >
+  {{ "committeeDecisions.details.voteOptions.yes" | translate }}
+  </button>
+  <button
+    (click)="filterHistory(0)"
+    class="filterBtn"
+    [class.active]="selectedOption == 0"
+  >
+  {{ "committeeDecisions.details.voteOptions.noVoteYet" | translate }}
+  </button>
+</div>
+</div>
+<!-- history items -->
+<ng-container *ngIf="loading; else tasks_items">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="list_skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- history items -->
+<ng-template #tasks_items>
+  <!-- list view -->
+  <app-voting-history-rows
+    *ngIf="votingHistory?.length > 0"
+    class="d-block mt-4"
+    [language]="language"
+    [list]="votingHistory"
+  ></app-voting-history-rows>
+
+  <div class="no-data" *ngIf="votingHistory?.length == 0 || !votingHistory">
+    <app-no-data [msg]="'committeeDecisions.details.votingHistory.noData' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #list_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,29 @@
+<div class="segments flex-wrap">
+  <button
+    class="move-button next-button"
+    (click)="backStep()"
+    [disabled]="isFirstSegment"
+  >
+    <i class="bx bx-chevron-left"></i>
+  </button>
+  <div>
+    <ul>
+      <li
+        *ngFor="let segment of segments; let i = index"
+        (click)="selectSegment(segment)"
+        [class.active]="segment.active"
+      >
+        {{ segment.title }}
+        <img [src]="segment.icon" />
+      </li>
+    </ul>
+    <ng-content></ng-content>
+  </div>
+  <button
+    class="move-button back-button"
+    (click)="nextStep()"
+    [disabled]="isLastSegment"
+  >
+    <i class="bx bx-chevron-right"></i>
+  </button>
+</div>

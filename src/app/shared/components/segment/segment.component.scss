@@ -1,0 +1,51 @@
+@import "../../../../assets/css/utils/variables.scss";
+
+.segments {
+  --aside-width: 260px;
+  display: grid;
+  grid-template-columns: var(--aside-width) auto;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: var(--aside-width);
+    flex-shrink: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      font-weight: 400;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 16px;
+      color: #717986;
+      background: #ffffff;
+      padding: 14px 20px;
+      box-shadow: 0px 0px 26px rgba(0, 0, 0, 0.04);
+      border-radius: 10px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &.active {
+        background: $main-color;
+        border: 1px solid $main-color;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 740px) {
+  .segments {
+    grid-template-columns: 1fr;
+
+    ul {
+      width: 100%;
+    }
+  }
+}

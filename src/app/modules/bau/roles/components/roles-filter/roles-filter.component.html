@@ -1,0 +1,48 @@
+<div class="roles-filters-container">
+  <div class="roles-filters" [formGroup]="form">
+    <!-- sector -->
+    <app-select
+      class="d-block"
+      formControlName="sectorId"
+      [control]="form | getControl : 'sectorId'"
+      [title]="'bau.roles.modal.sector' | translate"
+      [placeholder]="'bau.roles.modal.sector' | translate"
+      [clearable]="true"
+      [items]="sectors"
+      [bindVlaue]="'id'"
+      [bindLabel]="language == 'en' ? 'name' : 'arabicName'"
+      [loading]="isLoadingSectors"
+      (change)="changeFilter()"
+      (change)="checkSector($event)"
+    ></app-select>
+
+    <app-select
+      class="d-block"
+      formControlName="departmentId"
+      [control]="form | getControl : 'departmentId'"
+      [title]="'bau.roles.modal.department' | translate"
+      [placeholder]="'bau.roles.modal.department' | translate"
+      [clearable]="true"
+      [items]="departments"
+      [bindVlaue]="'id'"
+      [bindLabel]="language == 'en' ? 'name' : 'arabicName'"
+      [loading]="isLoadingDepartments"
+      (change)="changeFilter()"
+      (change)="checkDepartment($event)"
+    ></app-select>
+
+    <app-select
+      class="d-block"
+      formControlName="sectionId"
+      [control]="form | getControl : 'sectionId'"
+      [title]="'bau.roles.modal.section' | translate"
+      [placeholder]="'bau.roles.modal.section' | translate"
+      [clearable]="true"
+      [items]="sections"
+      [bindVlaue]="'id'"
+      [bindLabel]="language == 'en' ? 'name' : 'arabicName'"
+      [loading]="isLoadingSections"
+      (change)="changeFilter()"
+    ></app-select>
+  </div>
+</div>

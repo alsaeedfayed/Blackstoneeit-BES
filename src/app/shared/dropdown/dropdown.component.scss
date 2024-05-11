@@ -1,0 +1,110 @@
+@import "../../../assets/css/utils/variables.scss";
+@import "../../../assets/css/utils/mixins.scss";
+
+.dropdown-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eaeaea;
+  width: 30px;
+  height: 45px;
+  border-radius: 7px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(248, 248, 248);
+  }
+
+  .bx-dots-vertical-rounded {
+    color: #b5b5b5;
+    font-size: 25px;
+  }
+
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 170px;
+
+    &-item {
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(222, 222, 222, 0.16);
+      }
+
+      &:hover {
+        background-color: #f5f7fa;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background-color: transparent;
+        color: $secondary-color;
+        white-space: nowrap;
+        font-weight: 400;
+        font-size: 14px;
+        padding: 12px;
+        line-height: 16px;
+        border: none;
+        outline: none !important;
+
+        i {
+          font-size: 20px;
+        }
+
+        &:disabled {
+          color: $link_water_color !important;
+          cursor: default;
+        }
+
+        &.edit-btn {
+          color: $link_water_color;
+        }
+
+        &.delete-btn {
+          color: $danger-color;
+        }
+
+        &.members-btn {
+          color: $main-color;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  angular-popper {
+    .angular-popper {
+      z-index: 1;
+      width: fit-content;
+      background: $white-color;
+      padding: 0;
+      box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.1);
+      border-radius: 0.625rem;
+
+      &__arrow {
+        border-color: $white-color;
+      }
+    }
+  }
+}
+
+.filter-on{
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 11px;
+  width: 11px;
+  background-color: #ffa800;
+  color: #ffffff;
+  font-size: 10px;
+  border-radius: 50%;
+}
+
+.selected-background {
+  background-color: rgb(236, 234, 234) !important;
+}

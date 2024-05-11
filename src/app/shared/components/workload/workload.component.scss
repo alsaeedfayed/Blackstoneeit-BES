@@ -1,0 +1,32 @@
+.table {
+  background: #fff;
+  border-radius: 10px;
+  border: 0;
+  .header-text {
+    color: #7a838f !important;
+    font-weight: 600 !important;
+    size: 12px !important;
+  }
+  tr {
+    border: 0 !important;
+    background-color: transparent;
+  }
+  th {
+    border: 0 !important;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+    padding: 20px 10px;
+  }
+
+  td {
+    padding: 5px 10px;
+    gap: 10px;
+
+    &.tasks-count {
+      color: #7a838f;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}

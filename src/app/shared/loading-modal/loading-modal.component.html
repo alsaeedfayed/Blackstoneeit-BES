@@ -1,0 +1,16 @@
+<!-- <div class="loading-modal-container"
+     *ngIf="displayModal">
+  <div class="loading-modal-dialog">
+    <i class="bx bx-loader-alt bx-spin"></i>
+    <span class="loading-text">{{content | translate}}...</span>
+  </div>
+</div> -->
+
+<div id="part-loader"
+     class="fullLoader"
+     *ngIf="displayModal">
+  <div class="loader-content">
+    <img src="assets/img/feather-loader.svg"
+         class="loader" />
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="new-model-dialog-body">
+  <div class="requests-filter-form pb-2" [formGroup]="form">
+    <div class="filter mt-3">
+      <!-- <label class="form-label">
+        {{ 'requests.requester' | translate }}
+      </label>
+
+      <ng-select
+        [searchable]="true"
+        class="input-select"
+        placeholder="{{ 'shared.all' | translate }}"
+        formControlName="requesterId"
+        notFoundText="{{ 'shared.noItemsFound' | translate }}"
+        (search)="searchUsers($event)"
+      >
+        <ng-option
+          [value]="requester.id"
+          *ngFor="let requester of requesters"
+        >
+          {{ requester.fullName }}
+        </ng-option>
+      </ng-select> -->
+
+      <app-select
+      class="d-block mt-3"
+      formControlName="requesterId"
+      [title]="'requests.requester' | translate"
+      [placeholder]="'shared.all' | translate"
+      [items]="requesters"
+      bindValue="id"
+      [bindLabel]="'fullName'"
+      [multiple]="false"
+      [clearable]="true"
+      (onSearch)="searchUsers($event)"
+    ></app-select>
+
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'requests.requestNumber' | translate }}
+      </label>
+
+      <input type="text"
+        class="form-control"
+        formControlName="requestNumber"/>
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'requests.service' | translate }}
+      </label>
+
+      <ng-select
+        [searchable]="true"
+        class="input-select"
+        placeholder="{{ 'shared.all' | translate }}"
+        formControlName="serviceId"
+        notFoundText="{{ 'shared.noItemsFound' | translate }}"
+      >
+        <ng-option
+          [value]="service.serviceId"
+          *ngFor="let service of services"
+        >
+          {{ lang === 'en'? service.title : service.titleAr }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'requests.requestOn' | translate }}
+      </label>
+
+      <app-date-range formControlName="creationDate" [dir]="lang === 'en'? 'ltr':'rtl'"></app-date-range>
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'requests.lastUpdateDateRange' | translate }}
+      </label>
+
+      <app-date-range formControlName="updatedDate" [dir]="lang === 'en'? 'ltr':'rtl'"></app-date-range>
+    </div>
+
+    <div class="filter mt-3 d-flex align-items-ceneter">
+      <label class="form-label mr-4">
+        {{ 'requests.serviceRating' | translate }}
+      </label>
+
+      <bar-rating
+        [readOnly]="false"
+        [max]="5"
+        [theme]="'stars'"
+        [rate]="form.value.rating"
+        (rateChange)="setRating($event)"
+      ></bar-rating>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onPopupClose()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- clear button -->
+  <button
+    class="btn btn-outline-main flex-grow-1"
+    (click)="onFilterReset()"
+  >
+    {{ 'shared.clearFilter' | translate }}
+  </button>
+
+  <!-- filter button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    (click)="onFilterConfirmed()"
+  >
+    {{ 'shared.filter' | translate }}
+  </button>
+</div>

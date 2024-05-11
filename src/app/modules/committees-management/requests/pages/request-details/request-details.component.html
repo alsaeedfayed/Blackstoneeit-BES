@@ -1,0 +1,197 @@
+<!-- page header position -->
+<ng-container *ngIf="!committeeInfo; else header">
+  <ng-template [ngTemplateOutlet]="skeleton"></ng-template>
+</ng-container>
+
+<!-- buttons and status position -->
+<ng-container *ngIf="!committeeInfo; else data">
+  <div class="mb-3">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- page header -->
+<ng-template #header>
+  <app-header-page
+    [title]="'committeesRequestDetails.requestDetails.title' | translate"
+    [backButton]="true"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+    [backTo]="backToUrl"
+  >
+    <div class="d-flex flex-wrap gap-2" buttons>
+      <button
+        class="btn btn-outline-dark"
+        (click)="DeleteBtnClicked()"
+        *ngIf="committeeInfo?.status == '0'"
+      >
+        <i class="bx bxs-x-circle text-danger"></i>
+        {{ "committeesRequestDetails.draftRequests.delete" | translate }}
+      </button>
+
+      <button
+        class="btn btn-warning"
+        (click)="goToEditCommittee()"
+        *ngIf="committeeInfo?.canEdit"
+      >
+        {{ "committeesRequestDetails.draftRequests.edit" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+</ng-template>
+
+<ng-template #data>
+  <!-- action buttons -->
+  <workflow-action-options
+    *ngIf="!committeeInfo?.canEdit"
+    buttons
+    class="d-block mb-3"
+    [title]="'committeesRequestDetails.status' | translate"
+    [task]="task"
+    [options]="options"
+    [instanceId]="instanceId"
+    (onSaveAction)="saveAction($event)"
+    (onFormBuilderValuesChange)="getBuildedFormValues($event)"
+    (onActionClicked)="checkAction($event)"
+  >
+    <div *ngIf="!!doesHasDecision" class="justify-content-end d-flex mt-3">
+      <button
+        class="btn btn-main"
+        (click)="exportDataAsPDF()"
+        [disabled]="gettingPreview || notValid"
+      >
+        <i *ngIf="gettingPreview" class="bx bx-loader-alt bx-spin ml-1"></i>
+        <i *ngIf="!gettingPreview" class="bx bxs-file-pdf"></i>
+        {{
+          "committeesRequestDetails.decisionInfo.previewDecision" | translate
+        }}
+      </button>
+    </div>
+  </workflow-action-options>
+
+  <!-- approval timeline -->
+  <workflow-states
+    *ngIf="committeeInfo?.status != '0'"
+    class="d-block mb-3"
+    [steps]="steps"
+    [showTasks]="ShowTasks"
+  ></workflow-states>
+</ng-template>
+
+<ng-container
+  *ngIf="
+    isLoading || kpisLoading || mainTasksLoading || StrategicKpisLoading;
+    else details
+  "
+>
+  <div>
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #details>
+  <section class="info-container w-100">
+      <div class="request-details">
+        <!-- class="request-details" -->
+        <committee-info-panel
+          [committeeInfo]="committeeInfo"
+          [language]="language"
+          [strategicGoals]="strategicGoals"
+          [members]="members"
+          [kpis]="kpis"
+          [mainTasks]="mainTasks"
+          [allMemberTypes]="allMemberTypes"
+          [tags]="tags"
+          [strategicKpis]="strategicKpis"
+          [selectedKPIsIds]="selectedKPIsIds"
+          [goaltreeData]="goaltreeData"
+          [importedKPIsCount]="importedKPIsCount"
+          (openTaskModal)="openTasksModal($event)"
+          (openKpiModal)="openKpisModal($event)"
+        ></committee-info-panel>
+
+        <!-- decision details -->
+        <app-committee-decision-info
+          *ngIf="committeeInfo?.decisionNumber?.length > 0"
+          [language]="language"
+          [decisionNumber]="committeeInfo?.decisionNumber"
+          [decisionText]="committeeInfo?.decisionText"
+          [url]="exportUrl + '/' + requestId"
+          [fileName]="fileName"
+        ></app-committee-decision-info>
+      </div>
+      <div class="members-list  block-content">
+        <app-committee-members-column
+          [language]="language"
+          [members]="committeeInfo?.members"
+        ></app-committee-members-column>
+      </div>
+  </section>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader class="d-block mt-3" mode="row"></app-skeleton-loader>
+</ng-template>
+
+<!-- modal to confirm delete request -->
+<app-confirm-modal
+  [id]="'delete-request'"
+  [content]="
+    'committeesRequestDetails.draftRequests.deleteRequestConfirmMsg' | translate
+  "
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteRequest()"
+></app-confirm-modal>
+
+<!-- kpis details modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'kpis-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="changed-kpis-details w-100">
+    <label class="modal-title">
+      {{ "changeRequests.details.fullDetails" | translate }}
+    </label>
+  </div>
+  <div modal-content class="changedKpis-model-content border-top">
+    <div class="my-4">
+      <app-kpis-details
+        *ngIf="kpisDetailsData"
+        [language]="language"
+        [kpiDetails]="kpisDetailsData"
+        [isAddedKpi]="false"
+      ></app-kpis-details>
+    </div>
+  </div>
+</app-model>
+
+<!-- tasks details modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'tasks-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="changed-kpis-details w-100">
+    <label class="modal-title">
+      {{ "changeRequests.details.taskDetails" | translate }}
+    </label>
+  </div>
+  <div modal-content class="changedKpis-model-content border-top">
+    <div class="my-4">
+      <app-tasks-details
+        *ngIf="tasksDetailsData"
+        [language]="language"
+        [taskDetails]="tasksDetailsData"
+        [isAddedTask]="false"
+      ></app-tasks-details>
+    </div>
+  </div>
+</app-model>

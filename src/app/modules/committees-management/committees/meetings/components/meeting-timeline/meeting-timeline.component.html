@@ -1,0 +1,28 @@
+<div class="meeting-timeline-container">
+  <div
+    *ngFor="let card of cards ; let i = index"
+    class="meeting-timeline-item {{card.cardStatus}}">
+
+    <div class="timeline-card-header">
+      <div class="first-col">
+        <span class="step-number">
+          {{ "committeeMeetingDetails.meetingTimeline.step" | translate }} {{i+1}}
+        </span>
+      </div>
+
+      <!-- status badge -->
+      <div class="step-status {{card.badgeClass}}">
+        <i class="bx {{card.badgeIcon}}"></i>
+        {{ card.badgeMsg | translate }}
+      </div>
+    </div>
+
+    <div class="timeline-card-body">
+      <div class="author-img">
+        <person-item *ngIf="card?.user" [requesterItem]="card?.user" [noCursor]="true" [hasUserCard]="false"></person-item>
+      </div>
+
+      <div class="status-name">{{ card.msg | translate }}</div>
+    </div>
+  </div>
+</div>

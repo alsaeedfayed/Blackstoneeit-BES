@@ -1,0 +1,143 @@
+<div class="mb-4">
+    <div class="d-flex align-items-center">
+        <div class="mr-3">
+            <app-filter-dropdown [items]="sortItems"
+                                 [title]="'Status'">
+            </app-filter-dropdown>
+        </div>
+        <div class="mr-auto">
+            <app-filter-dropdown (selectEvent)="onSort($event)"
+                                 [title]="'Sort By'"
+                                 [items]="sortItems">
+            </app-filter-dropdown>
+        </div>
+        <div class="mr-2">
+            <div class="switch">
+                <input type="checkbox"
+                       id="switch1"
+                       (change)="onAssignedToMeChange($event)"
+                       class="switch__input">
+                <label for="switch1"
+                       class="switch__label">
+                    <span class="input-state">
+                        {{'Assigned to Me' | translate}}
+                    </span>
+                </label>
+            </div>
+        </div>
+        <div class="search-bar-container mr-2 w-25">
+            <input type="text"
+                   (keyup)="onSearch($event)"
+                   placeholder="{{'Search' | translate}}">
+            <i class="bx bx-search"></i>
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="module-title">
+        <h3>{{'Ideas' | translate}} <span *ngIf="!loading && ideasTotal"
+                  class="sub-title">({{'total' |
+                translate}} {{ideasTotal}})</span>
+        </h3>
+    </div>
+    <button class="btn btn-main"
+            (click)="onCreateIdea()">
+        <i class="bx bx-plus"></i>
+        {{'Create Idea' | translate}}
+    </button>
+</div>
+
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">{{'Title' | translate}}</th>
+            <th scope="col">{{'Description' | translate}}</th>
+            <th scope="col">{{'Category' | translate}}</th>
+            <th scope="col">{{'Status' | translate}}</th>
+            <th scope="col">{{'Created By' | translate}}</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of ideas | paginate: {
+        itemsPerPage: searchModel.pageSize,
+        currentPage: searchModel.page,
+        totalItems: ideasTotal
+      }; let i =index;">
+            <td class="col-2">
+                {{item?.title}}
+            </td>
+            <td class="col-2">
+                {{item?.description.slice(0, 50)}}
+            </td>
+            <td class="col-2">
+                {{item?.category}}
+            <td class="col-2">
+                <span class="project-card-status-badge primary"
+                      *ngIf="item.status.title.en === 'Approved'">
+                    {{item?.status.title[lang]}} </span>
+                <span class="project-card-status-badge danger"
+                      *ngIf="item.status.title.en === 'Rejected'">
+                    {{item?.status.title[lang]}} </span>
+                <span class="project-card-status-badge secondary"
+                      *ngIf="item.status.title.en === 'Returned'">
+                    {{item?.status.title[lang]}} </span>
+                <span class="project-card-status-badge warning"
+                      *ngIf="item.status.code === 'Draft'">
+                    {{item?.status.title[lang]}} </span>
+                <span class="project-card-status-badge warning"
+                      *ngIf="item.status.mappedStatusCode === 'PendingForReview'">
+                    {{item?.status.title[lang]}} </span>
+            </td>
+            <td class="col-2">
+                <div class="d-flex align-items-center h-100">
+                    <div class="profile-container col-4 p-0 w-100">
+                        <img class="profile-img"
+                             [src]="item?.owner?.userPicture?.url"
+                             alt="">
+                        <div class="profile-details">
+                            <span class="name">{{item.owner.fullName[lang]}}</span>
+                            <span class="position">{{item.owner.position}}</span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="col-1 text-end">
+                <button class="table-details-btn"
+                        (click)="onExpandChangeRequest(item)"> <i class="bx bx-chevron-right"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="row mt-4 m-0"
+     *ngIf="!loading && ideas?.length === 0">
+    <app-empty-state [title]="'No ideas available...'"></app-empty-state>
+</div>
+
+<pagination-controls
+  *ngIf="!loading"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+<div *ngIf="loading && (!ideas || ideasTotal == 0)"
+     class="mt-2">
+    <app-skeleton-loader *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+                         class="w-100"
+                         [mode]="'table'"></app-skeleton-loader>
+</div>
+
+<app-ideas-modal (refreshParentComponent)="ngOnInit()"></app-ideas-modal>

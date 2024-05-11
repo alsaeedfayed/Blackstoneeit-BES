@@ -1,0 +1,18 @@
+<div class="app-container" [ngClass]="{ 'is-sidebar-collapsed': isSidebarCollapsed }">
+  <app-sidebar
+    #sidebar
+    *ngIf="displaySidebar"
+    (collapsed)="onSidebarCollapse($event)"
+  ></app-sidebar>
+
+  <div class="main-content d-flex flex-column">
+    <app-header></app-header>
+
+    <div class="main-content-inner d-flex">
+      <div class="w-100">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <div class="flex-grow-1"></div>
+  </div>
+</div>

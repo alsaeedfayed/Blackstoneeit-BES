@@ -1,0 +1,13 @@
+<div class="form-group">
+  <label class="form-label">{{ title }}
+
+    <span *ngIf="isRequired" class="astrix-red">*</span>
+
+  </label>
+  <textarea (blur)="focus()" (input)="change()" [disabled]="disabled" [(ngModel)]="value" [placeholder]="placeholder"
+    class="form-textarea" [ngClass]="{ valid: control?.valid }"></textarea>
+</div>
+<ng-container *ngIf="!!showValidations">
+  <app-validation [length]="length" [minLength]="minLength"
+    *ngIf="(isSubmitted || control?.touched )&& control?.invalid" [control]="control"></app-validation>
+</ng-container>

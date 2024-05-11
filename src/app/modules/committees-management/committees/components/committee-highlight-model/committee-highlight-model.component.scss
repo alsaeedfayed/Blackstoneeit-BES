@@ -1,0 +1,213 @@
+@import "src/assets/css/utils/variables.scss";
+
+.see-more-btn {
+  display: inline-block;
+  color: $info_color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.block-title {
+  color: $info_color;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.chairman {
+  ::ng-deep person-item {
+    .personItem {
+      &.header-person {
+        width: fit-content;
+      }
+
+      > .avatar {
+        .letters,
+        img {
+          height: 2rem !important;
+          width: 2rem !important;
+        }
+      }
+    }
+  }
+}
+
+.members {
+  .members-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .members-count {
+    white-space: nowrap;
+  }
+
+  ::ng-deep avatar-stack {
+    .initials {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.meetings {
+  &-badge {
+    background-color: $main-color;
+    color: $white-color;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 0 10px;
+    border-radius: 50px;
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+  }
+
+  &-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+
+    &-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 3rem;
+      height: 4rem;
+      background-color: $black-color;
+      color: $white-color;
+      text-align: center;
+      border-radius: 0.625rem;
+
+      &-day {
+        font-weight: 700;
+        font-size: 1.125rem;
+        line-height: 1.25rem;
+      }
+
+      &-month {
+        font-weight: 400;
+        font-size: 0.625rem;
+        line-height: 1rem;
+      }
+    }
+
+    &-content {
+      flex-grow: 1;
+    }
+
+    &-title {
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    &-time {
+      background-color: rgba(172, 181, 193, 0.15);
+      color: $info_color;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+      white-space: nowrap;
+      padding: 0.25rem 0.5rem;
+      border-radius: 2.5rem;
+    }
+
+    &-status {
+      display: block;
+      height: 0.75rem;
+      width: 0.75rem;
+      border-radius: 50%;
+    }
+
+    &-duration,
+    &-organizer {
+      color: $info_color;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+    }
+
+    &-organizer {
+      person-item {
+        display: block;
+        width: 180px;
+      }
+    }
+  }
+}
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1rem 2rem;
+
+  ::ng-deep app-no-data {
+    .no-data {
+      position: static;
+      top: initial;
+      left: initial;
+      transform: none;
+    }
+
+    img {
+      display: block;
+      margin: auto;
+      width: 101px;
+      height: 83px;
+    }
+
+    p {
+      width: auto;
+      font-size: 0.875rem;
+      margin: 1.5rem 0 0;
+    }
+  }
+}
+
+.horizontal-line {
+  height: 1px;
+  background-color: #efefef;
+  margin: 40px 0;
+}
+.bg-draft {
+  --color: 150, 166, 189;
+  background-color: rgb(var(--color));
+}
+.bg-notDueYet {
+  --color: 41, 45, 50;
+  background-color: rgb(var(--color));
+}
+.bg-pendingMom {
+  --color: 235, 148, 0;
+  background-color: rgb(var(--color));
+}
+.bg-needMOMReview {
+  --color: 60, 166, 189;
+  background-color: rgb(var(--color));
+}
+.bg-momReviewed {
+  --color: 196, 214, 0;
+  background-color: rgb(var(--color));
+}
+.bg-complete {
+  --color: 15, 193, 97;
+  background-color: rgb(var(--color));
+}

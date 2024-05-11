@@ -1,0 +1,355 @@
+<div class="page">
+  <app-header-page
+    [title]="'committeeNewMeeting.updateMeeting' | translate"
+    [showTotalItems]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <!-- cancel button -->
+      <button class="btn btn-transparent" (click)="backToLastPage()">
+        {{ "shared.cancel" | translate }}
+      </button>
+
+      <!-- save  button -->
+      <button
+        class="btn btn-info"
+        [disabled]="form.invalid || isBtnLoading || !basicFormValidation"
+        (click)="save()"
+      >
+        <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{ "committeeNewMeeting.save" | translate }}
+      </button>
+
+      <!-- publish for review button -->
+      <button
+        class="btn btn-main"
+        *ngIf="meeting.canPublish || meeting.resumeWorkflowAction"
+        [disabled]="form.invalid || isBtnLoading || !basicFormValidation"
+        (click)="publishMeetingForReviewBtn()"
+      >
+        <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{
+          (meeting.resumeWorkflowAction
+            ? "committeeNewMeeting.rePublish"
+            : "committeeNewMeeting.publishForReview"
+          ) | translate
+        }}
+      </button>
+    </div>
+  </app-header-page>
+
+  <ng-container *ngIf="loading || loadingAttendee; else form_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!--  meeting form -->
+<ng-template #form_data>
+  <app-meeting-common-fields
+    [meetingData]="meeting"
+    [maxFileSizeInMB]="maxFileSizeInMB"
+    [language]="language"
+    [isUpdating]="true"
+    (newMeeting)="getMeetingData($event)"
+    (fileUploading)="fileUploading($event)"
+    (formValidated)="formValidated($event)"
+  ></app-meeting-common-fields>
+
+  <!-- meeting update mode -->
+  <div class="new-meeting-form" [formGroup]="form">
+    <div class="block-content mb-3">
+      <!-- meeting actual attendees -->
+      <div class="actual-attendees">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h3 class="block-title">
+            {{ "committeeNewMeeting.meetingForm.attendees" | translate }}
+          </h3>
+
+          <button class="add-new-btn" (click)="openNewAttendeeModel()">
+            <i class="bx bx-plus"></i>
+            {{ "committeeNewMeeting.meetingForm.addNewAttendee" | translate }}
+          </button>
+        </div>
+
+        <!-- attendees list -->
+        <div class="attendees-list mb-5" *ngIf="attendees?.length > 0">
+          <table>
+            <tr>
+              <th class="attendees-name">
+                {{ "committeeMeetingDetails.attendees.name" | translate }}
+              </th>
+              <th class="attendees-type">
+                {{ "committeeMeetingDetails.attendees.type" | translate }}
+              </th>
+              <th class="attendees-status">
+                {{ "committeeMeetingDetails.attendees.status" | translate }}
+              </th>
+
+              <th class="attendees-status">
+                {{
+                  "committeeNewMeeting.newAttendeeModel.evidence" | translate
+                }}
+              </th>
+
+              <th class="attendees-status">
+                {{
+                  "committeeNewMeeting.newAttendeeModel.attachments" | translate
+                }}
+              </th>
+
+              <!-- <th>{{'committeeNewMeeting.newAttendeeModel.evidence' | translate}}</th> -->
+              <th class="attendees-actions"></th>
+            </tr>
+
+            <!-- *ngIf="attendee?.attendeeType != 3" -->
+            <tr *ngFor="let attendee of attendees">
+              <td class="attendees-name">
+                <person-item
+
+                  [requesterItem]="attendee?.userInfo"
+                  [noCursor]="true"
+                ></person-item>
+                <!-- <span *ngIf="attendee?.attendeeType == 3" class="initials">
+                  {{ attendee?.name | initials }}
+                </span> -->
+                <!-- <span *ngIf="attendee?.attendeeType == 3">
+                  {{ attendee?.name | capitalizeFirstLetter }}
+                </span> -->
+              </td>
+              <td class="attendees-type">
+                {{
+                  language == "en"
+                    ? attendeesType[attendee?.attendeeType]["name"]
+                    : attendeesType[attendee?.attendeeType]["nameAr"]
+                }}
+              </td>
+              <td class="attendees-status">
+                <div class="d-flex gap-2">
+                  <div class="justification">
+                    <app-badge
+                      [className]="
+                        attendeeStatuses[attendee?.attendeeStatus]['className']
+                      "
+                      [label]="
+                        language == 'en'
+                          ? attendeeStatuses[attendee?.attendeeStatus]['name']
+                          : attendeeStatuses[attendee?.attendeeStatus]['nameAr']
+                      "
+                    ></app-badge>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div
+                  *ngIf="attendee?.attendeeStatus == 2"
+                  class="justification"
+                >
+                  <!-- <span>
+                    {{attendee?.justificationReason}}
+                  </span> -->
+
+                  <div class="angular-editor-description">
+                    <ng-container
+                      *ngIf="!attendee?.showMore; else allDescription"
+                    >
+                      {{
+                        attendee?.justificationReason
+                          | richTextToText
+                          | truncate : 40
+                      }}
+                      <a
+                        class="see-more"
+                        *ngIf="
+                          (attendee?.justificationReason | richTextToText)
+                            .length > 40
+                        "
+                        (click)="attendee.showMore = true"
+                      >
+                        {{ "committeesManagement.seeMore" | translate }}
+                      </a>
+                    </ng-container>
+                    <ng-template #allDescription>
+                      {{ attendee?.justificationReason | richTextToText }}
+                      <a class="see-more" (click)="attendee.showMore = false">
+                        {{ "committeesManagement.seeLess" | translate }}
+                      </a>
+                    </ng-template>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <uploaded-attachments-files
+                  class="d-block mt-3"
+                  [files]="attendee?.justificationAttachments"
+                  [canDeleted]="false"
+                  [old]="true"
+                ></uploaded-attachments-files>
+              </td>
+
+              <!-- justify reason
+                <td>
+
+                </td> -->
+              <td class="attendees-actions">
+                <button
+                  class="edit-grid-item-btn"
+                  (click)="openNewAttendeeModel(attendee)"
+                >
+                  <i class="bx bx-edit-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="no-data" *ngIf="attendees?.length == 0 || !attendees">
+          <app-no-data
+            [msg]="'committeeMeetingDetails.attendees.noAttendee' | translate"
+          ></app-no-data>
+        </div>
+      </div>
+    </div>
+
+    <!-- discussed items, tasks & decisions tabs -->
+    <div class="block-content mb-3">
+      <div class="tabs-holder">
+        <app-tabs class="d-block mt-5">
+          <!-- discussed items tab -->
+          <app-tab
+            [title]="
+              'committeeMeetingDetails.discussedItems.discussedItems'
+                | translate
+            "
+            [count]="discussedItemsCount"
+          >
+            <discussed-items-tab
+              [meetingId]="meetingId"
+              (count)="setTabsItemsCount($event, 'discussedItemsCount')"
+              [attendees]="mappedAttendees"
+            ></discussed-items-tab>
+          </app-tab>
+
+          <!-- tasks tab -->
+          <app-tab
+            [title]="'committeeMeetingDetails.tasks.tasks' | translate"
+            [count]="tasksCount"
+          >
+            <tasks-tab
+              [committeeId]="committeeId"
+              [meetingId]="meetingId"
+              (count)="setTabsItemsCount($event, 'tasksCount')"
+            ></tasks-tab>
+          </app-tab>
+
+          <!-- decisions tab -->
+          <app-tab
+            [title]="'committeeMeetingDetails.decisions.decisions' | translate"
+            [count]="decisionsCount"
+          >
+            <decisions-tab
+              [committeeId]="committeeId"
+              [meetingId]="meetingId"
+              (count)="setTabsItemsCount($event, 'decisionsCount')"
+            ></decisions-tab>
+          </app-tab>
+        </app-tabs>
+      </div>
+    </div>
+    <!-- general notes -->
+    <div class="block-content ">
+      <!-- general notes -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeeNewMeeting.meetingForm.generalNotes" | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+        <angular-editor formControlName="generalNotes" [config]="editorConfig">
+          <ng-template #customButtons>
+            <ae-toolbar-set>
+              <ae-button
+                iconClass="fa fa-paperclip fa-lg"
+                title="Attachment"
+                (buttonClick)="generalNotesAttachments.click()"
+              ></ae-button>
+            </ae-toolbar-set>
+          </ng-template>
+        </angular-editor>
+        <input
+          hidden
+          #generalNotesAttachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="generalNotesUploadedFiles"
+          [supportedTypes]="
+            'committeeNewMeeting.meetingForm.generalNotesAttachmentsTypes'
+              | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'generalNotes')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldGeneralNotesAttachments"
+          (deleteFile)="onDeleteFile($event, 'oldGeneralNotes')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- new attendee model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'new-attendee'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeNewAttendeeModel()"
+>
+  <div modal-header class="new-attendee-model-header w-100">
+    <label class="modal-title">
+      {{
+        (selectedAttendee
+          ? "committeeNewMeeting.newAttendeeModel.updateItem"
+          : "committeeNewMeeting.newAttendeeModel.addNewItem"
+        ) | translate
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="new-attendee-model-content border-top">
+    <new-attendee-model
+      *ngIf="isAttendeeModelOpened"
+      [committeeId]="committeeId"
+      [meetingId]="meetingId"
+      [attendee]="selectedAttendee"
+      (attendeeAdded)="getMeetingAttendees()"
+    ></new-attendee-model>
+  </div>
+</app-model>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- modal to confirm request sending -->
+<app-confirm-modal
+  [id]="'publish-meeting'"
+  [content]="'committeeNewMeeting.confirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="publishMeetingForReview()"
+></app-confirm-modal>

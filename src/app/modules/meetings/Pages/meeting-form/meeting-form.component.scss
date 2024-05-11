@@ -1,0 +1,42 @@
+.MeetingFormWrapper {
+  // .actions {
+  //   z-index: 999;
+  //   position: sticky;
+  //   width: 95%;
+  //   bottom: -15px;
+  //   margin: 15px auto 0;
+  //   &-wrapper {
+  //     width: 100%;
+  //     padding: 18px 0;
+  //     display: flex;
+  //     justify-content: space-between;
+  //     @media (max-width: 992px) {
+  //       flex-wrap: wrap;
+  //     }
+  //     gap: 15px;
+  //     background: #fff;
+  //     div {
+  //       width: 50%;
+  //       display: flex;
+  //       @media (max-width: 992px) {
+  //         justify-content: unset !important;
+  //       }
+  //     }
+  //   }
+  //   .btn {
+  //     padding: 0.375rem 3.75rem;
+  //   }
+  // }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-block: 1rem;
+  }
+}
+
+.btn-submit {
+  background-color: #00db99 !important;
+  color: #fff;
+}

@@ -1,0 +1,124 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.in-progress-task-container {
+  container: task-item / inline-size;
+}
+
+.in-progress-task {
+  display: grid;
+  gap: 2.5rem;
+  background-color: #fdfdfd;
+  padding: 1.25rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 0.625rem;
+
+  @container task-item (min-width: 700px) {
+    & {
+      grid-template-columns: 1.25fr 1fr 0.75fr 1fr;
+    }
+  }
+
+  @container task-item (min-width: 500px) and (max-width: 699px) {
+    & {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @container task-item (max-width: 500px) {
+    & {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cell {
+    &-title {
+      color: $info_color;
+      font-weight: 500;
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+
+    &.task-title {
+      strong {
+        color: $black-color;
+        font-weight: 400;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+    }
+
+    &.task-progress {
+      .cell-title {
+        .percentage {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+        }
+      }
+
+      .cell-content {
+        .progress-bar {
+          position: relative;
+          height: 0.25rem;
+          background-color: #ebedef;
+          border-radius: 0.625rem;
+          overflow: hidden;
+
+          .fill {
+            display: block;
+            position: absolute;
+            top: 0;
+            @include rtl_value(left, 0, auto);
+            @include rtl_value(right, auto, 0);
+            height: 100%;
+            width: 0%;
+            background-color: #ffa800;
+          }
+          .none{
+            background: linear-gradient(to right, #808080, #b6b6b6);
+          }
+          .half{
+            background: linear-gradient(to right, #FFA800, #FFCC6A);
+           
+          }
+          .afterHalf{
+            background: linear-gradient(to right, #840AFF, #B75BD8);
+          }
+          .done{
+            background: linear-gradient(to right, #52AF31, #3ED126);
+          }
+        }
+      }
+    }
+
+    &.task-assigned-to {
+      ::ng-deep {
+        person-item {
+          .avatar {
+            .letters {
+              height: 1.5rem;
+              width: 1.5rem;
+              font-size: 0.625rem;
+            }
+
+            img {
+              height: 1.5rem;
+              width: 1.5rem;
+            }
+          }
+
+          .name {
+            font-size: 0.875rem;
+            margin-bottom: 0;
+          }
+
+          .job {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

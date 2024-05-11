@@ -1,0 +1,25 @@
+.toolTip {
+    display: none;
+    position: absolute;
+    top: 33px;
+    background: #3C557A;
+    border-radius: 6px;
+    padding: 7px 10px;
+    width: max-content;
+    z-index: 999;
+    span {
+        color: #FCFCFC;
+        font-size: 8px;
+    }
+    &:before {
+        content: '';
+        position: absolute;
+        right: 7px;
+        top: -7px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 8px solid #3C557A;
+    }
+}

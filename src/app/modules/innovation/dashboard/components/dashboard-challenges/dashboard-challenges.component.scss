@@ -1,0 +1,46 @@
+.challenges {
+  border-radius: 16px;
+  background: var(--others-white, #FFF);
+  padding: 24px;
+
+  .header-items {
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .view-all {
+      color: #687588;
+      font-size: 14px;
+    }
+  }
+  .item{
+    flex-direction: column;
+    align-items: flex-start;
+    background: rgba(249, 249, 255, 1);
+    padding: 20px;
+    .title{
+      color: rgba(17, 24, 39, 1);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 9px;
+    }
+    .desc{
+      color: rgba(104, 117, 136, 1);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 19px;
+    }
+  }
+
+  ::ng-deep {
+    .badge-status {
+      white-space: nowrap;
+    }
+
+    .badge-status::before {
+      display: none
+    }
+
+  }
+}

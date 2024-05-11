@@ -1,0 +1,79 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="form-index">#</th>
+          <th scope="col">{{ "manageForms.formName" | translate }}</th>
+          <th scope="col">{{ "manageForms.creationDate" | translate }}</th>
+          <th scope="col">{{ "manageForms.lastUpdate" | translate }}</th>
+          <th scope="col" class="form-switch" *ngxPermissionsOnly="[permissionsManageFormsEnum.activate]">
+            {{ "manageForms.active" | translate }}
+          </th>
+          <th scope="col" class="form-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+          let form of forms
+            | paginate
+              : {
+                  itemsPerPage: paginationModle?.pageSize,
+                  currentPage: paginationModle?.pageIndex,
+                  totalItems: totalItems
+                };
+          let i = index
+        ">
+          <td class="form-index">
+            {{ i | tableItemIndex : paginationModle?.pageSize : paginationModle?.pageIndex }}
+          </td>
+          <td>
+            <div class="d-flex">
+              <!-- <img src="/assets/icons/file.svg" /> -->
+              <p class="m-0">{{ form.name }}</p>
+            </div>
+          </td>
+          <td>
+            {{
+              lang === "en" ?
+              (convertUTCDateToLocalDate(form.creationDate) | date : "dd/MM/yyyy hh:mm a") :
+              (convertUTCDateToLocalDate(form.creationDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+            }}
+          </td>
+          <td>
+            {{
+              lang === "en" ?
+              (convertUTCDateToLocalDate(form.updatedDate) | date : "dd/MM/yyyy hh:mm a") :
+              (convertUTCDateToLocalDate(form.updatedDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+            }}
+          </td>
+
+          <td class="form-switch" *ngxPermissionsOnly="[permissionsManageFormsEnum.activate]">
+            <app-switch [disabled]="true" [(ngModel)]="form.isActive" (click)="openModel(form)"></app-switch>
+
+            <app-confirm-modal
+              [id]="'confrontation-msg' + form.id"
+              [content]="msgText(form)"
+              [btnContent]="'shared.confirm' | translate"
+              [btnStyle]="'main'"
+              (confirm)="toggleActive(form)"
+            ></app-confirm-modal>
+          </td>
+          <td class="form-actions">
+            <app-dropdown (select)="onOptionSelect($event, form)" [items]="options"></app-dropdown>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="totalItems > paginationModle?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

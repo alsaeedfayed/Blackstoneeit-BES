@@ -1,0 +1,85 @@
+<div [formGroup]="form">
+  <!-- committee type select -->
+  <div
+    class="d-flex justify-content-between gap-2"
+    style="flex-wrap: wrap; gap: 2"
+  >
+
+  <!-- FILTER TYPE -->
+    <div style="flex-grow: 1">
+      <label class="form-label">
+        {{ "committeeDashboard.dashboard.filter.type" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="Type"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'Type')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeeDashboard.dashboard.filter.type' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setTypeValue($event)"
+      >
+        <ng-option *ngFor="let item of types" [value]="item?.id">
+          {{ language === "en" ? item?.name : item?.nameAr }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- FILTER CATEGORY -->
+    <div style="flex-grow: 1">
+      <label class="form-label">
+        {{ "committeeDashboard.dashboard.filter.category" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="Category"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'Category')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeeDashboard.dashboard.filter.category' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setCategoryValue($event)"
+      >
+        <ng-option *ngFor="let item of committeesCategories" [value]="item?.categoryKey">
+          {{ language === "en" ? item.categoryName : item.categoryNameAr }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- FILTER YEAR -->
+    <div style="flex-grow: 1">
+      <label class="form-label">
+        {{ "committeeDashboard.dashboard.filter.year" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="Year"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'Year')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeeDashboard.dashboard.filter.year' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setYearValue($event)"
+      >
+        <ng-option *ngFor="let item of years" [value]="item">
+          {{ item }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+  </div>
+</div>

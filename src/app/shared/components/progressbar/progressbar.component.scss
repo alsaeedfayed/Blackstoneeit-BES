@@ -1,0 +1,17 @@
+.progress-bar {
+  height: auto;
+  width: auto;
+  background-color: #f4f4f8;
+  border-radius: 5rem;
+  &-span {
+    border-radius: 5rem;
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+
+  }
+
+  .padd{
+    padding: 0 17px;
+  }
+}

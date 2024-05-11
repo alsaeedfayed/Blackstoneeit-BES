@@ -1,0 +1,15 @@
+<app-header-page
+  [title]="'events.events' | translate"
+  [totalItems]="totalCount"
+  [backButton]="true"
+  [isSearch]="true"
+  [titleBtn]="'events.addNew' | translate"
+  (search)="onSearch($event)"
+  (btnClick)="onAddEvent()"
+></app-header-page>
+
+<div class="row g-4">
+  <div class="col-md-4" *ngFor="let item of events">
+    <app-event-card [data]="item"></app-event-card>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+.container {
+  border-radius: 10px;
+}
+
+.form-header {
+  .title-wrapper {
+    .bx {
+      width: 18px;
+      height: 18px;
+      background-color: #c3c6cb;
+      color: #6a707d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      cursor: pointer;
+      &.ar {
+        transform: rotateY(180deg);
+      }
+    }
+    .text {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+  .button-wrapper {
+    .btn {
+      border-radius: 6px;
+      color: white;
+    }
+    .cancel {
+      background-color: #96a6bd;
+    }
+    .submit {
+      background-color: #0066ff;
+    }
+  }
+}
+
+.importance {
+  .alert-warning {
+    margin: 0;
+    .bxs-info-circle {
+      font-size: 22px;
+      color: #ffa800;
+    }
+  }
+}
+
+.budget {
+  .budget-sub-text {
+    font-size: 10px;
+    font-weight: 500;
+    position: absolute;
+    margin-bottom: -17px;
+    bottom: 0;
+  }
+}
+
+::ng-deep {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .hirerchy {
+    .msg.ng-star-inserted {
+      margin-bottom: -21px;
+      bottom: 0;
+    }
+  }
+}
+
+.required {
+  color: red;
+  line-height: 0;
+}
+
+.error-message {
+  color: red;
+  // position: absolute;
+  // margin-bottom: -21px;
+  // bottom: 0;
+}
+
+.btn-outline-primary {
+  border: #0066ff 1px solid;
+  color: #0066ff;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: #0066ff;
+    color: white;
+  }
+}
+
+// .validation-error {
+//   font-size: 14px;
+//   color: red;
+//   position: absolute;
+//   bottom: -19px;
+// }
+
+// .date-picker-wrapper {
+//   position: relative;
+// }
+
+.linked-roles {
+  color: #717986;
+  margin-top: 25px !important;
+  .wrapper {
+    color: #858a95;
+  }
+}
+
+.strategic-kpis-wrapper {
+  max-height: 750px; /* Set a maximum height for the content */
+  overflow-y: auto; /* Add a vertical scrollbar if content exceeds the max height */
+}
+
+
+::ng-deep {
+  app-strategic-kpis tree-root {
+    margin-bottom: 200px;
+  }
+}

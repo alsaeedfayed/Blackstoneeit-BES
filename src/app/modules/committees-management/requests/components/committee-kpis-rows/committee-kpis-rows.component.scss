@@ -1,0 +1,304 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.add-new-btn {
+  display: block;
+  background: none;
+  color: $main-color;
+  font-weight: 500;
+  padding-block: 0;
+  margin-inline-start: auto;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.edit-grid-item-btn {
+  height: 1.25rem;
+  width: 1.25rem;
+  background: none;
+  color: $black-color;
+  padding: 0;
+  border: 0;
+  transition: color 0.15s ease-in-out;
+
+  &:hover {
+    color: $main-color;
+  }
+}
+
+.eyeIcon {
+
+  height: 1.25rem;
+  width: 1.25rem;
+  background: none;
+  color: #353535 !important;
+  padding: 0;
+  border: 0;
+  transition: color 0.15s ease-in-out;
+  .bx{
+  font-size: 20px !important;
+  }
+  &:hover {
+    color: $main-color !important;
+  }
+
+}
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1rem 2rem;
+
+  ::ng-deep app-no-data {
+    .no-data {
+      position: static;
+      top: initial;
+      left: initial;
+      transform: none;
+    }
+
+    img {
+      display: block;
+      margin: auto;
+      width: 101px;
+      height: 83px;
+    }
+
+    p {
+      width: auto;
+      font-size: 0.875rem;
+      margin: 1.5rem 0 0;
+    }
+  }
+}
+.astrix-red {
+  color: red;
+}
+.disabledRow {
+  background-color: #aeaeae;
+  color: gray;
+}
+
+.data-breakdown {
+  background-color: #fff;
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 10px;
+    .control {
+      font-size: 15px;
+      cursor: pointer;
+      color: #4444ed;
+    }
+  }
+  .title {
+    // padding: 10px;
+    strong {
+      letter-spacing: 1px;
+      font-weight: 900;
+      font-size: 17px;
+    }
+  }
+  .table-header {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 15px;
+    .free-space {
+      width: 61.5%;
+    }
+    .columns {
+      display: flex;
+      align-items: center;
+      width: calc(100% - 61.5%);
+      justify-content: flex-end;
+    }
+    .column {
+      width: 100px;
+      &-action {
+        width: 60px;
+      }
+      strong {
+        color: rgb(150, 166, 189);
+        letter-spacing: 1px;
+      }
+    }
+  }
+  ul {
+    //margin: 5px 10px !important;
+    li {
+      .panel-header {
+        padding: 7px 0;
+        // padding: 0;
+        background-color: rgb(244, 247, 255);
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ddd;
+        width: 100%;
+        .header {
+          display: flex;
+          align-items: center;
+          @include rtl_key(padding-, right, left, 0);
+          @include rtl_key(padding-, left, right, 20px);
+          width: 100%;
+          .icons {
+            width: 22px;
+            i {
+              font-size: 22px;
+              cursor: pointer;
+            }
+          }
+          .hd-title {
+            @include rtl_key(padding-, right, left, 0);
+            @include rtl_key(padding-, left, right, 15px);
+          }
+          strong {
+            letter-spacing: 1px;
+            width: fit-content;
+          }
+          .goalId {
+            padding: 6px 12px;
+            color: #fff;
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+            border-radius: 5px;
+            @include font(12px, 500);
+            font-family: "Roboto";
+            background: #ddd;
+            color: #000;
+            font-weight: 400;
+            min-width: 65px !important;
+            text-align: center !important;
+          }
+        }
+        .free-space {
+          width: 61.5%;
+        }
+        .columns {
+          display: flex;
+          align-items: center;
+          width: calc(100% - 61.5%);
+          justify-content: flex-end;
+          .column {
+            width: 100px;
+            &-status {
+              width: 60px;
+            }
+          }
+        }
+      }
+      ul {
+        background-color: #fff;
+        display: none;
+        // margin: 5px 10px !important;
+        li {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          //padding: 7px 0;
+          padding: 0;
+          //border-bottom: 1px solid #ddd;
+          flex-direction: column;
+          .panel-header {
+            background: #fff;
+          }
+          .icons {
+            @include rtl_key(margin-, right, left, 0);
+            @include rtl_key(margin-, left, right, 10px);
+          }
+          span {
+            &.title {
+              @include rtl_key(padding-, right, left, 0);
+              @include rtl_key(padding-, left, right, 15px);
+            }
+          }
+          .free-space {
+            width: 61.5%;
+          }
+          .columns {
+            display: flex;
+            align-items: center;
+            width: calc(100% - 61.5%);
+            justify-content: flex-end;
+            .column {
+              width: 100px;
+              &-status {
+                min-width: 60px;
+              }
+            }
+          }
+          ul {
+            li {
+              .icons {
+                @include rtl_key(margin-, right, left, 0);
+                @include rtl_key(margin-, left, right, 20px);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .noData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+  }
+}
+.column {
+  &-status {
+    min-width: 70px !important;
+  }
+}
+.type {
+  padding: 6px 12px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  height: 30px;
+  min-width: 90px;
+  text-align: center;
+  @include rtl_key(margin-, right, left, 0);
+  // @include rtl_key(margin-, left, right, 10px);
+  span {
+    @include font(12px, 500);
+    font-family: "Roboto";
+    &.id {
+      background: #ddd;
+      color: #000;
+      font-weight: 400;
+    }
+  }
+}
+
+ul {
+  ul {
+    margin: 0 !important;
+    width: 100% !important;
+  }
+}
+
+.disabledRow {
+  background-color: #ebebeb;
+  color: gray;
+}
+.marginAr {
+  margin-right: 50px !important;
+}
+
+.marginEn {
+  margin-left: 50px;
+}
+
+.bxs-show{
+  color: #96a6bd;
+  font-size: 1.5rem;
+}

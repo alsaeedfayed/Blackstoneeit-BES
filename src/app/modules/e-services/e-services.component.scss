@@ -1,0 +1,12 @@
+.page-data {
+    min-height: 500px;
+    position: relative;
+  }
+
+  app-filter-services {
+    display: block;
+  }
+
+  :host ::ng-deep .header {
+    padding-bottom: 0 !important;
+  }

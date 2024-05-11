@@ -1,0 +1,149 @@
+<div class="MeetingFormWrapper">
+  <!-- Header -->
+  <div class="header">
+    <app-header-page
+      [title]="isEditMode ? ('Meetings.editMeeting' | translate) : ('Meetings.newMeeting' | translate)"
+      [showTotalItems]="false"
+      [backButton]="true"
+    ></app-header-page>
+
+    <div class="actions">
+      <button
+        class="btn btn-submit"
+        *ngIf="isSubmittable"
+        [disabled]="isBtnLoadingSubmit"
+        (click)="submit()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoadingSubmit"></i>
+        {{ "shared.submit" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <tabs
+    [tabs]="tabs"
+    (activeTabChanged)="activeTabIndex = $event"
+    *ngIf="!isLoading"
+  >
+    <!-- First Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 1 ? 'block' : 'none' }"
+    >
+      <mins-of-metting
+        [ComponentMode]="ComonentsMode"
+        [AttendeesPoitions]="attendeesPoitions"
+        (meetingCreatedSucessfully)="meetingCreatedHandler($event)"
+        (meetingRequestCreation)="isBtnLoadingSave = false"
+        (meetingUpdatedSucessfully)="meetingUpdatedHandler()"
+        [Data]="minOfMeetingData"
+      ></mins-of-metting>
+
+      <div class="actions justify-content-start">
+        <button
+          *ngIf="isSavable"
+          class="btn btn-main"
+          [disabled]="isBtnLoadingSave"
+          (click)="saveMeeting()"
+        >
+          <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoadingSave"></i>
+          {{ "shared.save" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Second Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 2 ? 'block' : 'none' }"
+    >
+      <attendees-list
+        [ComponentMode]="ComonentsMode"
+        [AttendeesPoitions]="attendeesPoitions"
+        [createdMeetingId]="createdMeetingId"
+        [canAdd]="CanAdd"
+        [Items]="meetingDetails?.attendees ?? []"
+        (refreshAttendees)="refreshAttendees($event)"
+      ></attendees-list>
+    </div>
+
+    <!-- Third Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 3 ? 'block' : 'none' }"
+    >
+      <discussion-item-list
+        [ComponentMode]="ComonentsMode"
+        [createdMeetingId]="createdMeetingId"
+        [canAdd]="CanAdd"
+        [Items]="meetingDetails?.discussionItems ?? []"
+        [attendees]="meetingDetails?.attendees ?? []"
+        (refresh)="getMeetingDetails()"
+      ></discussion-item-list>
+    </div>
+
+    <!-- Foruth Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 4 ? 'block' : 'none' }"
+    >
+      <action-item-list
+        [ComponentMode]="ComonentsMode"
+        [TaskTypes]="taskTypes"
+        [createdMeetingId]="createdMeetingId"
+        [canAdd]="CanAdd"
+        [Items]="meetingDetails?.actionItems ?? []"
+      ></action-item-list>
+    </div>
+  </tabs>
+
+  <div *ngIf="isLoading">
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </div>
+
+  <!-- <div class="actions">
+    <div class="actions-wrapper">
+      <div>
+        <button class="btn btn-outline-main mr-2" (click)="cancelForm()">
+          {{ "shared.cancel" | translate }}
+        </button>
+      </div>
+      <div style="justify-content: flex-end">
+        <button
+          class="btn btn-secondary mr-2"
+          *ngIf="activeStep > 1"
+          (click)="activeStep = activeStep - 1"
+        >
+          {{ "shared.previous" | translate }}
+        </button>
+
+        <button
+          class="btn btn-main"
+          (click)="onNextStep()"
+          [disabled]="isBtnLoading"
+          *ngIf="activeStep != 4"
+        >
+          <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+          {{ "shared.next" | translate }}
+        </button>
+
+        <button
+          class="btn btn-main"
+          [disabled]="isSubmitting"
+          (click)="submit()"
+          *ngIf="activeStep == 4"
+        >
+          <i
+            *ngIf="isSubmitting"
+            class="bx bx-loader-alt bx-spin ml-1"
+          ></i>
+          {{ "shared.save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div> -->
+</div>

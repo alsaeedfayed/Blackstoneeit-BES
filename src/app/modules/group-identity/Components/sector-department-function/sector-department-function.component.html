@@ -1,0 +1,60 @@
+<div class="wrapper" *ngIf="!loading">
+  <!-- Sector Select -->
+  <div class="filter">
+    <label *ngIf="allowLabel" class="label-select">{{ "shared.sectors" | translate }}</label>
+    <app-select
+      [placeholder]="'shared.allSectorsL0' | translate"
+      [bindLabel]="language == 'en' ? 'name' : 'arabicName'"
+      [items]="sectors"
+      [multiple]="false"
+      [(ngModel)]="selectedSector"
+      [compareWith]="compareWith"
+      [bindVlaue]="''"
+      [clearable]="true"
+      [dropdownPosition]="'bottom'"
+      (change)="sectorSelectedHandler($event)"
+    ></app-select>
+  </div>
+
+  <!-- <div class="l0-badge" *ngIf="showL0Badge">
+    <app-badge [label]="'shared.L0' | translate" [className]="'started'"></app-badge>
+  </div> -->
+
+  <!-- Depertment Select -->
+  <div class="filter" *ngIf="departments.length > 0">
+    <label *ngIf="allowLabel" class="label-select">{{ "shared.departments" | translate }}</label>
+    <app-select
+      [placeholder]="'shared.allDepartments' | translate"
+      [bindLabel]="language == 'en' ? 'name' : 'arabicName'"
+      [items]="departments"
+      [multiple]="false"
+      [(ngModel)]="selectedDepartment"
+      (change)="departmentSelectedHandler($event)"
+      [compareWith]="compareWith"
+      [bindVlaue]="''"
+      [clearable]="true"
+      [dropdownPosition]="'bottom'"
+    ></app-select>
+  </div>
+
+  <!-- Functions Select -->
+  <div class="filter" *ngIf="functions.length > 0">
+    <label *ngIf="allowLabel" class="label-select">{{ "shared.sections" | translate }}</label>
+    <app-select
+      [placeholder]="'shared.allSections' | translate"
+      [bindLabel]="language == 'en' ? 'name' : 'arabicName'"
+      [items]="functions"
+      [multiple]="false"
+      [(ngModel)]="selectedFunction"
+      (change)="functionSelectedHandler($event)"
+      [compareWith]="compareWith"
+      [bindVlaue]="''"
+      [clearable]="true"
+      [dropdownPosition]="'bottom'"
+    ></app-select>
+  </div>
+</div>
+
+<div class="wrapper" *ngIf="loading">
+  <app-skeleton-loader mode="table" count="1"></app-skeleton-loader>
+</div>

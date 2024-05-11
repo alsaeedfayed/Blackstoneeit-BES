@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-12 col-md-3 col-lg-3">
+    <div class="item">
+      <app-select
+        [placeholder]="'dashboard.selectSector' | translate"
+        [items]="sectors"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [clearable]="true"
+        [dropdownPosition]="'bottom'"
+        [(ngModel)]="sectorId"
+        (change)="onSelectSector($event)"
+      ></app-select>
+    </div>
+  </div>
+  <div class="col-12 col-md-3 col-lg-3">
+    <div class="item">
+      <app-select
+        [placeholder]="'dashboard.selectDepartment' | translate"
+        [items]="departments"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [clearable]="true"
+        [disabled]="!sectorId"
+        [dropdownPosition]="'bottom'"
+        [(ngModel)]="departmentId"
+        (change)="onSelectDepartment($event)"
+      ></app-select>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 col-lg-6">
+    <div class="d-flex align-items-center flex-wrap gap-20px mb-2 justify-content-end">
+      <app-select
+        class="years-select"
+        [placeholder]="'dashboard.selectYear' | translate"
+        [items]="years"
+        [bindVlaue]="'id'"
+        [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+        [dropdownPosition]="'bottom'"
+        [(value)]="+filters.year"
+        (change)="onSelectYear($event)"
+      ></app-select>
+    </div>
+  </div>
+</div>
+

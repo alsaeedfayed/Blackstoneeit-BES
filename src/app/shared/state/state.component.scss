@@ -1,0 +1,59 @@
+@import "../../../assets/css/utils/variables.scss";
+
+.container {
+    padding: 0;
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border: 1px solid $gainsboro_color;
+  border-radius: 5px;
+}
+
+.shape{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.label{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: $aluminium_color;
+  text-transform: capitalize;
+}
+
+.success {
+  //completed or done state
+  @extend .shape;
+  background-color: $success-color;
+}
+
+.warning {
+  //pending state
+  @extend .shape;
+  background-color: $warning-color;
+}
+
+.primary {
+  //in progress state
+  @extend .shape;
+  background-color: $maya_blue_color;
+}
+
+.purple {
+  //to do state
+  @extend .shape;
+  background-color: $medium_purple_color;
+}
+
+.review {
+  //review state
+  @extend .shape;
+  background-color: $lemon_color;
+}

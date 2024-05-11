@@ -1,0 +1,27 @@
+<div class="history-card">
+  <ng-container *ngIf="isLoading; else history_data">
+    <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+  </ng-container>
+
+  <ng-template #history_data>
+    <div class="wrapper" *ngIf="history.length !== 0">
+      <div class="item" *ngFor="let item of history">
+        <app-history-list-item [data]="item"></app-history-list-item>
+      </div>
+    </div>
+    <div class="no-data" *ngIf="history.length === 0">
+      <app-no-data msg="{{ 'requests.noAvailableHistory' | translate }}"></app-no-data>
+    </div>
+  </ng-template>
+
+  <ng-template #skeleton>
+    <app-skeleton-loader mode="request_history"></app-skeleton-loader>
+  </ng-template>
+
+  <div *ngIf="!isLoading && showLoadMore">
+    <button class="load-more" (click)="loadMore()">
+      <i class="bx bx-revision"></i>
+      {{ 'requests.loadMore' | translate }}
+    </button>
+  </div>
+</div>

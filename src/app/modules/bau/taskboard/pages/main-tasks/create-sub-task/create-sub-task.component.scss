@@ -1,0 +1,135 @@
+.container {
+  border-radius: 10px;
+}
+
+.form-header {
+  .title-wrapper {
+    .bx {
+      width: 18px;
+      height: 18px;
+      background-color: #c3c6cb;
+      color: #6a707d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      cursor: pointer;
+      &.ar {
+        transform: rotateY(180deg);
+      }
+    }
+    .text {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+  .button-wrapper {
+    .btn {
+      border-radius: 6px;
+      color: white;
+    }
+    .cancel {
+      background-color: #96a6bd;
+    }
+    .submit {
+      background-color: #0066ff;
+    }
+  }
+}
+
+.importance {
+  .alert-warning {
+    margin: 0;
+    .bxs-info-circle {
+      font-size: 22px;
+      color: #ffa800;
+    }
+  }
+}
+
+
+  .sub-text {
+    font-size: 10px;
+    font-weight: 500;
+    // position: absolute;
+    // margin-bottom: -17px;
+    // bottom: 0;
+  }
+
+
+::ng-deep {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+}
+
+.required{
+  color: red;
+  line-height: 0;
+}
+
+.error-message {
+  color: red;
+  // position: absolute;
+  // margin-bottom: -23px;
+  // bottom: 0;
+}
+
+.btn-outline-primary {
+  border: #0066ff 1px solid;
+  color: #0066ff;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: #0066ff;
+    color: white;
+  }
+}
+
+.search-follow-up-sec{
+  background: #ffffff;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+}
+
+::ng-deep .search-bar-container{
+  width: 100% !important;
+}
+
+.item input[type="radio"] {
+  /* Remove default radio button styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Define the custom square appearance */
+  width: 16px;
+  height: 16px;
+  border: 1px solid #DED7D7; /* Border color */
+  border-radius: 0; /* Make it square by setting border-radius to 0 */
+  outline: none; /* Remove the default focus outline */
+  margin-right: 5px; /* Add some spacing between the radio button and the label */
+}
+
+/* Optional: Style the radio button when it's checked */
+.item input[type="radio"]:checked {
+  background-color: #205bfd;
+  /* Add any additional styles for the checked state */
+}
+
+
+.disapled {
+  cursor: not-allowed;
+  opacity: 65%;
+  pointer-events: none;
+  &::after {
+    content: "";
+    width: 100%;
+    // height: 70px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 0;
+    top: 0;
+  }
+}

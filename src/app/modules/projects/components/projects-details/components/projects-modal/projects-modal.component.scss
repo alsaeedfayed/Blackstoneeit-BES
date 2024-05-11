@@ -1,0 +1,225 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.selected-users-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+
+  li {
+    margin-inline-end: 10px;
+    margin-bottom: 10px;
+
+    .project-card-status-badge {
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      white-space: nowrap;
+
+      i {
+        font-size: 18px;
+        margin-inline-start: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.form-textarea {
+  height: 90px !important;
+}
+
+.astrix-red {
+  color: red;
+}
+
+::ng-deep ngb-typeahead-window {
+  width: 100% !important;
+  max-height: 250px;
+  overflow-y: auto;
+
+  button:hover,
+  button.active {
+    background-color: $main-color !important;
+  }
+}
+
+.comment-box {
+  border: 1px solid #cbcbcb;
+  border-radius: 7px;
+  padding: 17px 21px;
+
+  .deliverable-title {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: $tertiary-color;
+    margin-bottom: 14px;
+  }
+
+  textarea {
+    margin-bottom: 14px;
+  }
+
+  .upload-btn {
+    position: relative;
+
+    input {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+    }
+
+    label {
+      text-decoration: underline;
+      color: $secondary-color;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      width: fit-content;
+      cursor: pointer;
+    }
+  }
+
+  .docs-list {
+    list-style: none;
+  }
+}
+
+.attachments {
+  .attachment {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: #3c557a;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 12px;
+      margin-inline-end: 10px;
+      line-height: inherit;
+      white-space: normal;
+      word-break: break-word;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    i {
+      font-size: 22px;
+      margin-inline-end: 5px;
+      color: #717986;
+    }
+
+    .delete-btn {
+      background-color: transparent;
+      border: none;
+      color: #717986;
+      text-decoration: underline;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 31px;
+    }
+  }
+}
+
+.input-with-currency {
+  position: relative;
+
+  input {
+    @include rtl_value(direction, ltr, rtl);
+    @include rtl_value(padding-inline-end, 47px, 55px);
+    padding-inline-start: 12px !important;
+  }
+
+  .currency-label {
+    position: absolute;
+    @include rtl_value(right, 10px, unset);
+    @include rtl_value(left, unset, 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    color: $main-color;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.custom-radio-btn {
+  label {
+    width: 60px;
+    height: 30px;
+    border-radius: 6px;
+    color: #a8a8a8;
+    background-color: #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    input {
+      margin-inline-start: 5px;
+    }
+  }
+}
+
+.deliverable-input-container {
+  position: relative;
+
+  .deliverable-input {
+    padding: 12px 0;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: $tertiary-color;
+
+    &::placeholder {
+      color: #cbcbcb;
+    }
+  }
+
+  .deliverable-btn {
+    position: absolute;
+    @include rtl_value(right, 0, auto);
+    @include rtl_value(left, auto, 0);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.deliverables-list {
+  list-style: none;
+  margin-top: 36px;
+  padding: 0 15px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #cbcbcb;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+
+    span {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 19px;
+      color: $tertiary-color;
+    }
+
+    i {
+      font-size: 26px;
+      color: #cbcbcb;
+      cursor: pointer;
+
+      &:hover {
+        color: $tertiary-color;
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+<div>
+  <ng-container *ngIf="loading; else formData">
+    <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+  </ng-container>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+
+    <!-- back button -->
+    <button
+      class="btn btn-dark flex-grow-1"
+      (click)="closePopup()"
+    >
+      {{ 'shared.back' | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form.invalid || isBtnLoading"
+      (click)="addLookup()"
+    >
+      <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+      {{ 'shared.save' | translate }}
+    </button>
+  </div>
+</div>
+
+<ng-template #formData>
+  <div class="new-model-dialog-body">
+    <div class="lookup-form pb-2" [formGroup]="form">
+
+      <!-- english name -->
+      <div class="mt-3">
+        <app-filed
+          formControlName="nameEn"
+          [title]="'lookups.nameEn' | translate"
+          [control]="form | getControl: 'nameEn'"
+          [placeholder]="'lookups.enterNameEn' | translate"
+          [isSubmitted]="isSubmitted"
+        ></app-filed>
+      </div>
+
+      <!-- arabic name -->
+      <div class="mt-3">
+        <app-filed
+          formControlName="nameAr"
+          [title]="'lookups.nameAr' | translate"
+          [control]="form | getControl: 'nameAr'"
+          [placeholder]="'lookups.enterNameAr' | translate"
+          [isSubmitted]="isSubmitted"
+        ></app-filed>
+      </div>
+
+      <!-- code -->
+      <div class="mt-3">
+        <app-filed
+          formControlName="code"
+          [title]="'lookups.code' | translate"
+          [control]="form | getControl: 'code'"
+          [placeholder]="'lookups.enterCode' | translate"
+          [disabled]="lookupToBeEdited"
+          [isSubmitted]="isSubmitted"
+        ></app-filed>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

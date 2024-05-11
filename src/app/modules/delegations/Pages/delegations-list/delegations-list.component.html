@@ -1,0 +1,200 @@
+<div class="wrapper">
+  <!-- Delegations List -->
+  <div class="list">
+
+    <!-- Header -->
+    <app-header-page
+      [title]="'delegations.delegations' | translate"
+      [totalItems]="totalCount"
+      [backButton]="true"
+      [titleBtn]="'delegations.addDelegation' | translate"
+      (btnClick)="navigateToAddDelegationPage()"
+    ></app-header-page>
+
+    <!-- Delegations Filter -->
+    <div class="delegation-filters">
+      <div class="left-filters">
+        <!-- Delegator Filer -->
+        <div class="filter">
+          <label for="data">{{ "delegations.delegator" | translate }}</label>
+          <app-select
+            class="width-20"
+            [bindLabel]="'fullName'"
+            [items]="users"
+            [multiple]="false"
+            (change)="handleDelegatorFilter($event)"
+            [clearable]="true"
+            [(ngModel)]="queryParams.delegator"
+            [placeholder]="'shared.PleaseSelect' | translate"
+            [dropdownPosition]="'bottom'"
+            (onSearch)="searchUsers($event)"
+          ></app-select>
+        </div>
+
+        <!-- Delegated To Filter -->
+        <div class="filter">
+          <label class="label-select">{{ "delegations.delegatedTo" | translate }}</label>
+          <app-select
+            class="width-20"
+            [bindLabel]="'fullName'"
+            [items]="users"
+            [multiple]="false"
+            (change)="handleDelegatedToFilter($event)"
+            [clearable]="true"
+            [(ngModel)]="queryParams.delegatedTo"
+            [placeholder]="'shared.PleaseSelect' | translate"
+            [dropdownPosition]="'bottom'"
+            (onSearch)="searchUsers($event)"
+          ></app-select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delegations Table -->
+    <div class="delegations-table" *ngIf="!loadingDelegations && delegations && delegations.length > 0">
+      <div class="delegations-table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" class="delegation-index">#</th>
+              <th scope="col">{{ "delegations.delegator" | translate }}</th>
+              <th scope="col">{{ "delegations.delegatedTo" | translate }}</th>
+              <th scope="col">{{ "delegations.from" | translate }}</th>
+              <th scope="col">{{ "delegations.to" | translate }}</th>
+              <th scope="col">{{ "shared.creationDate" | translate }}</th>
+              <th scope="col">{{ "shared.status" | translate }}</th>
+              <th scope="col" class="delegation-actions">{{ "shared.actions" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="
+                let delegation of delegations
+                  | paginate
+                    : {
+                        itemsPerPage: paginationModle?.pageSize,
+                        currentPage: paginationModle?.pageIndex,
+                        totalItems: totalCount
+                      };
+                let i = index
+              ">
+              <td class="delegation-index">
+                {{ i | tableItemIndex : paginationModle?.pageSize : paginationModle?.pageIndex }}
+              </td>
+              <td>
+                <person-item
+                  [item]="delegation.delegator"
+                ></person-item>
+              </td>
+              <td>
+                <person-item
+                  [item]="delegation.delegatedTo"
+                ></person-item>
+              </td>
+              <td>
+                <span *ngIf="delegation?.startDate">
+                  {{
+                    language === "en" ?
+                    ((delegation?.startDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+                    ((delegation?.startDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+                  }}
+                </span>
+              </td>
+              <td>
+                <span *ngIf="delegation?.endDate">
+                  {{
+                    language === "en" ?
+                    ((delegation?.endDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+                    ((delegation?.endDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+                  }}
+                </span>
+              </td>
+              <td>
+                <span *ngIf="delegation?.createdDate">
+                  {{
+                    language === "en" ?
+                    ((delegation?.createdDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+                    ((delegation?.createdDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+                  }}
+                </span>
+              </td>
+              <td>
+                <app-badge
+                  [className]="getStatusClassName(delegation?.status?.id)"
+                  [label]="getStatusText(delegation?.status?.code)"
+                ></app-badge>
+              </td>
+              <td class="delegation-actions">
+                <app-dropdown
+                  *ngIf="delegation?.status.code == 'Active'"
+                  [items]="options"
+                  (select)="onOptionSelect($event, delegation)"
+                ></app-dropdown>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      <pagination-controls
+        *ngIf="totalCount > paginationModle?.pageSize"
+        (pageChange)="onPaginate($event)"
+        class="my-pagination"
+        maxSize="5"
+        responsive="true"
+        [previousLabel]="'shared.prev' | translate"
+        [nextLabel]="'shared.next' | translate"
+      ></pagination-controls>
+    </div>
+
+    <div *ngIf="loadingDelegations" class="delegations-table-wrapper">
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+    </div>
+
+    <div class="no-data" *ngIf="!loadingDelegations && delegations.length == 0">
+      <app-no-data [msg]="'delegations.noDataMsg' | translate"></app-no-data>
+    </div>
+  </div>
+</div>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'delegation-action'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onPopupClose()"
+>
+  <div modal-header class="delegation-action-model-header w-100">
+    <label class="modal-title">
+      {{
+        delegationId ?
+        ('delegations.editDelegation' | translate) :
+        ('delegations.addDelegation' | translate)
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="delegation-action-model-content border-top">
+    <app-delegation-form
+      *ngIf="isDelegationModelOpened"
+      [createdDelegationId]="delegationId"
+      [ComonentsMode]="ComonentsMode"
+      (refreshData)="getDelegationsList()"
+    ></app-delegation-form>
+  </div>
+</app-model>
+
+<app-confirm-modal
+  [id]="'cancel-delegation'"
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onCancelDelegationConfirmed()"
+></app-confirm-modal>
+  

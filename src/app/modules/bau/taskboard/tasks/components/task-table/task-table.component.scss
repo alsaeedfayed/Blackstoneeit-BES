@@ -1,0 +1,126 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.tasks-list-container {
+  background-color: #ffffff;
+  border: 0.0625rem solid #efefef;
+  border-radius: 0.625rem;
+  box-shadow: 0rem 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+}
+
+.tasks-list {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+
+    tr {
+      &:not(:first-of-type):not(:last-of-type) {
+        border-bottom: 0.0625rem solid #efefef;
+      }
+
+      th {
+        color: $info_color;
+        font-size: 0.75rem;
+      }
+
+      th,
+      td {
+        font-weight: 500;
+        font-size: 13px;
+        padding: 0.5rem 0.75rem;
+      }
+
+      .task-title {
+        min-width: 150px;
+        max-width: 300px;
+      }
+
+      .task-progress {
+        min-width: 200px;
+
+        .progress-bar {
+          position: relative;
+          height: 0.25rem;
+          background-color: #ebedef;
+          border-radius: 0.625rem;
+          overflow: hidden;
+
+          .fill {
+            display: block;
+            position: absolute;
+            top: 0;
+            @include rtl_value(left, 0, auto);
+            @include rtl_value(right, auto, 0);
+            height: 100%;
+            width: 0%;
+            background-color: #ffa800;
+          }
+          .none {
+            background: linear-gradient(to right, #808080, #b6b6b6);
+          }
+          .half {
+            background: linear-gradient(to right, #ffa800, #ffcc6a);
+          }
+          .afterHalf {
+            background: linear-gradient(to right, #840aff, #b75bd8);
+          }
+          .done {
+            background: linear-gradient(to right, #52af31, #3ed126);
+          }
+        }
+
+        .percentage {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+        }
+      }
+
+      .task-created-on {
+        min-width: 150px;
+      }
+
+      .task-assigned-to {
+        width: 180px;
+
+        ::ng-deep person-item {
+          .personItem {
+            > .avatar {
+              .letters,
+              img {
+                height: 2rem !important;
+                width: 2rem !important;
+              }
+
+              .letters {
+                font-size: 0.75rem;
+              }
+            }
+
+            > .info {
+              .name {
+                font-size: 0.875rem;
+              }
+
+              .job {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.task-details-model-header {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+::ng-deep app-badge {
+  .badge-status::before {
+    display: none !important;
+  }
+}

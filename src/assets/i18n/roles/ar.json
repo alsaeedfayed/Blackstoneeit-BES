@@ -1,0 +1,21 @@
+{
+  "roles": {
+    "permissions": "اذونات",
+    "roles": "الأدوار",
+    "searchForRole": "البحث عن دور",
+    "addNewRole": "إضافة دور جديد",
+    "noRolesFound": "لم يتم العثور على أدوار مع هذا الاستعلام",
+    "confirmDeleteMsg": "هل أنت متأكد من حذف هذا الدور '{{name}}' ؟",
+    "roleWasSuccessfullyDeleted":"تم حذف الدور بنجاح",
+    "updateRole": "تعديل الدور",
+    "setPermissions": "تعيين الاذونات",
+    "roleName": "اسم الدور",
+    "roleWasSuccessfullyCreated": "تم إنشاء الدور بنجاح",
+    "roleWasSuccessfullyUpdated": "تم تعديل الدور بنجاح",
+    "permissionsWereSuccessfullySet": "تم تعيين الاذونات بنجاح",
+    "role": "دور",
+    "roleArabicName": "اسم الدور باللغة العربية",
+    "creationDate": "تاريخ الإنشاء",
+    "noDataMsg": "حسنًا .. يبدو أنه ليس لديك أي أدوار"
+  }
+}

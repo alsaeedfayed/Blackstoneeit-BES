@@ -1,0 +1,51 @@
+<div class="agent-queue-analytics">
+  <div class="agent-queue-analytics-wrapper">
+    <div *ngIf="!loading && agentQueueItems">
+      <div class="analytics-widgets">
+        <div class="analytics-widgets-items">
+          <app-stats-widget
+            [id]="1"
+            [count]="agentQueueItems[0].count"
+            [title]="agentQueueItems[0].title"
+            [icon]="'bx bx-file'"
+            [type]="'primary'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="2"
+            [count]="agentQueueItems[1].count"
+            [title]="agentQueueItems[1].title"
+            [icon]="'bx bx-at'"
+            [type]="'warning'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="3"
+            [count]="agentQueueItems[2].count"
+            [title]="agentQueueItems[2].title"
+            [icon]="'bx bx-minus-circle'"
+            [type]="'success'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="4"
+            [count]="agentQueueItems[3].count"
+            [title]="agentQueueItems[3].title"
+            [icon]="'bx bx-check-circle'"
+            [type]="'default'"
+          ></app-stats-widget>
+        </div>
+      </div>
+    </div>
+
+    <div class="analytics-widgets" *ngIf="loading">
+      <div class="analytics-widgets-items">
+        <ngx-skeleton-loader *ngFor="let item of [1, 2, 3, 4]"
+          count="1"
+          [theme]="{
+            'height': '105px',
+            'background-color': '#fcfcfc',
+            'border-radius': '10px'
+          }"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>

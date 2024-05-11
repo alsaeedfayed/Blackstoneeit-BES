@@ -1,0 +1,30 @@
+<div class="statistics-container">
+  <div class="item">
+    <div class="info">
+      <i class='bx bx-info-circle'></i>
+      <div class="toolTip">
+        <span>{{ActualTip}}</span>
+      </div>
+    </div>
+    <span>{{"scoreSubmission.actualScore" | translate}}</span>
+    <span class="percent">{{actual | number: '1.1-2'}}%</span>
+    <ngb-progressbar type="success" [value]="actual ?? 0"></ngb-progressbar>
+  </div>
+  <div class="item">
+    <div class="info">
+      <i class='bx bx-info-circle'></i>
+      <div class="toolTip">
+        <span>{{TargetTip}}</span>
+      </div>
+    </div>
+    <span>{{"scoreSubmission.targetScore" | translate}}</span>
+    <span class="percent">{{target | number: '1.1-2'}}%</span>
+    <ngb-progressbar type="secondary" [value]="target ?? 0"></ngb-progressbar>
+  </div>
+  <div class="item">
+    <div class="info info2"></div>
+    <span >{{"scoreSubmission.performanceScore" | translate}}</span>
+    <span class="percent">{{performance | number: '1.1-2'}}%</span>
+    <ngb-progressbar type="info" [value]="performance ?? 0"></ngb-progressbar>
+  </div>
+</div>

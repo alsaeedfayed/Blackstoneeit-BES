@@ -1,0 +1,17 @@
+{
+  "auth": {
+    "loginToYourAccount": "تسجيل الدخول إلى حسابك",
+    "email": "البريد الإلكتروني",
+    "typeEmailAddress": "اكتب البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "typePassword": "أكتب كلمة المرور",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "login": "تسجيل الدخول",
+    "or": "أو",
+    "loginWithMicrosoft": "تسجيل الدخول ب Microsoft",
+    "azureIsProcessing": "تتم مصادقة Azure 365...",
+    "pleaseEnterValidEmailAndPassword": "الرجاء إدخال بريد إلكتروني صالح وكلمة مرور",
+    "invalidEmailFormat": "بريد إلكتروني غير صالح"
+  }
+}

@@ -1,0 +1,65 @@
+<app-header-page
+  [title]="'shared.items' | translate"
+  [totalItems]="filteredScorecards?.length"
+  [isSearch]="true"
+  (search)="handleSearchValueFilter($event)"
+  [showButtons]="true"
+  [titleBtn]="'mangeScorecards.addNew' | translate"
+  (btnClick)="openPopup()"
+></app-header-page>
+
+<!-- <app-filter-services
+  (catgoryFilterEvent)="handleCatgoryFilter($event)"
+></app-filter-services> -->
+
+<div class="page-data">
+  <ng-container *ngIf="loading; else table_data">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <scorecards-table
+    *ngIf="filteredScorecards?.length"
+    [Scorecards]="filteredScorecards"
+    (currentChanged)="chnageCurrentScorecardHandler($event)"
+    (onChangeHandler)="changeHandler($event)"
+  ></scorecards-table>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="filteredScorecards?.length == 0">
+    <app-no-data [msg]="'mangeScorecards.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'new-scorecard'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="scorecard-new-model-header w-100">
+    <label class="modal-title">
+      {{ 'mangeScorecards.addNewScoreCard' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="scorecard-new-model-content border-top">
+    <scorecard-modal
+      *ngIf="isShowForm"
+      (newScorecardAdded)="getScorecardsData()"
+    ></scorecard-modal>
+  </div>
+</app-model>

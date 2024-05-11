@@ -1,0 +1,12 @@
+<div class="wrapper">
+  <input
+    type="checkbox"
+    [(ngModel)]="value"
+    [disabled]="disabled"
+    (input)="change($event)"
+    [checked]="checkedValue"
+    [id]="id"
+    [ngClass]="isFixed ? 'disabled' : null"
+  />
+  <label [for]="id"></label>
+</div>

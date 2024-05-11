@@ -1,0 +1,114 @@
+<app-popup
+  [dimensions]="{ width: 800, height: 800 }"
+  [id]="'history'"
+  (close)="onClose()"
+>
+  <ng-container modal-content class="h-100">
+    <div class="popup-header">
+      <button data-bs-dismiss="modal" aria-label="Close" class="back-btn">
+        <div class="arrow"><i class="bx bx-left-arrow-alt"></i></div>
+        <span>
+          {{ data?.owner.fullName }}
+          {{ "scoreSubmission.updateHistory" | translate }}
+        </span>
+      </button>
+    </div>
+
+    <div class="popup-body">
+      <!-- <div class="row item">
+        <div class="col-sm-4">
+          <span class="title">
+            {{ "scoreSubmission.oldValue" | translate }}
+          </span>
+        </div>
+        <div class="col-sm-8">
+          <span class="details">{{ data?.oldvalue }}</span>
+        </div>
+      </div> -->
+
+      <div class="row">
+        <div class="item half">
+          <div class="col-sm-12">
+            <span class="title">
+              {{ "scoreSubmission.actualValue" | translate }}
+            </span>
+          </div>
+          <div class="col-sm-12">
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="data?.actualvalue"
+            />
+            <!-- <span class="details">{{ data?.actualvalue }}</span> -->
+          </div>
+        </div>
+  
+        <div class="item half">
+          <div class="col-sm-12">
+            <span class="title">{{ "scoreSubmission.target" | translate }}</span>
+          </div>
+          <div class="col-sm-12">
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              [value]="data?.target"
+            />
+            <!-- <span class="details">{{ data?.target }}</span> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row item" >
+        <div class="col-sm-12">
+          <span class="title">{{ "scoreSubmission.comment" | translate }}</span>
+        </div>
+        <div class="col-sm-12">
+          <textarea
+            type="text"
+            class="form-textarea w-100"
+            disabled
+            [value]="data?.comment"
+          ></textarea>
+          <!-- <span class="details">
+            {{ data?.comment }}
+          </span> -->
+        </div>
+      </div>
+
+      <div class="row item">
+        <div class="col-sm-12">
+          <span class="title">
+            {{ "scoreSubmission.attachment" | translate }}
+          </span>
+        </div>
+        <div class="col-sm-12">
+          <ul class="details">
+            <li *ngFor="let attachment of data?.attachments">
+              <a (click)="getFileURL(attachment.fileName)">{{ attachment.uploadedFileName == null? attachment.fileName :attachment.uploadedFileName }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row item" *ngIf="data?.correctiveAction">
+        <div class="col-sm-12">
+          <span class="title">
+            {{ "scoreSubmission.correctiveAction" | translate }}
+          </span>
+        </div>
+        <div class="col-sm-12">
+          <textarea
+            type="text" class="form-textarea w-100" disabled [value]="data?.correctiveAction"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end popup-footer">
+      <button (click)="onClose()" class="btn btn-dark mr-2 col-2">
+        {{ "shared.back" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</app-popup>

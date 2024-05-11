@@ -1,0 +1,102 @@
+<div class="requests-page">
+  <app-header-page
+    [title]="'requests.myRequests' | translate"
+    [totalItems]="totalItems"
+    [backButton]="true"
+    [isSearch]="true"
+    [searchKey]="requestBody?.searchKey"
+    [filterCount]="this.filterCount"
+    [showTotalFilterAdvanced]="true"
+    [hasAdvancedFilter]="true"
+    (search)="handleSearch($event)"
+    (onAdvancedFilter)="openAdvancedFilterModel()"
+  ></app-header-page>
+
+  <div class="requests-page-wrapper">
+
+    <!-- analytics widgets -->
+    <div>
+      <requests-stats
+        [reqStats]="stats"
+        [loading]="loading"
+      ></requests-stats>
+    </div>
+
+    <!-- filters  -->
+    <div class="req-filters">
+      <!-- (servicesFilterEvent)="handleServiceFilter($event)" -->
+      <requests-filters
+        [filters]="getQueryParams()"
+        (catgoryFilterEvent)="handleCategoryFilter($event)"
+        (statusesFilterEvent)="handleStatusFilter($event)"
+        (ownedTasksFilterEvent)="handleOwnedTasksFilter($event)"
+        (onAssignedToMeFilter)="handleAssignedToMeFilter($event)"
+      ></requests-filters>
+    </div>
+
+    <!-- requests table -->
+    <ng-container *ngIf="loading; else table_data">
+      <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #table_data>
+  <requests-table
+    *ngIf="
+      requestsFilter.length != 0 &&
+      (requestsFilter | search: serviceTitle).length != 0
+    "
+    [totalItems]="totalItems"
+    [paginationModel]="{pageIndex: requestBody.pageIndex, pageSize: requestBody.pageSize}"
+    [Requests]="requestsFilter | search: serviceTitle"
+    (onRating)="setRating($event)"
+    (onPaginate)="handlePagination($event)"
+  ></requests-table>
+
+  <div
+    class="no-data"
+    *ngIf="
+      requestsFilter.length == 0 ||
+      (requestsFilter | search: serviceTitle).length == 0
+    "
+  >
+    <app-no-data
+      msg="{{ 'requests.noDataMsg' | translate }}"
+    ></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- Advance Filter Modal -->
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'requests-filter'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeAdvancedFilterModel()"
+>
+  <div modal-header class="requests-filter-model-header w-100">
+    <label class="modal-title">
+      {{ 'shared.advancedFilter' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="requests-filter-model-content border-top">
+    <app-requests-advanced-filter
+      [filters]="requestBody"
+      (onFilter)="handleAdvancedFilter($event)"
+      *ngIf="isAdvancedFilterClicked"
+    ></app-requests-advanced-filter>
+  </div>
+</app-model>

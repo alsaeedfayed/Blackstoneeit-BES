@@ -1,0 +1,74 @@
+<div class="form-group">
+  <label class="form-label">{{ title }} <span *ngIf="IsCommentRequired" class="astrix-red">*</span></label>
+  <div class="input-wrapper">
+    <textarea
+      (input)="change()"
+      [disabled]="disabled"
+      [(ngModel)]="value"
+      [placeholder]="'shared.typeDescription' | translate"
+      class="form-textarea"
+      [ngClass]="{ valid: control.valid }"
+      *ngIf="isTitle"
+    ></textarea>
+    <ul class="uploaded-files" *ngIf="uploadedFiles.length !== 0">
+      <li *ngFor="let file of uploadedFiles; let i = index">
+        <div class="file-details">
+          <i [class]="'bx ' + 'bxs-file-' + file?.extension"></i>
+          <div>
+            <span class="name" [title]="file?.name">{{
+              file?.name.length > 21
+                ? file?.name?.slice(0, 21).concat("...")
+                : file?.name
+            }}</span>
+            <span class="size">{{ file?.size }}MB</span>
+          </div>
+        </div>
+        <button (click)="onDeleteFile(i)" class="file-delete-btn">
+          <i class="bx bx-trash"></i>
+        </button>
+        <button (click)="onViewLocalFile(i)" class="file-view-btn">
+          <i class="bx bx-show"></i>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Previously uploaded files -->
+    <label *ngIf="prevAttachment && prevAttachment.length !== 0">{{
+      "shared.previousAttachments" | translate
+    }}</label>
+    <ul
+      class="uploaded-files"
+      *ngIf="prevAttachment && prevAttachment.length !== 0"
+    >
+      <li *ngFor="let file of prevAttachment; let i = index">
+        <div class="file-details" *ngIf="file">
+          <i [class]="'bx ' + 'bxs-file-' + file?.extension.split('.')[1]"></i>
+          <div>
+            <span class="name">{{ file?.fileName?.split("_")[0] }}</span>
+          </div>
+        </div>
+        <!-- <button (click)="onDeleteFileFromCloud(file)" class="file-delete-btn">
+          <i class="bx bx-trash"></i>
+        </button> -->
+        <button (click)="onViewFile(file)" class="file-view-btn">
+          <i class="bx bx-show"></i>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Upload File Button -->
+    <div class="upload-file-btn" *ngIf="!disabled">
+      <label for="input-file">{{ uploadFilesTitle }} <span *ngIf="IsAttachmentRequired" class="astrix-red">*</span></label>
+      <span class="upload-hint"
+        >{{ "shared.maxFileSixe1" | translate }} {{maxFileSizeInMB}} {{"shared.maxFileSixe2" | translate}}
+        <span *ngFor="let type of hintTypes;let last =last">{{ ' ' + (type | translate) }} <span *ngIf="!last"> ,</span> </span></span
+      >
+      <input (change)="onUploadFile($event)" id="input-file" type="file" [accept]="supportedType.join(',')" [disabled]="disabled"/>
+    </div>
+  </div>
+</div>
+<p class="upload-hint" *ngIf="attachmentHint?.ar || attachmentHint?.en"> {{lang == 'ar' ? attachmentHint?.ar : attachmentHint?.en }} </p>
+<app-validation
+  *ngIf="(control?.dirty || isSubmitted) && control?.invalid"
+  [control]="control"
+></app-validation>

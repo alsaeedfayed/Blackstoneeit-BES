@@ -1,0 +1,74 @@
+<div class="comments">
+    <div class="header">
+        <div class="header-actions">
+            <div>{{"requests.comments" | translate }}</div>
+            <!-- <div class="buttons">
+                <button (click)="approveComment()"><i class='bx bx-check-circle green'></i> {{"shared.approve" | translate}}</button>
+                <button (click)="rejectComment()"><i class='bx bx-x-circle red'></i> {{"shared.reject" | translate}}</button>
+            </div> -->
+        </div>
+        <div class="title">
+            <div class="item item-value width-30" *ngIf="lang != 'ar' && item?.type != controlTypeMode.File">
+                {{ item.name }}
+            </div>
+            <div class="item width-30" *ngIf="lang == 'ar' && item?.type != controlTypeMode.File">
+            {{ item.arName }}
+            </div>
+            <div class="item item-value width-30" *ngIf="
+                lang != 'ar' &&
+                item?.type == controlTypeMode.File &&
+                item.valueText != '[]' &&
+                item?.valueText != '&quot;&quot;'
+            ">
+            {{ item.name }}
+            </div>
+            <div class="item width-30" *ngIf="
+                lang == 'ar' &&
+                item?.type == controlTypeMode.File &&
+                item.valueText != '[]' &&
+                item?.valueText != '&quot;&quot;'
+            ">
+            {{ item.arName }}
+            </div>
+        </div>
+    </div>
+    <div class="body">
+        <div class="noData" *ngIf="item?.allowComment && (item?.comments?.length == 0 || item?.comments == null)">
+            <p >{{"requests.noCommentsAdded" | translate }}</p>
+        </div>
+        <div class="noData" *ngIf="!item?.allowComment">
+            <p >{{"requests.commentsNotAllowed" | translate }}</p>
+        </div>
+        <div class="list" *ngIf="item?.comments?.length > 0">
+            <div class="comment" *ngFor="let comment of item?.comments">
+                <div class="comment-header">
+                    <div class="data">
+                        <person-item *ngIf="comment?.commentorInfo" [requesterItem]="comment?.commentorInfo" [noCursor]="true"></person-item>
+                        <span class="time" *ngIf="comment?.time">
+                            {{ convertUTCDateToLocalDate(comment?.time) | dateAgo }}
+                        </span>
+                    </div>
+                    <div class="delete" *ngIf="comment?.commentorInfo?.id == CurrentUserId">
+                        <i class="bx bx-trash" (click)="deleteComment(comment)"></i>
+                    </div>
+                </div>
+                <p *ngIf="comment?.text">{{comment?.text}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="input" (keyup.enter)="addComment()">
+            <input type="text" [placeholder]="'requests.startTypingHere' | translate" 
+                [formControl]="comment" [readonly]="!item?.allowComment" [class.readonly]="!item?.allowComment" />
+        </div>
+    </div>
+</div>
+
+<!-- delete confirmation modal -->
+<app-confirm-modal
+    [id]="'delete-comment'"
+    [content]="confirmMsg"
+    [btnContent]="'shared.confirm' | translate"
+    [btnStyle]="'main'"
+    (confirm)="onDeleteConfirmed()"
+></app-confirm-modal>

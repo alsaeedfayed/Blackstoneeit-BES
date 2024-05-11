@@ -1,0 +1,224 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.tasks-status-container {
+  background-color: #ffffff;
+  padding: 1.25rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  overflow: auto;
+}
+
+.content-block {
+  background-color: $white-color;
+  padding: 1.25rem;
+  border: 0.0625rem solid $light_white_smoke_color;
+  border-radius: 0.625rem;
+  box-shadow: 0px 0px 26px rgba(0, 0, 0, 0.04);
+
+  .decisions-header,
+  .activities-header {
+    padding: 1.25rem 1.25rem 0 1.25rem;
+  }
+
+  &-title {
+    color: $black_color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+
+    .total-count {
+      color: $info_color;
+    }
+  }
+
+  &-subtitle {
+    color: $info_color;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem !important;
+  }
+
+  &-length {
+    color: $main-color;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem !important;
+  }
+}
+
+.see-more {
+  display: inline-block;
+  color: $main-color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+}
+
+.analytics-widgets {
+  container: analytics-widgets / inline-size;
+
+  &-items {
+    display: grid;
+    gap: 1rem;
+
+    @container analytics-widgets (min-width: 800px) {
+      & {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @container analytics-widgets (min-width: 500px) and (max-width: 799px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  ::ng-deep app-stats-widget {
+    .stats-widget {
+      height: 100%;
+    }
+  }
+}
+
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-subtitle {
+    color: $black-color;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+}
+
+.tasks-list {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+
+    tr {
+      &:not(:first-of-type):not(:last-of-type) {
+        border-bottom: 0.0625rem solid #efefef;
+      }
+
+      th {
+        color: $info_color;
+        font-size: 0.75rem;
+      }
+
+      th,
+      td {
+        font-weight: 500;
+        padding: 0.75rem 1.25rem;
+      }
+
+      .task-title {
+        min-width: 150px;
+      }
+
+      .task-progress {
+        min-width: 200px;
+
+        .progress-bar {
+          position: relative;
+          height: 0.25rem;
+          background-color: #ebedef;
+          border-radius: 0.625rem;
+          overflow: hidden;
+
+          .fill {
+            display: block;
+            position: absolute;
+            top: 0;
+            @include rtl_value(left, 0, auto);
+            @include rtl_value(right, auto, 0);
+            height: 100%;
+            width: 0%;
+            background-color: #ffa800;
+          }
+
+          .none {
+            background: linear-gradient(to right, #808080, #b6b6b6);
+          }
+
+          .half {
+            background: linear-gradient(to right, #FFA800, #FFCC6A);
+
+          }
+
+          .afterHalf {
+            background: linear-gradient(to right, #840AFF, #B75BD8);
+          }
+
+          .done {
+            background: linear-gradient(to right, #52AF31, #3ED126);
+          }
+        }
+
+        .percentage {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+        }
+      }
+
+      .task-created-on {
+        min-width: 150px;
+      }
+
+      .task-assigned-to {
+        width: 180px;
+
+        ::ng-deep person-item {
+          .personItem {
+            >.avatar {
+
+              .letters,
+              img {
+                height: 2rem !important;
+                width: 2rem !important;
+              }
+
+              .letters {
+                font-size: 0.75rem;
+              }
+            }
+
+            >.info {
+              .name {
+                font-size: 0.875rem;
+              }
+
+              .job {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.taskTotal {
+  color: #96A6BD;
+  font-weight: 400;
+}

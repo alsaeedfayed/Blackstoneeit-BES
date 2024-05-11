@@ -1,0 +1,10 @@
+<span
+  class="initials-container"
+  [ngStyle]="{
+    'background': colors[randomNumber],
+    'width': dimensions?.width + 'px',
+    'height': dimensions?.height + 'px'
+  }"
+>
+  <span class="initials">{{ name | initials }}</span>
+</span>

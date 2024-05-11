@@ -1,0 +1,17 @@
+<div class="vote-progress">
+  <span
+    class="vote-progress-bar bg-{{ vote.color }}"
+    [ngStyle]="{
+      width: vote.voterPercentage + '%'
+    }"
+  ></span>
+  <div class="d-flex justify-content-between">
+    <span class="vote-progress-label status">
+      {{ vote.title[language] }}
+    </span>
+    <span class="vote-progress-label">
+      {{ vote.votersCount | votesCount : language }} <span *ngIf="vote.votersCount>0">-</span>
+      {{ vote.voterPercentage }}%
+    </span>
+  </div>
+</div>

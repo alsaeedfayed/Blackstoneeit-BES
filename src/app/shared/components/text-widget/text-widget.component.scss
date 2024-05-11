@@ -1,0 +1,79 @@
+@import "src/assets/css/utils/mixins.scss";
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+
+  .widgets-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 210px;
+    width: 100%;
+    background: #ffffff;
+    padding: 21px 20px;
+    box-shadow: 0px 0px 26px rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
+
+    .left {
+      display: flex;
+      align-items: center;
+
+      .card-container {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        // width: 25%;
+        @include rtl_key(margin-, right, left, 10px);
+        @include rtl_key(margin-, left, right, 0);
+      }
+
+      .label {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0;
+      }
+    }
+
+    .value {
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 20px;
+    }
+  }
+}
+
+.statistics {
+  width: 50%;
+
+  @media (max-width: 440px) {
+    width: 100%;
+  }
+}
+
+.total {
+  background-color: #878fa7;
+
+  .value,
+  .label {
+    color: #fff !important;
+  }
+}
+
+.on-track {
+  background-color: #1be3a7;
+}
+
+.off-track {
+  background-color: #ffb2b2;
+}
+
+.not-due {
+  background-color: #f9f9f9;
+}

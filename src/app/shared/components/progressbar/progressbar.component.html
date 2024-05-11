@@ -1,0 +1,10 @@
+<div class="progress-bar">
+  <span
+
+    class="progress-bar-span"
+    [ngStyle]="{ backgroundColor: bgColor, width: progressWidth + '%'}"
+    [ngClass]="{'padd' : progressWidth>0}"
+  >
+    {{ lable }}
+  </span>
+</div>

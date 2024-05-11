@@ -1,0 +1,71 @@
+@import "src/assets/css/utils/variables.scss";
+
+.new-event-form {
+  background: $white-color;
+  padding: 0 1.25rem 1.25rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.01);
+
+  .agenda-items-container {
+    container: agenda-items / inline-size;
+
+    .agenda-items {
+      display: grid;
+      gap: 1.5rem;
+
+      @container agenda-items (min-width: 600px) {
+        & {
+          grid-template-columns: calc(50% - 0.75rem) calc(50% - 4.75rem) 2rem;
+        }
+      }
+
+      app-filed {
+        &.ng-dirty.ng-touched.ng-invalid {
+          + .remove-item-btn {
+            margin-bottom: 1.375rem;
+          }
+        }
+      }
+
+      .remove-item-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: flex-end;
+        height: 2.75rem;
+        width: 2rem;
+        font-size: 1.25rem;
+        background: none;
+        padding: 0;
+        border: 0;
+      }
+    }
+  }
+
+  ::ng-deep {
+    app-nz-date-picker,
+    app-nz-time-picker {
+      .form-group {
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  .cover-photo {
+    .uploaded-image {
+      width: fit-content;
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+
+      img {
+        max-width: 100%;
+        border-radius: inherit;
+      }
+    }
+  }
+
+  .astrix-red {
+    color: red;
+  }
+}

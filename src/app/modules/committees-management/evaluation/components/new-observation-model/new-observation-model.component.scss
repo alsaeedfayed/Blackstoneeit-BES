@@ -1,0 +1,55 @@
+.astrix-red {
+  color: red;
+}
+.drop-zone {
+  border: 2px dotted #9f9f9f;
+  border-radius: 7px;
+  text-align: center;
+  padding: 25px 10px;
+  margin-top: 5px;
+}
+
+:host ::ng-deep app-filed {
+  textarea {
+    height: 250px !important ;
+    resize: vertical !important;
+  }
+}
+
+::ng-deep {
+  .arNameLable label {
+    text-align: right;
+  }
+  .enNameLable label {
+    text-align: left;
+  }
+}
+
+.observationTitlesar{
+  .observaitonTitlesContainer{
+    flex-direction: row-reverse;
+  }
+}
+
+
+::ng-deep {
+  .observationTitlesar {
+    .enNameLable {
+      .form-label {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 3px;
+      }
+    }
+  }
+
+  .observationTitlesen {
+    .arNameLable {
+      .form-label {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 3px;
+      }
+    }
+  }
+}

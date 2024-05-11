@@ -1,0 +1,23 @@
+//buttons
+// @import "../../../assets/css/components/button.scss";
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 25px;
+  height: 100%;
+  padding: 20px 30px;
+  h5 {
+    text-align: center;
+    margin: 20px;
+  }
+  .actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    .btn {
+      padding: 12px 25px;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<!-- Start Not Authorized Area -->
+<div class="not-authorized-area">
+  <div class="d-table">
+    <div class="d-table-cell">
+      <div class="not-authorized-content d-flex flex-column align-items-center">
+        <img src="/assets/img/security.svg" alt="" />
+        <h2>{{ "oops.youAreNotAuthorized" | translate }}</h2>
+        <p>{{ "oops.youAreNotAuthorizedMsg" | translate }}</p>
+        <a class="btn btn-main" [routerLink]="'/service-catalog'">
+          {{ "oops.backHome" | translate }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Not Authorized Area -->

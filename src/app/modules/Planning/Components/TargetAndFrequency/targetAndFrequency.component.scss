@@ -1,0 +1,62 @@
+//variables
+@import "../../../../../assets/css/utils/variables.scss";
+
+.target {
+  .measurment-type,
+  .freq-type {
+    margin: 15px 0;
+
+    .types {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      .type {
+        button {
+          color: #cbcbcb;
+          width: 100%;
+          border: 1px solid #cbcbcb;
+          border-radius: 4px;
+          padding: 15px 30px;
+          font-size: 14px;
+          font-weight: 600;
+
+          &.active {
+            color: #3c557a;
+            border-color: $main-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+.define-target {
+  form {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .child {
+      width: 49%;
+      // min-width: 390px;
+
+      @media (max-width: 576px) {
+        min-width: unset;
+        width: 100%;
+      }
+    }
+
+    .check {
+      width: 100%;
+    }
+  }
+}
+
+label {
+  display: block;
+  color: #717986;
+  font-size: 16px;
+  margin: 15px 0;
+}

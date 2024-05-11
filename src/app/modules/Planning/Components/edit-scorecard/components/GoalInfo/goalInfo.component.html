@@ -1,0 +1,218 @@
+<!-- Goal Info -->
+<div class="goalInfo" *ngIf="!model.loading">
+  <form [formGroup]="model.form">
+    <!-- Types -->
+    <!-- <div
+      class="types"
+      *ngIf="
+        model.types &&
+        model.types.length > 0 &&
+        model.selectedType &&
+        model.selectedType.id
+      "
+    >
+      <div class="type" *ngFor="let type of model.types">
+        <button
+          (click)="model.toggleActivation(type)"
+          class="btn"
+          [ngStyle]="{
+            backgroundColor:
+              type.id === model.selectedType.id ? type.color : 'transparent'
+          }"
+          [ngClass]="{ active: type.id === model.selectedType.id }"
+        >
+          {{ model.lang === "en" ? type.name : type.arabicName }}
+        </button>
+      </div>
+    </div> -->
+    <!-- Title -->
+    <div class="title">
+      <app-filed
+        class="d-block pt-3"
+        title="{{ 'Planning.goalTitle' | translate }}"
+        formControlName="title"
+        [control]="model.form | getControl: 'title'"
+        [length]="300"
+        [placeholder]="'Planning.goalTitlePlaceholder' | translate"
+        [isSubmitted]="model.isSubmitted"
+      ></app-filed>
+    </div>
+    <!-- Arabic Title -->
+    <div class="title">
+      <app-filed
+        class="d-block pt-3"
+        title="{{ 'Planning.goalArabicTitle' | translate }}"
+        formControlName="titleAr"
+        [control]="model.form | getControl: 'titleAr'"
+        [length]="300"
+        [placeholder]="'Planning.goalArabicTitlePlaceholder' | translate"
+        [isSubmitted]="model.isSubmitted"
+      ></app-filed>
+    </div>
+
+    <app-textarea-filed
+      class="d-block pt-3"
+      formControlName="formula"
+      title="{{ 'Planning.formula' | translate }}"
+      [control]="model.form | getControl: 'formula'"
+      [placeholder]="'Planning.formulaPlaceholder' | translate"
+    ></app-textarea-filed>
+
+    <app-textarea-filed
+      class="d-block pt-3"
+      formControlName="risk"
+      title="{{ 'Planning.risk' | translate }}"
+      [control]="model.form | getControl: 'risk'"
+      [placeholder]="'Planning.riskPlaceholder' | translate"
+    ></app-textarea-filed>
+
+    <app-textarea-filed
+      class="d-block pt-3"
+      formControlName="achievementRequirements"
+      title="{{ 'Planning.achievementRequirements' | translate }}"
+      [control]="model.form | getControl: 'achievementRequirements'"
+      [placeholder]="'Planning.achievementRequirementsPlaceholder' | translate"
+    ></app-textarea-filed>
+
+    <div class="desc">
+      <app-description-input-with-attachments
+        class="d-block pt-3"
+        title="{{ 'Planning.attachments' | translate }}"
+        [isTitle]="false"
+        (attachmentUploadEvent)="model.uploadFile($event)"
+        [isSubmitted]="model.isSubmitted"
+        [prevAttachment]="model.prevUploadedFiles"
+      ></app-description-input-with-attachments>
+    </div>
+    <!-- Desc -->
+    <!-- <div class="desc">
+      <app-description-input-with-attachments
+        class="d-block pt-3"
+        title="{{ 'Planning.goalDescription' | translate }}"
+        formControlName="description"
+        [control]="model.form | getControl: 'description'"
+        (attachmentUploadEvent)="model.uploadFile($event)"
+        [isSubmitted]="model.isSubmitted"
+        [prevAttachment]="model.prevUploadedFiles"
+      ></app-description-input-with-attachments>
+    </div> -->
+    <!-- Level -->
+    <div class="level row" style="display: none;">
+      <div class="pt-3 col-md-4">
+        <label class="form-label">{{ "Planning.goalLevel" | translate }}</label>
+        <ng-select
+          class="input-select"
+          placeholder="{{ 'Planning.selectLevel' | translate }}"
+          formControlName="level"
+          [items]="model.filteredLevels"
+          bindLabel="txt"
+          bindValue="id"
+          [(ngModel)]="model.val"
+          [dropdownPosition]="'top'"
+          [clearable]="false"
+          (change)="model.filterGroups()"
+        >
+        </ng-select>
+      </div>
+      <div class="pt-3 col-md-8 align-self-end" *ngIf="model.val !== 1">
+        <label class="form-label">{{
+          model.val == 2
+            ? model.sectorsLabel
+            : model.val == 3
+            ? model.departmentsLabel
+            : model.sectionsLabel
+        }}</label>
+        <ng-select
+          placeholder="{{ 'Planning.selectGroup' | translate }}"
+          class="input-select"
+          formControlName="groupId"
+          [items]="model.filteredGroups"
+          [bindLabel]="model.lang === 'en'? 'name' : 'arabicName'"
+          bindValue="id"
+          [dropdownPosition]="'top'"
+          [clearable]="true"
+          (change)="model.getUserGroup()"
+        >
+        </ng-select>
+        <app-validation
+          *ngIf="model.isSubmitted && model.f['groupId'].invalid"
+          [control]="model.f['groupId']"
+        ></app-validation>
+      </div>
+    </div>
+    <!--  Owner -->
+    <div
+      class="parent"
+      *ngIf="model.selectedType && model.selectedType.category === 2"
+    >
+      <div class="pt-3">
+        <label class="form-label">{{ "Planning.owner" | translate }}</label>
+        <ng-select
+          class="input-select"
+          placeholder="{{ 'Planning.selectOwner' | translate }}"
+          formControlName="ownerId"
+          [items]="model.owners"
+          bindLabel="fullName"
+          [dropdownPosition]="'top'"
+          bindValue="id"
+        >
+        </ng-select>
+      </div>
+    </div>
+    <!-- Parent Goal -->
+    <div
+      class="parent"
+      *ngIf="
+        model.selectedType && model.parentItems && model.parentItems.length > 0
+      "
+      [ngStyle]="{ display: model.isChild ? 'block' : 'none' }"
+    >
+      <div class="pt-3">
+        <label class="form-label">{{ "Planning.parent" | translate }}</label>
+        <ng-select
+          class="input-select"
+          placeholder="{{ 'Planning.selectParent' | translate }}"
+          [dropdownPosition]="'top'"
+          formControlName="parentId"
+          [items]="model.parentItems"
+          [bindLabel]="model.lang === 'en'? 'title' : 'titleAr'"
+          bindValue="id"
+          [readonly]="true"
+        >
+        </ng-select>
+      </div>
+    </div>
+  </form>
+  <!-- <div *ngIf="model.selectedType && model.selectedType.category === 2" class="internalWeight">
+    <h6>{{ 'Planning.targetAndFrequency' | translate }}</h6>
+     <div class="val">
+      <label>{{ 'Planning.contributionWeight' | translate }}</label>
+      <frequency-input
+        [Item]="1"
+        [(ngModel)]="model.contributionWeight"
+        class="intial"
+      ></frequency-input>
+      <div class="error" *ngIf="(model.internalWeightVal < 0 || model.internalWeightVal > 100)">
+        <span>{{ 'Planning.internalWeightMsg' | translate }}</span>
+      </div>
+    </div>
+     <div class="val">
+      <label>{{ 'Planning.internalWeight' | translate }}</label>
+      <frequency-input
+        [Item]="1"
+        [(ngModel)]="model.internalWeightVal"
+        class="intial"
+      ></frequency-input>
+      <div class="error" *ngIf="(model.internalWeightVal < 0 || model.internalWeightVal > 100)">
+        <span>{{ 'Planning.internalWeightMsg' | translate }}</span>
+      </div>
+    </div>
+  </div> -->
+</div>
+
+<div *ngIf="model.loading">
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</div>

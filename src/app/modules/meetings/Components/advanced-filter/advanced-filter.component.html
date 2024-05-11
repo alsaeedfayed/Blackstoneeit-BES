@@ -1,0 +1,128 @@
+<div class="new-model-dialog-body">
+  <div class="advanced-filter-form pb-2" [formGroup]="form">
+
+    <app-filed
+      class="d-block mt-4"
+      formControlName="id"
+      [title]="'Meetings.id' | translate"
+      [placeholder]="'Meetings.id' | translate"
+    ></app-filed>
+
+    <app-filed
+      class="d-block mt-4"
+      formControlName="title"
+      [title]="'Meetings.title' | translate"
+      [placeholder]="'Meetings.title' | translate"
+    ></app-filed>
+
+    <div class="d-flex flex-column gap-1">
+      <div class="row">
+        <div class="form-group col-6 mt-4">
+          <label for="" class="form-label">{{'Meetings.from' | translate}}</label>
+          <app-datepicker [allowPastDate]="true" formControlName="fromDate"></app-datepicker>
+        </div>
+        <div class="form-group col-6 mt-4">
+          <label for="" class="form-label">{{'Meetings.to' | translate}}</label>
+          <app-datepicker [allowPastDate]="true" formControlName="toDate"></app-datepicker>
+        </div>
+      </div>
+
+      <!-- invalid date alert -->
+      <div class="validation" *ngIf="isInvalidDateRange">
+        <span>{{ 'Meetings.invalidDateRange' | translate }}</span>
+      </div>
+    </div>
+
+    <app-select
+      class="d-block mt-4"
+      formControlName="status"
+      [title]="'Meetings.status' | translate"
+      [placeholder]="'Meetings.status' | translate"
+      [items]="statuses"
+      [bindVlaue]="'id'"
+      [bindLabel]="lang == 'ar' ? 'name' : 'nameEn'"
+      [multiple]="false"
+      [clearable]="true"
+    ></app-select>
+
+    <app-select
+      class="d-block mt-4"
+      formControlName="createdBy"
+      [title]="'Meetings.createdBy' | translate"
+      [placeholder]="'Meetings.createdBy' | translate"
+      [items]="users"
+      bindValue="id"
+      [bindLabel]="'fullName'"
+      [multiple]="false"
+      [clearable]="true"
+      (onSearch)="searchUsers($event)"
+    ></app-select>
+
+    <app-select
+      class="d-block mt-4"
+      formControlName="meetingChairperson"
+      [title]="'Meetings.meetingChairperson' | translate"
+      [placeholder]="'Meetings.meetingChairperson' | translate"
+      [items]="users"
+      bindValue="id"
+      [bindLabel]="'fullName'"
+      [multiple]="false"
+      [clearable]="true"
+      (onSearch)="searchUsers($event)"
+    ></app-select>
+
+    <app-select
+      class="d-block mt-4"
+      formControlName="meetingInitiator"
+      [title]="'Meetings.meetingInitiator' | translate"
+      [placeholder]="'Meetings.meetingInitiator' | translate"
+      [items]="users"
+      bindValue="id"
+      [bindLabel]="'fullName'"
+      [multiple]="false"
+      [clearable]="true"
+      (onSearch)="searchUsers($event)"
+    ></app-select>
+
+    <app-select
+      class="d-block mt-4"
+      formControlName="commitee"
+      [control]="form | getControl: 'commitee'"
+      [title]="'Meetings.commiteeName' | translate"
+      [placeholder]="'Meetings.commiteeName' | translate"
+      [items]="commitee"
+      [bindVlaue]="'id'"
+      [bindLabel]="lang == 'ar'? 'nameAr':'name'"
+      [clearable]="true"
+    ></app-select>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="close()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- clear button -->
+  <button
+    class="btn btn-outline-main flex-grow-1"
+    (click)="resetFilters()"
+  >
+    {{ 'Meetings.clearFilters' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="isInvalidDateRange"
+    (click)="save()"
+  >
+    {{ 'shared.applyFilter' | translate }}
+  </button>
+</div>

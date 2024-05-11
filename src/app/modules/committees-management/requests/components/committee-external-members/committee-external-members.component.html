@@ -1,0 +1,135 @@
+<div class="row">
+  <div class="d-flex align-items-center justify-content-between mb-1">
+    <label class="form-label">
+      {{
+        "committeesNewRequest.externalMembersRows.externalMember" | translate
+      }}
+    </label>
+    <button
+      *ngIf="externalMembers?.length > 0"
+      class="add-new-btn"
+      (click)="openNewExternalMemberModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{
+        "committeesNewRequest.externalMembersRows.addExternalMember" | translate
+      }}
+    </button>
+  </div>
+</div>
+
+<div class="member-list pt-3">
+  <table *ngIf="externalMembers?.length > 0">
+    <tr>
+      <th class="member-name">
+        {{ "committeesNewRequest.externalMembersRows.table.name" | translate }}
+      </th>
+      <th class="member-email">
+        {{ "committeesNewRequest.externalMembersRows.table.email" | translate }}
+      </th>
+      <th class="member-position">
+        {{
+          "committeesNewRequest.externalMembersRows.table.position" | translate
+        }}
+      </th>
+      <th class="member-phone">
+        {{
+          "committeesNewRequest.externalMembersRows.table.phoneNumber"
+            | translate
+        }}
+      </th>
+      <th *ngIf="isUpdating" class="MainTask-actions"></th>
+    </tr>
+    <tr *ngFor="let member of externalMembers">
+      <!-- name -->
+      <td class="member-name">
+        {{ member?.name[language] }}
+      </td>
+      <!-- name -->
+      <td class="member-email">
+        {{ member?.email }}
+      </td>
+      <!-- name -->
+      <td class="member-position">
+        {{ member?.position }}
+      </td>
+      <!-- name -->
+      <td class="member-phone">
+        {{ member?.phoneNumber }}
+      </td>
+      <!-- actions -->
+      <td *ngIf="isUpdating" class="member-actions d-flex gap-2">
+        <button
+          [title]="'shared.edit' | translate"
+          class="edit-grid-item-btn"
+          (click)="openNewExternalMemberModel(member)"
+        >
+          <i class="bx bx-edit-alt fs-5"></i>
+        </button>
+        <button
+          [title]="'shared.delete' | translate"
+          class="edit-grid-item-btn"
+          (click)="deleteExternalMember(member.name?.en)"
+        >
+          <i class="bx bx-trash text-danger fs-5"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <div class="no-data" *ngIf="externalMembers?.length == 0 || !externalMembers">
+    <p class="text-secondary">
+      {{ "committeesNewRequest.externalMembersRows.noDataMsg" | translate }}
+    </p>
+    <button
+      *ngIf="isUpdating"
+      class="btn btn-main"
+      (click)="openNewExternalMemberModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{
+        "committeesNewRequest.externalMembersRows.addExternalMember" | translate
+      }}
+    </button>
+  </div>
+</div>
+
+<!-- create/edit external member modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'new-external-member'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeExternalMemberModel()"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{
+        (selectedExternalMember
+          ? "committeesNewRequest.externalMembersRows.editExternalMember"
+          : "committeesNewRequest.externalMembersRows.addExternalMember"
+        ) | translate
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="border-top">
+    <app-new-external-member-modal
+      *ngIf="isExternalMemberModelOpened"
+      [language]="language"
+      [nameEn]="selectedExternalMember?.name?.en"
+    ></app-new-external-member-modal>
+  </div>
+</app-model>
+
+<!-- modal to confirm delete a member -->
+<app-confirm-modal
+  [id]="'delete-member'"
+  [content]="
+    'committeesNewRequest.externalMembersRows.deleteConfirmMsg' | translate
+  "
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteExternalMemberConfirmed()"
+></app-confirm-modal>

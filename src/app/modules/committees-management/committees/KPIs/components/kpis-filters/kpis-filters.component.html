@@ -1,0 +1,130 @@
+<div class="kpi-filters-container">
+  <div class="kpi-filters row" [formGroup]="form">
+
+    <!-- measurementRecurrences select -->
+    <div class="col-6">
+      <label class="form-label">
+        {{ 'committeeKPIs.filters.frequency' | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="measurementRecurrence"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl: 'measurementRecurrence')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeeKPIs.filters.frequency' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setFrequencyValue($event)"   
+      >
+        <ng-option *ngFor="let item of measurementRecurrences" [value]="item?.id">
+         {{item.title[language]}}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- sorting filter -->
+    <div class="sorting-filter col-6">
+      <app-select
+        class="d-block"
+        formControlName="sortKey"
+        [control]="form | getControl: 'sortKey'"
+        [title]="'committeeKPIs.filters.sortBy' | translate"
+        [placeholder]="'committeeKPIs.filters.selectSortBy' | translate"
+        [items]="sortKeys"
+        [bindVlaue]="'key'"
+        [bindLabel]="language == 'en' ? 'name' : 'nameAr'"
+        [clearable]="true"
+        
+        (change)="changeFilter()"
+      ></app-select>
+
+      <button
+        class="sorting-filter-icon "
+        [ngClass]="{
+          'sort-up': ascMode,
+          'sort-down': descMode,
+          'disabled':sortDisabled
+        }"
+        
+        (click)="sort()"
+      >
+        <i class='bx bxs-up-arrow'></i>
+        <i class='bx bxs-down-arrow'></i>
+      </button>
+    </div>
+
+     <!-- Weight filter -->
+    <div class="col-6 col mt-3">
+
+      <header class="form-label">{{'committeeKPIs.filters.weight' | translate}} (%)</header>
+
+      <div class="row">
+        <!-- Weight from -->
+        <app-filed
+        class="d-block col-6"
+        formControlName="weightFrom"
+        [control]="form | getControl : 'weightFrom'"
+        [placeholder]="'shared.from' | translate"
+        [isNumber]="true"
+        [minValue]="0"
+        [maxValue]="100"
+        (change)="changeFilter()"
+      ></app-filed>
+
+      <!-- Weight to -->
+      <app-filed
+        class="d-block col-6"
+        formControlName="weightTo"
+        [control]="form | getControl : 'weightTo'"
+        [placeholder]="'shared.to' | translate"
+        [isNumber]="true"
+        [minValue]="0"
+        [maxValue]="100"
+        (change)="changeFilter()"
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- Target filter -->
+    <div class="col-6 col mt-3">
+
+      <header class="form-label">{{'committeeKPIs.filters.target' | translate}} (%)</header>
+
+      <div class="row">
+
+        <!-- Target from -->
+        <app-filed
+          class="d-block col-6"
+          formControlName="targetFrom"
+          [control]="form | getControl : 'targetFrom'"
+          [placeholder]="'shared.from' | translate"
+          [isNumber]="true"
+          [minValue]="0"
+          [maxValue]="100"
+          (change)="changeFilter()"
+        ></app-filed>
+
+        <!-- Target to -->
+        <app-filed
+          class="d-block col-6"
+          formControlName="targetTo"
+          [control]="form | getControl : 'targetTo'"
+          [placeholder]="'shared.to' | translate"
+          [isNumber]="true"
+          [minValue]="0"
+          [maxValue]="100"
+          (change)="changeFilter()"
+        ></app-filed>
+
+      </div>
+    </div>
+
+
+
+
+  
+  </div>
+</div>

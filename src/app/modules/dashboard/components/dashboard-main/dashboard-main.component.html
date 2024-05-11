@@ -1,0 +1,115 @@
+<app-header-page
+  [title]="'dashboard.dashboard' | translate"
+  [backButton]="true"
+  [hasAdvancedFilter]="true"
+  [isSearch]="false"
+  [showTotalFilterAdvanced]=" true"
+  [filterCount]="filterLength"
+  (onAdvancedFilter)="openFilterModel()"
+>
+  <ng-container buttons>
+    <button
+      class="btn btn-info"
+      [disabled]="isExporting"
+      (click)="loadAllDetails()"
+    >
+      <i class='bx bxs-download' *ngIf="!isExporting"></i>
+      <i class="bx bx-loader-alt bx-spin" *ngIf="isExporting"></i>
+      {{ "shared.export" | translate }}
+    </button>
+  </ng-container>
+</app-header-page>
+
+<div [style.display]="projectsData && !isLoading ? 'block' : 'none'" #exported_data>
+  <div class="pt-2 pb-3">
+    <div #page_filters>
+      <app-dashboard-filters [filters]="data"></app-dashboard-filters>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="projectsData">
+    <div class="col-md-8 mb-3">
+      <app-dashboard-summary-card
+        [data]="projectsData"
+      ></app-dashboard-summary-card>
+    </div>
+    <div class="col-md-4 mb-3">
+      <app-dashboard-finance-summary></app-dashboard-finance-summary>
+    </div>
+  </div>
+
+  <div class="row">
+    <div *ngIf="!data.sectorId" class="col-md-8 mb-3">
+      <app-dashboard-sectors></app-dashboard-sectors>
+    </div>
+    <div *ngIf="data.sectorId" class="col-md-8 mb-3">
+      <app-dashboard-departments></app-dashboard-departments>
+    </div>
+    <div class="col-md-4 mb-3">
+      <app-dashboard-project-status
+        [data]="projectsData"
+      ></app-dashboard-project-status>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5 mb-3">
+      <app-total-budget-and-spent></app-total-budget-and-spent>
+    </div>
+    <div class="col-md-3 mb-3">
+      <app-deliverables></app-deliverables>
+    </div>
+    <div class="col-md-4 mb-3">
+      <app-categories></app-categories>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <app-details-list #details_list (onExport)="exportPage()"></app-details-list>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mb-3">
+        <app-origins></app-origins>
+      </div>
+      <div class="mb-3">
+        <app-priorities></app-priorities>
+      </div>
+      <div class="mb-3">
+        <app-dashboard-project-managers></app-dashboard-project-managers>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading">
+  <app-skeleton-loader mode="dashboard"></app-skeleton-loader>
+</div>
+
+<!-- <div class="mb-3">
+  <app-high-risks-list></app-high-risks-list>
+</div> -->
+
+<!-- advanced filter model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'dashboard-filter'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeFilterModel()"
+>
+  <div modal-header class="filter-model-header w-100">
+    <label class="modal-title">
+      {{ "shared.advancedFilter" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="filter-model-content border-top">
+    <app-dashboard-advanced-filter
+      *ngIf="isFilterModelOpened"
+      [filters]="data"
+    ></app-dashboard-advanced-filter>
+  </div>
+</app-model>

@@ -1,0 +1,174 @@
+<div class="new-model-dialog-body">
+  <div class="new-attendee-form pb-2" [formGroup]="form">
+    <!-- title en,ar -->
+    <div class="row">
+      <!-- task title -->
+      <div class="col-md-6 mt-4 enNameLable">
+        <app-filed
+          [length]="100"
+          class="d-block"
+          formControlName="title"
+          [control]="form | getControl : 'title'"
+          [title]="'committeesNewRequest.newMainTaskModel.title' | translate"
+          [placeholder]="
+            'committeesNewRequest.newMainTaskModel.title' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <!-- task title ar -->
+      <div class="col-md-6 mt-4 arNameLable">
+        <app-filed
+          [length]="100"
+          class="d-block rtl-text"
+          formControlName="titleAr"
+          [control]="form | getControl : 'titleAr'"
+          [title]="'committeesNewRequest.newMainTaskModel.titleAr' | translate"
+          [placeholder]="
+            'committeesNewRequest.newMainTaskModel.titleAr' | translate
+          "
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- dueDate -->
+
+    <div class="mt-4">
+      <app-nz-date-picker
+        class="d-block"
+        formControlName="dueDate"
+        [control]="form | getControl : 'dueDate'"
+        [title]="'committeesNewRequest.newMainTaskModel.dueDate' | translate"
+        [placeholder]="
+          'committeesNewRequest.newMainTaskModel.dueDate' | translate
+        "
+      ></app-nz-date-picker>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6 mt-4">
+        <label class="form-label">
+          {{ "committeeTasks.addModal.assignedTo" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+
+        <ng-select
+          class="input-select members-select"
+          formControlName="assignedTo"
+          [ngClass]="{ valid: (form | getControl : 'assignedTo')?.valid }"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="'committeeTasks.addModal.assignedTo' | translate"
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [multiple]="false"
+        >
+          <ng-option
+            *ngFor="let member of committeeMembers"
+            [value]="member?.id"
+          >
+            <person-item
+              [requesterItem]="member"
+              [noCursor]="true"
+            ></person-item>
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <!-- priority -->
+      <div class="col-md-6 mt-4">
+        <app-select
+          class="d-block"
+          formControlName="importanceLevel"
+          [control]="form | getControl : 'importanceLevel'"
+          [title]="'committeeTasks.addModal.priority' | translate"
+          [placeholder]="'committeeTasks.addModal.priority' | translate"
+          [items]="priority"
+          [bindVlaue]="'id'"
+          [bindLabel]="language == 'en' ? 'name' : 'nameAr'"
+        >
+          >
+        </app-select>
+      </div>
+    </div>
+
+
+     <!-- Description -->
+     <div class="mt-4">
+      <label class="form-label">
+        {{ "committeeTasks.addModal.description" | translate }}
+      </label>
+
+      <angular-editor
+        formControlName="description"
+        [config]="editorConfig"
+      ></angular-editor>
+      <label for="" class="form-label mt-3">
+        {{ "shared.attachments" | translate }}
+      </label>
+      <div
+        class="drop-zone"
+        (drop)="onDrop($event)"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+      >
+        <p class="fw-bold text-black">
+          {{ "committeeKPIs.details.drag" | translate }}
+        </p>
+        <div>
+          <span class="text-secondary">{{ "shared.or" | translate }}</span>
+          <a (click)="attachments.click()" class="text-primary">
+            {{ "committeeKPIs.details.browse" | translate }}
+          </a>
+          <span class="text-secondary">
+            {{ "committeeKPIs.details.choose" | translate }}
+          </span>
+        </div>
+      </div>
+
+      <input
+        hidden
+        #attachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event)"
+      />
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        [supportedTypes]="
+          'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'new')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAttachments"
+        (deleteFile)="onDeleteFile($event, 'old')"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- cancel button -->
+  <button class="btn btn-info flex-grow-1" (click)="closePopup()">
+    {{ "shared.cancel" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || isBtnLoading"
+    (click)="save()"
+  >
+    <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    {{ "shared.save" | translate }}
+  </button>
+</div>

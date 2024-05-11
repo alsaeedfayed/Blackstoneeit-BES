@@ -1,0 +1,67 @@
+<div class="committee-page">
+  <app-header-page
+    [title]="'committee.pageTitle' | translate"
+    [totalItems]="totalCount"
+    [backButton]="true"
+    [isSearch]="true"
+    [showButtons]="isShowCreateButton"
+    [titleBtn]="'committee.createForm' | translate"
+    (search)="handleSearchValueFilter($event)"
+    (btnClick)="openPopup()"
+  ></app-header-page>
+
+  <!-- table -->
+  <ng-container *ngIf="loading; else table_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <committee-table
+    *ngIf="list?.length > 0"
+    [totalCount]="totalCount"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (onChangeHandler)="refreshData(true)"
+    (onPaginateEvent)="handlePaginationchange($event)"
+  ></committee-table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data [msg]="'committee.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- create committee model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'committee-item-add'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeCommitteeModel()"
+>
+  <div modal-header class="commitee-model-header w-100">
+    <label class="modal-title">
+      {{ 'committee.new' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="commitee-model-content border-top">
+    <commitee-modal
+      *ngIf="isShowForm"
+      (submitted)="submitted()"
+    ></commitee-modal>
+  </div>
+</app-model>

@@ -1,0 +1,55 @@
+<div class="voting-list-container">
+  <div class="voting-list">
+    <table>
+      <tr>
+        <th class="voting-voter">
+          {{ "committeeDecisions.details.votingHistory.voterName" | translate }}
+        </th>
+        <th class="voting-committeeRole">
+          {{
+            "committeeDecisions.details.votingHistory.committeeRole" | translate
+          }}
+        </th>
+        <th class="voting-voting">
+          {{ "committeeDecisions.details.votingHistory.voting" | translate }}
+        </th>
+        <th class="voting-time">
+          {{
+            "committeeDecisions.details.votingHistory.votingDate&Time"
+              | translate
+          }}
+        </th>
+      </tr>
+      <tr *ngFor="let item of list; let i = index">
+        <td class="voting-voter">
+          <person-item
+            [requesterItem]="item?.voterInfo"
+            [noCursor]="true"
+            [isUserCardFixed]="true"
+          ></person-item>
+        </td>
+        <td class="voting-committeeRole">
+          {{ committeeMemberTypes[item?.memberType].title[language] }}
+        </td>
+        <td class="voting-voting">
+          <app-badge
+            [className]="votingOptions[item?.votingAnswer]['color']"
+            [label]="votingOptions[item?.votingAnswer].status[language]"
+          ></app-badge>
+        </td>
+
+        <td class="voting-time">
+          <span *ngIf="item?.creationDate">
+            {{
+              language === "en"
+                ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                  | date : "d MMM y hh:mm")
+                : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                  | localizeDate : "d MMM y hh:mm")
+            }}
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

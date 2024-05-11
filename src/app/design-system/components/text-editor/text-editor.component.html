@@ -1,0 +1,61 @@
+<div class="form-group">
+
+  <!-- control label -->
+  <label [for]="id" class="form-label" *ngIf="title">
+    {{ title }}
+    <span class="astrix-red" *ngIf="isRequired">*</span>
+  </label>
+
+  <!-- text filed -->
+  <angular-editor
+    [config]="editorConfig"
+    [id]="id"
+    [placeholder]="placeholder"
+    (keyup)="keyup()"
+    (keyup.enter)="keyup()"
+    (input)="change()"
+    (focus)="focus()"
+    [(ngModel)]="value"
+  >
+    <ng-template #customButtons>
+      <ae-toolbar-set>
+        <ng-container *ngIf="hasAttachments">
+          <ae-button
+            iconClass="fa fa-paperclip fa-lg"
+            [title]="'Attachment'"
+            (buttonClick)="attachments?.click()"
+          ></ae-button>
+
+          <!-- files filed -->
+          <input
+            hidden
+            #attachments
+            type="file"
+            [accept]="supportedAttachmentTypes.join(',')"
+            (change)="onUploadFile($event)"
+          />
+        </ng-container>
+      </ae-toolbar-set>
+    </ng-template>
+  </angular-editor>
+</div>
+
+<ng-container *ngIf="!!showValidations">
+  <app-validation *ngIf="(control?.touched || isSubmitted) && control?.invalid"
+    [title]="title"
+    [control]="control"
+    [length]="length"
+    [minLength]="minLength"
+  ></app-validation>
+</ng-container>
+
+<!-- uploaded files -->
+<uploaded-attachments-files
+  *ngIf="hasAttachments"
+  class="d-block mt-3"
+  [isRequired]="isAttachmentsRequired"
+  [files]="getAttachmentsFiles"
+  [supportedTypes]="supportedAttachmentHint"
+  [maxSize]="supportedAttachmentSize"
+  (deleteFile)="onDeleteFile($event)"
+></uploaded-attachments-files>

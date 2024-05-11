@@ -1,0 +1,21 @@
+{
+  "groups": {
+    "groups": "المجموعات",
+    "createGroup": "انشاء مجموعة",
+    "name": "الاسم",
+    "arabicName": "الاسم العربى",
+    "groupCode": "كود المجموعة",
+    "parentGroup": "المجموعة الرئيسية",
+    "level": "المستوى",
+    "lastUpdate": "اخر تحديث",
+    "editGroup": "تعديل المجموعة",
+    "confirmDeleteMsg": "هل أنت متأكد من حذف هذه المجموعة '{{name}}' ؟",
+    "groupWasSuccessfullyDeleted": "تم حذف المجموعة بنجاح",
+    "groupWasSuccessfullyCreated": "تم انشاء المجموعة بنجاح",
+    "groupWasSuccessfullyUpdated": "تم تعديل المجموعة بنجاح",
+    "N/A": "لا يوجد",
+    "noDataMsg": "حسنًا .. يبدو أنه ليس لديك أي مجموعات",
+    "tree": "شجرة",
+    "list": "قائمة"
+  }
+}

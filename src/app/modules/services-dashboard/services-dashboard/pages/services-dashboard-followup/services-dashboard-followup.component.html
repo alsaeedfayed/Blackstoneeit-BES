@@ -1,0 +1,139 @@
+<div class="actions mt-2">
+  <div>
+    <div class="filter-btnn">
+      <button (click)="toggleFilterContainers()" class="filter-bttn">
+        <img src="assets/icons/filter-2.svg" alt="filter" />
+        {{ "shared.filter" | translate }}
+        <span *ngIf="filterCount > 0" class="number">{{filterCount}}</span>
+        <i class="bx bx-chevron-down ng-star-inserted"></i>
+      </button>
+    </div>
+  </div>
+  <div>
+    <button class="btn btn-info" style="cursor: pointer" (click)="export()" [disabled]="exportLoading">
+      <i class='bx bxs-download' *ngIf="!exportLoading"></i>
+        <i class="bx bx-loader-alt bx-spin" *ngIf="exportLoading"></i>
+        {{ "shared.export" | translate }}
+    </button>
+  </div>
+</div>
+
+<div class="cont">
+  <div id="filters-cont" class="filters-container">
+    <app-follow-up-filters *ngIf="activeFilterContainer"
+      (onFilterEmitter)="handleFilter($event)" (onCancelEmitter)="handleCancelFilter()">
+    </app-follow-up-filters>
+  </div>
+</div>
+
+<!-- <ng-container *ngIf="cardsLoading; else cards">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="cardsSkeleton"> </ng-container>
+  </div>
+</ng-container>
+
+<ng-template #cards>
+  <div class="card-items">
+    <div class="item analytics-widget">
+      <div class="analytics-widget-wrapper all">
+        <h4>{{ totalCount }}</h4>
+        <p>{{ "servicesDashboard.allTasks" | translate }}</p>
+      </div>
+    </div>
+    <div class="item analytics-widget">
+      <div class="analytics-widget-wrapper opened">
+        <h4>{{ openedCount }}</h4>
+        <p>{{ "servicesDashboard.openedTasks" | translate }}</p>
+      </div>
+    </div>
+    <div class="item analytics-widget">
+      <div class="analytics-widget-wrapper onTrack">
+        <h4>{{ onTrackCount }}</h4>
+        <p>{{ "servicesDashboard.onTrack" | translate }}</p>
+      </div>
+    </div>
+    <div class="item analytics-widget">
+      <div class="analytics-widget-wrapper delayed">
+        <h4>{{ delayedCount }}</h4>
+        <p>{{ "servicesDashboard.delayedTasks" | translate }}</p>
+      </div>
+    </div>
+    <div class="item analytics-widget">
+      <div class="analytics-widget-wrapper closed">
+        <h4>{{ closedCount }}</h4>
+        <p>{{ "servicesDashboard.closedTasks" | translate }}</p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #cardsSkeleton>
+  <div class="overflow">
+   <div class="d-flex justify-content-center ml-2 mr-2 mb-16 w-12 float"
+   *ngFor="let i of [1, 2, 3, 4, 5]">
+   <app-skeleton-loader class="w-100" [mode]="'userCard'"></app-skeleton-loader>
+   </div>
+  </div>
+ </ng-template> -->
+
+<div [style.display]="
+    followUpPerQuarterData &&
+    meetingsPerQuarterData &&
+    progressTrackingData &&
+    ClosureRateDate &&
+    followUpItemsData &&
+    meetingStatusData &&
+    topLoadedEmployees &&
+    !isClosureRateLoading &&
+    !isFollowUpItemsLoading &&
+    !isFollowUpMeetingsStatus &&
+    !isMeetingsPerQuarterLoading &&
+    !isProgressTrackingLoading &&
+    !isTopLoadedEmpsLoading &&
+    !isfollowUpPerQuarterLoading
+      ? 'block'
+      : 'none'
+  ">
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-6 mt-2">
+      <app-follow-up-itemss [data]="followUpItemsData"></app-follow-up-itemss>
+    </div>
+    <div class="col-12 col-md-12 col-lg-6 mt-2 ">
+      <app-follow-up-closure-ratte  [data]="ClosureRateDate"></app-follow-up-closure-ratte>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-6 mt-2">
+      <app-follow-up-per-quarter [data]="followUpPerQuarterData"></app-follow-up-per-quarter>
+    </div>
+    <div class="col-12 col-md-12 col-lg-6 mt-2">
+      <app-follow-up-top-emps [data]="topLoadedEmployees"></app-follow-up-top-emps>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-follow-up-trackking [data]="progressTrackingData"></app-follow-up-trackking>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-6 mt-2">
+      <app-follow-up-meetings-status [data]="meetingStatusData"></app-follow-up-meetings-status>
+    </div>
+    <div class="col-12 col-md-12 col-lg-6 mt-2">
+      <app-meetings-per-quarater [data]="meetingsPerQuarterData" [lang]="lang"></app-meetings-per-quarater>
+    </div>
+  </div>
+  </div>
+
+<div *ngIf="
+    isClosureRateLoading ||
+    isFollowUpMeetingsStatus ||
+    isMeetingsPerQuarterLoading ||
+    isProgressTrackingLoading ||
+    isfollowUpPerQuarterLoading ||
+    isFollowUpItemsLoading ||
+    isTopLoadedEmpsLoading
+  ">
+  <app-skeleton-loader mode="dashboard"></app-skeleton-loader>
+</div>

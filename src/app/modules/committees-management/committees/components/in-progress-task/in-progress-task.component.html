@@ -1,0 +1,41 @@
+<div class="in-progress-task-container">
+  <div class="in-progress-task">
+    <div class="cell task-title">
+      <div class="cell-title">{{ 'committeesManagement.taskTitle' | translate }}</div>
+      <div class="cell-content mt-2">
+        <strong>{{ title }}</strong>
+      </div>
+    </div>
+    <div class="cell task-progress">
+      <div class="cell-title">
+        <div class="d-flex align-items-center justify-content-between gap-2">
+          <span>{{ 'committeesManagement.progress' | translate }}</span>
+          <span class="percentage">{{ progress }}%</span>
+        </div>
+      </div>
+      <div class="cell-content mt-3">
+        <div class="progress-bar">
+          <span class="fill {{progress | progressColor}}" [ngStyle]="{ 'width': progress + '%' }"></span>
+        </div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="cell-title">{{ 'committeesManagement.date' | translate }}</div>
+      <div class="cell-content mt-2">
+        <span *ngIf="date">
+          {{
+            lang === "en" ?
+            (convertUTCDateToLocalDate(date).toLocaleString() | date: "d MMM y") :
+            (convertUTCDateToLocalDate(date).toLocaleString() | localizeDate : "d MMM y")
+          }}
+        </span>
+      </div>
+    </div>
+    <div class="cell task-assigned-to">
+      <div class="cell-title">{{ 'committeesManagement.assignedTo' | translate }}</div>
+      <div class="cell-content mt-2">
+        <person-item [requesterItem]="assignedTo" [noCursor]="true"></person-item>
+      </div>
+    </div>
+  </div>
+</div>

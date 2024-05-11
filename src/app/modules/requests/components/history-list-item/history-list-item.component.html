@@ -1,0 +1,31 @@
+<div class="header">
+  <div class="info">
+    <person-item [item]="personInfo" [noCursor]="true"></person-item>
+  </div>
+  <div class="state">
+    <app-badge [label]="data?.state" [className]="className"></app-badge>
+  </div>
+</div>
+
+<p class="comment" *ngIf="data?.comments">
+  {{ data?.comments }}
+</p>
+
+<p
+  class="attachments"
+  *ngIf="!isShowAttachments && data?.attachments?.length > 0"
+  (click)="showAttachments()"
+>
+  {{ data?.attachments?.length }} {{ 'requests.attachments' | translate }}
+</p>
+
+<ul class="attachments-files" *ngIf="isShowAttachments">
+  <li *ngFor="let file of data?.attachments; let i = index">
+    <div class="file-details">
+      <i [class]="'bx ' + 'bxs-file-' + file.extension"></i>
+      <div>
+        <span class="name">{{ file.uploadedFileName }}</span>
+      </div>
+    </div>
+  </li>
+</ul>

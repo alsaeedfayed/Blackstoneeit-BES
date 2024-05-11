@@ -1,0 +1,406 @@
+<div class="container bg-white py-3">
+  <ng-container *ngIf="isLoading; else insights_Content">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+
+  <ng-template #insights_Content>
+    <div class="content-wrapper">
+      <div class="Insights-header row align-items-stretch">
+        <div class="col">
+          <span class="header-text">{{ "bau.insights" | translate }}</span>
+        </div>
+        <!-- <div class="col d-flex justify-content-end" *ngIf="canChangeBudget">
+          <div class="setting-icon-wrapper">
+            <i class="bx bx-cog setting-icon" (click)="toggleInputField()"></i>
+          </div>
+        </div> -->
+      </div>
+
+      <div
+        class="form-group change-budget"
+        [@openCloseScaleAnimation]="inputFieldState"
+      >
+        <label for="changeBudget">{{ "bau.changeBudget" | translate }}</label>
+        <div class="d-flex gap-2">
+          <input
+            type="text"
+            class="form-control"
+            id="changeBudget"
+            [placeholder]="'bau.AED' | translate"
+            [ngModel]="null"
+            #budgetInput="ngModel"
+            name="budget"
+            required
+            type="number"
+            step="0.01"
+          />
+          <button
+            type="submit"
+            class="btn btn-primary submit-button"
+            [ngClass]="{ ar: lang === 'ar' }"
+            [disabled]="!budgetInput.valid"
+            (click)="onChangeBudget(budgetInput.value)"
+          >
+            <i class="bx bx-send"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row mt-3 tasks-count justify-content-between bg-white">
+        <div class="col-4">
+          <div class="count-header">{{ "bau.mainTasks" | translate }}</div>
+          <div class="counter">{{ insights.mainTasksCount }}</div>
+          <div class="subcount">
+            <span
+              class="subcount-track"
+              [ngClass]="
+                insights.delayedMainTasksCount > 0
+                  ? 'text-danger'
+                  : 'text-success'
+              "
+            >
+              <!-- <i class="bx bx-up-arrow-alt"></i> -->
+              <span>{{ insights.delayedMainTasksCount }}</span>
+            </span>
+            <span class="subcount-text">{{ "bau.delayed" | translate }}</span>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="count-header">{{ "bau.tasks" | translate }}</div>
+          <div class="counter">{{ insights.tasksCount }}</div>
+          <div class="subcount">
+            <span
+              class="subcount-track"
+              [ngClass]="
+                insights.delayedTasksCount > 0 ? 'text-danger' : 'text-success'
+              "
+            >
+              <!-- <i class="bx bx-up-arrow-alt"></i> -->
+              <span>{{ insights.delayedTasksCount }}</span>
+            </span>
+            <span class="subcount-text">{{ "bau.delayed" | translate }}</span>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="count-header">{{ "bau.budget" | translate }}</div>
+          <div class="counter d-flex">
+            {{ insights.totalBudget | formatMoney }}
+            <span class="AED">{{ "bau.AED" | translate }}</span>
+          </div>
+          <div class="subcount">
+            <span
+              class="subcount-track"
+              [ngClass]="
+                insights.spentBudget > insights.tasksBudget
+                  ? 'text-danger'
+                  : 'text-success'
+              "
+            >
+              <span>{{ insights.spentBudget | formatMoney }}</span>
+            </span>
+            <span class="subcount-text">{{ "bau.spent" | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3 justify-content-center roles-coverage | slice:0:10">
+        <div class="wrapper">
+          <div class="header-text">{{ "bau.rolesCoverage" | translate }}</div>
+          <div class="roles-wrapper">
+            <div class="roles" *ngFor="let role of insights.rolesCoverage">
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [ngStyle]="{ width: role.percentage + '%' }"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [title]="lang === 'ar' ? role.roleNameAr : role.roleNameEn"
+                ></div>
+                <!-- give ar and en class to give right and left postion basen on lang  -->
+                <span
+                  class="progress-bar-text"
+                  [ngClass]="{
+                    ar: lang === 'ar',
+                    en: lang !== 'ar'
+                  }"
+                >
+                  {{ lang == "ar" ? role.roleNameAr : role.roleNameEn }}
+                </span>
+                <span
+                  class="tasks-count"
+                  [ngClass]="{ ar: lang === 'ar', en: lang === 'en' }"
+                >
+                  <span title="{{ 'bau.mainTasks' | translate }}">
+                    {{ role.mainTasksCount }}
+                  </span>
+                  (
+                  <span title="{{ 'bau.subTasks' | translate }}">
+                    {{ role.tasksCount }}
+                  </span>
+                  )
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPLOYEE WORK LOAD -->
+      <div
+        class="row mt-3 justify-content-center workload-emploee | slice:0:10"
+      >
+        <div
+          class="d-flex justify-content-between align-items-baseline"
+          style="padding: 1rem; background-color: #fff"
+        >
+          <div class="row mt-3 justify-content-center workload-section" style="margin-left: -1rem;">
+            <div class="block-title">
+              {{ "bau.dashboard.bestContributers" | translate }}
+            </div>
+          </div>
+          <!-- switch button -->
+          <div class="d-flex">
+            <app-switch-btn
+              style="margin-left: 10px"
+              [onlyForDestroyedChart]="false"
+              (onChange)="onSwitchChangeContributers($event)"
+            ></app-switch-btn>
+
+            <div
+            style="font-weight: 500; color: #c1c1c1; font-size: 14px;"
+              *ngIf="isMainTaskscontributers"
+              class="sector-performance-container-header-mainTasks"
+            >
+              {{ "bau.dashboard.mainTasks" | translate }}
+            </div>
+            <div
+            style="font-weight: 500; color: #c1c1c1; font-size: 14px;"
+              *ngIf="!isMainTaskscontributers"
+              class="sector-performance-container-header-tasks"
+            >
+              {{ "bau.dashboard.tasks" | translate }}
+            </div>
+          </div>
+        </div>
+
+        <app-workload
+          *ngIf="isMainTaskscontributers"
+          [language]="lang"
+          [colsData]="colsDataEmployees"
+          [workLoadData]="workLoadDataMainEmployees"
+        ></app-workload>
+        <div
+          class="no-dataunit"
+          *ngIf="
+            isMainTaskscontributers &&
+            (workLoadDataMainEmployees?.length == 0 ||
+              !workLoadDataMainEmployees)
+          "
+        >
+          <app-no-data
+            [msg]="'bau.dashboard.noDataMsgBestCont' | translate"
+          ></app-no-data>
+        </div>
+
+        <app-workload
+          *ngIf="!isMainTaskscontributers"
+          [language]="lang"
+          [colsData]="colsDataEmployees"
+          [workLoadData]="workLoadDataSubEmployees"
+        ></app-workload>
+
+        <div
+          class="no-dataunit"
+          *ngIf="
+            !isMainTaskscontributers &&
+            (workLoadDataSubEmployees?.length == 0 || !workLoadDataSubEmployees)
+          "
+        >
+          <app-no-data
+            [msg]="'bau.dashboard.noDataMsgBestCont' | translate"
+          ></app-no-data>
+        </div>
+        <!-- <app-workload
+          [language]="lang"
+          [colsData]="colsDataEmployees"
+          [workLoadData]="workLoadDataEmployees"
+        ></app-workload> -->
+      </div>
+      <!-- <div
+        class="row mt-3 justify-content-center workload-emploee"
+        [ngClass]="{ scrollable: insights.employeesWorkLoad.length > 4 }"
+      >
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">{{ "bau.workload/Employee" | translate }}</th>
+              <th scope="col">{{ "bau.mainTask/TasksCount" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let employee of insights.employeesWorkLoad; let i = index"
+            >
+              <td scope="row" class="d-flex">
+                <div class="profile-img">
+                  <img
+                    [src]="employee.basicInfo.base64Image"
+                    alt="Employee Image"
+                    *ngIf="
+                      !employee.basicInfo.isImageLoad &&
+                        employee.basicInfo.isImageLoad != false;
+                      else defaultImage
+                    "
+                    (error)="onRolesCoverageImageCrash(i)"
+                  />
+                  <ng-template #defaultImage>
+                    <i class="bx bx-user-circle"></i>
+                  </ng-template>
+                </div>
+                <div class="profile-name">
+                  {{ employee.basicInfo.fullName }}
+                </div>
+              </td>
+              <td class="tasks-count">
+                {{ employee.mainTasksCount }} / {{ employee.subTasksCount }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div> -->
+
+      <!-- SECTION WORK LOAD -->
+
+      <!-- <div
+        class="row mt-3 justify-content-center workload-emploee"
+        [ngClass]="{ scrollable: workLoadDataSections?.length > 4 }"
+      >
+        <app-workload
+          [language]="lang"
+          [colsData]="colsData"
+          [workLoadData]="workLoadData"
+        ></app-workload>
+      </div>
+
+      <div
+        class="row mt-3 justify-content-center workload-section"
+        [ngClass]="{ scrollable: insights.sectionsWorkLoad.length > 3 }"
+      >
+        <app-workload
+          [language]="lang"
+          [colsData]="colsDataSections"
+          [workLoadData]="workLoadDataSections"
+        ></app-workload>
+      </div> -->
+
+      <div
+        class="row mt-3 my-2 justify-content-center workload-section | slice:0:10"
+      >
+        <table class="table table-borderless">
+          <thead>
+            <tr class="header-text" >
+              <th scope="col">
+                <div class="block-title" style="margin-left: -.5rem">
+                  {{ "bau.workload/Section" | translate }}
+                </div>
+              </th>
+              <th scope="col">
+                <!-- switch button -->
+                <div class="d-flex align-items-center justify-content-end" >
+                  <app-switch-btn
+                    style="margin-left: 20px"
+                    [onlyForDestroyedChart]="false"
+                    (onChange)="onSwitchSeciton($event)"
+                  ></app-switch-btn>
+
+                  <div
+                  style="font-weight: 500; color: #c1c1c1; font-size: 14px;"
+                    *ngIf="isWorkSectionMain"
+                    class="sector-performance-container-header-mainTasks"
+                  >
+                    {{ "bau.dashboard.mainTasks" | translate }}
+                  </div>
+                  <div
+                  style="font-weight: 500; color: #c1c1c1; font-size: 14px;"
+                    *ngIf="!isWorkSectionMain"
+                    class="sector-performance-container-header-tasks"
+                  >
+                    {{ "bau.dashboard.tasks" | translate }}
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="isWorkSectionMain">
+            <tr *ngFor="let section of workLoadDataMainSections">
+              <td scope="row">
+                {{
+                  lang == "ar"
+                    ? section.section.arabicName
+                    : section.section.name
+                }}
+              </td>
+              <td
+                class="tasks-count"
+                style="display: flex; justify-content: end"
+              >
+                {{ section?.tasksCount }}
+              </td>
+            </tr>
+            <div
+              class="no-dataunit"
+              *ngIf="
+                workLoadDataMainSections?.length == 0 ||
+                !workLoadDataMainSections
+              "
+            >
+              <app-no-data
+                [msg]="'bau.dashboard.noDataMsgWorkSections' | translate"
+              ></app-no-data>
+            </div>
+          </tbody>
+
+          <tbody *ngIf="!isWorkSectionMain">
+            <tr *ngFor="let section of workLoadDataSubSections">
+              <td scope="row">
+                {{
+                  lang == "ar"
+                    ? section.section.arabicName
+                    : section.section.name
+                }}
+              </td>
+              <td
+                class="tasks-count"
+                style="display: flex; justify-content: end"
+              >
+                {{ section?.tasksCount }}
+              </td>
+            </tr>
+
+            <div
+              class="no-dataunit"
+              *ngIf="
+                workLoadDataSubSections?.length == 0 || !workLoadDataSubSections
+              "
+            >
+              <app-no-data
+                [msg]="'bau.dashboard.noDataMsgWorkSections' | translate"
+              ></app-no-data>
+            </div>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </ng-template>
+</div>

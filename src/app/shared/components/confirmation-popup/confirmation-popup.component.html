@@ -1,0 +1,9 @@
+<app-popup [mode]="'confirmation'" [id]="id">
+  <div modal-content class="content">
+    <h5>{{ msg }}</h5>
+    <div class="actions">
+      <button (click)="acceptEvent.emit();discardModal()" class="btn btn-main">{{ 'shared.yes' | translate }}</button>
+      <button (click)="discardModal()" class="btn btn-warning">{{ 'shared.no' | translate }}</button>
+    </div>
+  </div>
+</app-popup>

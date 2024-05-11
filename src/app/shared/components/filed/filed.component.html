@@ -1,0 +1,83 @@
+<div class="form-group" [ngClass]="{ 'mt-2': !title }">
+  <!-- control label -->
+  <label [for]="id" class="form-label" *ngIf="title">
+    {{ title }}
+    <span [ngClass]="{ 'astrix-red': isRequired, 'no-astrix': !isRequired }">
+      *
+    </span>
+  </label>
+
+  <!-- tags filed -->
+  <ng-container *ngIf="isTagsFiled; else input">
+    <div class="tags-container">
+      <ul class="tags-list" *ngIf="tags?.length">
+        <li class="tags-list-item" *ngFor="let tag of tags">
+          <span class="tags-list-item-label">{{ tag }}</span>
+          <span class="tags-list-item-remove" (click)="removeTag(tag)">×</span>
+        </li>
+      </ul>
+
+      <input
+        type="text"
+        [ngStyle]="style"
+        [id]="id"
+        [dir]="dir"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        (keyup.enter)="onEnterTag()"
+        [(ngModel)]="tagVal"
+      />
+    </div>
+  </ng-container>
+
+  <!-- text filed -->
+  <ng-template #input>
+    <input
+      *ngIf="!isLongText; else longText"
+      class="form-control test"
+      [type]="isPassword ? 'password' : isNumber ? 'number' : 'text'"
+      [min]="minValue"
+      [max]="maxValue"
+      [ngStyle]="style"
+      [ngClass]="{ valid: control?.valid }"
+      [id]="id"
+      [dir]="dir"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      (keyup)="keyup()"
+      (keyup.enter)="keyup()"
+      (input)="change()"
+      (blur)="focus()"
+      [(ngModel)]="value"
+    />
+  </ng-template>
+
+  <!-- text area -->
+  <ng-template #longText>
+    <textarea
+      class="form-control"
+      [ngClass]="{ valid: control?.valid }"
+      [ngStyle]="style"
+      [id]="id"
+      [dir]="dir"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      (keyup)="keyup()"
+      (keyup.enter)="keyup()"
+      (input)="change()"
+      (blur)="focus()"
+      [(ngModel)]="value"
+    ></textarea>
+  </ng-template>
+</div>
+
+<ng-container *ngIf="!!showValidations">
+  <app-validation
+    *ngIf="(control?.touched || isSubmitted) && control?.invalid"
+    [title]="title"
+    [control]="control"
+    [length]="length"
+    [minLength]="minLength"
+    [valideMax] = "validMax"
+  ></app-validation>
+</ng-container>

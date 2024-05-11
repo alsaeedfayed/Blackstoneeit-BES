@@ -1,0 +1,49 @@
+<div class="servicesDashboard">
+<!--  <div class="serviceDashboard-title">-->
+<!--    <span>{{ 'servicesDashboard.dashboard' | translate }}</span>-->
+<!--  </div>-->
+  <app-header-page
+    [title]="'servicesDashboard.dashboard' | translate"
+    [backButton]="true"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+  ></app-header-page>
+
+  <ul class="servicesDashboard-nav tabsmenu">
+    <li class="servicesDashboard-nav-item tabsmenu__item">
+      <span
+        class="servicesDashboard-nav-link tabsmenu__link"
+        routerLinkActive="activeServiceDashboard"
+        routerLink="serviceandrequest"
+        (click)="showServicesAndRequests = true"
+      >
+        <i
+          class="bx bx-notepad"
+          style="padding-right: 4px; padding-left: 4px; font-size: 1.3rem;"
+        ></i>
+        {{ 'servicesDashboard.servicesAndRequests' | translate }}
+      </span>
+    </li>
+    <li class="nav-item tabsmenu__item">
+      <span
+        class="servicesDashboard-nav-link tabsmenu__link"
+        routerLinkActive="activeServiceDashboard"
+        routerLink="services-follow-up"
+        (click)="showServicesAndRequests = false"
+      >
+        <i
+          class="bx bx-windows"
+          style="padding-right: 4px; padding-left: 4px; font-size: 1.3rem;"
+        ></i>
+        {{ 'servicesDashboard.followUpItemsAndMeetings' | translate }}
+      </span>
+    </li>
+  </ul>
+  <div class="filterrs mb-3 d-flex justify-content-right">
+    <!-- <app-services-dashboard-filters
+      [OnlyShowForServicesAndRequests]="showServicesAndRequests"
+      (filter)="handleFilter($event)"
+    ></app-services-dashboard-filters> -->
+  </div>
+  <router-outlet></router-outlet>
+</div>

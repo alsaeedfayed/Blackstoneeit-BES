@@ -1,0 +1,73 @@
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="roles-index">#</th>
+          <th scope="col" class="roles-title">
+            {{ "roles.roleName" | translate }}
+          </th>
+          <th scope="col" class="roles-title">
+            {{ "roles.roleArabicName" | translate }}
+          </th>
+          <th scope="col" class="roles-date">
+            {{ "roles.creationDate" | translate }}
+          </th>
+          <th scope="col" class="roles-permissions">
+            {{ "roles.permissions" | translate }}
+          </th>
+          <th scope="col" class="roles-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+            let item of List
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          ">
+          <td class="roles-index">
+            {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+          </td>
+          <td class="roles-title">
+            {{ item?.name }}
+          </td>
+          <td class="roles-title">
+            {{ item?.nameAr }}
+          </td>
+          <td class="roles-date">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en" ?
+                ((item?.creationDate | uTCToLocalDate) | date: "dd/MM/yyyy") :
+                ((item?.creationDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+              }}
+            </span>
+          </td>
+          <td class="roles-permissions">
+            <span
+              *ngIf="item?.structuredPermissions | permissionsCount"
+              class="hoverableLink"
+              (click)="onViewPermissions(item)"
+            >
+              {{ item?.structuredPermissions | permissionsCount }} {{ 'roles.permissions' | translate }}
+            </span>
+            <span class="rectangle-badge badge-muted" *ngIf="!(item?.structuredPermissions | permissionsCount)">
+              {{ 'shared.N/A' | translate }}
+            </span>
+          </td>
+          <td class="roles-actions">
+            <app-dropdown
+              [items]="item.cardActions"
+              (select)="onOptionClick($event, item)"
+            ></app-dropdown>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

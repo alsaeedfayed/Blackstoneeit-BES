@@ -1,0 +1,200 @@
+@import "src/assets/css/utils/variables.scss";
+
+.wrapper {
+  width: 100%;
+
+  .comments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: auto;
+    background: $white-color;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+    overflow-y: scroll;
+    margin-bottom: 1.5rem;
+
+    .comment-container {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0;
+
+      &:not(:last-child) {
+        padding-bottom: 20px;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 90%;
+          height: 1px;
+          background-color: #dfdfdf;
+        }
+      }
+
+      .first-col {
+        width: 55px;
+        margin-inline-end: 6px;
+
+        img {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+      }
+
+      .second-col {
+        width: calc(100% - 55px);
+
+        .name-and-time {
+          display: flex;
+          align-items: center;
+
+          .name {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            letter-spacing: -0.02em;
+            color: #3c557a;
+            margin-inline-end: 14px;
+          }
+
+          .time {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 14px;
+            letter-spacing: -0.02em;
+            color: #8b8b8b;
+          }
+        }
+
+        .position {
+          margin-bottom: 11px;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 14px;
+          letter-spacing: -0.02em;
+          color: #8b8b8b;
+        }
+
+        .comment-text {
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 26px;
+          letter-spacing: 0.02em;
+          color: #666666;
+          margin-bottom: 10px;
+          word-break: break-all;
+        }
+
+        .like-btn-and-count {
+          display: flex;
+          align-items: center;
+
+          button {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            margin-inline-end: 7px;
+
+            i {
+              font-size: 22px;
+              color: $main-color;
+            }
+          }
+
+          span {
+            font-weight: 400;
+            font-size: 13px;
+            line-height: 15px;
+            letter-spacing: -0.02em;
+            color: $main-color;
+          }
+        }
+      }
+    }
+  }
+
+  .comment-input-container {
+    display: flex;
+    height: 97px;
+    background: $white-color;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+    border: 0;
+
+    .first-col {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 68px;
+      padding: 0;
+
+      &:after {
+        content: "";
+        position: absolute;
+        right: 0;
+        height: 80%;
+        align-self: center;
+        border: 1px solid #cbcbcb;
+        border-radius: 8px;
+      }
+
+      img {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 0;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .name {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 16px;
+          letter-spacing: -0.02em;
+          margin-bottom: 0;
+        }
+
+        .position {
+          color: #8b8b8b;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 14px;
+          letter-spacing: -0.02em;
+        }
+      }
+    }
+
+    .second-col {
+      width: auto;
+      flex-grow: 1;
+      overflow: hidden;
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        padding: 0 20px;
+        border: none;
+        resize: none;
+
+        &:focus {
+          outline: none;
+          border: none;
+        }
+      }
+    }
+  }
+}

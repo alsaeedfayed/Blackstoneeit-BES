@@ -1,0 +1,60 @@
+<div class="box-service">
+  <label class="badge-labal"
+    *ngIf="(service.cateogryName && lang === 'en') || (service.cateogryNameAr && lang === 'ar')">
+    {{ lang === 'en'? service.cateogryName : service.cateogryNameAr }}
+  </label>
+  <p class="title-service" *ngIf="lang === 'en'">
+    {{ service.title }}
+  </p>
+  <p class="title-service" *ngIf="lang === 'ar'">
+    {{ service.titleAr }}
+  </p>
+  <button *ngxPermissionsOnly="[permissionsServiceCatalogEnum.favourite]" class="favorite-services"
+    [disabled]="service.isFavouritLoading" (click)="openModel()">
+    <img *ngIf="!service.isFavouritLoading" [src]="
+        service.favourite
+          ? 'assets/icons/favorite-red.svg'
+          : 'assets/icons/favorite-outline.svg'
+      " />
+    <ng-container *ngIf="service.isFavouritLoading">
+      <i class="bx bx-loader-alt bx-spin ml-1"></i>
+    </ng-container>
+  </button>
+  <div class="rating-services d-flex">
+    <div class="d-flex align-items-center" *ngxPermissionsOnly="[permissionsServiceCatalogEnum.rate]">
+
+      <bar-rating [rate]="service.rating" [readOnly]="true" [max]="5" [theme]="'stars'"></bar-rating>
+      <label class="rating"> ({{ Count }}) </label>
+    </div>
+    <button class="btn btn-main start-btn" *ngxPermissionsOnly="[permissionsServiceCatalogEnum.startService]"
+      routerLink="./start-service" [queryParams]="{
+        serviceId: service.id,
+        titleAr:service.titleAr,
+        title:service.title
+      }">
+      {{ "serviceCatalog.startService" | translate }}
+    </button>
+  </div>
+</div>
+
+<app-confirm-modal
+  [id]="'confrontation-msg' + id"
+  [content]="msgText"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="toggleFavourite()"
+></app-confirm-modal>
+
+<!-- <app-model
+  [dimensions]="{ width: 856 }"
+  [id]="'start-service' + id"
+  [title]="'Start Service ' + service.title"
+>
+  <div modal-content class="new-service-popup px-4">
+    <app-start-service
+      *ngIf="showModle"
+      (close)="closeService()"
+      [serviceId]="service.id"
+    ></app-start-service>
+  </div>
+</app-model> -->

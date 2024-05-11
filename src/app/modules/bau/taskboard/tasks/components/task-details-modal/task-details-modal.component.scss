@@ -1,0 +1,425 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.new-model-dialog-body {
+  container: details-model / inline-size;
+  .tables {
+    @container details-model (max-width: 460px) {
+      & {
+        flex-direction: column !important;
+      }
+    }
+  }
+}
+.see-more-btn {
+  display: inline-block;
+  color: $main-color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.block-title {
+  color: $info_color;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.progress-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  margin-left: 0.3rem;
+}
+
+.task-title,
+.angular-editor-description {
+  word-break: break-word;
+}
+
+.update-task-btn {
+  min-width: auto;
+}
+
+.highlight-table {
+  width: 100%;
+
+  th {
+    color: $info_color;
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+  }
+
+  td {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .task-status {
+    &-select {
+      min-width: 50%;
+    }
+
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    ::ng-deep {
+      .badge-status::before {
+        content: none;
+      }
+    }
+  }
+  .task-group {
+    background-color: lighten($main-color, 30%);
+    color: $main-color;
+    width: fit-content;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 0 0.625rem;
+    border-radius: 2.5rem;
+  }
+
+  ::ng-deep person-item {
+    .personItem {
+      &.header-person {
+        width: fit-content;
+      }
+
+      > .avatar {
+        .letters,
+        img {
+          width: 2rem !important;
+          height: 2rem !important;
+        }
+
+        .letters {
+          font-size: 0.625rem;
+        }
+      }
+
+      > .info {
+        .name {
+          font-size: 0.875rem;
+          margin-bottom: 0;
+        }
+
+        .job {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.progress {
+  &-container {
+    background-color: #f1f3f6cc;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5%;
+    .task-progress {
+      width: 100%;
+      .progress-percentage {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        color: $black-color;
+        font-weight: 400;
+        font-size: 0.75rem;
+        line-height: 1.25rem;
+      }
+
+      .progress-bar {
+        position: relative;
+        height: 0.25rem;
+        background-color: #ebedef;
+        margin-top: 0.5rem;
+        border-radius: 0.625rem;
+        overflow: hidden;
+        height: 15px;
+
+        .fill {
+          display: block;
+          position: absolute;
+          top: 0;
+          @include rtl_value(left, 0, auto);
+          @include rtl_value(right, auto, 0);
+          height: 100%;
+          width: 0%;
+        }
+        .none {
+          background: linear-gradient(to right, #808080, #b6b6b6);
+        }
+        .half {
+          background: linear-gradient(to right, #ffa800, #ffcc6a);
+        }
+        .afterHalf {
+          background: linear-gradient(to right, #840aff, #b75bd8);
+        }
+        .done {
+          background: linear-gradient(to right, #52af31, #3ed126);
+        }
+      }
+      .percentage {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &:not(.done) {
+    .progress-bar {
+      .fill {
+        background-color: #ffa800;
+      }
+    }
+  }
+
+  &.done {
+    .progress-bar {
+      .fill {
+        background-color: #0fc161;
+      }
+    }
+  }
+}
+.comments-area {
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 0;
+
+    &-item {
+      &-head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+
+        ::ng-deep {
+          person-item {
+            .personItem {
+              > .avatar {
+                .letters,
+                img {
+                  height: 2rem !important;
+                  width: 2rem !important;
+                }
+
+                .letters {
+                  font-size: 0.625rem;
+                }
+              }
+
+              > .info {
+                .name {
+                  color: $black-color;
+                  font-size: 0.875rem;
+                  margin-bottom: 0;
+                }
+
+                .job {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+
+        &-date {
+          color: $info_color;
+        }
+      }
+
+      &-body {
+        color: #636363;
+        font-weight: 400;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        padding-inline-start: 0.25rem;
+      }
+    }
+  }
+
+  .comment-box {
+    position: relative;
+    word-break: break-word;
+    margin-bottom: 5px;
+    border-radius: 5px !important;
+    border: 1px solid gray !important;
+    app-mention-box {
+      padding-inline: 25px 40px !important;
+      margin: 1px 0px !important;
+    }
+    ::ng-deep {
+      app-filed {
+        .form-group {
+          margin-top: 0 !important;
+        }
+
+        .form-control {
+          // padding-inline: 2.75rem !important;
+          border-radius: 60px !important;
+        }
+      }
+    }
+
+    .upload-files-btn,
+    .post-btn {
+      position: absolute;
+      z-index: 3;
+      top: 6px;
+      width: 2rem;
+      min-width: auto;
+      min-height: auto;
+      height: 2rem;
+      line-height: 2rem;
+      padding: 0;
+      border-radius: 50% !important;
+
+      i.bx {
+        margin-inline: 0 !important;
+      }
+    }
+
+    .post-btn {
+      @include rtl_value(right, 6px, auto);
+      @include rtl_value(left, auto, 6px);
+      background-color: $black-color;
+      color: $white-color;
+
+      i.bx-send {
+        @include rtl_value(transform, rotate(0deg), rotate(180deg));
+      }
+    }
+
+    .upload-files-btn {
+      @include rtl_value(left, 6px, auto);
+      @include rtl_value(right, auto, 6px);
+      color: $black-color;
+
+      i.bx {
+        font-size: 20px;
+        @include rtl_value(
+          transform,
+          rotate(-45deg),
+          rotate(-135deg) rotateX(180deg)
+        );
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .tabs-items {
+    .item {
+      .tab-title {
+        font-size: 16px !important;
+        font-weight: 500;
+      }
+    }
+  }
+  app-tab {
+    &.active {
+      height: 100%;
+    }
+
+    .tab {
+      height: 100%;
+    }
+  }
+
+  uploaded-attachments-files {
+    margin-bottom: 0.5rem;
+
+    .uploaded-attachments-files {
+      li {
+        width: 100% !important;
+      }
+    }
+  }
+}
+// tabs styles
+.tabsmenu {
+  --tab-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+  
+  &__item {
+    // flex-grow: 1;
+    &:hover {
+      & ~ .tabsmenu__item {
+        .tabsmenu__link {
+          &:before {
+            @include rtl_value(left, 0, 100%);
+            @include rtl_value(right, 100%, 0);
+          }
+        }
+      }
+
+      & .tabsmenu__link {
+        color: $black-color;
+
+        &:before {
+          @include rtl_value(left, 0, 0);
+          @include rtl_value(right, 0, 0);
+        }
+      }
+    }
+  }
+
+  &:not(:hover) {
+    .tabsmenu__item.active {
+      & .tabsmenu__link {
+        color: $black-color;
+
+        &:before {
+          @include rtl_value(left, 0, 0);
+          @include rtl_value(right, 0, 0);
+        }
+      }
+    }
+  }
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    height: var(--tab-height);
+    line-height: var(--tab-height);
+    color: $info_color;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0 1rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      @include rtl_value(left, 100%, 0);
+      @include rtl_value(right, 0, 100%);
+      bottom: -1px;
+      border-bottom: 2px solid $main-color;
+      transition: 0.16s all 0.025s;
+    }
+
+    i {
+      font-size: 1.125rem;
+    }
+  }
+}

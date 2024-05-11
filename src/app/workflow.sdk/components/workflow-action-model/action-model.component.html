@@ -1,0 +1,90 @@
+<div class="new-model-dialog-body">
+  <ng-container *ngIf="loading; else formData">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #formData>
+
+  <ng-content></ng-content>
+
+  <!-- Form Builder -->
+  <app-form-builder-base
+    *ngIf="option?.formFields?.length > 0"
+    [formArr]="option?.formFields"
+    (formValue)="FormValue($event)"
+    (validForm)="isValidForm($event)"
+  ></app-form-builder-base>
+
+  <form class="pb-2" [formGroup]="form">
+    <!-- reassign action -->
+    <div class="team-search-container mt-3" *ngIf="ReassignActionType">
+      <workflow-team-search
+        [memberToAddType]="'teamMember'"
+        [lang]="lang"
+        [users]="users"
+        [isRequired]="isUsersRequired"
+        (onUserSelect)="setSelectedUsers($event)"
+      ></workflow-team-search>
+    </div>
+
+    <!-- override action -->
+    <workflow-select
+      *ngIf="OverrideActionType"
+      class="d-block mt-3"
+      bindValue="id"
+      formControlName="step"
+      [control]="form | getControl : 'step'"
+      [title]="'manageWorkflow.step' | translate"
+      [placeholder]="'manageWorkflow.selectStep' | translate"
+      [bindLabel]="lang == 'en' ? 'title.en' : 'title.ar'"
+      [items]="steps"
+      [clearable]="true"
+      autofocus
+    ></workflow-select>
+
+    <!-- description/attachments -->
+    <workflow-description-input-with-attachments
+      class="d-block mt-3"
+      formControlName="comments"
+      [control]="form | getControl : 'comments'"
+      [title]="'manageWorkflow.comments' | translate"
+      (attachmentUploadEvent)="uploadFile($event)"
+      (onDelete)="deleteAttachment($event)"
+      [isCommentRequired]="option?.isCommentRequired"
+      [isAttchmentRequired]="option?.isAttachmentRequired"
+      [attachmentHint]="option?.attachmentHint"
+    ></workflow-description-input-with-attachments>
+  </form>
+</ng-template>
+
+<ng-template #skeleton>
+  <workflow-skeleton-loader mode="table"></workflow-skeleton-loader>
+  <workflow-skeleton-loader mode="table"></workflow-skeleton-loader>
+  <workflow-skeleton-loader mode="table"></workflow-skeleton-loader>
+</ng-template>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closeModel()">
+    {{ "manageWorkflow.back" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="
+      !isValidFormBuilder ||
+      form.invalid ||
+      isBtnLoading ||
+      (option?.isAttachmentRequired && attachments?.length == 0)
+    "
+    (click)="saveAction()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ "manageWorkflow.save" | translate }}
+  </button>
+</div>

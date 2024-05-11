@@ -1,0 +1,147 @@
+<div class="tasks-list-container">
+  <div class="tasks-list">
+    <table>
+      <tr>
+        <th class="task-title">
+          {{ "bau.bauTasks.taskTitle" | translate }}
+        </th>
+        <th class="task-status">
+          {{ "bau.bauTasks.priority" | translate }}
+        </th>
+        
+        <th class="task-progress">
+          {{ "bau.bauTasks.progress" | translate }}
+        </th>
+        <th class="task-created-on">
+          {{ "bau.bauTasks.createdOn" | translate }}
+        </th>
+        <th class="task-assigned-to">
+          {{ "bau.bauTasks.assignedTo" | translate }}
+        </th>
+
+        <th class="task-commentsCount">
+          {{'bau.bauTasks.budget' | translate}}
+        </th>
+        <th class="task-filesCount task-counts">
+          {{'bau.bauTasks.filesCount' | translate}}
+        </th>
+        <th class="task-commentsCount task-counts">
+          {{'bau.bauTasks.commentsCount' | translate}}
+        </th>
+        <th class="task-status">
+          {{'bau.bauTasks.status' | translate}}
+        </th>
+      </tr>
+      <tr *ngFor="
+        let task of list
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems
+              };
+        let i = index
+      ">
+        <td class="task-title">
+          <a class="hoverableLink" (click)="openTaskDetailsModel(task)">
+            {{ language == 'en'? task?.titleEn :task?.titleAr }}
+          </a>
+
+        </td>
+        <td class="task-status">
+          <app-badge
+            [className]="importanceLevels[task?.importanceLevel]['className']"
+            [label]="language =='en'? importanceLevels[task?.importanceLevel]['name']: importanceLevels[task?.importanceLevel]['nameAr']"
+          ></app-badge>
+        </td>
+        <td class="task-progress">
+          <div class="d-flex align-items-center gap-2">
+            <div class="progress-bar flex-grow-1">
+              <span class="fill {{task?.progress | progressColorBau}}" [ngStyle]="{ 'width': task?.progress + '%' }"></span>
+            </div>
+            <span class="percentage">{{task.progress}}%</span>
+          </div>
+        </td>
+        <td class="task-created-on">
+          <span *ngIf="task?.creationDate">
+            {{
+            language === "en" ?
+            ((task?.creationDate|uTCToLocalDate : true).toLocaleString() | date: "d MMM y") :
+            ((task?.creationDate|uTCToLocalDate : true).toLocaleString() | localizeDate : "d MMM y")
+            }}
+          </span>
+        </td>
+        <td class="task-assigned-to">
+          <person-item [requesterItem]="task?.assignedToInfo" [noCursor]="true" [isUserCardFixed]="true"></person-item>
+        </td>
+        <td>
+          <div class=" d-flex gap-1">
+            {{ task?.budget | formatMoney }}
+            <span class="AED"> {{ "bau.AED" | translate }}</span>
+          </div>
+        </td>
+        <td class="task-counts">{{task?.attachmentsCount}}</td>
+        <td class="task-counts">{{task?.commentsCount}}</td>
+        <td class="task-status">
+          <app-badge
+          [className]="statuses[task?.status]['className']"
+          [label]="language =='en'? statuses[task?.status]['name']: statuses[task?.status]['nameAr']"
+        ></app-badge>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+
+
+<!-- task details modal -->
+<app-model
+
+  [dimensions]="{ width: isDetailsModelOpened ? 900: 500, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+
+    <label class="modal-title" *ngIf="isDetailsModelOpened">{{'bau.bauTasks.detailsModel.title' | translate }}</label>
+
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">{{'bau.bauTasks.detailsModel.title' | translate }}</label>
+
+
+
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+    <app-task-details-modal
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdateStatus)="updateTaskStatus($event)"
+    ></app-task-details-modal>
+
+    <app-update-task-progress-modal
+    *ngIf="isUpdateProgressModelOpened"
+    [task]="openedTask"
+    [language]="language"
+    (onBack)="openTaskDetailsModel(openedTask)"
+    (onUpdate)="onUpdateTaskProgress()"
+  ></app-update-task-progress-modal>
+
+
+  </div>
+</app-model>

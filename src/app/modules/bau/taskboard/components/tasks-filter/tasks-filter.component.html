@@ -1,0 +1,31 @@
+<div class="d-flex gap-2 mt-3">
+  <div class="col-3">
+
+    <ng-select
+      class="input-select roles-select"
+      [clearable]="true"
+      [placeholder]="'bau.trackStatus' | translate"
+      [notFoundText]="'shared.noItemsFound' | translate"
+      [closeOnSelect]="true"
+      (change)="onTaskTrackChange($event)"
+    >
+      <ng-option *ngFor="let track of taskTrackStatus" [value]="track?.id">
+        {{ lang == "en" ? track.name : track.nameAr }}
+      </ng-option>
+    </ng-select>
+  </div>
+  <div class="col-3">
+    <ng-select
+      class="input-select roles-select"
+      [clearable]="true"
+      [placeholder]="'bau.taskStatus' | translate"
+      [notFoundText]="'shared.noItemsFound' | translate"
+      [closeOnSelect]="true"
+      (change)="onTaskStatusChange($event)"
+    >
+      <ng-option *ngFor="let status of taskStaus" [value]="status?.id">
+        {{ lang == "en" ? status.name : status.nameAr }}
+      </ng-option>
+    </ng-select>
+  </div>
+</div>

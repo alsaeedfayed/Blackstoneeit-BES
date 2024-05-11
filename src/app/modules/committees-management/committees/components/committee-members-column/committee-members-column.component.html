@@ -1,0 +1,83 @@
+<section class="d-flex flex-column gap-3">
+  <div class="form-label fw-bold">
+    {{ "committeeDetails.committeeMembers" | translate }}
+  </div>
+  <!-- chairman -->
+  <div class="chairman-container">
+    <h4 class="block-subtitle mb-2">
+      {{ "committeeDetails.chairman" | translate }}
+    </h4>
+    <person-item
+      [showIcon]="true"
+      *ngIf="_chairman"
+      [requesterItem]="_chairman"
+      [noCursor]="true"
+    ></person-item>
+    <!-- <i class='bx bxs-user {{language}}-icon'></i> -->
+  </div>
+
+  <!-- viceChairman -->
+  <div class="secretory-container">
+    <h4 class="block-subtitle mb-3">
+      {{ "committeeDetails.viceChairman" | translate }}
+    </h4>
+
+    <div class="d-flex flex-column gap-3">
+      <person-item
+        *ngFor="let viceChairman of _viceChairmans"
+        [requesterItem]="viceChairman"
+        [noCursor]="true"
+      ></person-item>
+    </div>
+  </div>
+
+  <!-- secretory -->
+  <div class="secretory-container">
+    <h4 class="block-subtitle mb-3">
+      {{ "committeeDetails.secretary" | translate }}
+    </h4>
+
+    <div class="d-flex flex-column gap-3">
+      <person-item
+        *ngFor="let secretary of _secretaries"
+        [requesterItem]="secretary"
+        [noCursor]="true"
+      ></person-item>
+    </div>
+  </div>
+
+  <!-- members -->
+  <div class="">
+    <h4 class="block-subtitle mb-3 d-flex gap-2">
+      {{ "committeeDetails.members" | translate }}
+      ({{ _members?.length }})
+      <!-- <span class="px-2 bg-dark text-white rounded-pill">
+      </span> -->
+    </h4>
+
+    <div class="d-flex flex-column gap-3">
+      <person-item
+        *ngFor="let member of _members"
+        [requesterItem]="member"
+        [noCursor]="true"
+      ></person-item>
+    </div>
+  </div>
+  <!--external members -->
+  <div class="" *ngIf="_externalMembers?.length > 0">
+    <h4 class="block-subtitle mb-3 d-flex gap-2">
+      {{ "committeeDetails.externalMembers" | translate }}
+      ({{ _externalMembers?.length }})
+      <!-- <span class="px-2 bg-dark text-white rounded-pill">
+      </span> -->
+    </h4>
+
+    <div class="d-flex flex-column gap-3">
+      <person-item
+        *ngFor="let member of _externalMembers"
+        [requesterItem]="member"
+        [noCursor]="true"
+      ></person-item>
+    </div>
+  </div>
+</section>

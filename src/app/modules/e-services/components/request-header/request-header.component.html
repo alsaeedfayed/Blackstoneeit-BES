@@ -1,0 +1,29 @@
+<div class="d-flex justify-content-between">
+  <app-header-page
+  class="col-sm col-12"
+  [title]="title"
+  [backButton]="true"
+  [showTotalItems]="false"
+  >
+  <div class="col-sm col-12 d-flex justify-content-end align-items-center flex-wrap gap-2" buttons>
+
+    <!-- cancel button -->
+    <button
+      class="btn btn-transparent"
+      [routerLink]="['/e-services/']"
+    >
+      {{ "shared.cancel" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main btn-primary"
+      [disabled]="!isValid"
+      (click)="submit.emit()"
+    >
+      <!-- <i class="bx bx-loader-alt bx-spin ml-1"></i> -->
+      {{ "EServices.sendRequest" | translate }}
+    </button>
+  </div>
+  </app-header-page>
+</div>

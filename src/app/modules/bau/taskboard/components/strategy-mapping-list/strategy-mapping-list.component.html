@@ -1,0 +1,35 @@
+<!-- Strategy mapping -->
+<div *ngIf="hasTitle" class="block-title">
+    {{ "committeeDetails.strategyMapping" | translate }}
+  </div>
+  <table *ngIf="list?.length > 0">
+    <tr *ngFor="let item of list">
+      <!-- goal title -->
+      <td>
+        <label [for]="item.id">
+          <span
+            [class.disabled]="
+              item?.children?.length === 0 && item?.goalType?.name !== 'KPI'
+            "
+            [class]="'badge ' + item.goalType?.name?.toLowerCase()"
+          >
+            <i class="bx bx-check"></i>
+            {{
+              language == "en" ? item?.goalType?.name : item?.goalType?.arabicName
+            }}
+          </span>
+        </label>
+      </td>
+      <!-- kpi -->
+      <td>
+        <span class="name">
+          {{ language == "en" ? item?.title : item?.titleAr }}
+        </span>
+      </td>
+    </tr>
+  </table>
+  <!-- <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeDetails.noStrategyMapping' | translate"
+    ></app-no-data>
+  </div> -->

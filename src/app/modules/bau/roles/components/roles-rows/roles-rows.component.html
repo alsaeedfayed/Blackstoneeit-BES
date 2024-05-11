@@ -1,0 +1,214 @@
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <!-- <th scope="col" class="id">#</th> -->
+          <th scope="col" class="role-title">
+            <ng-container
+              *ngIf="language == 'en'; then englishName; else arabicName"
+            ></ng-container>
+            <ng-template #englishName>
+              <div class="sortable-row" (click)="sort(sortKey.nameEn)">
+                {{ "bau.roles.table.title" | translate }}
+                <div
+                  class="sort-icon"
+                  [ngClass]="{
+                    'sort-up':
+                      sortedCol && sortedCol == sortKey.nameEn && ascMode,
+                    'sort-down':
+                      sortedCol && sortedCol == sortKey.nameEn && descMode
+                  }"
+                >
+                  <i class="bx bxs-up-arrow"></i>
+                  <i class="bx bxs-down-arrow"></i>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #arabicName>
+              <div class="sortable-row" (click)="sort(sortKey.nameAr)">
+                {{ "bau.roles.table.title" | translate }}
+                <div
+                  class="sort-icon"
+                  [ngClass]="{
+                    'sort-up':
+                      sortedCol && sortedCol == sortKey.nameAr && ascMode,
+                    'sort-down':
+                      sortedCol && sortedCol == sortKey.nameAr && descMode
+                  }"
+                >
+                  <i class="bx bxs-up-arrow"></i>
+                  <i class="bx bxs-down-arrow"></i>
+                </div>
+              </div>
+            </ng-template>
+          </th>
+
+          <th scope="col" class="role-sector">
+            {{ "bau.roles.table.sector" | translate }}
+          </th>
+          <th scope="col" class="role-department">
+            {{ "bau.roles.table.department" | translate }}
+          </th>
+          <th scope="col" class="role-section">
+            {{ "bau.roles.table.section" | translate }}
+          </th>
+
+          <th scope="col" class="role-created-on">
+            <div class="sortable-row" (click)="sort(sortKey.creationDate)">
+              {{ "bau.roles.table.created" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.creationDate && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.creationDate && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="role-actions">
+            {{ "bau.roles.table.actions" | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <!-- <td class="id">
+            {{
+              i
+                | tableItemIndex
+                  : paginationModel?.pageSize
+                  : paginationModel?.pageIndex
+            }}
+          </td> -->
+          <td class="role-name">
+            <!-- <a
+              class="hoverableLink"
+              [routerLink]="'/bau/roles/details/' + item?.id"
+            > -->
+            {{ language === "en" ? item?.nameEn : item?.nameAr }}
+            <!-- </a> -->
+          </td>
+
+          <td class="role-sector">
+            {{
+              language === "en" ? item?.sector?.name : item?.sector?.arabicName
+            }}
+          </td>
+
+          <td class="role-department">
+            {{
+              language === "en"
+                ? item?.department?.name
+                : item?.department?.arabicName
+            }}
+          </td>
+          <td class="role-section">
+            <ng-container *ngIf="item?.section; then sectionData; else noSection"></ng-container>
+            <ng-template #sectionData>
+            {{
+              language === "en"
+                ? item?.section?.name
+                : item?.section?.arabicName
+            }}
+            </ng-template>
+            <ng-template #noSection>-</ng-template>
+          </td>
+          <td class="role-created-on">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+          <td class="role-actions">
+            <ng-container
+              *ngIf="!item.isTackingAction; then actions; else loadingIcon"
+            ></ng-container>
+            <ng-template #actions>
+              <app-button [permission]="editRolePermission">
+                <a class="hoverableLink" (click)="openUpdateRoleModel(item)">
+                  {{ "bau.roles.table.edit" | translate }}
+                </a>
+              </app-button>
+              <app-button [permission]="deleteRolePermission">
+                <a class="hoverableLink text-danger" (click)="deleteRoleConfirmation(item?.id)">
+                  {{ "bau.roles.table.delete" | translate }}
+                </a>
+              </app-button>
+            </ng-template>
+            <ng-template #loadingIcon>
+              <i class="bx bx-loader-alt bx-spin ml-1"></i>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+<!-- modal to confirm delete role -->
+<app-confirm-modal
+  [id]="'delete-role'"
+  [content]="'bau.roles.deleteConfirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'danger'"
+  (confirm)="deleteRole()"
+></app-confirm-modal>
+
+<!-- update modal -->
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'update-role'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeModal()"
+>
+  <div modal-header class="create-role-modal-header w-100">
+    <label class="modal-title">
+      {{ "bau.roles.modal.headerTitleUpdate" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="create-role-modal-content border-top">
+    <app-new-role-modal
+      *ngIf="isUpdateModalOpen"
+      [language]="language"
+      [role]="roleOpened"
+      (onChange)="closeModal()"
+    ></app-new-role-modal>
+  </div>
+</app-model>

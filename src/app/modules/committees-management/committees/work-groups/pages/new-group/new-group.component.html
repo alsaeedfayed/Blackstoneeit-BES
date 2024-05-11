@@ -1,0 +1,137 @@
+<div class="page">
+  <ng-container
+    *ngIf="
+      loadingCommitteeDetails ||
+        (membersLoading && isUpdating) ||
+        (loadingData && isUpdating);
+      else form_data
+    "
+  >
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- new group form -->
+<ng-template #form_data>
+  <app-header-page
+    [title]="
+      (!isUpdating
+        ? 'committeeNewGroup.newGroup'
+        : 'committeeNewGroup.updateGroup'
+      ) | translate
+    "
+    [showTotalItems]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <!-- cancel button -->
+      <button class="btn btn-transparent" (click)="backToLastPage()">
+        {{ "shared.cancel" | translate }}
+      </button>
+
+      <!-- save draft button -->
+      <button
+        class="btn btn-main"
+        [disabled]="form.invalid"
+        [hidden]="isUpdating"
+        (click)="createGroup()"
+      >
+        <i
+          *ngIf="isSaveDraftBtnLoading"
+          class="bx bx-loader-alt bx-spin ml-1"
+        ></i>
+        {{ "committeeNewGroup.create" | translate }}
+      </button>
+
+      <!-- publish button -->
+      <button
+        class="btn btn-warning"
+        [disabled]="form.invalid"
+        [hidden]="!isUpdating"
+        (click)="updateGroup()"
+      >
+        {{ "committeeNewGroup.update" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+
+  <div class="new-group-form" [formGroup]="form">
+    <!-- group name -->
+    <div class="mt-4">
+      <app-filed
+        [length]="100"
+        class="d-block"
+        formControlName="name"
+        [control]="form | getControl : 'name'"
+        [title]="'committeeNewGroup.groupForm.groupName' | translate"
+        [placeholder]="'committeeNewGroup.groupForm.groupName' | translate"
+      ></app-filed>
+    </div>
+
+    <!-- group members -->
+    
+    <div class="mt-4">
+      <label class="form-label">
+        {{ "committeeNewGroup.groupForm.groupMembers" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <ng-select
+        class="input-select members-select"
+        formControlName="memberIds"
+        [ngClass]="{ valid: (form | getControl : 'memberIds')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeeNewGroup.groupForm.groupMembers' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [multiple]="true"
+        [closeOnSelect]="false"
+        (scrollToEnd)="loadMoreEmployees()"
+        [loading]="gettingEmployees"
+        (focus)="onFocus($event)"
+      >
+        <ng-option *ngFor="let member of committeeMembers" [value]="member?.id">
+          <person-item [requesterItem]="member" [noCursor]="true"></person-item>
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- Support members -->
+    
+    <div class="mt-4">
+      <label class="form-label">
+        {{ "committeeNewGroup.groupForm.supportMembers" | translate }}
+      </label>
+      <ng-select
+        class="input-select members-select"
+        formControlName="supportMemberIds" 
+        [ngClass]="{ valid: (form | getControl : 'memberIds')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeeNewGroup.groupForm.supportMembers' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [multiple]="true"
+        [closeOnSelect]="false"
+      >
+      <ng-option *ngFor="let member of users" [value]="member?.id" [disabled]="selectedGroupMembers.includes(member?.id)">
+        <!-- <person-item [requesterItem]="member" [noCursor]="true"></person-item> -->
+        {{ member?.fullName }}
+      </ng-option>
+
+      </ng-select>
+    </div>
+
+
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

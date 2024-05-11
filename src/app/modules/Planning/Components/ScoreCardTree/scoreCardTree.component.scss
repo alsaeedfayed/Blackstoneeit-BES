@@ -1,0 +1,176 @@
+// varibales
+@import "../../../../../assets/css/utils/variables.scss";
+
+.scorecardTree {
+  min-height: 500px;
+
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 450px;
+    margin-top: 20px;
+
+    ::ng-deep {
+      app-no-data {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        width: 100%;
+
+        .no-data {
+          position: static;
+          top: auto;
+          left: auto;
+          transform: none;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}
+
+.scoreCardHeader {
+  h3 {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #3c557a;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0;
+
+    .filters {
+      display: flex;
+
+      .filter {
+        display: flex;
+        align-items: center;
+        margin-inline-end: 5px;
+        flex-grow: 1;
+
+        .label-select {
+          color: #8b8b8b;
+          font-weight: 400;
+          font-size: 14px;
+          margin-inline-end: 10px;
+        }
+
+        ::ng-deep {
+          .ng-select-container {
+            min-width: 148px;
+
+            .ng-placeholder {
+              color: #25364f;
+              text-transform: capitalize;
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+    }
+
+    .right-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+
+      .list-view-controls {
+        display: flex;
+        padding: 6px 15px 0px;
+        border: 1px solid #e5e5e5;
+        // min-width: 100px;
+        border-radius: 8px;
+        gap: 25px;
+        justify-content: space-between;
+        align-items: center;
+        height: 47px;
+
+        .view {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          cursor: pointer;
+
+          p {
+            font-size: 13px;
+            margin: 0;
+            color: #aeaeae;
+            font-weight: 500;
+          }
+
+          img {
+            height: 12px;
+          }
+
+          &.active {
+            p,
+            i {
+              color: $main-color;
+            }
+          }
+        }
+      }
+
+      .tree-controls {
+        display: flex;
+
+        .control {
+          display: flex;
+          gap: 4px;
+          cursor: pointer;
+          align-items: center;
+
+          i {
+            font-size: 24px;
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .right-bar {
+  align-self: flex-end !important;
+}
+
+:host ::ng-deep .modal-content {
+  overflow-x: hidden !important;
+}
+
+nz-tree-select {
+  min-width: 200px;
+}
+
+.rotateY_180deg {
+  transform: rotateY(180deg);
+}
+
+.items {
+  position: relative;
+
+  .total-weight {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    z-index: 9;
+    padding: 10px;
+    text-align: center;
+    color: $main-color;
+
+    span {
+      font-weight: bold;
+    }
+  }
+}

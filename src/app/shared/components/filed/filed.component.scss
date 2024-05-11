@@ -1,0 +1,93 @@
+.ng-valid {
+  border-color: #cbcbcb !important;
+
+  // &.valid:not(.ng-pristine) {
+  //   border-color: #00db99 !important;
+  // }
+}
+
+input:disabled {
+  background-color: #f9f9f9 !important;
+
+  &::placeholder {
+    color: #aaaaaa;
+  }
+}
+textarea:disabled {
+  background-color: #f9f9f9 !important;
+
+  &::placeholder {
+    color: #aaaaaa;
+  }
+}
+
+.astrix-red {
+  color: red;
+}
+.no-astrix {
+  color: transparent;
+}
+
+// tags styles
+.tags {
+  &-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 44px;
+    background-color: #ffffff;
+    color: #3c557a;
+    line-height: 19px;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 0 6px;
+    border: 1px solid #cbcbcb;
+    border-radius: 8px;
+
+    input {
+      display: block;
+      flex-grow: 1;
+      height: 100%;
+      padding: 12px 6px;
+      border-radius: inherit;
+      background: none;
+      border: none;
+      outline: none;
+    }
+  }
+
+  &-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 6px;
+    margin-bottom: 0;
+
+    &-item {
+      display: flex;
+      gap: 4px;
+      background-color: rgba(172, 181, 193, 0.15);
+      white-space: nowrap;
+      font-size: 0.9em;
+      padding: 4px 6px 4px 4px;
+      border-radius: 40px;
+
+      &-label {
+      }
+
+      &-remove {
+        display: inline-block;
+        background-color: #717986;
+        color: #ffffff;
+        padding: 1px 5px;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #3c557a;
+        }
+      }
+    }
+  }
+}

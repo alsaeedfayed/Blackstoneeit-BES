@@ -1,0 +1,73 @@
+.committee-dashboard-types {
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  background-color: #fff;
+  height: 320px;
+  align-items: center;
+  &-canvas {
+    position: relative;
+    &-total {
+      position: absolute;
+      top: 45%;
+      font-weight: 500;
+      font-size: 18px;
+      color: #121824;
+    }
+  }
+  &-info {
+    &-title {
+      font-weight: 500;
+      font-size: 16px;
+      color: #121824;
+    }
+
+    &-permenant {
+      &-square {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        display: block;
+        background-color: rgb(82, 201, 114)
+
+      }
+      &-lable {
+        font-weight: 400;
+        font-size: 14px;
+        color: #96a6bd;
+      }
+    }
+    &-temporary {
+      &-square {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        display: block;
+        background-color: rgb(227, 203, 155);
+
+      }
+      &-lable {
+        font-weight: 400;
+        font-size: 14px;
+        color: #96a6bd;
+      }
+    }
+
+    &-notActive {
+      &-square {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+        display: block;
+        background-color: rgb(255, 115, 115);
+
+
+      }
+      &-lable {
+        font-weight: 400;
+        font-size: 14px;
+        color: #96a6bd;
+      }
+    }
+
+  }
+}

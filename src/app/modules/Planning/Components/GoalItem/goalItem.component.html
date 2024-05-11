@@ -1,0 +1,171 @@
+<!-- Goal Item -->
+<div
+  class="goalItem"
+  [style.borderColor]="isHovered ? model.GoalTypeColor : 'transparent'"
+  (mouseover)="isHovered = true"
+  (mouseout)="isHovered = false"
+>
+  <div class="right-stuff">
+    <!-- Level -->
+    <div class="level">
+      <span class="current">{{ model.GoalLevelText }}</span>
+      <span *ngIf="model.data.group">
+        <span *ngIf="model.data.group.code" class="meta-level">
+          {{ model.data.group.code }}
+        </span>
+      </span>
+    </div>
+
+    <div class="type id-type">
+      <span class="type id">{{ model.data.id }}</span>
+    </div>
+
+    <!-- Type -->
+    <div class="type" [style.background]="model.GoalTypeColor">
+      <span>{{ model.GoalTypeText }}</span>
+    </div>
+
+    <!-- Title -->
+    <h4>{{ model.lang === "en" ? model.data.title : model.data.titleAr }}</h4>
+  </div>
+
+  <div class="left-stuff">
+    <!-- <div class="blocks" *ngIf="model.data.goalType && model.data.goalType.category == 1">
+      <div class="block">
+        <p>{{ 'Planning.informambleTotalWeight' | translate }}</p>
+        <span>{{ model.data.informambleTotalWeight + '%'?? "-" }}</span>
+      </div>
+    </div> -->
+    <div class="blocks" *ngIf="model.data.goalType && model.data.goalType.category == 2">
+      <div class="block">
+        <p>{{ "Planning.weight" | translate }}</p>
+        <span>{{ model.data.internalWeight + "%" ?? "-" }}</span>
+      </div>
+
+      <div class="block">
+        <p>{{ "Planning.frequency" | translate }}</p>
+        <span>{{ model.GoalfrequencyText(model.data.frequency) }}</span>
+      </div>
+
+      <div class="block">
+        <p>{{ "Planning.type" | translate }}</p>
+        <span>
+          {{ model.getMeasurmentMethodText(model.data.measurementMethod) }}
+        </span>
+      </div>
+
+      <div class="block">
+        <p>{{ "Planning.target" | translate }}</p>
+        <span *ngIf="model.data.measurementMethod == 5">
+          {{
+            model.lang === "en"
+              ? (model.convertUTCDateToLocalDate(
+                  model.data?.dateGoalTarget?.kpiDate2
+                ) | date : "dd/MM/yyyy")
+              : (model.convertUTCDateToLocalDate(
+                  model.data?.dateGoalTarget?.kpiDate2
+                ) | localizeDate : "dd/MM/yyyy")
+          }}
+        </span>
+        <span *ngIf="model.data.measurementMethod != 5">
+          <span *ngIf="!model.data.isBaseline && !model.data.isParentLinkedToChildren">
+            {{ model.data.totalTarget }}
+            {{ model.addittion(model.data.measurementMethod) }}
+          </span>
+          <span *ngIf="model.data.isBaseline">
+            {{ "Planning.baselineKBI" | translate }}
+          </span>
+          <span *ngIf="model.data.isParentLinkedToChildren">
+            {{ "Planning.fromChildren" | translate }}
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <!-- Add Child *ngIf="model.data.editable" -->
+      <div class="addChild" *ngIf="model.data.addSubGoal">
+        <button
+          class="btn"
+          [style.color]="model.GoalTypeColor"
+          (click)="model.addChild()"
+        >
+          <!-- <i class="bx bx-plus"></i>  -->
+          <span>{{ "Planning.add" | translate }}</span>
+        </button>
+      </div>
+
+      <div class="edit" *ngIf="model.data.editable">
+        <button
+          class="btn"
+          [style.color]="model.GoalTypeColor"
+          (click)="model.editItem()"
+        >
+          <!-- <i class="bx bx-edit" [style.color]="model.GoalTypeColor"></i>  -->
+          <span>{{ "shared.edit" | translate }}</span>
+        </button>
+      </div>
+
+      <div class="goalAction details-icon" (click)="model.showDetails()">
+        <i class="bx bx-show"></i>
+      </div>
+
+      <div
+        *ngIf="model.data.deletable"
+        class="goalAction delete-icon"
+        (click)="model.deleteGoal()"
+      >
+        <i class="bx bx-trash"></i>
+      </div>
+
+      <div (click)="ChangeCollpase()" *ngIf="model.data.children.length > 0">
+        <img
+          src="assets/img/dropdownArrow.svg"
+          alt="down_arrow"
+          class="img-style"
+          [ngClass]="{ flip: Expanded }"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="info" *ngIf="!model.data.isSubmitted">
+    <i class="bx bx-info-circle"></i>
+    <div class="toolTip">
+      <span>{{ "Planning.notSubmitted" | translate }}</span>
+    </div>
+  </div>
+
+  <!--
+    <ng-container [ngSwitch]="model.data.hasPercentage"> -->
+  <!-- First Mode of Goal Item -->
+  <!-- <ng-template [ngSwitchCase]="false">
+        <div class="actions"> -->
+  <!-- Add Childs -->
+  <!-- <div class="addChilds">
+            <button
+              (click)="model.addChild()"
+              class="btn"
+              [style.background]="model.GoalTypeColor"
+            >
+              <i class="bx bx-plus"></i>
+              <span> Add Childs </span>
+            </button>
+          </div>
+        </div>
+      </ng-template> -->
+  <!-- Second Mode of Goal Item -->
+  <!-- <ng-template [ngSwitchCase]="true">
+        <div class="data">
+          <span>{{model.data.percentData.yearlyTarget}}</span>
+          <span>{{model.data.percentData.duePeriod}}</span>
+          <span>{{model.data.percentData.periodTarget}}</span>
+          <span>{{model.data.percentData.periodActual}}</span>
+          <span>{{model.data.percentData.targetTd}}</span>
+          <span>{{model.data.percentData.actualTd}}</span>
+          <span class="state" [ngStyle]="{backgroundColor: model.data.percentData.isStable ? '#00DB99' : '#FF6060'}">{{model.data.percentData.totalPercent ?? ''}}</span>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div> -->
+</div>

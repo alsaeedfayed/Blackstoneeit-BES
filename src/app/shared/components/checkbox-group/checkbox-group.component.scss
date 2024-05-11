@@ -1,0 +1,23 @@
+.checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: space-between;
+
+  .check {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}
+h5 {
+  color: #717986;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.astrix-red {
+  color: red;
+}

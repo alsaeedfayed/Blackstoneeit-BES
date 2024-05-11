@@ -1,0 +1,31 @@
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.form {
+    min-height: 74vh;
+}
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: sticky;
+    @media (max-width: 490px) {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    background-color: #fff;
+    button {
+      width: 154px;
+      font-weight: 500;
+      font-size: 18px;
+      &:first-child {
+        margin-inline-end: 11px;
+        @media (max-width: 490px) {
+          margin-inline-end: 0;
+        }
+      }
+    }
+}

@@ -1,0 +1,83 @@
+<div class="performance-to-date">
+    
+    <div class="title">
+        <strong>{{'performanceDashboard.performanceToDate' | translate}}</strong>
+    </div>
+
+    <div class="data" *ngIf="!isNullish">
+        <div class="performace-percentage">
+            <p class="number">{{_data.performanceTD | number : "1.1-1"}} %</p>
+            <p class="title">{{'performanceDashboard.performance' | translate}}</p>
+        </div>
+    
+        <div class="items">
+            <div class="item row">
+                <div class="col-md-4">
+                    <span >{{"performanceDashboard.Actual" | translate}}</span>
+                </div>
+                <div class="col-md-3">
+                    <span class="percent">{{_data.actualTD | number : "1.1-1"}} %</span>
+                </div>
+                <div class="col-md-5">
+                    <ngb-progressbar type="success" [value]="_data.actualTD ?? 0"></ngb-progressbar>
+                </div>
+            </div>
+        
+            <div class="item row">
+                <div class="col-md-4">
+                    <span >{{"performanceDashboard.Target" | translate}}</span>
+                </div>
+                <div class="col-md-3">
+                    <span class="percent">{{_data.targetTD | number : "1.1-1"}} %</span>
+                </div>
+                <div class="col-md-5">
+                    <ngb-progressbar type="secondary" [value]="_data.targetTD ?? 0"></ngb-progressbar>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    <div class="noData" *ngIf="isNullish">
+        <img src="assets/img/no-data.png" />
+        <p>{{ 'shared.noData' | translate}}</p>
+    </div>
+
+</div>
+
+    <!-- <div class="performance-to-date">
+        
+        <div class="title">
+            <strong>{{'performanceDashboard.performanceToDate' | translate}}</strong>
+        </div>
+
+        <div class="circles">
+            <div class="circle second-circle" [style.width]="TargetTD" [style.height]="TargetTD">
+                <p>{{'performanceDashboard.Target' | translate}}</p>
+                <span>{{_data.targetTD | number : "1.1-1"}} %</span>
+            </div>
+            <div class="circle first-circle" [style.width]="PerformanceTD" [style.height]="PerformanceTD">
+                <p>{{'performanceDashboard.performance' | translate}}</p>
+                <span>{{_data.performanceTD | number : "1.1-1"}} %</span>
+            </div>
+            <div class="circle third-circle" [style.width]="ActualTD" [style.height]="ActualTD">
+                <p>{{'performanceDashboard.Actual' | translate}}</p>
+                <span>{{_data.actualTD | number : "1.1-1"}} %</span>
+            </div>
+        </div>
+
+        <div class="data">
+            <div class="item">
+                <div class="rectangle second"></div>
+                <span>{{'performanceDashboard.Target' | translate}}</span>
+            </div>
+            <div class="item">
+                <div class="rectangle third"></div>
+                <span>{{'performanceDashboard.performance' | translate}}</span>
+            </div>
+            <div class="item">
+                <div class="rectangle first"></div>
+                <span>{{'performanceDashboard.Actual' | translate}}</span>
+            </div>
+        </div>
+
+    </div> -->

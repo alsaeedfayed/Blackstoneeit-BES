@@ -1,0 +1,40 @@
+@import "src/assets/css/utils/mixins.scss";
+
+:host ::ng-deep {
+  app-search {
+    .search-bar-container {
+      --input-height: 38px;
+      height: var(--input-height);
+      min-height: var(--input-height);
+      width: 250px;
+
+      input {
+        height: var(--input-height);
+        min-height: var(--input-height);
+        line-height: var(--input-height);
+        background-color: #ffffff !important;
+        border: 1px solid #e1e1e1;
+        @include rtl_value(padding, 0 10px 0 33px, 0 33px 0 10px);
+      }
+
+      i {
+        font-size: 14px;
+        @include rtl_value(left, 10px, auto);
+        @include rtl_value(right, auto, 10px);
+      }
+    }
+  }
+}
+
+.requests-page {
+  &-wrapper {
+    > div {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+}

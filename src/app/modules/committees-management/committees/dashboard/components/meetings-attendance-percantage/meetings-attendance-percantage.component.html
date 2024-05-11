@@ -1,0 +1,82 @@
+<ng-container *ngIf="loadingRates; else data">
+  <div class="mb-3">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #data>
+  <div class="attendance-card">
+    <div class="attendance-card-header">
+
+      <div class="d-block">
+        <p class="attendance-card-header-title">
+          {{ "committeeDashboard.meetingsAttendancePercantage" | translate }}
+        </p>
+        <p
+          *ngIf="attendanceRate && attendanceRate > 0; else noPercentageData"
+          class="attendance-card-header-percantage mt-2"
+        >
+          {{ attendanceRate }}%
+        </p>
+        <ng-template #noPercentageData>
+
+           <span style="    color: #FFF;
+           font-weight: 500;
+           font-size: 18px;
+           line-height: 20px;"> {{ "committeeDashboard.dashboard.noData" | translate }} </span>
+
+        </ng-template>
+      </div>
+
+      <div class="attendance-card-header-chart">
+        <div class="tasks-status">
+          <circle-progress
+            [percent]="attendanceRate"
+            [showUnits]="false"
+            [showTitle]="false"
+            [showSubtitle]="false"
+            [radius]="20"
+            [outerStrokeWidth]="5"
+            [outerStrokeColor]="'#fff'"
+            [innerStrokeColor]="'#96A6BD26'"
+            [showInnerStroke]="true"
+            [innerStrokeWidth]="8"
+            [space]="-8"
+            [showBackground]="false"
+            [animation]="true"
+            [animationDuration]="200"
+          ></circle-progress>
+          <div
+            class="d-flex justify-content-center align-items-center tasks-status-icon h-100 w-100"
+          >
+            <span class=""><i class="bx bx-arrow-back bx-rotate-90"></i></span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="attendance-card-body mt-4">
+      <div
+        class="d-flex justify-content-between mt-2 w-100"
+        *ngFor="let memberData of membersAttendanceRate"
+      >
+        <person-item
+          [requesterItem]="memberData?.member"
+          [noCursor]="true"
+          [isUserCardFixed]="true"
+        ></person-item>
+        <span class="member-percentage">
+          {{memberData.attendanceRate > 0 || memberData.invited  ? memberData.attendanceRate + "%" :   '-' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+  <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+</ng-template>
+<!-- buttons and status position -->

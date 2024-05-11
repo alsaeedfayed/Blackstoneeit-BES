@@ -1,0 +1,116 @@
+<div class="page">
+  <ng-container *ngIf="isLoadingData; else form_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- new committee form -->
+<ng-template #form_data>
+  <app-header-page
+    [title]="
+      (isUpdating
+        ? 'committeesNewRequest.editCommittee'
+        : 'committeesNewRequest.newCommittee'
+      ) | translate
+    "
+    [showTotalItems]="false"
+    [backButton]="true"
+  >
+    <!-- [backTo]="
+      CommitteeBasicInfo.status == 5
+        ? '/committees-management/requests/details/' + requestId
+        : '/committees-management/requests'
+    " -->
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <!-- cancel button -->
+      <button class="btn btn-transparent" (click)="backToLastPage()">
+        {{ "shared.cancel" | translate }}
+      </button>
+
+      <!-- save draft button -->
+      <button
+        class="btn btn-info"
+        [disabled]="sendingLoading || !isNameValid || isFileUploading"
+        (click)="saveDraft()"
+      >
+        <i
+          *ngIf="sendingLoading || isFileUploading"
+          class="bx bx-loader-alt bx-spin ml-1"
+        ></i>
+        {{ "committeesNewRequest.saveDraft" | translate }}
+      </button>
+
+      <!-- send request button -->
+      <button
+        class="btn btn-main"
+        *ngIf="isLastTab"
+        [disabled]="!isBasicInfoValid || sendingLoading || isFileUploading"
+        (click)="sendRequestBtn()"
+      >
+        <i
+          *ngIf="sendingLoading || isFileUploading"
+          class="bx bx-loader-alt bx-spin ml-1"
+        ></i>
+        {{ "committeesNewRequest.sendRequest" | translate }}
+      </button>
+
+      <!-- next button -->
+      <button
+        *ngIf="!isLastTab"
+        [disabled]="isFileUploading"
+        class="btn btn-dark d-flex justify-content-around"
+        (click)="activeNextTab()"
+      >
+        {{ "shared.next" | translate }}
+        <i
+          *ngIf="!isFileUploading"
+          class="bx bx-right-arrow-alt m-0 {{
+            language == 'ar' ? 'bx-rotate-180' : ''
+          }}"
+        ></i>
+        <i *ngIf="isFileUploading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      </button>
+    </div>
+  </app-header-page>
+</ng-template>
+
+<app-committee-creation-basic-info
+  [id]="requestId"
+  [nextTab]="toNextTabFlag"
+  [language]="language"
+  [isCommitteeChangeRequest]="false"
+  [isRequestUpdating]="isUpdating"
+  (isValid)="checkBasicInfoValidation($event)"
+  (currentTab)="checkTab($event)"
+  (isNameValid)="checkNameValidation($event)"
+  (isFileUploading)="checkFileUploading($event)"
+  (getBasicInfo)="getCommitteeBasicInfo($event)"
+  (isLoadingData)="checkLoadingData($event)"
+></app-committee-creation-basic-info>
+
+<!-- loader skeleton for the header -->
+<ng-template #headerSkeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- modal to confirm request sending -->
+<app-confirm-modal
+  [id]="'send-request'"
+  [content]="'committeesNewRequest.confirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="sendRequest()"
+></app-confirm-modal>

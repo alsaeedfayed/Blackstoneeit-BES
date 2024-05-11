@@ -1,0 +1,123 @@
+<div class="req-table" *ngIf="services">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            <div class="sortable-row" (click)="onSort()">
+              {{ "EServices.title" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up': currentSortOrder === 'sorted',
+                  'sort-down': currentSortOrder === 'reversed'
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            {{ "EServices.type" | translate }}
+          </th>
+          <th scope="col">{{ "EServices.category" | translate }}</th>
+          <th scope="col">
+            <div class="sortable-row" (click)="onCreationDateSort()">
+              {{ "EServices.createDate" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up': creationDateSortOrder === 'sorted',
+                  'sort-down': creationDateSortOrder === 'reversed'
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">{{ "EServices.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let service of sortedServices
+              | paginate
+                : {
+                    itemsPerPage: paginationModle?.pageSize,
+                    currentPage: paginationModle?.pageIndex,
+                    totalItems: services.length
+                  }
+          "
+          [ngClass]="{ deleted: service.isDeleted }"
+        >
+          <!-- Service Title -->
+          <!-- if serivce is deleted user cant go to details page  -->
+          <td *ngIf="language === 'en'">
+            <a (click)="onClickDetails(service.id)" *ngIf="!service.isDeleted">
+              {{ service.serviceTitle }}
+            </a>
+            <span *ngIf="service.isDeleted">
+              {{ service.serviceTitle }}
+            </span>
+          </td>
+          <td *ngIf="language === 'ar'">
+            <a (click)="onClickDetails(service.id)" *ngIf="!service.isDeleted">
+              {{ service.serviceTitleAr }}
+            </a>
+            <span *ngIf="service.isDeleted">
+              {{ service.serviceTitleAr }}
+            </span>
+          </td>
+
+          <!-- Type Name -->
+          <td *ngIf="language === 'en'">
+            {{ service.typeName }}
+          </td>
+          <td *ngIf="language === 'ar'">
+            {{ service.typeNameAr }}
+          </td>
+
+          <!-- Category Name -->
+          <td *ngIf="language === 'en'">
+            {{ service.categoryName }}
+          </td>
+          <td *ngIf="language === 'ar'">
+            {{ service.categoryNameAr }}
+          </td>
+
+          <!-- Create Date -->
+          <td>
+            {{
+              this.language === "en"
+                ? (convertUTCDateToLocalDate(service?.creationDate)
+                  | date : "dd/MM/yyyy hh:mm a")
+                : (convertUTCDateToLocalDate(service?.creationDate)
+                  | localizeDate : "dd/MM/yyyy hh:mm a")
+            }}
+          </td>
+          <td>
+            <div>
+              <app-dropdown
+                *ngIf="!service.isDeleted"
+                (select)="onActionSelect($event, service)"
+                [items]="actions"
+              ></app-dropdown>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="services.length > paginationModle?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  previousLabel=""
+  nextLabel=""
+></pagination-controls>

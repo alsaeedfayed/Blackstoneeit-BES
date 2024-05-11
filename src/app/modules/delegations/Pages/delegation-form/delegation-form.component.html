@@ -1,0 +1,81 @@
+<div class="new-model-dialog-body">
+  <div class="step" *ngIf="!isLoading">
+    <div class="delegation-action-form mt-4 pb-2" [formGroup]="form">
+
+      <app-select
+        class="d-block mt-4"
+        formControlName="delegator"
+        [bindVlaue]="'id'"
+        [control]="form | getControl: 'delegator'"
+        [bindLabel]="'fullName'"
+        [items]="users"
+        [title]="'delegations.delegator' | translate "
+        [placeholder]="'delegations.delegator' | translate"
+        [clearable]="true"
+      ></app-select>
+
+      <div class="mt-4">
+        <div class="row">
+          <div [ngClass]="{'col-10' : calculdatedDays , 'col-12' : !calculdatedDays}">
+            <app-date-range-picker
+              class="d-block"
+              [control]="form | getControl : 'dates'"
+              formControlName="dates"
+              [title]="'delegations.period' | translate"
+              [allowPastDate]="false"
+            ></app-date-range-picker>
+          </div>
+          <div class="col-2 days" [ngClass]="{'ar' : lang == 'ar' , 'en' : lang == 'en'}">
+            <span *ngIf="calculdatedDays && calculdatedDays == 1">
+              ( {{calculdatedDays}} {{'delegations.day' | translate}} )
+            </span>
+            <span *ngIf="calculdatedDays && calculdatedDays > 1">
+              ( {{calculdatedDays}} {{'delegations.days' | translate}} )
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <app-select
+        class="d-block mt-4"
+        formControlName="delegatedTo"
+        [bindVlaue]="'id'"
+        [control]="form | getControl: 'delegatedTo'"
+        [bindLabel]="'fullName'"
+        [items]="users"
+        [title]="'delegations.delegatedTo' | translate "
+        [placeholder]="'delegations.delegatedTo' | translate"
+        [clearable]="true"
+      ></app-select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading">
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onPopupClose()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form?.invalid || isBtnLoadingSubmit"
+    (click)="submit()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoadingSubmit"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

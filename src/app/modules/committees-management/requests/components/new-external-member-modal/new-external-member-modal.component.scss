@@ -1,0 +1,14 @@
+
+.member-entity {
+  ::ng-deep {
+    label span {
+      line-height: unset !important;
+    }
+  }
+}
+
+.externalMembersar {
+  .externalTitleContainer {
+    flex-direction: row-reverse;
+  }
+}

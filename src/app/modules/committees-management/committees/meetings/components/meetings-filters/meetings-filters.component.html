@@ -1,0 +1,45 @@
+<div class="meetings-filters-container">
+  <div class="meetings-filters" [formGroup]="form">
+
+    <!-- committee objectives select -->
+    <app-select
+      class="d-block"
+      formControlName="locationType"
+      [control]="form | getControl: 'locationType'"
+      [title]="'committeeMeetings.filters.locationType' | translate"
+      [placeholder]="'committeeMeetings.filters.selectLocationType' | translate"
+      [items]="locationTypes"
+      [bindVlaue]="'id'"
+      [bindLabel]="language == 'en' ? 'name' : 'nameAr'"
+      [clearable]="true"
+      (change)="changeFilter()"
+    ></app-select>
+  
+    <!-- status select -->
+    <div>
+      <label class="form-label">
+        {{ 'committeeMeetings.filters.status' | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="status"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl: 'status')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeeMeetings.filters.selectStatus' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setStatusValue($event)"   
+      >
+        <ng-option *ngFor="let item of statuses" [value]="item?.id">
+          <app-badge
+            [className]="item['className'] "
+            [label]="language == 'ar' ? item['nameAr'] : item['name']"
+          ></app-badge>
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<!-- table -->
+<ng-container *ngIf="loading; else decisions_items">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- decisions items -->
+<ng-template #decisions_items>
+  <!-- page filters -->
+  <app-page-filters
+    [searchPlaceHolder]="'committeeDecisions.searchPlaceholder' | translate"
+    [hasAddBtn]="true"
+    [addBtnLabel]="'committeeDecisions.add' | translate"
+    [hasAdvancedFilter]="true"
+    [appliedFiltersCount]="appliedFiltersCount"
+    (search)="onSearch($event)"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+    (onClear)="clearFilter()"
+    (onAddBtnCLicked)="goToCreateDecision()"
+    [hasExportBtn]="false"
+    (onExportBtnClicked)="exportList()"
+  >
+    <app-decisions-filters
+      [isFiltersEmpty]="emptyFIlters"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-decisions-filters>
+  </app-page-filters>
+
+  <ng-container *ngIf="loadingDecisions; else rows">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton_rows"></ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #rows>
+  <decisions-rows
+    *ngIf="list?.length > 0"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></decisions-rows>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeDecisions.noDataMsg' | translate"
+    ></app-no-data>
+  </div>
+</ng-template>
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+<ng-template #skeleton_rows>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

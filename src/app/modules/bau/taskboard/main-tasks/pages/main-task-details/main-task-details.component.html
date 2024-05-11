@@ -1,0 +1,29 @@
+<!-- page header position -->
+<ng-container *ngIf="isLoadingMainTaskDetails; else mainTaskDetails">
+  <ng-template [ngTemplateOutlet]="header_skeleton"></ng-template>
+</ng-container>
+
+<ng-template #mainTaskDetails>
+  <app-header-page
+    [title]="title"
+    [backButton]="true"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+    [backTo]="backToUrl"
+  ></app-header-page>
+
+  <app-main-task-main-info
+    [mainTask]="mainTask"
+    [language]="language"
+  ></app-main-task-main-info>
+</ng-template>
+
+<app-tasks-board (changeHappened)="getMainTaskDetails()"></app-tasks-board>
+
+<ng-template #header_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

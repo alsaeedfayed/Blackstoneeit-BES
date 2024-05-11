@@ -1,0 +1,150 @@
+@import 'src/assets/css/utils/variables.scss';
+
+.deliverable-status-card {
+    min-height: 40px;
+    border-radius: 10px;
+    padding: 15px 31px;
+
+    &.pending {
+        border: 0.5px solid #FBC103;
+
+        .dot {
+            background: #FBC103;
+        }
+
+        .status-text {
+            color: #FBC103;
+        }
+
+        .counter {
+            color: #FBC103;
+        }
+
+        .deliverable-status-card-progress {
+            background-color: rgb(251, 193, 3, 0.5);
+
+            .outer-layer {
+                background-color: #FBC103;
+            }
+        }
+    }
+
+    &.accepted {
+        border: 0.5px solid #00DB99;
+
+        .dot {
+            background: #00DB99;
+        }
+
+        .status-text {
+            color: #00DB99;
+        }
+
+        .counter {
+            color: #00DB99;
+        }
+
+        .deliverable-status-card-progress {
+            background-color: rgb(0, 219, 153, 0.5);
+
+            .outer-layer {
+                background-color: #00DB99;
+            }
+        }
+    }
+
+    &.submitted {
+        border: 0.5px solid #6B6B6B;
+
+        .dot {
+            background: #6B6B6B;
+        }
+
+        .status-text {
+            color: #6B6B6B;
+        }
+
+        .counter {
+            color: #6B6B6B;
+        }
+
+        .deliverable-status-card-progress {
+            background-color: rgb(107, 107, 107, 0.5);
+
+            .outer-layer {
+                background-color: #6B6B6B;
+            }
+        }
+    }
+
+    &.rejected {
+        border: 0.5px solid #FF285C;
+
+        .dot {
+            background: #FF285C;
+        }
+
+        .status-text {
+            color: #FF285C;
+        }
+
+        .counter {
+            color: #FF285C;
+        }
+
+        .deliverable-status-card-progress {
+            background-color: rgb(255, 40, 92);
+
+            .outer-layer {
+                background-color: #FF285C;
+            }
+        }
+    }
+
+    .status {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: block;
+            margin-inline-end: 17px;
+        }
+
+        .status-text {
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 21px;
+        }
+    }
+
+    .counter {
+        font-weight: 500;
+        font-size: 22px;
+        line-height: 26px;
+    }
+
+    // .deliverable-status-card-progress {
+    //     height: 6px;
+    //     border-radius: 16px;
+    //     width: 100%;
+    //     position: relative;
+    //     overflow: hidden;
+
+    //     .outer-layer {
+    //         position: absolute;
+    //         top: 0;
+    //         left: 0;
+    //         width: 50%;
+    //         height: 100%;
+    //         border-radius: 16px;
+    //         z-index: 2;
+    //         transition: width 1s;
+    //         opacity: initial !important;
+    //     }
+    // }
+
+}

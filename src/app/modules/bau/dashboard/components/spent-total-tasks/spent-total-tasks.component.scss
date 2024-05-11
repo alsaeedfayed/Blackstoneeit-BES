@@ -1,0 +1,12 @@
+.spent-total {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &-spent {
+    font-weight: 500;
+    font-size: 14px;
+    position: absolute;
+    color: rgb(237, 162, 91) ;
+  }
+}

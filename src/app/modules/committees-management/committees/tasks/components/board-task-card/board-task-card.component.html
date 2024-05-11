@@ -1,0 +1,125 @@
+<div class="board-task-card status-{{ task?.status }}">
+  <div
+    class="d-flex align-items-center justify-content-{{
+      task?.relatedGroups.length > 0 ? 'between' : 'end'
+    }} gap-3 flex-wrap mb-1"
+  >
+    <!-- groups -->
+    <div
+      class="board-task-card-category"
+      *ngIf="task?.relatedGroups.length > 0"
+    >
+      <app-badge
+        [className]="'todoTask'"
+        [label]="task?.relatedGroups | relatedGroups : lang | truncate : 20"
+        [title]="task?.relatedGroups | relatedGroups : lang"
+      ></app-badge>
+    </div>
+
+    <!-- date -->
+    <div class="board-task-card-date d-flex gap-2">
+      <div *ngIf="task?.taskType" class="mainTitle">
+        {{ "committeeTasks.main" | translate }}
+      </div>
+
+      <span *ngIf="task?.creationDate">
+        {{
+          lang === "en"
+            ? (convertUTCDateToLocalDate(task?.creationDate).toLocaleString()
+              | date : "d MMM y")
+            : (convertUTCDateToLocalDate(task?.creationDate).toLocaleString()
+              | localizeDate : "d MMM y")
+        }}
+      </span>
+    </div>
+  </div>
+
+  <!-- title -->
+  <span
+    class="board-task-card-title"
+    [title]="lang == 'en' ? task?.title : task?.titleAr"
+  >
+    {{ (lang == "en" ? task?.title : task?.titleAr) | truncate : 20 }}
+  </span>
+  <div
+    class="d-flex align-items-center justify-content-between gap-3 flex-wrap mt-2"
+  >
+    <!-- code -->
+    <span class="board-task-card-code">
+      {{ task?.code }}
+    </span>
+
+    <!-- priority -->
+    <app-badge
+      class="priority d-block"
+      [className]="importanceLevels[task?.importanceLevel]['className']"
+      [label]="
+        lang == 'en'
+          ? importanceLevels[task?.importanceLevel]['name']
+          : importanceLevels[task?.importanceLevel]['nameAr']
+      "
+    ></app-badge>
+  </div>
+
+  <!-- progress -->
+  <div class="board-task-card-progress">
+    <div class="progress-percentage">
+      <span class="label">{{ "committeeTasks.progress" | translate }}</span>
+      <span class="percent">{{ task?.progress }}%</span>
+    </div>
+    <div class="progress-bar">
+      <span
+        class="fill {{ task?.progress | progressColor }}"
+        [ngStyle]="{ width: task?.progress + '%' }"
+      ></span>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="board-task-card-footer">
+    <person-item
+      [requesterItem]="task?.assignedToInfo"
+      [noCursor]="true"
+      [hasUserCard]="false"
+    ></person-item>
+
+    <ul class="task-meta">
+      <li
+        (click)="showSubTasks($event)"
+        class="task-meta-item-subTasks"
+        *ngIf="task?.taskType && task?.subTaskCount > 0"
+      >
+        <i class="bx bx-chevron-down"></i>
+        <span class="task-meta-count">{{ task?.subTaskCount }}</span>
+      </li>
+
+      <li class="task-meta-item">
+        <i class="bx bx-folder-open"></i>
+        <span class="task-meta-count">{{ task?.attachmentsCount }}</span>
+      </li>
+      <li class="task-meta-item">
+        <i class="bx bx-comment-dots"></i>
+        <span class="task-meta-count">{{ task?.commentsCount }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div
+    *ngIf="task?.taskType"
+    class="subTasksContainer my-3"
+    [ngClass]="{ hideSubTask: !showSubTasksToggler }"
+  >
+    <ng-container *ngFor="let subTask of task?.subTasks">
+      <div
+        (click)="openSubTaskDetails($event, subTask)"
+        class="d-flex gap-1 my-2 align-items-start text-primary subTaskItme"
+      >
+        <span><i class="bx bx-task subTaaskIcon"></i></span>
+        <span>{{ lang == "en" ? subTask?.title : subTask?.titleAr }}</span>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+</div>

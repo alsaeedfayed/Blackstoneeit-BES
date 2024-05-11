@@ -1,0 +1,90 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+:host {
+  ::ng-deep {
+    app-header-page {
+      .page-header {
+        padding-block: 1rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+
+      .module-title {
+        font-size: 1rem !important;
+      }
+    }
+
+    app-search {
+      .search-bar-container {
+        --input-height: 38px;
+        height: var(--input-height);
+        min-height: var(--input-height);
+        width: 250px;
+
+        input {
+          height: var(--input-height);
+          min-height: var(--input-height);
+          line-height: var(--input-height);
+          background-color: #ffffff !important;
+          border: 1px solid #e1e1e1;
+          @include rtl_value(padding, 0 10px 0 33px, 0 33px 0 10px);
+        }
+
+        i {
+          font-size: 14px;
+          @include rtl_value(left, 10px, auto);
+          @include rtl_value(right, auto, 10px);
+        }
+      }
+    }
+  }
+}
+
+.table {
+  --index-width: 50px;
+  --actions-width: 70px;
+
+  .config-index {
+    width: var(--index-width);
+  }
+
+  .config-actions {
+    width: var(--actions-width);
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.page-data {
+  min-height: 500px;
+  position: relative;
+}
+
+p {
+  margin: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border: 0;
+  font-size: 22px;
+  background-color: transparent;
+  color: grey;
+  border-bottom: none;
+}
+
+button {
+  background-color: none;
+}
+
+.bx {
+  border-bottom: none;
+}

@@ -1,0 +1,144 @@
+<div class="new-model-dialog-body">
+  <div class="dashboard-filter-form pb-2" [formGroup]="form">
+    <div class="row">
+      <div class="col-6 mt-3">
+        <app-select
+          formControlName="managerId"
+          [control]="form | getControl: 'managerId'"
+          [title]="'dashboard.projectManager' | translate"
+          [placeholder]="'dashboard.selectProjectManager' | translate"
+          [items]="managers"
+          [bindVlaue]="'id'"
+          [bindLabel]="'fullName'"
+          [clearable]="true"
+        ></app-select>
+      </div>
+
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="categoryId"
+          [control]="form | getControl: 'categoryId'"
+          [title]="'dashboard.category' | translate"
+          [placeholder]="'dashboard.selectCategory' | translate"
+          [items]="categories"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+          [clearable]="true"
+        ></app-select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="originId"
+          [control]="form | getControl: 'originId'"
+          [title]="'dashboard.origins' | translate"
+          [placeholder]="'dashboard.selectOrigin' | translate"
+          [items]="origins"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+          [clearable]="true"
+        ></app-select>
+      </div>
+
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="types"
+          [control]="form | getControl: 'types'"
+          [title]="'dashboard.type' | translate"
+          [placeholder]="'dashboard.selectType' | translate"
+          [items]="types"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+          [clearable]="true"
+        ></app-select>
+      </div>
+    </div>
+
+    <app-select
+      class="d-block mt-3"
+      formControlName="priorityLevel"
+      [control]="form | getControl: 'priorityLevel'"
+      [title]="'dashboard.priorityLevel' | translate"
+      [placeholder]="'dashboard.selectPriorityLevel' | translate"
+      [items]="priorityLevels"
+      [bindVlaue]="'id'"
+      [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+      [clearable]="true"
+    ></app-select>
+
+    <!-- <div class="row">
+      <div class="col-6 mt-3">
+        <label for="" class="form-label">
+          {{ "dashboard.fromDate" | translate }}
+        </label>
+        <app-datepicker formControlName="fromDate"> </app-datepicker>
+      </div>
+
+      <div class="col-6 mt-3">
+        <label for="" class="form-label">
+          {{ "dashboard.toDate" | translate }}
+        </label>
+        <app-datepicker formControlName="toDate"></app-datepicker>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div class="col-6 mt-3">
+        <label for="" class="form-label">
+          {{ "dashboard.fromBudget" | translate }}
+        </label>
+        <input
+          class="form-control"
+          type="number"
+          formControlName="fromBudget"
+          [placeholder]="'dashboard.budgetPlaceholder' | translate"
+        />
+      </div>
+
+      <div class="col-6 mt-3">
+        <label for="" class="form-label">
+          {{ "dashboard.toBudget" | translate }}
+        </label>
+        <input
+          class="form-control"
+          type="number"
+          formControlName="toBudget"
+          [placeholder]="'dashboard.budgetPlaceholder' | translate"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onPopupClose()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- clear button -->
+  <button
+    class="btn btn-outline-secondary flex-grow-1"
+    (click)="onClear()"
+  >
+    {{ 'shared.clearFilter' | translate }}
+  </button>
+
+  <!-- filter button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    (click)="onFilter()"
+  >
+    {{ 'shared.filter' | translate }}
+  </button>
+</div>

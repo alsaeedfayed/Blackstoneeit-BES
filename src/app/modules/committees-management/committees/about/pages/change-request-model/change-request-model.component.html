@@ -1,0 +1,74 @@
+<ng-container *ngIf="loadingReasons; else create_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #create_data>
+  <div class="new-model-dialog-body">
+    <div class="new-task-form pb-2" [formGroup]="changeRequestForm">
+      <div class="row">
+        <div class="ant-col-md-order-12 mt-4">
+          <label class="form-label">
+            {{ "committeeDetails.changeRequestReason" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <input
+            formControlName="reason"
+            type="text"
+            class="form-control"
+            name="reason"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- audit types -->
+        <div class="ant-col-md-order-12 mt-4">
+          <label class="form-label">
+            {{ "committeeDetails.description" | translate }}
+
+          </label>
+          <textarea
+            formControlName="description"
+            style="height: 8rem !important"
+            class="form-control"
+            name="description"
+            id="desc"
+            rows="5"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="changeRequestForm.invalid || isBtnLoading || validateDateRang"
+      (click)="saveNewChangeRequest()"
+    >
+      <i
+        *ngIf="isBtnLoading || uploadingFile"
+        class="bx bx-loader-alt bx-spin ml-1"
+      ></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

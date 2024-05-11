@@ -1,0 +1,159 @@
+<!-- Planning Header -->
+<div class="planningHeader">
+  <div class="planningHeader-wrapper">
+    <div class="heading-info">
+      <div class="select">
+        <span class="planning-scorecard">{{ "Planning.scorecard" | translate }}:</span>
+
+        <ng-select
+          class="select-ddl"
+          [clearable]="false"
+          [(ngModel)]="selectedScorecard"
+          [items]="scoreCardPlanningItems"
+          placeholder="{{ 'Planning.pleaseChoose' | translate }}"
+          [bindLabel]="lang === 'en' ? 'title' : 'titleAr'"
+          [dropdownPosition]="'bottom'"
+          (change)="handelSelectCardPlanning()"
+        ></ng-select>
+
+        <div
+          *ngxPermissionsOnly="[permissionsViewStatusDetails]"
+          class="view-status-detils"
+          (click)="openStatusDetailsPopup()"
+        >
+          <i class="bx bx-info-circle"></i>
+        </div>
+
+        <div class="info-item" *ngIf="GoalLevelText && statusValue != 3">
+          <span>{{ "shared.status" | translate }}:</span>
+          <strong>
+            {{ "Planning." + GoalLevelText | translate }}
+            {{ status ? "- " + status : "" }}
+          </strong>
+        </div>
+
+        <div class="info-item" *ngIf="statusValue == 3">
+          <div class="lbl-buttons">
+            <strong class="bg-closed">{{ closedLable }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-actions">
+      <!-- <div class="info-item" *ngIf="statusValue == 3">
+        <div class="lbl-buttons">
+          <span class="bg-closed">
+            {{ closedLable }}
+          </span>
+        </div>
+      </div> -->
+
+      <div class="info-actions">
+        <!-- <div class="info">
+        <i class='bx bx-info-circle'></i>
+        <div class="toolTip">
+          <span>In Order to submit you need to add child first</span>
+        </div>
+      </div> -->
+        <!-- <div class="actions d-flex" *ngIf="moveToNextLevel"> -->
+        <!-- <button
+          class="btn btn-custom"
+          (click)="MoveToNextLevelHandler()"
+          [disabled]="isMovingToNextLevel"
+        >
+          <i
+            *ngIf="isMovingToNextLevel"
+            class="bx bx-loader-alt bx-spin ml-1"
+          ></i>
+          {{ "Planning.moveTo" | translate }} <span>{{ GoalNextLevel }}</span>
+        </button> -->
+        <!-- </div> -->
+
+        <div class="actions d-flex" *ngIf="closeScorecard">
+          <button
+            class="btn btn-custom-2"
+            [disabled]="isScorecardApproving"
+            (click)="openConfirmationCloseScorecard()"
+          >
+            <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isScorecardApproving"></i>
+            {{ "Planning.closeScorecardApproval" | translate }}
+          </button>
+        </div>
+
+        <div class="actions d-flex approval-btn-wrapper" *ngIf="isPlanning || submitable">
+          <div class="lbl-buttons" *ngIf="isPlanning">
+            <span
+              [ngClass]="{
+                'bg-time': submissionTotalWeight != 100,
+                'bg-submitted': submissionTotalWeight == 100
+              }"
+            >
+              {{ "Planning.submissionTotalWeight" | translate }} :
+              <span>{{ submissionTotalWeight }}%</span>
+            </span>
+          </div>
+
+          <button
+            *ngIf="submitable"
+            class="btn btn-main"
+            [disabled]="isSubmitting"
+            (click)="openConfirmForSubmitScorecard()"
+          >
+            <i *ngIf="isSubmitting" class="bx bx-loader-alt bx-spin ml-1"></i>
+            {{ "Planning.submitApproval" | translate }}
+          </button>
+        </div>
+
+        <div class="actions d-flex" *ngIf="canChangeRequest">
+          <button class="btn btn-main" (click)="openChnageRequestPopup()">
+            {{ "Planning.chnageRequest" | translate }}
+          </button>
+        </div>
+
+        <div class="actions d-flex" *ngIf="canEditScorecard">
+          <button class="btn btn-warning" (click)="navigateToEditScorecard()">
+            {{ "Planning.editScorcard" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-confirm-modal
+    [id]="'submit-scorecard'"
+    [content]="confirmMsg"
+    [btnContent]="'shared.confirm' | translate"
+    [btnStyle]="'main'"
+    (confirm)="submitScorecard()"
+  ></app-confirm-modal>
+
+  <app-confirm-modal
+    [id]="'close-scorecard'"
+    [content]="confirmCloseMsg"
+    [btnContent]="'shared.confirm' | translate"
+    [btnStyle]="'main'"
+    (confirm)="scorecardApproveHandler()"
+  ></app-confirm-modal>
+
+  <app-model
+    [dimensions]="{ width: 700, height: 750 }"
+    [id]="'scorecardStatusDetailsPlanning'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="closeStatusDetailsPopup()"
+  >
+    <div modal-header class="scorecard-details-model-header w-100">
+      <label class="modal-title">
+        {{ 'shared.scorecardStatusDetails' | translate }}
+      </label>
+    </div>
+
+    <div modal-content class="scorecard-details-model-content border-top">
+      <scorecard-details-modal
+        *ngIf="isShowDetailsPopup"
+      ></scorecard-details-modal>
+    </div>
+  </app-model>
+</div>

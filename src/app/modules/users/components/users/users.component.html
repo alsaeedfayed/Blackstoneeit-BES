@@ -1,0 +1,149 @@
+<app-header-page
+  [title]="'users.users' | translate"
+  [totalItems]="totalUsers"
+  [backButton]="true"
+></app-header-page>
+
+<!-- page filters -->
+<app-page-filters
+  class="d-block mb-4"
+  [lang]="lang"
+  [searchPlaceHolder]="'shared.search' | translate"
+  [hasListViewBtn]="true"
+  [hasCardsViewBtn]="true"
+  [viewMode]="'list'"
+  [hasAddBtn]="true"
+  [addBtnLabel]="'users.addNewUser' | translate"
+  (search)="onSearch($event)"
+  (onAddBtnCLicked)="onAddUser()"
+  (onViewModeChange)="changeViewMode($event)"
+></app-page-filters>
+
+<!-- users skeleton -->
+<ng-container *ngIf="loading; else users_data">
+  <div class="my-4">
+    <ng-container *ngIf="isListView" [ngTemplateOutlet]="table_skeleton"></ng-container>
+    <ng-container *ngIf="!isListView" [ngTemplateOutlet]="cards_skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- users data -->
+<ng-template #users_data>
+
+  <!-- table view -->
+  <users-table
+    *ngIf="users?.length > 0 && isListView"
+    [totalItems]="totalUsers"
+    [list]="users"
+    [paginationModel]="paginationModel"
+    (viewGroupsAndRoles)="viewGroupsAndRoles($event)"
+  ></users-table>
+
+  <!-- cards view -->
+  <div class="users-cards row" *ngIf="users?.length > 0 && !isListView">
+    <div
+      class="col-12 col-lg-6 col-xl-4 d-flex justify-content-center"
+      *ngFor="
+        let user of users
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems: totalUsers
+              };
+        let i = index
+      "
+    >
+      <app-user-card
+        class="w-100"
+        [data]="user"
+        (viewGroupsAndRoles)="viewGroupsAndRoles($event)"
+      ></app-user-card>
+    </div>
+  </div>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="users?.length == 0 || !users">
+    <app-no-data [msg]="'users.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #table_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the cards -->
+<ng-template #cards_skeleton>
+  <div class="row">
+    <div
+      class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center mb-16"
+      *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+    >
+      <app-skeleton-loader class="w-100" [mode]="'userCard'"></app-skeleton-loader>
+    </div>
+  </div>
+</ng-template>
+
+<!-- confirm modal -->
+<app-confirm-modal
+  [content]="
+    (selectedUser?.active ? 'users.confirmDeactivateMsg' : 'users.confirmActivateMsg')
+    | translate : { name: selectedUser?.fullName }
+  "
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onConfirmationModalConfirm($event)"
+></app-confirm-modal>
+
+<!-- users modal -->
+<app-users-modal
+  [title]="modalTitle"
+  [roles]="roles"
+  [groups]="groups"
+  (refreshUsersList)="refreshList()"
+></app-users-modal>
+
+<!-- view groups and roles modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'view-groups-roles'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeGroupsAndRolesModel()"
+>
+  <div modal-header class="view-groups-roles-model-header w-100">
+    <label class="modal-title">
+      {{ 'users.userGroupsAndRoles' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="view-groups-roles-model-content border-top">
+    <app-view-groups-and-roles-modal
+      *ngIf="isGroupsAndRolesModelOpened"
+      [user]="user"
+    ></app-view-groups-and-roles-modal>
+  </div>
+</app-model>
+
+<app-loading-modal
+  [displayModal]="loadingModalFlag"
+  [content]="'users.actionInProgress' | translate"
+></app-loading-modal>
+
+<pagination-controls
+  *ngIf="!loading && totalUsers > paginationModel?.pageSize"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+  (pageChange)="onPaginate($event)"
+></pagination-controls>

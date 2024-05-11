@@ -1,0 +1,168 @@
+<div class="model-container">
+  <ng-container *ngIf="add; else addForm"></ng-container>
+
+  <ng-container *ngIf="loading; else formData">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+
+    <!-- back button -->
+    <button
+      class="btn btn-dark flex-grow-1"
+      (click)="closePopup()"
+    >
+      {{ 'shared.back' | translate }}
+    </button>
+  </div>
+</div>
+
+<ng-template #addForm>
+  <div class="new-model-dialog-body">
+    <p class="mt-3 mb-0"><strong>{{ 'lookups.addNewRole' | translate }}</strong></p>
+
+    <!-- add role form -->
+    <div class="new-role-form pb-2" [formGroup]="form">
+
+      <!-- name -->
+      <div class="pt-3">
+        <app-select
+          class="d-block"
+          formControlName="name"
+          [bindVlaue]="'value'"
+          [control]="form | getControl: 'name'"
+          [bindLabel]="language == 'en' ? 'nameEn' : 'nameAr'"
+          [items]="roleslookup"
+          [title]="'lookups.theRole' | translate "
+          [placeholder]="'lookups.selectRole' | translate"
+        ></app-select>
+      </div>
+
+      <!-- user -->
+      <div class="pt-3">
+        <app-select
+          class="d-block"
+          formControlName="user"
+          [bindVlaue]="'id'"
+          [control]="form | getControl: 'user'"
+          [bindLabel]="'fullName'"
+          [items]="users"
+          [title]="'lookups.user' | translate "
+          [placeholder]="'lookups.user' | translate"
+          [clearable]="true"
+          (onSearch)="searchUsers($event)"
+        ></app-select>
+      </div>
+    </div>
+
+    <div class="buttons py-2">
+
+      <!-- back button -->
+      <button class="btn btn-outline-secondary" (click)="back()">
+        {{ 'shared.back' | translate }}
+      </button>
+
+      <!-- save button -->
+      <button
+        *ngIf="!add"
+        class="btn btn-main"
+        [disabled]="form?.invalid || isBtnLoading"
+        (click)="save()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+        {{ 'shared.save' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #formData>
+  <div class="new-model-dialog-body">
+    <button
+      *ngIf="add"
+      class="btn btn-main mt-3 add"
+      [disabled]="isBtnLoading"
+      (click)="addRole()"
+    >
+      {{ 'shared.add' | translate }}
+    </button>
+
+    <div class="table-wrapper" *ngIf="roles?.count > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              {{'lookups.roleName' | translate }}
+            </th>
+            <th>
+              {{'lookups.code' | translate }}
+            </th>
+            <th>
+              {{'lookups.user' | translate }}
+            </th>
+            <th>
+              {{'lookups.creationDate' | translate }}
+            </th>
+            <th>
+              {{'lookups.action' | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles.data
+            | paginate
+            : {
+                itemsPerPage: pageSize,
+                currentPage: pageIndex,
+                totalItems: roles?.count
+              };
+            let i = index
+          ">
+            <td>{{language == "ar" ? role?.roleNameAr : role?.roleName}}</td>
+            <td>{{role?.roleCode}}</td>
+            <td>
+              <person-item
+                *ngIf="role?.userInfo"
+                [ownerItem]="role?.userInfo"
+                [CompMode]="2"
+                [noCursor]="true"
+              ></person-item>
+            </td>
+            <td>{{role?.creationDate | date : "dd/MM/yyyy"}}</td>
+            <td class="pointer" (click)="confirmRemove(role?.id)" *ngIf="!(confirmDelete && roleToDelete == role?.id)">
+              <i class="bx bx-trash icon red"></i>
+            </td>
+            <td class="pointer" (click)="confirmRemove()" *ngIf="confirmDelete && roleToDelete == role?.id">
+              <i class="bx bx-check green icon margin" (click)="remove(role?.id)"></i>
+              <i class='bx bx-x red icon margin' (click)="confirmDelete=false; roleToDelete=null;"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pagination-controls
+      *ngIf="roles?.count > pageSize && !loading"
+      (pageChange)="onPageChange($event)"
+      class="my-pagination"
+      maxSize="5"
+      responsive="true"
+      [previousLabel]="'shared.prev' | translate"
+      [nextLabel]="'shared.next' | translate"
+    ></pagination-controls>
+
+    <div class="no-data" *ngIf="roles?.count == 0 && add">
+      <app-no-data [msg]="'lookups.noRolesDataMsg' | translate"></app-no-data>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <div class="p-4">
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </div>
+</ng-template>

@@ -1,0 +1,51 @@
+<div class="meetings-analytics">
+  <div class="meetings-analytics-wrapper">
+    <div *ngIf="!loading && items">
+      <div class="analytics-widgets">
+        <div class="analytics-widgets-items">
+          <app-stats-widget
+            [id]="1"
+            [count]="items[0].count"
+            [title]="items[0].title"
+            [icon]="'bx bx-file'"
+            [type]="'default'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="2"
+            [count]="items[1].count"
+            [title]="items[1].title"
+            [icon]="'bx bx-edit'"
+            [type]="'warning'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="3"
+            [count]="items[2].count"
+            [title]="items[2].title"
+            [icon]="'bx bx-check-circle'"
+            [type]="'success'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="4"
+            [count]="+items[3].count"
+            [title]="items[3].title"
+            [icon]="'bx bx-cog'"
+            [type]="'primary'"
+          ></app-stats-widget>
+        </div>
+      </div>
+    </div>
+
+    <div class="analytics-widgets" *ngIf="loading">
+      <div class="analytics-widgets-items">
+        <ngx-skeleton-loader *ngFor="let item of [1, 2, 3, 4]"
+          count="1"
+          [theme]="{
+            'height': '105px',
+            'background-color': '#fcfcfc',
+            'border-radius': '10px'
+          }"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>

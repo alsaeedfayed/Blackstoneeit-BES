@@ -1,0 +1,147 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.comments-area {
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 0;
+
+    &-item {
+      &-head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+
+        ::ng-deep {
+          person-item {
+            .personItem {
+              > .avatar {
+                .letters,
+                img {
+                  height: 2rem !important;
+                  width: 2rem !important;
+                }
+
+                .letters {
+                  font-size: 0.625rem;
+                }
+              }
+
+              > .info {
+                .name {
+                  color: $black-color;
+                  font-size: 0.875rem;
+                  margin-bottom: 0;
+                }
+
+                .job {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+
+        &-date {
+          color: $info_color;
+        }
+      }
+
+      &-body {
+        color: #636363;
+        font-weight: 400;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        padding-inline-start: 0.25rem;
+      }
+    }
+  }
+  .comment-box {
+    position: relative;
+    app-mention-box{
+      padding-inline: 20px !important;
+
+    }
+    ::ng-deep {
+      app-filed {
+        .form-group {
+          margin-top: 0 !important;
+        }
+
+        .form-control {
+          padding-inline: 2.75rem !important;
+          border-radius: 60px !important;
+        }
+      }
+    }
+
+    .upload-files-btn,
+    .post-btn {
+      position: absolute;
+      z-index: 1;
+      top: 6px;
+      width: 2rem;
+      min-width: auto;
+      min-height: auto;
+      height: 2rem;
+      line-height: 2rem;
+      padding: 0;
+      border-radius: 50% !important;
+
+      i.bx {
+        margin-inline: 0 !important;
+      }
+    }
+
+    .post-btn {
+      @include rtl_value(right, 6px, auto);
+      @include rtl_value(left, auto, 6px);
+      background-color: $black-color;
+      color: $white-color;
+
+      i.bx-send {
+        @include rtl_value(transform, rotate(0deg), rotate(180deg));
+      }
+    }
+
+    .upload-files-btn {
+      @include rtl_value(left, 6px, auto);
+      @include rtl_value(right, auto, 6px);
+      color: $black-color;
+
+      i.bx {
+        font-size: 20px;
+        @include rtl_value(
+          transform,
+          rotate(-45deg),
+          rotate(-135deg) rotateX(180deg)
+        );
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  app-tab {
+    &.active {
+      height: 100%;
+    }
+
+    .tab {
+      height: 100%;
+    }
+  }
+
+  uploaded-attachments-files {
+    margin-bottom: 0.5rem;
+
+    .uploaded-attachments-files {
+      li {
+        width: 100% !important;
+      }
+    }
+  }
+}

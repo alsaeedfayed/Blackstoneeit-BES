@@ -1,0 +1,285 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.page-filters {
+  z-index: 1;
+  container: page-filters / inline-size;
+
+  .top-row {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+
+    @container page-filters (max-width: 500px) {
+      & {
+        flex-direction: column;
+      }
+    }
+
+    .start-area {
+      gap: 1.25rem;
+    }
+
+    .end-area {
+      gap: 0.625rem;
+    }
+
+    .start-area,
+    .end-area {
+      display: flex;
+      align-items: center;
+
+      @container page-filters (max-width: 500px) {
+        & {
+          flex-direction: column;
+        }
+      }
+    }
+
+    app-search {
+      @container page-filters (max-width: 500px) {
+        &,
+        .search-bar-container {
+          width: 100% !important;
+        }
+      }
+    }
+
+    ::ng-deep app-search {
+      .search-bar-container {
+        --input-height: 38px;
+        height: var(--input-height);
+        min-height: var(--input-height);
+        width: 250px;
+        margin-inline-end: 0 !important;
+
+        input {
+          height: var(--input-height);
+          min-height: var(--input-height);
+          line-height: var(--input-height);
+          background-color: #ffffff;
+          border: 1px solid #e1e1e1;
+          @include rtl_value(padding, 0 10px 0 33px, 0 33px 0 10px);
+        }
+
+        i {
+          font-size: 14px;
+          @include rtl_value(left, 10px, auto);
+          @include rtl_value(right, auto, 10px);
+        }
+      }
+    }
+
+    .view-btn,
+    .advanced-filter-btn {
+      display: flex;
+      align-items: center;
+      height: 38px;
+      background-color: #ffffff;
+      border: 0.6px solid #e1e1e1;
+      border-radius: 8px;
+    }
+
+    .view-btn {
+      justify-content: center;
+      width: 38px;
+      font-size: 1.25rem;
+
+      svg {
+        width: 1.25rem;
+      }
+
+      &.active {
+        color: $main-color;
+      }
+    }
+
+    .advanced-filter-btn {
+      gap: 10px;
+      // min-width: 100px;
+      padding: 12px 10px;
+
+      @container page-filters (max-width: 500px) {
+        & {
+          width: 100%;
+        }
+      }
+
+      .applied-filters-count {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 14px;
+        width: 14px;
+        background-color: #ffa800;
+        color: #ffffff;
+        font-size: 10px;
+        border-radius: 50%;
+      }
+
+      .bx-chevron-down {
+        margin-inline-start: auto;
+      }
+    }
+
+    .add-btn,
+    .filter-export-btn {
+      min-width: auto;
+
+      @container page-filters (max-width: 500px) {
+        & {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .advanced-filter {
+    &-content {
+      background: #ffffff;
+      padding: 30px 20px 20px;
+      margin-top: 12px;
+      border: 1px solid #efefef;
+      border-radius: 10px;
+      box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.01);
+      display: none;
+
+      ::ng-deep {
+        .input-select.ng-select {
+          &.valid {
+            .ng-select-container {
+              border-color: #cbcbcb;
+            }
+          }
+        }
+
+        .sorting-filter {
+          display: flex;
+          align-items: flex-end;
+
+          app-select {
+            flex-grow: 1;
+
+            .ng-select-container {
+              @include rtl_value(border-radius, 8px 0 0 8px, 0 8px 8px 0);
+            }
+          }
+
+          &-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 44px;
+            width: 32px;
+            color: $info_color;
+            font-size: 0.625rem;
+            background: none;
+            border: 1px solid #cbcbcb;
+            @include rtl_value(border-radius, 0 8px 8px 0, 8px 0 0 8px);
+
+            &.disabled {
+              pointer-events: none;
+              opacity: 0.8;
+              background-color: #f0f0f0;
+            }
+
+            &.sort-up {
+              i.bx {
+                &:first-of-type {
+                  color: $main-color;
+                }
+              }
+            }
+
+            &.sort-down {
+              i.bx {
+                &:last-of-type {
+                  color: $main-color;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &-divider {
+      margin-block: 24px;
+      border-bottom: 0.4px solid rgba(18, 24, 36, 0.1);
+    }
+
+    &-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+
+      .filter-clear-btn {
+        background: none;
+        padding: 0;
+        border: none;
+        margin-inline-end: auto;
+        transition: all 0.15s ease-in-out;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .filter-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 29px;
+        min-width: 77px;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.15s ease-in-out;
+      }
+    }
+  }
+}
+
+.rotateY_180deg {
+  transform: rotateY(180deg);
+}
+
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-subtitle {
+    color: $black-color;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+}
+
+.see-more {
+  display: inline-block;
+  color: $main-color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+}
+
+.filter-action-btn:disabled,
+.filter-action-btn[disabled] {
+  background-color: gainsboro !important;
+}

@@ -1,0 +1,16 @@
+{
+  "manageForms": {
+    "formName": "Form Name",
+    "enterFormName": "Enter Form Name",
+    "formSavedSuccessfully": "Form saved successfully",
+    "creationDate": "Creation Date",
+    "lastUpdate": "Last update",
+    "active": "Active",
+    "areYouSureYouWantToDeactivate": "Are you sure you want to deactivate",
+    "areYouSureYouWantToActivate": "Are you sure you want to activate",
+    "manageForms": "Manage Forms",
+    "createForm": "Create Form",
+    "noDataMsg": "Hmm.. looks like you don't have any forms",
+    "newForm": "New Form"
+  }
+}

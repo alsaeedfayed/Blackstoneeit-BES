@@ -1,0 +1,73 @@
+<div class="new-model-dialog-body">
+  <ng-container *ngIf="loading; else formData">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #formData>
+  <div class="pb-2" [formGroup]="committeesForm">
+
+    <!-- english name -->
+    <app-filed
+      class="d-block mt-3"
+      formControlName="name"
+      [control]="committeesForm | getControl: 'name'"
+      [title]="'committee.name' | translate"
+      [placeholder]="'committee.enterEnglishName' | translate"
+    ></app-filed>
+
+    <!-- arabic name -->
+    <app-filed
+      class="d-block mt-3"
+      formControlName="nameAr"
+      [control]="committeesForm | getControl: 'nameAr'"
+      [title]="'committee.nameAr' | translate"
+      [placeholder]="'committee.enterArabicName' | translate"
+    ></app-filed>
+    <div class="mt-4">
+      <app-select class="d-block" formControlName="chairmanId" [bindVlaue]="'id'"
+                  [control]="committeesForm | getControl: 'chairmanId'" [bindLabel]="'fullName'" [items]="users"
+                  [title]="'committee.chairman' | translate " [placeholder]="'committee.chairman' | translate"
+                  (change)="handleSelectChairman2($event)"
+      ></app-select>
+    </div>
+    <div class="team-search-container mt-3">
+      <app-team-search
+        [memberToAddType]="committeeToAddType"
+        [lang]="lang"
+        [users]="users"
+      ></app-team-search>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="committeesForm.invalid || isBtnLoading"
+    (click)="submit()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

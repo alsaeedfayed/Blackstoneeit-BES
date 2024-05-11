@@ -1,0 +1,98 @@
+   <!-- members table -->
+   <div class="basicInfo-table">
+    <div *ngIf="basicInfoList?.length" class="table mt-4">
+      <div class="table-wrapper">
+        <div *ngIf="title" style="font-weight: 500; font-size: 16px">
+          {{title}}
+        </div>
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th scope="col" class="fieldName" style="width: 33.3%">
+                {{ "changeRequests.details.fieldName" | translate }}
+              </th>
+
+              <th scope="col" class="oldValue" style="width: 33.3%">
+                {{ "changeRequests.details.oldValue" | translate }}
+              </th>
+
+              <th scope="col" class="newValue" style="width: 33.3%">
+                {{ "changeRequests.details.newValue" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of basicInfoList; let i = index">
+              <td class="field-name">
+               <!-- {{lang === "en" ? item?.fieldName : item?.fieldNameAr }} -->
+               {{item?.displayNames[lang]}}
+              </td>
+
+              <td class="old-value">
+                <span *ngIf="item?.fieldName === 'Sponsor'"> <person-item
+                  *ngIf="item?.oldFieldValue"
+                  [requesterItem]="item?.oldFieldValue"
+                  [noCursor]="true"
+                ></person-item></span>
+
+
+                <span *ngIf="item?.fieldName === 'Attachment'">
+
+                  <uploaded-attachments-files *ngIf="item?.oldFieldValue?.length>0 ; else noAttatchmentsOld"
+                  class="d-block mt-3"
+                  [files]="item?.oldFieldValue"
+                  [canDeleted]="false"
+                ></uploaded-attachments-files>
+                <ng-template #noAttatchmentsOld>{{'changeRequests.details.noAtt' | translate}}</ng-template>
+                 </span>
+
+
+                 <span *ngIf="item?.fieldName === 'DueDate'">
+
+                 {{ item?.oldFieldValue.substr(0 , 10)}}
+                 </span>
+
+
+                <span *ngIf="item?.fieldName !== 'Sponsor' && item?.fieldName !== 'Attachment' && item?.fieldName !== 'DueDate' " [innerHTML]="item?.oldFieldValue"></span>
+              </td>
+
+              <td class="new-value">
+                <span *ngIf="item?.fieldName === 'Sponsor'">
+                  <person-item
+                  *ngIf="item?.newFieldValue"
+                  [requesterItem]="item?.newFieldValue"
+                  [noCursor]="true"
+                ></person-item>
+
+                </span>
+
+
+                <span *ngIf="item?.fieldName === 'Attachment'">
+
+                  <uploaded-attachments-files *ngIf="item?.newFieldValue?.length>0 ; else noAttatchmentsNew"
+                  class="d-block mt-3"
+                  [files]="item?.newFieldValue"
+                  [canDeleted]="false"
+                ></uploaded-attachments-files>
+                <ng-template #noAttatchmentsNew>-</ng-template>
+                 </span>
+
+                 <span *ngIf="item?.fieldName === 'DueDate'">
+
+                  {{ item?.newFieldValue.substr(0 , 10)}}
+                  </span>
+
+                <span *ngIf="item?.fieldName !== 'Sponsor' && item?.fieldName !== 'Attachment' && item?.fieldName !== 'DueDate' " [innerHTML]="item?.newFieldValue"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!basicInfoList?.length">
+    <app-no-data
+      [msg]="noDataMsg"
+    ></app-no-data>
+  </div>

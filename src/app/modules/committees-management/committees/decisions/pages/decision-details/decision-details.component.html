@@ -1,0 +1,370 @@
+<!-- buttons and status position -->
+<ng-container *ngIf="loading || historyLoading; else data">
+  <div class="mb-3">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #data>
+  <app-header-page
+    [title]="language == 'ar' ? decision?.nameAr : decision?.name"
+    [backButton]="true"
+    [showTotalItems]="false"
+    [isAddBtn]="false"
+    [backTo]="
+      '/committees-management/committee-details/' +
+      decision?.committeeId +
+      '/decisions'
+    "
+  >
+    <div class="d-flex flex-wrap gap-2" buttons>
+      <button
+        class="btn btn-warning"
+        (click)="goToEdit()"
+        *ngIf="decision?.canEdit"
+      >
+        {{ "committeeDecisions.details.edit" | translate }}
+      </button>
+
+      <button
+      class="btn btn-secondary"
+      [disabled]="isDownloading"
+      (click)="exportDataAsPDF()"
+    >
+      <i *ngIf="isDownloading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      <i *ngIf="!isDownloading" class="bx bxs-file-pdf"></i>
+      {{ "committeeDecisions.downloadDecision" | translate }}
+    </button>
+      <button
+        *ngIf="decision?.status != 7 && decision?.canConfirm"
+        class="btn btn-main"
+        (click)="openConfirmDecison()"
+      >
+        <!-- <i *ngIf="isConfirmingDecision" class="bx bx-loader-alt bx-spin ml-1"></i> -->
+        {{ "committeeDecisions.confirmDecision" | translate }}
+      </button>
+
+
+    </div>
+  </app-header-page>
+  <section class="row gap-3">
+    <div class="block-content decision-info">
+      <!-- status -->
+      <div
+        div
+        class="d-flex align-items-center justify-content-end flex-wrap mb-3"
+      >
+        <app-badge
+          [className]="decisionStatus[decision?.status]['className']"
+          [label]="
+            language == 'en'
+              ? decisionStatus[decision?.status]['name']
+              : decisionStatus[decision?.status]['nameAr']
+          "
+        ></app-badge>
+      </div>
+
+      <!-- created by , related committee , created on , category -->
+      <div class="row">
+        <ul class="decision-info-list">
+          <!-- Created by  -->
+          <li class="decision-info-list-item">
+            <h4 class="block-subtitle mb-2">
+              {{ "committeeDecisions.details.createdBy" | translate }}
+            </h4>
+
+            <div class="decision-info-list-item-content">
+              <person-item
+                [requesterItem]="decision?.creatorInfo"
+                [noCursor]="true"
+              ></person-item>
+            </div>
+          </li>
+
+          <!-- Related Committee -->
+          <li class="decision-info-list-item">
+            <h4 class="block-subtitle mb-2">
+              {{ "committeeDecisions.details.relatedCommittee" | translate }}
+            </h4>
+
+            <div class="decision-info-list-item-content">
+              <a
+                class="hoverableLink"
+                [routerLink]="
+                  '/committees-management/committee-details/' +
+                  decision?.committeeId
+                "
+              >
+                {{
+                  language == "ar"
+                    ? decision?.committeeInfo?.nameAr
+                    : decision?.committeeInfo?.name
+                }}
+              </a>
+            </div>
+          </li>
+          <!-- Related Meeting -->
+          <li class="decision-info-list-item" *ngIf="decision?.meetingId">
+            <h4 class="block-subtitle mb-2">
+              {{ "committeeTasks.detailsModel.relatedMeeting" | translate }}
+            </h4>
+
+            <div class="decision-info-list-item-content">
+              <a
+              class="hoverableLink"
+              [routerLink]="
+                '/committees-management/committee/' +
+                decision?.committeeId +
+                '/meeting/' +
+                decision?.meetingId
+              "
+            >
+              {{ decision?.meeting?.name }}
+            </a>
+            </div>
+          </li>
+
+          <!-- Created On -->
+          <li class="decision-info-list-item">
+            <h4 class="block-subtitle mb-2">
+              {{ "committeeDecisions.details.createdOn" | translate }}
+            </h4>
+
+            <div class="decision-info-list-item-content">
+              <span *ngIf="decision?.creationDate">
+                {{
+                  language === "en"
+                    ? ((
+                        decision?.creationDate | uTCToLocalDate
+                      ).toLocaleString() | date : "d MMM y")
+                    : ((
+                        decision?.creationDate | uTCToLocalDate
+                      ).toLocaleString() | localizeDate : "d MMM y")
+                }}
+              </span>
+            </div>
+          </li>
+          <!-- Category -->
+          <li class="decision-info-list-item">
+            <h4 class="block-subtitle mb-2">
+              {{ "committeeDecisions.details.category" | translate }}
+            </h4>
+
+            <div class="decision-info-list-item-content">
+              {{
+                language == "ar" ? decision?.typeNameAr : decision?.typeNameEn
+              }}
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- description -->
+      <div class="row mt-4" *ngIf="decision?.notes?.length > 0">
+        <div class="">
+          <div
+            [innerHTML]="
+              decision?.notes | truncate : descTextLimit | noSanitize
+            "
+          ></div>
+
+          <button
+            class="see-more-btn text-primary"
+            *ngIf="decision?.notes?.length > descTextInitialLimit"
+            (click)="toggleMoreText()"
+          >
+            <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+              {{ "committeesManagement.seeMore" | translate }}
+            </ng-container>
+            <ng-template #seeLess>
+              {{ "committeesManagement.seeLess" | translate }}
+            </ng-template>
+          </button>
+        </div>
+      </div>
+
+      <!-- TAGS -->
+      <ng-container *ngIf="decision?.tags?.length">
+        <div class="block-small-title">
+          {{ "committeeDetails.tags" | translate }}
+        </div>
+        <ul class="tags-list">
+          <li class="tags-list-item" *ngFor="let item of decision?.tags">
+            {{ item.tag }}
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+
+    <!-- voting action & result section -->
+    <div class="d-flex justify-content-between">
+      <!-- voting action -->
+      <div class="w-50 row">
+        <app-decision-voting-options
+          [title]="'committeeDecisions.details.voting.title' | translate"
+          [language]="language"
+          [options]="votingOptions"
+          [closingDate]="decision?.decisionVoting?.closingDate"
+          [selectedOption]=""
+          (onVote)="onDecisionVoted($event)"
+          [userVoting]="decision?.myVoting"
+          [decisionStatus]="decision?.status"
+          [cantVote]="decision?.canVote"
+        ></app-decision-voting-options>
+      </div>
+      <!-- voting results -->
+      <div class="voting-results row block-content w-50">
+        <label class="block-title mb-3">
+          {{ "committeeDecisions.details.votingResults" | translate }}
+        </label>
+
+        <ng-container *ngIf="updatingVotes; else votingRes">
+          <div class="mb-3">
+            <ng-container
+              [ngTemplateOutlet]="votingResultSkeleton"
+            ></ng-container>
+          </div>
+        </ng-container>
+
+        <ng-template #votingRes>
+          <app-voting-bar
+            class="votingBar"
+            [vote]="{
+              title: { en: 'Yes', ar: 'نعم' },
+              votersCount: decision?.yesCount,
+              voterPercentage: decision?.yesPercentage,
+              color: 'success'
+            }"
+            [language]="language"
+          ></app-voting-bar>
+          <app-voting-bar
+            class="votingBar"
+            [vote]="{
+              title: { en: 'No', ar: 'لا' },
+              votersCount: decision?.noCount,
+              voterPercentage: decision?.noPercentage,
+              color: 'danger'
+            }"
+            [language]="language"
+          ></app-voting-bar>
+          <app-voting-bar
+            [vote]="{
+              title: { en: 'Abstain', ar: 'أمتنع' },
+              votersCount: decision?.abstainCount,
+              voterPercentage: decision?.abstainPercentage,
+              color: 'secondary'
+            }"
+            [language]="language"
+          ></app-voting-bar>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="block-content">
+      <!-- history -->
+      <ul
+        class="tabsmenu border-bottom flex-column flex-{{
+          breakpoint
+        }}-row mb-4"
+      >
+        <li
+          *ngFor="let tab of tabs"
+          class="tabsmenu__item {{ tab.active ? 'active' : '' }}"
+        >
+          <a class="tabsmenu__link" (click)="activeTab(tab)">
+            {{ language == "ar" ? tab?.labelAr : tab?.label }}
+            <i
+              *ngIf="tab.valid"
+              class="bx bx-check text-success fw-bold fs-3"
+            ></i>
+          </a>
+        </li>
+      </ul>
+
+      <section *ngIf="tabs[0].active">
+        <ng-container *ngIf="updatingVotes; else votingHist">
+          <div class="mb-3">
+            <ng-container [ngTemplateOutlet]="votinHistory"></ng-container>
+          </div>
+        </ng-container>
+
+        <ng-template #votingHist>
+          <app-decision-voting-history
+            [language]="language"
+          ></app-decision-voting-history>
+        </ng-template>
+      </section>
+      <section *ngIf="tabs[1].active">
+        <div class="d-flex justify-content-end align-items-center mt-2">
+          <a
+            class="btn btn-main"
+            (click)="openDecisionDetailsModel()"
+            *ngIf="decision.canSend"
+          >
+            {{ "committeeDecisions.details.sendDecision" | translate }}
+          </a>
+        </div>
+
+        <app-decision-send-history
+          [language]="language"
+          [newDecisionAdded]="newDecisionAdded"
+        ></app-decision-send-history>
+      </section>
+    </div>
+  </section>
+</ng-template>
+<!--send decision  modal -->
+<app-model
+  [dimensions]="{ width: 720, height: 750 }"
+  [id]="'send-decision'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="create-task-model-header w-100">
+    <label class="modal-title">
+      {{ "committeeDecisions.details.SendModel.title" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <app-send-decision-details-model
+      *ngIf="isSendDecision"
+      [decisionId]="decisionId"
+      [language]="language"
+      (mailSent)="getSendDecisionHistory()"
+    ></app-send-decision-details-model>
+  </div>
+</app-model>
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<ng-template #votingResultSkeleton>
+  <app-skeleton-loader
+    mode="table"
+    *ngFor="let item of [1, 2]"
+  ></app-skeleton-loader>
+</ng-template>
+
+<ng-template #votinHistory>
+  <app-skeleton-loader
+    mode="table"
+    *ngFor="let item of [1, 2, 3, 4, 5]"
+  ></app-skeleton-loader>
+</ng-template>
+
+<app-confirm-modal
+  [id]="'confirm-decision'"
+  [content]="(decision?.votingStatus ? 'committeeDecisions.confirmMsgPopUpAccepted' : 'committeeDecisions.confirmMsgPopUpRejected')  | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="confirmDecision()"
+></app-confirm-modal>

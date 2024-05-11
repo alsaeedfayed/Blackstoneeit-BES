@@ -1,0 +1,99 @@
+<div class="requests-filters-container">
+  <div class="requests-filters" [formGroup]="form">
+    <!-- committee type select -->
+    <app-select
+      class="d-block"
+      formControlName="CommitteeId"
+      [control]="form | getControl : 'CommitteeId'"
+      [title]="'changeRequests.table.CommitteeName' | translate"
+      [placeholder]="'changeRequests.table.SelectCommitteeName' | translate"
+      [items]="committeeNames"
+      [bindVlaue]="'id'"
+      [bindLabel]="language == 'ar' ? 'nameAr' : 'name'"
+      [clearable]="true"
+      (change)="changeFilter()"
+    ></app-select>
+
+    <!-- committee chairman select -->
+    <div>
+      <label class="form-label">
+        {{
+          "committeesRequests.advancedFilterModal.committeeChairman" | translate
+        }}
+      </label>
+
+      <ng-select
+        class="input-select"
+        formControlName="Chairman"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeesRequests.advancedFilterModal.selectCommitteeChairman'
+            | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [closeOnSelect]="true"
+        (scrollToEnd)="loadMoreEmployees()"
+        (search)="searchEmployees($event)"
+        [loading]="gettingEmployees"
+        (focus)="onFocus()"
+        (change)="changeFilter()"
+      >
+        <ng-option
+          *ngFor="let committeeChairman of committeeChairmans"
+          [value]="committeeChairman?.id"
+        >
+          {{ committeeChairman?.fullName }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- status select -->
+    <div>
+      <label class="form-label">
+        {{ "committeesRequests.advancedFilterModal.status" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="Status"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'Status')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeesRequests.advancedFilterModal.selectStatus' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setStatusValue($event)"
+      >
+        <ng-option *ngFor="let item of statuses" [value]="item?.id">
+          <app-badge
+            [className]="item['className']"
+            [label]="language == 'ar' ? item['nameAr'] : item['name']"
+          ></app-badge>
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <app-nz-date-picker
+      [formControl]="form.controls['CreationFrom']"
+      [control]="form | getControl : 'CreationFrom'"
+      [title]="'shared.creationDate' | translate"
+      [placeholder]="'committeesEvaluations.modal.from' | translate"
+      (onInputChange)="setFromValue()"
+    ></app-nz-date-picker>
+
+    <div  class="transparent-title">
+      <app-nz-date-picker
+        [formControl]="form.controls['CreationTo']"
+        [control]="form | getControl : 'CreationTo'"
+        [title]="'to'"
+        [placeholder]="'committeesEvaluations.modal.to' | translate"
+        (onInputChange)="setToValue()"
+      ></app-nz-date-picker>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+@import "src/assets/css/utils/variables.scss";
+
+.back-btn {
+  span {
+    text-transform: capitalize;
+  }
+}
+
+.item {
+  margin-bottom: 20px;
+
+  &.half {
+    width: 50%;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19px;
+    color: $secondary-color;
+  }
+
+  .details {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: $tertiary-color;
+  }
+
+  ul {
+    margin: 0;
+    li {
+      margin-bottom: 10px;
+      a
+      {
+        text-decoration: underline;
+        color: blue;
+      }
+    }
+  }
+}

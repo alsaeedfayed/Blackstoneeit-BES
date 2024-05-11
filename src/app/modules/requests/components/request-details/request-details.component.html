@@ -1,0 +1,78 @@
+<app-header-page
+  [title]="'requests.requestDetails' | translate"
+  [backButton]="true"
+  [showTotalItems]="false"
+  [isAddBtn]="false"
+>
+  <div class="d-flex gap-2" buttons>
+    <!-- <a class="btn btn-info" download href="/assets/pdf/DG Letter.pdf">
+      Download DG Letter
+    </a> -->
+    <button
+      class="btn btn-info"
+      [disabled]="isCapturing"
+      (click)="exportDataAsImage()"
+    >
+      <i class="bx bxs-download" *ngIf="!isCapturing"></i>
+      <i class="bx bx-loader-alt bx-spin" *ngIf="isCapturing"></i>
+      {{ "shared.export" | translate }}
+    </button>
+
+    <button
+      *ngIf="status?.requestInformation?.edit"
+      class="btn btn-main"
+      (click)="editRequestDetails()"
+    >
+      {{ "shared.edit" | translate }}
+    </button>
+  </div>
+</app-header-page>
+
+<ng-container *ngIf="isLoading; else data">
+  <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+</ng-container>
+
+<ng-template #data>
+  <div
+    [ngClass]="isCapturing ? 'detailsImage' : ''"
+    id="detailsImage"
+    #screen
+  >
+    <div class="status" *ngIf="steps?.length > 0">
+      <!-- action buttons -->
+      <workflow-action-options
+        class="d-block mb-3"
+        [title]="'requests.requestStatus' | translate"
+        [task]="task"
+        [options]="options"
+        [instanceId]="instanceId"
+        (onSaveAction)="actionTakenHandler($event)"
+      ></workflow-action-options>
+
+      <!-- approval timeline -->
+      <workflow-states
+        class="d-block mb-3"
+        [steps]="steps"
+        [showTasks]="ShowTasks"
+				[isCapturing]="isCapturing"
+      ></workflow-states>
+    </div>
+
+    <div class="details">
+      <app-request-details-data [Data]="status" [isCapturing]="isCapturing"></app-request-details-data>
+    </div>
+  </div>
+
+  <!-- <div>
+    <app-request-history
+      [options]="options"
+      (updateReqEvent)="reloadRequest()"
+    ></app-request-history>
+  </div> -->
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+  <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+  <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+</ng-template>

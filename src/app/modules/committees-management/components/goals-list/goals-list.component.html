@@ -1,0 +1,30 @@
+<ul class="goal-list-container">
+  <li *ngFor="let goal of list">
+    <div class="goal">
+      <!-- <span class="goal-level"> {{ goal.goalTypeId }}</span> -->
+      <span class="goal-id">{{ goal?.id }}</span>
+      <div class="goal-type" [style.background]="goal?.goalType?.color">
+        <span>
+          {{ language == "ar" ? goal?.goalType?.arabicName : goal?.goalType?.name }}
+        </span>
+      </div>
+      <div class="goal-title">
+        <strong>{{ language == "ar" ? goal?.titleAr : goal?.title }}</strong>
+      </div>
+      <div class="goal-action {{language =='en'? 'ms-auto' :'me-auto'}} my-auto">
+        <button
+            class="goal-action-btn"
+            (click)="deleteGoal(goal?.id)"
+          >
+            <i class="bx bx-trash text-danger fs-5"></i>
+          </button>
+      </div>
+    </div>
+  </li>
+</ul>
+
+<!-- <div class="no-data" *ngIf="list?.length == 0 || !list">
+  <app-no-data
+    [msg]="'committeeDetails.noGoals' | translate"
+  ></app-no-data>
+</div> -->

@@ -1,0 +1,57 @@
+<div class="mb-4 filters-container">
+  <div class="filters-container-filters">
+    <form [formGroup]="filterForm">
+      <div class="row" style="width: 100%;">
+          <div class="col-md-6 col-xl-6 filters-container-filters-col">
+            <label for="" class="filters-container-filters-label">
+              {{ 'servicesDashboard.dateFrom' | translate }}
+            </label>
+            <!--  [date]="fromDate" (getSelectedDate)="handleFromDateFilter($event)" -->
+            <app-datepicker
+              [allowPastDate]="true"
+              [showClear]="showClear"
+              formControlName="fromDate" 
+              (onReset)="resetFromDate()"
+            ></app-datepicker>
+          </div>
+          <div class="col-md-6 col-xl-6 filters-container-filters-col">
+            <label for="" class="filters-container-filters-label">
+              {{ 'servicesDashboard.dateTo' | translate }}
+            </label>
+            <!-- [date]="toDate" (getSelectedDate)="handleToDateFilter($event)" -->
+            <app-datepicker
+              [allowPastDate]="true"
+              [showClear]="showClearToDate"
+              formControlName="toDate"
+              (onReset)="resetToDate()"
+            ></app-datepicker>
+          </div>
+
+          <div class="col-md-6 col-xl-6 filters-container-filters-col mt-2">
+            <label for="" class="filters-container-filters-label">
+              {{ 'servicesDashboard.category' | translate }}
+            </label>
+            <!-- [(ngModel)]="selectedCategory.id" -->
+            <ng-select
+              [searchable]="false"
+              class="input-select w-255px"
+              placeholder="{{ 'shared.all' | translate }}"
+              bindLabel="language == 'ar' ? nameAr : nameEn"
+              bindValue="id"
+              formControlName="category"
+              (change)="handleCategoryFilter($event)"
+            >
+              <ng-option [value]="category.id" *ngFor="let category of categories">
+                {{ language == 'ar' ? category.nameAr : category.nameEn }}
+              </ng-option>
+            </ng-select>
+          </div>
+      
+        <div class="col-md-6 col-xl-6 buttons mt-4">
+          <button class="btn btn-main mr-2" (click)="filter()">{{language == 'ar' ? 'فلتر' : 'Filter'}}</button>
+          <button class="btn btn-outline-secondary mr-2" (click)="cancel()">{{language == 'ar' ? 'اغلاق' : 'Cancel'}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

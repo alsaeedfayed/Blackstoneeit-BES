@@ -1,0 +1,208 @@
+<div class="agent-queue-table">
+  <div class="agent-queue-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            <div  class="sortable-row" (click)="sort(1)">
+              #
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 1 && ascMode,
+                'sort-down': sortedCol && sortedCol == 1 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            <div  class="sortable-row" (click)="sort(2)">
+              {{ "agentQueue.requestTitle" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 2 && ascMode,
+                'sort-down': sortedCol && sortedCol == 2 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(3)">
+              {{ "agentQueue.serviceName" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 3 && ascMode,
+                'sort-down': sortedCol && sortedCol == 3 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">{{ "agentQueue.requester" | translate }}</th>
+          <!-- <th scope="col">{{ "Assignee" | translate }}</th> -->
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(4)">
+              {{ "shared.status" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 4 && ascMode,
+                'sort-down': sortedCol && sortedCol == 4 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">{{ "agentQueue.rating" | translate }}</th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(5)">
+              {{ "agentQueue.created" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 5 && ascMode,
+                'sort-down': sortedCol && sortedCol == 5 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">{{ "agentQueue.updatedDate" | translate }}</th>
+          <th scope="col" class="width-10">
+            <div class="sortable-row" (click)="sort(6)">
+              {{ "agentQueue.SLA" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 6 && ascMode,
+                'sort-down': sortedCol && sortedCol == 6 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+            let item of agentQueueList
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          ">
+          <!-- # -->
+          <td>
+            <span *ngIf="!allowGoToDetails"> {{ item.requestNumber }} </span>
+            <a *ngIf="allowGoToDetails" class="details hoverableLink"
+              [routerLink]="'/requests/request-details/' + item.id">{{item.requestNumber}}</a>
+          </td>
+          <!-- Title -->
+          <td>
+            {{ item.title }}
+          </td>
+          <!-- Service -->
+          <td *ngIf="lang === 'en'">
+            {{ item.serviceName }}
+          </td>
+          <td *ngIf="lang === 'ar'">
+            {{ item.serviceNameAr }}
+          </td>
+          <!-- Requester -->
+          <td>
+            <!-- {{
+              item?.employeeName?.length > 20
+                ? item.employeeName.slice(0, 20).concat("...")
+                : item.employeeName
+            }} -->
+            <person-item
+              *ngIf="item?.requester"
+              [requesterItem]="item?.requester"
+              [noCursor]="true"
+            ></person-item>
+          </td>
+          <!-- Assignee -->
+          <!-- <td [title]="item.assignedTo">
+            {{
+              item?.assignedTo?.length > 20
+                ? item.assignedTo.slice(0, 20).concat("...")
+                : item.assignedTo
+            }}
+          </td> -->
+          <!-- Status -->
+          <td>
+            <!-- {{ 'shared.new' | translate }} -->
+            <app-badge *ngIf="item.status == agentQueueStatusMode.New" [className]="'new'"
+              [label]="getLabel(item.currentStatus, 'New')"></app-badge>
+            <app-badge *ngIf="item.status == agentQueueStatusMode.Inprogress" [className]="'opened'"
+              [label]="getLabel(item.currentStatus, 'Open')"></app-badge>
+            <app-badge *ngIf="item.status == agentQueueStatusMode.Closed" [className]="'closed'"
+              [label]="getLabel(item.currentStatus, 'Closed')"></app-badge>
+          </td>
+          <!-- Rating -->
+          <td>
+            <bar-rating [readOnly]="true" [max]="5" [theme]="'stars'" [rate]="item.rating"></bar-rating>
+          </td>
+          <!-- Created -->
+          <td>
+            {{
+              lang === "en" ?
+              ((item.creationDate | uTCToLocalDate) | date: "dd/MM/yyyy") :
+              ((item.creationDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <!-- Updated -->
+          <td>
+            {{
+              lang === "en" ?
+              ((item.updatedDate | uTCToLocalDate) | date: "dd/MM/yyyy") :
+              ((item.updatedDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <!-- SLA -->
+          <td>
+            <div class="agent-sla-progress">
+              <p class="progress-nums text-right" *ngIf="item?.sla?.targetSLA !== null" [ngClass]="{'green': !item?.sla.isPaused && item?.sla?.slaPercentage < 50 , 
+              'orange' : !item?.sla.isPaused && item?.sla?.slaPercentage >= 50 && item?.sla?.slaPercentage <= 70,
+              'red' : !item?.sla.isPaused && item?.sla?.slaPercentage > 70 && item?.sla?.slaPercentage <= 100,
+              'dark-red' : !item?.sla.isPaused && item?.sla?.slaPercentage > 100}">
+                {{item.sla.acutalSLA}}/<strong>{{floor(item.sla.targetSLA)}}</strong>
+              </p>
+  
+              <span *ngIf="item?.sla?.targetSLA === null" class="span-progress no-sla center"
+                [ngClass]="{'span-ar' : lang === 'ar'}">
+                {{ "agentQueue.noSla" | translate }}
+              </span>
+  
+              <i *ngIf="item?.sla?.targetSLA !== null && item?.sla.isPaused"
+                class="span-progress bx bx-pause-circle pause"></i>
+  
+              <span *ngIf="item?.sla?.targetSLA !== null && item.sla.slaPercentage > 40 && item?.sla.isPaused"
+                class="span-progress pause-label" [ngClass]="{'span-ar' : lang === 'ar'}">
+                {{ "agentQueue.paused" | translate }}
+              </span>
+  
+              <progress class="progress-sla gray" max="100"
+                value="{{ item?.sla?.targetSLA !== null ? item.sla.slaPercentage : 0  }}" [ngClass]="{'green': !(item.sla.isPaused) && (item.sla.slaPercentage < 50) , 
+                          'orange' : !(item?.sla.isPaused) && (item.sla.slaPercentage >= 50) && (item.sla.slaPercentage <= 70),
+                          'red' : !(item?.sla.isPaused) && (item.sla.slaPercentage > 70) && (item.sla.slaPercentage <= 100),
+                          'dark-red' : !(item?.sla.isPaused) && (item.sla.slaPercentage > 100)}">
+              </progress>
+            </div>
+          </td> 
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPageChange($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

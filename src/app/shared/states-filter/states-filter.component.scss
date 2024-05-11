@@ -1,0 +1,62 @@
+@import 'src/assets/css/utils/variables.scss';
+
+.states-filter-container {
+    background: $white-color;
+    border: 1px solid #f2f4f9;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+
+    .state-filter-item {
+        padding: 18px 30px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: $dark-gray-color;
+        cursor: pointer;
+        position: relative;
+        white-space: nowrap;
+        &::before {
+            display: none;
+            border-radius: 50%;
+            top: 10px;
+            left: 50%;
+            position: absolute;
+            transform: translateX(-50%);
+            content: "";
+            width: 4px;
+            height: 4px;
+            background-color: $tertiary-color;
+        }
+
+        &.active {
+            color: #25364F;
+            &::before {
+                display: block;
+            }
+            
+        }
+
+        &:hover {
+            color: #25364F;
+            &::before {
+                display: block;
+            }
+        }
+
+        // &:not(:last-child) {
+        //     &::after{
+        //         top: 50%;
+        //         right: 0;
+        //         position: absolute;
+        //         transform: translateY(-50%);
+        //         width: 2px;
+        //         height: 50%;
+        //         content: "";
+        //         color: #f2f4f9;
+        //     }
+        // }
+
+    }
+}

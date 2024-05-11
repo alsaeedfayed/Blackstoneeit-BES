@@ -1,0 +1,1331 @@
+/*
+* This file contains the styling for the actual template, this
+is the file you need to edit to change the look of the
+template.
+
+This files table contents are outlined below>>>>>
+
+*******************************************
+*******************************************
+
+** - Default CSS
+** - Sidemenu CSS
+** - App Navbar CSS
+** - Main Content CSS
+** - App Email CSS
+** - App Email Read CSS
+** - App Email Compose CSS
+** - App Todo CSS
+** - App Calendar CSS
+** - App Chat CSS
+** - Profile CSS
+** - Gallery CSS
+** - Register CSS
+** - Reset Password CSS
+** - Forgot Password CSS
+** - Lock Screen CSS
+** - Error 404 CSS
+** - Error 500 CSS
+** - Coming Soon CSS
+** - Maintenance CSS
+** - Not Authorized CSS
+** - FAQ CSS
+** - Pricing CSS
+** - Invoice CSS
+** - Timeline CSS
+** - Footer CSS
+*/
+
+@import "~bootstrap/scss/bootstrap";
+@import "./utils/variables.scss";
+@import "./utils/mixins.scss";
+@import "./default.scss";
+@import "./layout/sidebar.scss";
+@import "./layout/header.scss";
+@import "./components/button.scss";
+@import "./components/toastr.scss";
+@import "./components/badge.scss";
+@import "./components/form-inputs.scss";
+@import "./components/table.scss";
+@import "./components/card.scss";
+@import "./components/datepicker.scss";
+@import "./components/scrollbar.scss";
+@import "./components/popup.scss";
+@import "./components/stepper.scss";
+@import "./components/typography.scss";
+@import "./components/profile.scss";
+@import "./components/comments.scss";
+@import "./components/documents.scss";
+@import "./components/pagination.scss";
+@import "./components/accordion.scss";
+@import "./rtl-styles.scss";
+
+@import "~@circlon/angular-tree-component/css/angular-tree-component.css";
+
+@font-face {
+  font-family: "iconsax";
+  src: url("../iconsax-css/8a6826558a673b5fca7bae08e54137bb.eot");
+  src: url("../iconsax-css/8a6826558a673b5fca7bae08e54137bb.eot?#iefix")
+      format("embedded-opentype"),
+    url("../iconsax-css/8a6826558a673b5fca7bae08e54137bb.woff") format("woff"),
+    url("../iconsax-css/8a6826558a673b5fca7bae08e54137bb.woff2") format("woff2"),
+    url("../iconsax-css/8a6826558a673b5fca7bae08e54137bb.ttf")
+      format("truetype");
+
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// url("https://db.onlinewebfonts.com/t/8a6826558a673b5fca7bae08e54137bb.svg#iconsax")
+// format("svg");
+
+// General style
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  ul {
+    margin: 10px;
+    margin-right: 0;
+    width: 99% !important;
+  }
+}
+
+p,
+span,
+li,
+a,
+strong,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+div,
+label {
+  font-family: "Roboto", sans-serif !important;
+}
+a{
+  text-decoration: none !important;
+}
+.hoverableLink {
+  color: $main-color;
+  transition: color 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/*================================================
+Main Content CSS
+=================================================*/
+.main-content {
+  min-height: 100vh;
+  background-color: $page-bg-color;
+  padding: calc(var(--app-header-height) + 1.5rem) 1.5rem 1.5rem;
+  margin-inline-start: auto;
+  transition: width 0.25s ease-in-out;
+
+  &-inner {
+    min-height: 100vh;
+  }
+}
+
+.col-lg-3 {
+  &:nth-child(2) {
+    .stats-card-box {
+      .icon-box {
+        background-color: #13bb37;
+        box-shadow: 1px 5px 24px 0 rgba(19, 187, 55, 0.15);
+      }
+
+      .progress-list {
+        .bar-inner {
+          .bar {
+            background: #13bb37;
+          }
+        }
+      }
+    }
+  }
+
+  &:nth-child(3) {
+    .stats-card-box {
+      .icon-box {
+        background-color: #ff4b00;
+        box-shadow: 1px 5px 24px 0 rgba(255, 75, 0, 0.15);
+      }
+
+      .progress-list {
+        .bar-inner {
+          .bar {
+            background: #ff4b00;
+          }
+        }
+      }
+    }
+  }
+
+  &:nth-child(4) {
+    .stats-card-box {
+      .icon-box {
+        background-color: #4788ff;
+        box-shadow: 1px 5px 24px 0 rgba(71, 136, 255, 0.15);
+      }
+
+      .progress-list {
+        .bar-inner {
+          .bar {
+            background: #4788ff;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes wave {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+.badge-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.button-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.button-group-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.dropdowns-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.popovers-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.tooltips-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.spinners-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.collapse-card-box {
+  .card-header {
+    margin-bottom: 17px;
+  }
+}
+
+.accordion-box {
+  .accordion {
+    list-style-type: none;
+    padding-left: 0;
+
+    margin: {
+      bottom: 0;
+    }
+
+    .accordion-item {
+      display: block;
+      background: #f5f5ff;
+      margin-bottom: 10px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .accordion-title {
+      padding: 12px 40px 10px 20px;
+      color: $black-color;
+      position: relative;
+      text-decoration: none;
+      display: block;
+
+      font: {
+        size: $font-size;
+        weight: 600;
+      }
+
+      i {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+      }
+
+      &.active {
+        background-color: $main-color;
+        color: $white-color;
+
+        i {
+          &::before {
+            content: "\eaf8";
+          }
+        }
+      }
+
+      &:hover {
+        background-color: $main-color;
+        color: $white-color;
+      }
+    }
+
+    .accordion-content {
+      display: none;
+      position: relative;
+      padding: 15px;
+      font-size: $font-size;
+      color: #1f1b1b;
+      line-height: 1.8;
+      background-color: #fafafa;
+
+      &.show {
+        display: block;
+      }
+    }
+  }
+}
+
+/*================================================
+Login CSS
+=================================================*/
+.login-area {
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  background: #f6f7fb;
+
+  &.bg-image {
+    background: {
+      // image: url('');
+      position: center center;
+      size: cover;
+      repeat: no-repeat;
+    }
+  }
+
+  .d-table {
+    width: 100%;
+    height: 100%;
+
+    &-cell {
+      vertical-align: middle;
+    }
+  }
+
+  .login-form {
+    max-width: 480px;
+    background: $white-color;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    padding: 50px;
+    box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
+
+    margin: {
+      left: auto;
+      right: auto;
+    }
+
+    h2 {
+      font: {
+        size: 30px;
+        weight: 700;
+      }
+
+      margin: {
+        top: 30px;
+        bottom: 0;
+      }
+    }
+
+    form {
+      margin-top: 25px;
+
+      .form-group {
+        margin-bottom: 30px;
+        width: 100%;
+        position: relative;
+
+        .label-title {
+          margin-bottom: 0;
+          position: absolute;
+          display: block;
+          left: 0;
+          top: 0;
+          pointer-events: none;
+          width: 100%;
+          height: 100%;
+          color: $black-color;
+
+          i {
+            position: absolute;
+            left: 0;
+            transition: $transition;
+            top: 9px;
+
+            font: {
+              size: 22px;
+            }
+          }
+
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            transition: $transition;
+            background: $main-color;
+          }
+        }
+
+        .form-control {
+          border-radius: 0;
+          border: none;
+          border-bottom: 2px solid #adadad;
+          padding: 0 0 0 32px;
+          color: $black-color;
+          height: 45px;
+          transition: $transition;
+
+          font: {
+            family: $font-family;
+            size: 17px;
+            weight: 500;
+          }
+
+          &::placeholder {
+            color: #a1a1a1;
+            transition: $transition;
+          }
+
+          &:focus {
+            padding-left: 5px;
+
+            &::placeholder {
+              color: transparent;
+            }
+          }
+
+          &:focus + .label-title::before {
+            width: 100%;
+          }
+
+          &:focus + .label-title {
+            color: #a1a1a1;
+
+            i {
+              top: -22px;
+            }
+          }
+        }
+
+        .remember-forgot {
+          text-align: left;
+          position: relative;
+          overflow: hidden;
+
+          .forgot-password {
+            float: right;
+            color: #0ca7ec;
+            text-decoration: none !important;
+          }
+        }
+
+        .checkbox-box {
+          margin-bottom: 0;
+          cursor: pointer;
+          user-select: none;
+          padding-left: 25px;
+          color: #6c757d;
+
+          input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+
+            &:checked ~ .checkmark {
+              background-color: #2196f3;
+            }
+
+            &:checked ~ .checkmark:after {
+              display: block;
+            }
+          }
+
+          .checkmark {
+            position: absolute;
+            top: 1px;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            overflow: hidden;
+            background-color: #eeeeee;
+            transition: $transition;
+
+            &:after {
+              content: "\e9f0";
+              position: absolute;
+              display: none;
+              left: 0;
+              top: -4.5px;
+              color: $white-color;
+
+              font: {
+                family: "boxicons" !important;
+                weight: normal;
+                style: normal;
+                size: 17px;
+                variant: normal;
+              }
+            }
+          }
+
+          a {
+            text-decoration: none;
+            color: $black-color;
+          }
+        }
+      }
+
+      .login-btn {
+        padding: 12px 35px 11px;
+        border-radius: 30px;
+        border: none;
+        text-transform: uppercase;
+        transition: $transition;
+        background-color: $main-color;
+        color: $white-color;
+
+        font: {
+          size: $font-size;
+          weight: 700;
+        }
+
+        &:hover,
+        &:focus {
+          background-color: $black-color;
+          color: $white-color;
+        }
+      }
+
+      p {
+        margin-top: 20px;
+        color: #6c757d;
+
+        a {
+          text-decoration: none !important;
+          color: #0ca7ec;
+        }
+      }
+    }
+  }
+}
+
+/*================================================
+Reset Password CSS
+=================================================*/
+.reset-password-area {
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  background: #f6f7fb;
+
+  &.bg-image {
+    background: {
+      // image: url(../../assets/img/reset-password-bg.jpg);
+      position: center center;
+      size: cover;
+      repeat: no-repeat;
+    }
+  }
+
+  .d-table {
+    width: 100%;
+    height: 100%;
+
+    &-cell {
+      vertical-align: middle;
+    }
+  }
+
+  .reset-password-content {
+    max-width: 900px;
+    background: $white-color;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 50px 60px 50px 30px;
+    box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
+
+    margin: {
+      left: auto;
+      right: auto;
+    }
+
+    .image {
+      text-align: center;
+    }
+
+    .reset-password-form {
+      padding-left: 30px;
+
+      h2 {
+        font: {
+          size: 30px;
+          weight: 700;
+        }
+
+        margin: {
+          top: 30px;
+          bottom: 0;
+        }
+      }
+
+      form {
+        margin-top: 25px;
+
+        .form-group {
+          margin-bottom: 30px;
+          width: 100%;
+          position: relative;
+
+          .label-title {
+            margin-bottom: 0;
+            position: absolute;
+            display: block;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            color: $black-color;
+
+            i {
+              position: absolute;
+              left: 0;
+              transition: $transition;
+              top: 9px;
+
+              font: {
+                size: 22px;
+              }
+            }
+
+            &::before {
+              content: "";
+              display: block;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 0;
+              height: 2px;
+              transition: $transition;
+              background: $main-color;
+            }
+          }
+
+          .form-control {
+            border-radius: 0;
+            border: none;
+            border-bottom: 2px solid #adadad;
+            padding: 0 0 0 32px;
+            color: $black-color;
+            height: 45px;
+            transition: $transition;
+
+            font: {
+              family: $font-family;
+              size: 17px;
+              weight: 500;
+            }
+
+            &::placeholder {
+              color: #a1a1a1;
+              transition: $transition;
+            }
+
+            &:focus {
+              padding-left: 5px;
+
+              &::placeholder {
+                color: transparent;
+              }
+            }
+
+            &:focus + .label-title::before {
+              width: 100%;
+            }
+
+            &:focus + .label-title {
+              color: #a1a1a1;
+
+              i {
+                top: -22px;
+              }
+            }
+          }
+        }
+
+        .reset-password-btn {
+          padding: 12px 35px 11px;
+          border-radius: 30px;
+          border: none;
+          text-transform: uppercase;
+          transition: $transition;
+          background-color: $main-color;
+          color: $white-color;
+
+          font: {
+            size: $font-size;
+            weight: 700;
+          }
+
+          &:hover,
+          &:focus {
+            background-color: $black-color;
+            color: $white-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+/*================================================
+Forgot Password CSS
+=================================================*/
+.forgot-password-area {
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  background: #f6f7fb;
+
+  &.bg-image {
+    background: {
+      // image: url(../../assets/img/forgot-password-bg.jpg);
+      position: center center;
+      size: cover;
+      repeat: no-repeat;
+    }
+  }
+
+  .d-table {
+    width: 100%;
+    height: 100%;
+
+    &-cell {
+      vertical-align: middle;
+    }
+  }
+
+  .forgot-password-content {
+    max-width: 900px;
+    background: $white-color;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 50px 60px 50px 30px;
+    box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
+
+    margin: {
+      left: auto;
+      right: auto;
+    }
+
+    .image {
+      text-align: center;
+    }
+
+    .forgot-password-form {
+      padding-left: 30px;
+
+      h2 {
+        font: {
+          size: 30px;
+          weight: 700;
+        }
+
+        margin: {
+          top: 30px;
+          bottom: 0;
+        }
+      }
+
+      p {
+        color: #6c757d;
+        margin-top: 7px;
+      }
+
+      form {
+        margin-top: 25px;
+
+        .form-group {
+          margin-bottom: 30px;
+          width: 100%;
+          position: relative;
+
+          .label-title {
+            margin-bottom: 0;
+            position: absolute;
+            display: block;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            color: $black-color;
+
+            i {
+              position: absolute;
+              left: 0;
+              transition: $transition;
+              top: 9px;
+
+              font: {
+                size: 22px;
+              }
+            }
+
+            &::before {
+              content: "";
+              display: block;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 0;
+              height: 2px;
+              transition: $transition;
+              background: $main-color;
+            }
+          }
+
+          .form-control {
+            border-radius: 0;
+            border: none;
+            border-bottom: 2px solid #adadad;
+            padding: 0 0 0 32px;
+            color: $black-color;
+            height: 45px;
+            transition: $transition;
+
+            font: {
+              family: $font-family;
+              size: 17px;
+              weight: 500;
+            }
+
+            &::placeholder {
+              color: #a1a1a1;
+              transition: $transition;
+            }
+
+            &:focus {
+              padding-left: 5px;
+
+              &::placeholder {
+                color: transparent;
+              }
+            }
+
+            &:focus + .label-title::before {
+              width: 100%;
+            }
+
+            &:focus + .label-title {
+              color: #a1a1a1;
+
+              i {
+                top: -22px;
+              }
+            }
+          }
+        }
+
+        .forgot-password-btn {
+          padding: 12px 35px 11px;
+          border-radius: 30px;
+          border: none;
+          text-transform: uppercase;
+          transition: $transition;
+          background-color: $main-color;
+          color: $white-color;
+
+          font: {
+            size: $font-size;
+            weight: 700;
+          }
+
+          &:hover,
+          &:focus {
+            background-color: $black-color;
+            color: $white-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+/*================================================
+Not Authorized CSS
+=================================================*/
+.not-authorized-area {
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  background: #f6f7fb;
+
+  &.bg-image {
+    background: {
+      // image: url(../../assets/img/not-authorized-bg.jpg);
+      position: center center;
+      size: cover;
+      repeat: no-repeat;
+    }
+  }
+
+  .d-table {
+    width: 100%;
+    height: 100%;
+
+    &-cell {
+      vertical-align: middle;
+    }
+  }
+
+  .not-authorized-content {
+    max-width: 850px;
+    background: $white-color;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    padding: 50px 60px 50px 30px;
+    box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
+
+    margin: {
+      left: auto;
+      right: auto;
+    }
+
+    img {
+      width: 40%;
+    }
+
+    .logo {
+      display: inline-block;
+    }
+
+    h2 {
+      // background: url(../../assets/img/oops-bg.jpg) no-repeat;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: cover;
+      background-position: center;
+      text-transform: uppercase;
+
+      font: {
+        size: 45px;
+        weight: 900;
+      }
+
+      margin: {
+        top: 30px;
+        bottom: 5px;
+      }
+    }
+
+    p {
+      color: #6084a4;
+      line-height: 1.7;
+      max-width: 500px;
+
+      margin: {
+        left: auto;
+        right: auto;
+        bottom: 20px;
+        top: 0;
+      }
+    }
+
+    .default-btn {
+      transition: $transition;
+      text-decoration: none;
+      padding: 13px 35px 12px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      display: inline-block;
+      transition: $transition;
+      background-color: $main-color;
+      color: $white-color;
+      cursor: pointer;
+
+      font: {
+        size: $font-size;
+        weight: 700;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: $black-color;
+        color: $white-color;
+      }
+    }
+  }
+}
+
+mark {
+  background: yellow;
+}
+
+// style select
+.input-select.ng-select {
+  // &.valid:not(.ng-pristine) {
+  //   .ng-select-container {
+  //     border-color: #00db99;
+  //   }
+  // }
+
+  .ng-option-label {
+    text-transform: capitalize;
+  }
+
+  .ng-select-container {
+    border-radius: 8px;
+    height: 44px;
+    border: 1px solid #cbcbcb;
+
+    .ng-value-container,
+    .ng-input {
+      align-items: center !important;
+      height: 85%;
+      // white-space: inherit !important;
+
+      input {
+        height: 100%;
+      }
+    }
+
+    .ng-value {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.ng-select.ng-select-single {
+  .ng-select-container {
+    .ng-value-container {
+      white-space: inherit !important;
+    }
+  }
+}
+.ng-select.ng-select-single .ng-select-container .ng-value-container,
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-value {
+  white-space: inherit !important;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
+  top: auto;
+}
+
+.ng-select.ng-select-multiple .ng-select-container {
+  height: auto !important;
+  min-height: 44px;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: #d8d8d8;
+}
+
+.ant-picker {
+  &:not(.ant-picker-focused) {
+    border-color: #cbcbcb !important;
+  }
+}
+
+.br-stars .br-unit-inner {
+  width: 16px;
+  height: 16px;
+}
+
+.cdk-overlay-container {
+  z-index: 1500 !important;
+}
+
+.ant-select-selection-item-remove {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.tree-select {
+  width: 100%;
+
+  .ant-select-selector {
+    height: 50px;
+    border-radius: 8px !important;
+    border-color: #cbcbcb !important;
+  }
+}
+
+.filter-model {
+  min-width: 750px;
+}
+
+.modal {
+  z-index: 1090;
+
+  &-content {
+    max-height: 600px;
+    overflow-y: scroll;
+  }
+
+  &-backdrop {
+    z-index: 1080;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.ant-tree-list {
+  max-height: 400px !important;
+}
+
+.tree-select .ant-select-selector {
+  height: 44px !important;
+}
+
+ngx-daterangepicker-material {
+  .md-drppicker {
+    min-width: 645px;
+  }
+
+  .md-drppicker td.active {
+    background-color: $main-color;
+  }
+
+  .buttons {
+    button {
+      width: 120px !important;
+      min-height: 40px !important;
+      margin-top: 8px;
+      background-color: $main-color !important;
+      box-shadow: none !important;
+    }
+
+    .clear {
+      background-color: #ddd !important;
+
+      svg {
+        display: none;
+      }
+    }
+  }
+}
+
+.anticon-swap-right svg {
+  margin-top: -18px !important;
+}
+
+[dir="rtl"] {
+  .bx-chevron-left {
+    transform: rotate(180deg);
+  }
+}
+
+// Org chart style
+.ngx-org {
+  &-horizontal {
+    padding: 1em 0;
+  }
+
+  &-vertical {
+    padding: 0 1em;
+  }
+
+  &-border {
+    border: 1px solid darkgrey;
+  }
+
+  &-box {
+    padding: 0.5em 1em;
+    border-radius: 0.2em;
+    box-shadow: 0.05em 0.05em 0.2em 0.05em #0000002b;
+  }
+
+  &-connector {
+    &-horizontal {
+      width: 1em;
+    }
+
+    &-vertical {
+      height: 1em;
+    }
+  }
+}
+
+// div:has(> .translation) {
+div {
+  position: relative;
+  .translation {
+    position: absolute;
+    right: 0;
+    top: 41%;
+    background: #cbcbcb;
+    width: 30px;
+    height: 59%;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    // span {
+    //   color: #fff;
+    // }
+    &.rtl {
+      left: 13px;
+      right: auto;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &.textarea {
+      top: 24%;
+      height: 76%;
+      &.rtl {
+        left: 0;
+      }
+    }
+  }
+
+  .translationSection {
+    min-height: 35px;
+    direction: rtl;
+    width: auto;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    border: 1px solid #cbcbcb;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 10px;
+    gap: 30px;
+    z-index: 9999 !important;
+    background: ghostwhite;
+    &.rtl {
+      right: auto;
+      direction: ltr;
+    }
+    .icons {
+      display: flex;
+      align-items: center;
+      .icon {
+        // padding: 2px 5px;
+
+        //border: 1px solid #ddd;
+        @include rtl_key(margin-, right, left, 3px);
+        @include rtl_key(margin-, left, right, 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.clone {
+          color: $main-color;
+          font-size: 18px;
+        }
+        &.close {
+          color: red;
+          font-size: 23px;
+          &::before {
+            content: "|";
+            color: #ddd;
+          }
+        }
+        i {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+.history-model-content {
+
+  .items-timeline{
+    // .badge-status {
+    //   width: 110px !important;
+    // }
+  }
+  .personItem{
+    .letters {
+      background: rgb(82, 113, 255) !important;
+    }
+  }
+
+}
+ng-dropdown-panel {
+  @include rtl_value(left, 0, auto);
+  @include rtl_value(right, auto, 0);
+}
+.ag-theme-quartz,
+.ag-theme-quartz-dark {
+  --ag-icon-font-family: agGridMaterial !important;
+}
+
+.ag-icon {
+  font-family: var(--ag-icon-font-family) !important;
+}
+
+@font-face {
+  font-family: 'agGridMaterial';
+  //src: url(data:font/woff2;charset=utf-8;base64,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);
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+.lang-order-1 {
+  @include rtl_value(order , 1, 2 );
+}
+
+.lang-order-2 {
+  @include rtl_value(order , 2, 1 );
+}

@@ -1,0 +1,52 @@
+<div class="event-card-container">
+  <a [routerLink]="'/events/' + data?.id">
+    <img
+      [src]="data?.coverPhoto?.url"
+      onerror="this.src='assets/img/placeholder.png'"
+      alt=""
+    />
+
+    <div class="event-card-body">
+      <h3>
+        {{ data?.title?.length > 50 ? data?.title.slice(0, 50) + "..." : data?.title }}
+      </h3>
+
+      <p
+        class="event-desc angular-editor-description"
+        [innerHTML]="
+          data?.description?.length > 120 ?
+          data?.description.slice(0, 120) + '...' :
+          data?.description
+        "
+      ></p>
+
+      <div class="event-card-details d-flex align-items-center gap-2">
+        <app-badge
+          *ngIf="data?.status === 'Open'"
+          [className]="'active'"
+          [label]="'shared.open' | translate"
+        ></app-badge>
+        <app-badge
+          *ngIf="data?.status === 'Closed'"
+          [className]="'rejected'"
+          [label]="'shared.closed' | translate"
+        ></app-badge>
+        <app-badge
+          *ngIf="data?.status === 'Cancelled'"
+          [className]="'inProgress'"
+          [label]="'shared.cancelled' | translate"
+        ></app-badge>
+
+        <!-- <div class="attendees-count">
+          <i class="bx bxs-group"></i>
+          {{ "events.attendees" | translate }}:
+          <span>{{ data?.attendeesNumber }}</span>
+        </div> -->
+        <app-badge
+          [className]="'new'"
+          [label]="('events.attendees' | translate) + ': ' + data?.attendeesNumber"
+        ></app-badge>
+      </div>
+    </div>
+  </a>
+</div>

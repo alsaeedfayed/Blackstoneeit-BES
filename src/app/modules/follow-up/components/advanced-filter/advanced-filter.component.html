@@ -1,0 +1,429 @@
+<!-- <app-model
+  [dimensions]="{ width: 856 }"
+  [id]="'follow-up-item'"
+  [title]="'followUp.addFollowUpItem' | translate"
+  (close)="save()"
+>
+  <div modal-content class="new-service-popup px-4">
+    <div [formGroup]="form">
+
+      <div class="mt-1">
+        <app-filed
+          class="d-block pt-3"
+          title="{{ 'followUp.idNumber' | translate }}"
+          formControlName="id"
+          [placeholder]="
+            'followUp.idNumber' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <div class="mt-1">
+        <app-filed
+          class="d-block pt-3"
+          title="{{ 'followUp.title' | translate }}"
+          formControlName="title"
+          [placeholder]="
+            'followUp.title' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <div class="mt-1">
+        <app-select
+          formControlName="typeCode"
+          [title]="'followUp.type' | translate"
+          [bindVlaue]="'code'"
+          [bindLabel]="lang == 'ar'? 'nameAr':'nameEn'"
+          [placeholder]="'followUp.type' | translate"
+          [items]="types"
+          [multiple]="false"
+          [clearable]="true"
+        >
+        </app-select>
+      </div>
+
+      <div class="mt-1">
+        <app-select
+          formControlName="status"
+          [title]="'followUp.status' | translate"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'name' : 'nameEn'"
+          [placeholder]="'followUp.status' | translate"
+          [items]="statuses"
+          [multiple]="false"
+          [clearable]="true"
+        >
+        </app-select>
+      </div>
+
+      <div class="mt-4">
+        <app-select
+          formControlName="requestCreator"
+          [title]="'followUp.requestCreator' | translate"
+          bindValue="id"
+          [placeholder]="'followUp.requestCreator' | translate"
+          [bindLabel]="'fullName'"
+          [items]="users"
+          [multiple]="false"
+          [clearable]="true"
+        >
+        </app-select>
+      </div>
+
+      <app-date-range-picker
+        class="d-block"
+        [control]="form | getControl : 'dateRange'"
+        formControlName="dateRange"
+        [title]="'followUp.completionDateRange' | translate"
+      ></app-date-range-picker>
+
+      <app-date-range-picker
+        class="d-block"
+        [control]="form | getControl : 'creationDateRange'"
+        formControlName="creationDateRange"
+        [title]="'followUp.creationDateRange' | translate"
+      ></app-date-range-picker>
+
+      <app-date-range-picker
+        class="d-block"
+        [control]="form | getControl : 'actualClosedDateRange'"
+        formControlName="actualClosedDateRange"
+        [title]="'followUp.actualClosedDateRange' | translate"
+      ></app-date-range-picker>
+
+
+
+      <div class=" mt-4">
+        <div class="row">
+            <div class="col-12">
+                <app-radio-group class="d-flex" bindValue="id" formControlName="type">
+                    <app-radio-box  [value]="0">
+                        {{ 'followUp.organizationMember' | translate }}
+                    </app-radio-box>
+                    <app-radio-box class="mr-4 ml-4"  [value]="1">
+                        {{ 'followUp.commiteeMembers' | translate }}
+                    </app-radio-box>
+                </app-radio-group>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mt-4" *ngIf="form.get('type').value == 1">
+      <div class="row">
+          <div class="col-4">
+              <app-select class="d-block" [control]="form | getControl: 'commitee'" formControlName="commitee"
+                  [placeholder]="'followUp.commiteeName' | translate" [bindVlaue]="'id'"
+                  [bindLabel]="lang == 'ar'? 'nameAr':'name'" [items]="commitee"
+                  [title]="'followUp.commiteeName' | translate " (change)="getMembers()"></app-select>
+          </div>
+          <div class="col-4" *ngIf="!!(form | getControl: 'commitee').value">
+              <app-select [bindLabel]="'fullName'"
+                  [placeholder]="'followUp.commiteeMember' | translate" [title]="'followUp.commiteeMember' | translate "
+                  formControlName="Assignee" [control]="form | getControl: 'Assignee'" [bindVlaue]="'id'"
+                  [items]="member" class="d-block"></app-select>
+          </div>
+      </div>
+  </div>
+    </div>
+
+    <div class="mt-4" *ngIf="form.get('type').value == 0">
+      <div class="row" >
+        <div class="col-4">
+            <app-select class="d-block" [control]="form | getControl: 'sector'" formControlName="sector"
+                [placeholder]="'followUp.sectorPlaceholder' | translate" [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar'? 'arabicName':'name'" [items]="sector"
+                [title]="'followUp.sector' | translate " ></app-select>
+        </div>
+        <div class="col-4" *ngIf="!!(form | getControl: 'sector').value">
+            <app-select [bindLabel]="lang == 'ar'? 'arabicName' : 'name'"
+                [placeholder]="'followUp.departmentPlaceholder' | translate" [title]="'followUp.department' | translate "
+                formControlName="department" [control]="form | getControl: 'department'" [bindVlaue]="'id'"
+                [items]="department" class="d-block" [clearable]="true"></app-select>
+        </div>
+        <div class="col-4" *ngIf="!!(form | getControl: 'department').value">
+            <app-select [bindLabel]="lang == 'ar'? 'arabicName' : 'name'"
+                [placeholder]="'followUp.sectionPlaceholder' | translate" [title]="'followUp.section' | translate "
+                formControlName="section" [control]="form | getControl: 'section'" [bindVlaue]="'id'"
+                [items]="section" class="d-block" [clearable]="true"></app-select>
+        </div>
+      </div>
+
+      <div class=" mt-4" *ngIf="!!(form | getControl: 'sector').value">
+        <app-select [bindLabel]="'fullName'" [placeholder]="'followUp.assigneePlaceholder' | translate"
+            [control]="form | getControl: 'Assignee'" formControlName="Assignee" [bindVlaue]="'id'" [items]="users"
+            class="d-block" [title]="'followUp.assignedTo' | translate" [clearable]="true"></app-select>
+
+      </div>
+
+      <div class="buttons py-4">
+        <button class="btn btn-gray-outline" (click)="close()">
+          {{ "shared.close" | translate }}
+        </button>
+        <div class="right-btns">
+          <button class="btn btn-main-outline" (click)="resetFilters()">
+            {{ "followUp.clearFilters" | translate }}
+          </button>
+
+          <button
+            class="btn btn-main"
+            [disabled]="
+              !form.value.department && !form.value.sector && !form.value.dateRange && !form.value.creationDateRange && !form.value.commitee
+              && !form.value.section && !form.value.actualClosedDateRange && !form.value.Assignee && !form.value.requestCreator && !form.value.status
+              && !form.value.type && !form.value.id && !form.value.title && !form.value.commitee
+            "
+            (click)="save()"
+          >
+            {{ "shared.applyFilter" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-model> -->
+
+<div class="new-model-dialog-body">
+  <div class="advanced-filter-form pb-2" [formGroup]="form">
+
+    <app-filed
+      class="d-block mt-3"
+      formControlName="id"
+      [title]="'followUp.idNumber' | translate"
+      [placeholder]="'followUp.idNumber' | translate"
+    ></app-filed>
+
+    <app-filed
+      class="d-block mt-3"
+      formControlName="title"
+      [title]="'followUp.title' | translate"
+      [placeholder]="'followUp.title' | translate"
+    ></app-filed>
+
+    <app-select
+      class="d-block mt-3"
+      formControlName="typeCode"
+      [title]="'followUp.type' | translate"
+      [placeholder]="'followUp.type' | translate"
+      [items]="types"
+      [bindVlaue]="'code'"
+      [bindLabel]="lang == 'ar'? 'nameAr':'nameEn'"
+      [multiple]="false"
+      [clearable]="true"
+    ></app-select>
+
+    <div class="row">
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="status"
+          [title]="'followUp.status' | translate"
+          [placeholder]="'followUp.status' | translate"
+          [items]="statuses"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'name' : 'nameEn'"
+          [multiple]="false"
+          [clearable]="true"
+        ></app-select>
+      </div>
+
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="ResponseStatus"
+          [title]="' '"
+          [placeholder]="'followUp.status' | translate"
+          [items]="statuses2"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'name' : 'nameEn'"
+          [multiple]="false"
+          [clearable]="true"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <app-select
+      class="d-block mt-3"
+      formControlName="requestCreator"
+      [title]="'followUp.requestCreator' | translate"
+      [placeholder]="'followUp.requestCreator' | translate"
+      [items]="users"
+      bindValue="id"
+      [bindLabel]="'fullName'"
+      [multiple]="false"
+      [clearable]="true"
+    ></app-select>
+
+    <app-date-range-picker
+      class="d-block mt-3"
+      formControlName="dateRange"
+      [control]="form | getControl : 'dateRange'"
+      [title]="'followUp.completionDateRange' | translate"
+    ></app-date-range-picker>
+
+    <app-date-range-picker
+      class="d-block mt-3"
+      formControlName="creationDateRange"
+      [control]="form | getControl : 'creationDateRange'"
+      [title]="'followUp.creationDateRange' | translate"
+    ></app-date-range-picker>
+
+    <app-date-range-picker
+      class="d-block mt-3"
+      formControlName="actualClosedDateRange"
+      [control]="form | getControl : 'actualClosedDateRange'"
+      [title]="'followUp.actualClosedDateRange' | translate"
+    ></app-date-range-picker>
+
+    <div class="row">
+      <div class="col-12">
+        <app-radio-group class="d-flex" bindValue="id" formControlName="type">
+          <app-radio-box class="d-block mt-3" [value]="1">
+            {{ 'followUp.organizationMember' | translate }}
+          </app-radio-box>
+          <app-radio-box class="d-block mt-3 mr-4 ml-4"  [value]="2">
+            {{ 'followUp.commiteeMembers' | translate }}
+          </app-radio-box>
+        </app-radio-group>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="form.get('type').value == 2">
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="commitee"
+          [control]="form | getControl: 'commitee'"
+          [title]="'followUp.commiteeName' | translate"
+          [placeholder]="'followUp.commiteeName' | translate"
+          [items]="commitee"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar'? 'nameAr':'name'"
+          (change)="getMembers()"
+          [dropdownPosition]="'top'"
+        ></app-select>
+      </div>
+
+      <div class="col-6" *ngIf="!!(form | getControl: 'commitee').value">
+        <app-select
+          class="d-block mt-3"
+          formControlName="Assignee"
+          [control]="form | getControl: 'Assignee'"
+          [title]="'followUp.commiteeMember' | translate "
+          [placeholder]="'followUp.commiteeMember' | translate"
+          [items]="member"
+          [bindVlaue]="'id'"
+          [bindLabel]="'fullName'"
+          [dropdownPosition]="'top'"
+        ></app-select>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="form.get('type').value == 1">
+      <div class="col-6">
+        <app-select
+          class="d-block mt-3"
+          formControlName="sector"
+          [control]="form | getControl: 'sector'"
+          [title]="'followUp.sector' | translate"
+          [placeholder]="'followUp.sectorPlaceholder' | translate"
+          [items]="sector"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar'? 'arabicName':'name'"
+          [dropdownPosition]="'top'"
+        ></app-select>
+      </div>
+
+      <div class="col-6" *ngIf="!!(form | getControl: 'sector').value">
+        <app-select
+          class="d-block mt-3"
+          formControlName="department"
+          [control]="form | getControl: 'department'"
+          [title]="'followUp.department' | translate"
+          [placeholder]="'followUp.departmentPlaceholder' | translate"
+          [items]="department"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar'? 'arabicName' : 'name'"
+          [clearable]="true"
+          [dropdownPosition]="'top'"
+        ></app-select>
+      </div>
+
+      <div class="col-6" *ngIf="!!(form | getControl: 'department').value">
+        <app-select
+          class="d-block mt-3"
+          formControlName="section"
+          [control]="form | getControl: 'section'"
+          [title]="'followUp.section' | translate"
+          [placeholder]="'followUp.sectionPlaceholder' | translate"
+          [items]="section"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+          [clearable]="true"
+          [dropdownPosition]="'top'"
+        ></app-select>
+      </div>
+    </div>
+
+    <div *ngIf="!!(form | getControl: 'sector').value">
+      <app-select
+        class="d-block mt-3"
+        formControlName="Assignee"
+        [control]="form | getControl: 'Assignee'"
+        [title]="'followUp.assignedTo' | translate"
+        [placeholder]="'followUp.assigneePlaceholder' | translate"
+        [items]="users"
+        [bindVlaue]="'id'"
+        [bindLabel]="'fullName'"
+        [clearable]="true"
+        [dropdownPosition]="'top'"
+        (onSearch)="searchUsers($event)"
+      ></app-select>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="close()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- clear button -->
+  <button
+    class="btn btn-outline-main flex-grow-1"
+    (click)="resetFilters()"
+  >
+    {{ 'followUp.clearFilters' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="
+      !form.value.department &&
+      !form.value.sector &&
+      !form.value.dateRange &&
+      !form.value.creationDateRange &&
+      !form.value.commitee &&
+      !form.value.section &&
+      !form.value.actualClosedDateRange &&
+      !form.value.Assignee &&
+      !form.value.requestCreator &&
+      !form.value.status &&
+      !form.value.type &&
+      !form.value.id &&
+      !form.value.title &&
+      !form.value.commitee
+    "
+    (click)="save()"
+  >
+    {{ 'shared.applyFilter' | translate }}
+  </button>
+</div>

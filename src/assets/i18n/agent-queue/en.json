@@ -1,0 +1,32 @@
+{
+  "agentQueue": {
+    "assignedToMe": "Assigned To Me",
+    "allOpenRequests": "All Open Requests",
+    "unassignedRequests": "Unassigned Requests",
+    "closedRequests": "Closed Requests",
+    "requester": "Requester",
+    "enterRequester": "Enter Requester",
+    "service": "Service",
+    "enterService": "Enter Service",
+    "requestTitle": "Request Title",
+    "assignee": "Assignee",
+    "created": "Created Date",
+    "agentQueue": "Agent Queue",
+    "serviceName": "Service Name",
+    "noDataMsg": "Hmm.. looks like you don't have any agent queue",
+    "category": "Category",
+    "allRequests":"All Requests",
+    "requestNumber": "Request Number",
+    "creationDate": "Creation Date Range",
+    "lastUpdateDateRange": "Last Update Date Range",
+    "inProgress": "Open",
+    "closed": "Closed",
+    "updatedDate": "Updated Date",
+    "rating": "Rating",
+    "noSla" : "No SLA",
+    "paused" : "Paused",
+    "SLA" : "SLA",
+    "SLAOnly" : "SLA Only",
+    "downloadRequestsPresentations": "Download Requests Presentations"
+  }
+}

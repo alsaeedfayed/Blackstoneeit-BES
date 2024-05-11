@@ -1,0 +1,76 @@
+<div class="cards-grid-container mt-4">
+  <div class="cards-grid">
+    <a class="cards-grid-item"
+      [routerLink]="'/committees-management/committee/' + committeeId + '/groups/' + item?.id"
+      *ngFor="
+        let item of list
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems
+              };
+        let i = index
+      ">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+
+        <!-- group status -->
+        <div class="group-status">
+          <app-badge
+            [className]="statuses[item?.status]['className']"
+            [label]="language == 'ar' ? statuses[item?.status]['nameAr'] : statuses[item?.status]['name']"
+          ></app-badge>
+        </div>
+
+        <!-- group creation date -->
+        <div class="created-on cards-grid-item-title">
+          <ng-container *ngIf="item?.creationDate">
+            {{
+              language === "en" ?
+              ((item?.creationDate |uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+              ((item?.creationDate |uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+            }}
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- group title -->
+      <div class="group-title mb-4">{{ item?.name }}</div>
+
+      <div class="group-details">
+
+        <!-- group members -->
+        <div class="group-members">
+          <div class="cards-grid-item-title">{{ "committeeWorkGroups.list.members" | translate }}</div>
+          <div class="cards-grid-item-content">
+            <avatar-stack [members]="item?.members"></avatar-stack>
+            <span class="members-count">{{ item?.membersCount | membersCount : language }}</span>
+          </div>
+        </div>
+
+        <!-- group creator -->
+        <div class="created-by">
+          <div class="cards-grid-item-title">{{ "committeeWorkGroups.list.createdBy" | translate }}</div>
+          <div class="cards-grid-item-content">{{ language == "ar" ? item?.creatorInfo?.fullArabicName :  item?.creatorInfo?.fullName }}</div>
+        </div>
+
+        <!-- group tasks count -->
+        <div class="tasks-count">
+          <div class="cards-grid-item-title">{{ "committeeWorkGroups.list.tasksCount" | translate }}</div>
+          <div class="cards-grid-item-content">{{item?.tasksCount}}</div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

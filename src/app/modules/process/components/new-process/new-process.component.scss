@@ -1,0 +1,32 @@
+.page {
+  .block-content {
+    background-color: #fff;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.25rem 0.875rem #00000003;
+  }
+  .auth {
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    border-radius: 20px;
+    padding: 15px 20px;
+  }
+  label {
+    font-size: 16px !important;
+  }
+}
+.astrix-red {
+  color: red;
+}
+
+::ng-deep {
+  .angular-editor-description {
+    ol,
+    ul {
+      list-style: revert;
+      padding: revert;
+      margin: revert;
+    }
+  }
+
+}

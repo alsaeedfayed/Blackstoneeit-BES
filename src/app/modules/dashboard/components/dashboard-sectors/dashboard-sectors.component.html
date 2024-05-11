@@ -1,0 +1,78 @@
+<div class="tasks-progress-container">
+  <div class="header">
+    <span class="title">
+      {{ "dashboard.ProjectsDistributionPerSector" | translate }}
+    </span>
+  </div>
+
+  <div class="content">
+    <div class="row align-items-center" *ngFor="let sector of sectorsData">
+      <div class="col-4 text-end">
+        {{ sector.groupName[lang] }} ({{ sector.totalProjects }})
+      </div>
+      <div class="col-8">
+        <div class="distribution">
+          <span
+            *ngIf="sector.totalClosed"
+            class="closed"
+            [style.width]="
+              (sector.totalClosed / sector.totalProjects) * 100 + '%'
+            "
+          >
+            {{ sector.totalClosed }}
+          </span>
+          <span
+            *ngIf="sector.totalOnTrack"
+            class="on-track"
+            [style.width]="
+              (sector.totalOnTrack / sector.totalProjects) * 100 + '%'
+            "
+          >
+            {{ sector.totalOnTrack }}
+          </span>
+          <span
+            *ngIf="sector.totalOffTrack"
+            class="off-track"
+            [style.width]="
+              (sector.totalOffTrack / sector.totalProjects) * 100 + '%'
+            "
+          >
+            {{ sector.totalOffTrack }}
+          </span>
+          <span
+            *ngIf="sector.totalNotStarted"
+            class="started"
+            [style.width]="
+              (sector.totalNotStarted / sector.totalProjects) * 100 + '%'
+            "
+          >
+            {{ sector.totalNotStarted }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="labels">
+    <div class="label">
+      <span class="dot closed"></span>
+      <span>{{ "dashboard.closed" | translate }}</span>
+    </div>
+    <div class="label">
+      <span class="dot on-track"></span>
+      <span>{{ "dashboard.onTrack" | translate }}</span>
+    </div>
+    <div class="label">
+      <span class="dot off-track"></span>
+      <span>{{ "dashboard.offTrack" | translate }}</span>
+    </div>
+    <div class="label">
+      <span class="dot started"></span>
+      <span>{{ "dashboard.notStarted" | translate }}</span>
+    </div>
+  </div>
+
+  <!-- <div class="chart">
+    <canvas class="my-chart" id="myChart" #myChart></canvas>
+  </div> -->
+</div>

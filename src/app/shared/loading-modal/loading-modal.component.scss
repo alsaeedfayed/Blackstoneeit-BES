@@ -1,0 +1,89 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.loading-modal-container {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.55);
+
+  .loading-modal-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 600px;
+    height: 25%;
+    background: $white-color;
+    border-radius: 12px;
+
+    .bx-spin {
+      color: $main-color;
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+
+    .loading-text {
+      color: $tertiary-color;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+}
+
+.fullLoader {
+  position: fixed;
+  z-index: 9999999999999999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  .loader-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 6px;
+
+    img {
+      width: 60%;
+    }
+  }
+}
+
+.loader {
+  @include prefixer(transform, rotate(20deg), webkit moz o ms);
+  @include prefixer(
+    animation,
+    loaderAnimation 3s linear infinite,
+    webkit moz o ms
+  );
+}
+
+@include KAnimation(loaderAnimation) {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(720deg);
+  }
+}

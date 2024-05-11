@@ -1,0 +1,12 @@
+<div class="avatar-stack">
+  <ng-container *ngFor="let member of members | slice:0:4">
+    <img
+      *ngIf="!initialsOnly && (member?.image || member?.profileImage)"
+      [src]="member?.image || member?.profileImage"
+    />
+
+    <span class="initials" *ngIf="initialsOnly || (!member?.image && !member?.profileImage)">
+      {{ (member?.fullName || member?.fullname) | initials }}
+    </span>
+  </ng-container>
+</div>

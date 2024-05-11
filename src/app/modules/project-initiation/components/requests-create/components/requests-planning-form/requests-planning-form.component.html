@@ -1,0 +1,518 @@
+<h3 class="form-title mb-3">
+  {{ "initiationForm.projectPlanning" | translate }}
+</h3>
+
+<div *ngIf="readOnly">
+  <div class="content-block mb-4">
+    <div class="row">
+      <div class="col-7">
+        <label for="" class="form-label">
+          {{ "initiationForm.duration" | translate }}
+        </label>
+
+        <div class="d-flex gap-3">
+          <div class="duration-label-container">
+            <div class="duration-label-col">
+              <span class="counter">{{ data?.duration?.year }}</span>
+              <span class="counter-description">
+                {{ "initiationForm.years" | translate }}
+              </span>
+            </div>
+            <div class="duration-label-col">
+              <span class="counter">{{ data?.duration?.month }}</span>
+              <span class="counter-description">
+                {{ "initiationForm.months" | translate }}
+              </span>
+            </div>
+            <div class="duration-label-col">
+              <span class="counter">{{ data?.duration?.day }}</span>
+              <span class="counter-description">
+                {{ "initiationForm.days" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3">
+            <p>
+              <label class="d-block">
+                {{ "initiationForm.from" | translate }}
+              </label>
+              {{ data?.startDate | date : "dd/MM/yyyy" }}
+            </p>
+            <p>
+              <label class="d-block">{{ "initiationForm.to" | translate }}</label>
+              {{ data?.endDate | date : "dd/MM/yyyy" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-5">
+        <label for="" class="form-label">
+          {{ "initiationForm.projectBudget" | translate }}
+        </label>
+        <p>{{ "shared.AED" | translate }} {{ data?.budget | number }}</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="form-title mb-3">{{ "initiationForm.milestones" | translate }}</h3>
+
+  <app-requests-milestone-card
+    *ngFor="let item of data?.milestones"
+    [lang]="lang"
+    [mode]="'milestones-list'"
+    [readonly]="readOnly"
+    [data]="item"
+  ></app-requests-milestone-card>
+</div>
+<div *ngIf="!readOnly">
+  <form [formGroup]="projectPlanningForm" class="">
+    <ng-container formGroupName="firstGroup">
+      <div class="row mb-4">
+        <div class="form-group col-6">
+          <label for="" class="form-label">
+            {{ "initiationForm.startDate" | translate }}:
+          </label>
+          <app-datepicker
+            [allowPastDate]="true"
+            formControlName="projectFromDuration"
+          ></app-datepicker>
+          <small
+            class="form-error mb-2"
+            *ngIf="
+              getProjectPlanningForm.firstGroup.projectFromDuration?.errors
+                ?.required && isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate | translate }}
+          </small>
+        </div>
+
+        <div class="form-group col-6">
+          <label for="" class="form-label">
+            {{ "initiationForm.endDate" | translate }}:
+          </label>
+          <app-datepicker formControlName="projectEndDuration"></app-datepicker>
+          <small
+            class="form-error mb-2"
+            *ngIf="
+              getProjectPlanningForm.firstGroup.projectEndDuration?.errors
+                ?.required && isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate | translate }}
+          </small>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="form-group col-12">
+          <label for="" class="form-label">
+            {{ "initiationForm.projectBudget" | translate }}:
+          </label>
+          <div class="input-with-currency">
+            <!-- type="text" -->
+            <input
+              formControlName="projectBudget"
+              class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              placeholder="00.0000"
+            />
+            <div class="currency-label">{{ "shared.AED" | translate }}</div>
+          </div>
+          <small
+            class="form-error mb-2"
+            *ngIf="
+              getProjectPlanningForm.firstGroup.projectBudget?.errors
+                ?.required && isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate | translate }}
+          </small>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+
+  <div
+    class="d-flex justify-content-between align-items-center mb-4"
+    *ngIf="milestones?.length !== 0"
+  >
+    <h3 class="form-title mb-0">
+      {{ "initiationForm.milestones" | translate }}
+    </h3>
+
+    <div class="d-flex">
+      <button
+        class="btn btn-outline-main mr-2"
+        (click)="onTemplateChoose()"
+      >
+        {{ "initiationForm.chooseAnotherTemplate" | translate }}
+      </button>
+
+      <button class="btn btn-main" (click)="onAddMilestone()">
+        <i class="bx bx-plus"></i>
+        {{ "initiationForm.addNewMilestone" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="d-flex justify-content-center align-items-center flex-column pt-5 pb-5 milestone-empty-state"
+    *ngIf="milestones?.length === 0"
+    [class.disabled]="
+      getProjectPlanningForm.firstGroup.invalid && templates?.length !== 0
+    "
+  >
+    <app-empty-state
+      [title]="'initiationForm.milestoneEmpty' | translate"
+    ></app-empty-state>
+
+    <div class="d-flex">
+      <button class="btn btn-main mr-2" (click)="onAddMilestone()">
+        <i class="bx bx-plus"></i>
+        {{ "initiationForm.addNewMilestone" | translate }}
+      </button>
+
+      <button class="btn btn-outline-main" (click)="onTemplateChoose()">
+        {{ "initiationForm.useReadyTemplates" | translate }}
+      </button>
+    </div>
+  </div>
+  <div *ngIf="milestones?.length !== 0">
+    <app-requests-milestone-card
+      *ngFor="let item of milestones; let i = index"
+      [lang]="lang"
+      [mode]="'milestones-list'"
+      [data]="item"
+      (select)="onCardOptionsSelect($event, item, i)"
+    ></app-requests-milestone-card>
+  </div>
+
+  <app-model
+    [dimensions]="popupConfig?.dimensions"
+    [id]="'milestone-create'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="onPopupClose()"
+  >
+    <div modal-header class="milestone-model-header w-100">
+      <label class="modal-title">
+        {{ popupConfig?.title[lang] }}
+      </label>
+    </div>
+
+    <div modal-content class="milestone-model-content border-top">
+      <div class="new-model-dialog-body">
+        <div class="py-3" *ngIf="popupConfig?.mode === 'template-select'">
+          <div class="row">
+            <div class="col-4">
+              <div class="template-cards-container">
+                <div
+                  *ngFor="let item of templates"
+                  class="template-card"
+                  [class.active]="item === selectedTemplate"
+                  (click)="selectedTemplate = item"
+                >
+                  <div class="icon">
+                    <i class="bx bx-file-blank"></i>
+                  </div>
+                  <h4>{{ item?.name[lang] }}</h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-8">
+              <div class="template-details-container">
+                <app-requests-milestone-card
+                  *ngFor="
+                    let item of selectedTemplate?.milestones;
+                    let i = index
+                  "
+                  [lang]="lang"
+                  [mode]="'template-list'"
+                  [data]="item"
+                  (select)="onCardOptionsSelect($event, item, i)"
+                ></app-requests-milestone-card>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="pb-2" [formGroup]="milestoneForm" *ngIf="popupConfig?.mode === 'milestone-form'">
+          <div class="form-group my-4">
+            <label for="" class="form-label">
+              {{ "initiationForm.name" | translate }}:
+            </label>
+            <input formControlName="name" type="text" class="form-control" />
+            <small
+              class="form-error"
+              *ngIf="
+                getMilesstoneForm.name?.errors?.required &&
+                isMilestoneFormSubmitted
+              "
+            >
+              <i class="bx bx-error-circle mr-2"></i>
+              {{ "shared.validations.required" | translate }}
+            </small>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="" class="form-label">
+              {{ "initiationForm.description" | translate }}:
+            </label>
+            <textarea
+              class="form-textarea"
+              formControlName="description"
+            ></textarea>
+            <small
+              class="form-error"
+              *ngIf="
+                getMilesstoneForm.description?.errors?.required &&
+                isMilestoneFormSubmitted
+              "
+            >
+              <i class="bx bx-error-circle mr-2"></i>
+              {{ "shared.validations.required" | translate }}
+            </small>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="" class="form-label">
+              {{ "initiationForm.weight" | translate }}:
+            </label>
+            <app-custom-range-control
+              [maxRange]="100"
+              [minRange]="0"
+              [step]="5"
+              [unit]="'%'"
+              formControlName="weight"
+            ></app-custom-range-control>
+
+            <small class="form-hint">
+              {{ "initiationForm.projectRemainingWeight" | translate }}:
+              {{ milestonesRemainingWeight }}%
+            </small>
+            <small
+              class="form-error"
+              *ngIf="
+                getMilesstoneForm.weight?.errors?.required &&
+                isMilestoneFormSubmitted
+              "
+            >
+              <i class="bx bx-error-circle mr-2"></i>
+              {{ "shared.validations.required" | translate }}
+            </small>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="" class="form-label">
+              {{ "initiationForm.cost" | translate }}:
+            </label>
+            <div class="input-with-currency">
+              <!-- type="text" -->
+              <input
+                formControlName="cost"
+                class="form-control"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                placeholder="00.0000"
+              />
+              <div class="currency-label">{{ "shared.AED" | translate }}</div>
+            </div>
+
+            <small class="form-hint">
+              {{ "initiationForm.projectRemainingBudget" | translate }}:
+              {{ "shared.AED" | translate }} {{ milestonesRemainingCost | number }}
+            </small>
+            <small
+              class="form-error"
+              *ngIf="
+                getMilesstoneForm.cost?.errors?.required &&
+                isMilestoneFormSubmitted
+              "
+            >
+              <i class="bx bx-error-circle mr-2"></i>
+              {{ "shared.validations.required" | translate }}
+            </small>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="" class="form-label">
+              {{ "initiationForm.dueDate" | translate }}:
+            </label>
+            <app-datepicker
+              [allowPastDate]="true"
+              formControlName="dueDate"
+            ></app-datepicker>
+            <small
+              class="form-error"
+              *ngIf="
+                getMilesstoneForm.dueDate?.errors?.required &&
+                isMilestoneFormSubmitted
+              "
+            >
+              <i class="bx bx-error-circle mr-2"></i>
+              {{ "shared.validations.required" | translate }}
+            </small>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="" class="form-label">
+              {{ "initiationForm.deliverables" | translate }}:
+            </label>
+            <div class="deliverable-input-container">
+              <input
+                type="text"
+                #milestoneDeliverablesInput
+                (keyup.enter)="
+                  onAddDeliverable(
+                    $event?.target?.value,
+                    milestoneDeliverablesInput
+                  )
+                "
+                formArrayName="deliverables"
+                placeholder="{{
+                  'initiationForm.deliverableName' | translate
+                }}"
+                class="deliverable-input"
+              />
+
+              <button
+                class="btn btn-link deliverable-btn"
+                (click)="
+                  onAddDeliverable(
+                    milestoneDeliverablesInput?.value,
+                    milestoneDeliverablesInput
+                  )
+                "
+              >
+                {{ "initiationForm.addDeliverable" | translate }}
+              </button>
+            </div>
+            <small
+              class="form-error"
+              *ngIf="
+                getMilesstoneForm.deliverables?.errors?.required &&
+                isMilestoneFormSubmitted
+              "
+            >
+              <i class="bx bx-error-circle mr-2"></i>
+              {{ "initiationForm.deliverableValidation" | translate }}
+            </small>
+            <ul
+              class="deliverables-list"
+              *ngIf="getMilestoneDeliverable?.controls?.length !== 0"
+            >
+              <li
+                *ngFor="
+                  let deliverable of getMilestoneDeliverable.controls;
+                  let i = index
+                "
+              >
+                <span>{{ deliverable.value[lang] }}</span>
+                <i (click)="onDeleteDeliverable(i)" class="bx bx-x"></i>
+              </li>
+            </ul>
+          </div>
+
+          <div class="form-group">
+            <label for="" class="form-label">
+              {{ "initiationForm.tasks" | translate }}:
+            </label>
+            <div class="deliverable-input-container">
+              <input
+                type="text"
+                #milestoneTasksInput
+                (keyup.enter)="
+                  onAddTask($event?.target.value, milestoneTasksInput)
+                "
+                formArrayName="tasks"
+                placeholder="{{ 'initiationForm.taskName' | translate }}"
+                class="deliverable-input"
+              />
+              <button
+                class="btn btn-link deliverable-btn"
+                (click)="
+                  onAddTask(milestoneTasksInput?.value, milestoneTasksInput)
+                "
+              >
+                {{ "initiationForm.addTask" | translate }}
+              </button>
+            </div>
+            <ul
+              class="deliverables-list"
+              *ngIf="getMilestoneTasks.controls?.length !== 0"
+            >
+              <li
+                *ngFor="let task of getMilestoneTasks.controls; let i = index"
+              >
+                <span>{{ task?.value[lang] }}</span>
+                <i (click)="onDeleteTask(i)" class="bx bx-x"></i>
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+
+      <!-- footer buttons -->
+      <div class="new-model-dialog-footer">
+
+        <ng-container *ngIf="popupConfig?.mode === 'template-select'">
+          <!-- back button -->
+          <button
+            class="btn btn-dark flex-grow-1"
+            (click)="onPopupClose()"
+          >
+            {{ 'shared.back' | translate }}
+          </button>
+
+          <!-- apply button -->
+          <button
+            class="btn btn-main flex-grow-1"
+            (click)="generateMilestones(selectedTemplate)"
+          >
+            {{ 'initiationForm.apply' | translate }}
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="popupConfig?.mode === 'milestone-form'">
+          <!-- back button -->
+          <button
+            class="btn btn-dark flex-grow-1"
+            (click)="onPopupClose()"
+          >
+            {{ 'shared.back' | translate }}
+          </button>
+
+          <!-- save button -->
+          <button
+            class="btn btn-main flex-grow-1"
+            (click)="onSaveMilestone()"
+          >
+            {{ 'shared.save' | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </app-model>
+</div>
+
+<app-confirm-modal
+  [content]="'shared.confirmModalText' | translate"
+  [btnStyle]="'main'"
+  [btnContent]="'shared.delete'"
+  (confirm)="onDeleteMilestoneConfirmed($event)"
+></app-confirm-modal>
+
+<app-confirm-modal
+  [id]="'recalculate-milestones'"
+  [content]="'initiationForm.recalculateMIlestonesMsg' | translate"
+  [btnStyle]="'main'"
+  [btnContent]="'shared.confirm'"
+  (confirm)="onRecalculateMilestones()"
+></app-confirm-modal>

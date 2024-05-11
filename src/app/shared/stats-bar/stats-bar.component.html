@@ -1,0 +1,14 @@
+<ul class="bar-container">
+  <ng-container *ngFor="let item of items | keyvalue">
+    <li *ngIf="item.key !== 'total' && item.value != 0"
+        [ngClass]="{'primary': item.key === 'accepted' || item.key === 'low',
+        'secondary': item.key === 'submitted' || item.key === 'medium', 
+        'danger': item.key === 'rejected' || item.key === 'very high',
+        'warning': item.key === 'pending' || item.key === 'high',  
+        'one-item': totalItems === 1, 
+        'multiple-items': totalItems > 1}"
+        [ngStyle]="{'width': (item?.value / items.total * 100) + '%'}"
+        [attr.data-after-content]="(('projects.' + (item.key | lowercase) | translate) + ' (' +  item.value + ')')">
+    </li>
+  </ng-container>
+</ul>

@@ -1,0 +1,8 @@
+<div class="badges">
+    <app-button-select 
+    [language]="language"
+    *ngFor="let button of buttons" 
+    [data]="button"
+    (onSelect)="getButton($event)">
+</app-button-select>
+</div>

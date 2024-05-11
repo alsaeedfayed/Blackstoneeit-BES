@@ -1,0 +1,44 @@
+@import "src/assets/css/utils/variables.scss";
+
+.process-state-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    height: 149px;
+    padding: 20px 32px;
+    position: relative;
+    &:hover{
+        border: 1px solid $gainsboro_color;
+    }
+    .card-id{
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        font-size: 24px;
+        font-weight: normal;
+        color: $gainsboro_color;
+    }
+    .card-title{
+        margin-bottom: 7px;
+        color: $black_color;
+        font-weight: 500;
+        font-size: 18px;
+    }
+    .card-date{
+        margin-bottom: 16px;
+        color: $aluminium_color;
+        font-weight: 300;
+        font-size: 14px;
+    }
+
+    .process-state-card-badges{
+        display: flex;
+        flex-direction: row;
+    }
+
+    &:hover{
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.08);
+    }
+}

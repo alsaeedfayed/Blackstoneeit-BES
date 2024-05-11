@@ -1,0 +1,60 @@
+<div
+  class="d-flex justify-content-between committee-performance flex-wrap gap-2"
+>
+
+
+  <div class="d-flex justify-content-center" style="padding : 24px 0px 0px 0px;align-items: center;flex-grow: 1; border: 1px solid #EFEFEF; border-radius: 10px; height:12rem">
+
+    <app-guage-drawer
+    [value]="performanceData?.attendanceRate"
+    [foregroundColor]="'#EB9400'"
+    [backgroundColor]="'#d6d6d6'"
+    [type]="'semi'"
+    [thick]="15"
+    [icon]="'bx bx-group'"
+    [iconColor]="'#EB9400'"
+    [text]="
+      'committeesEvaluations.details.attendanceRate' | translate
+    "
+  ></app-guage-drawer>
+
+   </div>
+
+  <div class="d-flex justify-content-center" style="padding : 24px 0px 0px 0px;align-items: center;flex-grow: 1; border: 1px solid #EFEFEF; border-radius: 10px; height:12rem">
+
+
+    <app-guage-drawer
+                  [value]="performanceData?.kpiPerformance"
+                  [foregroundColor]="'#0165FF'"
+                  [backgroundColor]="'#d6d6d6'"
+                  [type]="'semi'"
+                  [thick]="15"
+                  [icon]="'bx bx-trending-up'"
+                  [iconColor]="'#0165FF'"
+                  [text]="
+                    'committeesEvaluations.details.kpiPerformance' | translate
+                  "
+                ></app-guage-drawer>
+
+   </div>
+
+
+    <div class="d-flex justify-content-center" style="padding : 24px 0px 0px 0px;align-items: center;flex-grow: 1; border: 1px solid #EFEFEF; border-radius: 10px; height:12rem">
+
+
+      <app-guage-drawer
+      [value]="performanceData?.mainTaskProgress"
+      [foregroundColor]="'#9C5BEF'"
+      [backgroundColor]="'#d6d6d6'"
+      [type]="'semi'"
+      [thick]="15"
+      [icon]="'bx bx-extension bx-flip-horizontal'"
+      [iconColor]="'#9C5BEF'"
+      [text]="
+        'committeesEvaluations.details.taskProgress' | translate
+      "
+    ></app-guage-drawer>
+
+     </div>
+
+</div>

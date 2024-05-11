@@ -1,0 +1,88 @@
+@import "../utils/variables.scss";
+
+.my-pagination {
+  display: block;
+  margin: 14px 0;
+
+  .ngx-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin: 0;
+
+    li {
+      &:not(.pagination-next):not(.pagination-previous) {
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 30px;
+          width: 30px;
+          background: $white-color;
+          color: $black_color;
+          border-radius: 4px;
+
+          &:hover {
+            background: #EEF1F6;
+            color: $black_color;
+          }
+        }
+      }
+    }
+
+    .current {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #EEF1F6;
+      color: $black_color;
+      height: 30px;
+      width: 30px;
+      border-radius: 4px;
+    }
+
+    .pagination-next,
+    .pagination-previous {
+      padding: 0;
+
+      &.disabled {
+        color: #96a6bd;
+      }
+
+      a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+
+        &:hover {
+          background: none;
+          color: $main-color;
+        }
+      }
+    }
+
+    .pagination-next {
+      margin-inline-start: 26px;
+
+      &.disabled::after,
+      a::after {
+        content: "\e9fa";
+        font-family: "boxicons" !important;
+        margin: 0;
+      }
+    }
+
+    .pagination-previous {
+      margin-inline-end: 26px;
+
+      &.disabled::before,
+      a::before {
+        content: "\e9f9";
+        font-family: "boxicons" !important;
+        margin: 0;
+      }
+    }
+  }
+}

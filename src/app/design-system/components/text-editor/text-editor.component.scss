@@ -1,0 +1,38 @@
+:host ::ng-deep angular-editor {
+  .angular-editor {
+    padding: 0.625rem;
+    border: 0.0625rem solid #cbcbcb;
+    border-radius: 0.5rem;
+
+    .angular-editor-toolbar {
+      background-color: transparent !important;
+      padding: 0 0 0.375rem !important;
+      border: none !important;
+      border-bottom: 1px solid #cbcbcb !important;
+    }
+
+    .angular-editor-textarea {
+      padding: 0 !important;
+      border: none !important;
+
+      &[contenteditable="false"] {
+        background-color: #f9f9f9 !important;
+
+        & + .angular-editor-placeholder {
+          color: #aaaaaa !important;
+        }
+      }
+    }
+
+    ol,
+    ul {
+      list-style: revert;
+      padding: revert;
+      margin: revert;
+    }
+  }
+}
+
+.astrix-red {
+  color: red;
+}

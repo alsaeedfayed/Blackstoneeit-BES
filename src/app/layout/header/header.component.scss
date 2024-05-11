@@ -1,0 +1,247 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.app-navbar {
+  position: fixed;
+  z-index: 1070;
+  top: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  height: var(--app-header-height);
+  background-color: $white-color;
+  padding: 0 1.5rem;
+  border-bottom: 0.0625rem solid #e6e6e6;
+  transition-property: left, right, width;
+  transition: 0.25s ease-in-out;
+  animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
+
+  &-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  &-links {
+    margin-bottom: 0;
+
+    &-item {
+    }
+  }
+
+  &-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0;
+
+    &-item {
+      &.profile-actions {
+      }
+
+      &.language-actions {
+        button {
+          display: block;
+          color: $main-color;
+          font-weight: 400;
+          font-size: 1rem;
+          background: none;
+          border: none;
+        }
+      }
+    }
+  }
+}
+
+.profile-management-container {
+  position: relative;
+
+  .profile-image {
+    position: relative;
+
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      width: 0;
+    }
+
+    img {
+      border-radius: 50%;
+      width: 170px;
+      height: 170px;
+      border: 5px solid #ffff;
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.41);
+      object-fit: cover;
+    }
+
+    .upload-profile-photo {
+      cursor: pointer;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1;
+
+      a {
+        background-color: transparent;
+        color: gray;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+
+        font: {
+          weight: 600;
+        }
+
+        i {
+          font-size: 25px;
+          color: gray;
+          margin-bottom: 2px;
+          display: block;
+        }
+      }
+    }
+
+    &:hover {
+      .upload-profile-photo {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  person-item {
+    .personItem {
+      flex-direction: row-reverse;
+      cursor: pointer;
+    }
+
+    .avatar {
+      .letters,
+      img {
+        border-radius: 0.625rem !important;
+      }
+    }
+
+    .info {
+      @media (max-width: 400px) {
+        display: none !important;
+      }
+    }
+
+    .name {
+      color: $black-color;
+      font-weight: 500;
+      font-size: 0.875rem;
+      line-height: 1.125rem;
+    }
+
+    .job {
+      color: $info_color;
+      font-weight: 400;
+      font-size: 0.625rem;
+      line-height: 0.75rem;
+    }
+  }
+}
+
+.ar-font {
+  font-family: "Janna LT Regular", sans-serif !important;
+}
+
+.en-font {
+  font-family: "Roboto", sans-serif !important;
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  @media (max-width: 576px) {
+    justify-content: center;
+    gap: 7px;
+  }
+}
+
+:host ::ng-deep .job {
+  @media (max-width: 576px) {
+    display: none;
+  }
+}
+
+.notification-bell {
+  position: relative;
+
+  i {
+    font-size: 25px;
+    color: $main-color;
+    cursor: pointer;
+  }
+
+  .count {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    transform: translate(40%, -40%);
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .notification-menu {
+    position: absolute;
+    @include rtl_value(left, 0, auto);
+    @include rtl_value(right, auto, 0);
+    bottom: -15px;
+    background-color: #fbfbfb;
+    width: 260px;
+    z-index: 99999;
+    max-height: 360px;
+    word-break: break-word;
+    transform: translateY(100%);
+    overflow: auto;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    @media (max-width: 300px) {
+      width: 220px;
+    }
+  }
+}
+
+
+.empty-notififcation-state p {
+  color: #a9a9a9;
+  font-weight: bold;
+}
+
+.notififcations-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  margin-left: 2px;
+  margin-right: 2px;
+}

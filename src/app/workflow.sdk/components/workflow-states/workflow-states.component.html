@@ -1,0 +1,114 @@
+<!-- states timeline -->
+<div class="approval-timeline-container">
+  <ng-container *ngIf="steps && steps.length > 0">
+    <div
+      class="approval-timeline-item"
+      *ngFor="let item of steps; let i = index"
+      [ngClass]="{
+        completed: item?.status?.code !== 'Upcoming' && item?.status?.code !== 'Pending',
+        current: item?.current,
+        upcoming: item?.status?.code === 'Upcoming'
+      }"
+      (click)="onItemClick(item)"
+    >
+      <div class="timeline-card-header">
+        <div class="first-col">
+          <span class="step-number">{{ "manageWorkflow.step" | translate }} {{ item?.number }}</span>
+          <span class="step-date" *ngIf="item?.date">
+            {{ (item?.date | uTCToLocalDate) | date : "dd/MM/yyyy, h:mm a" }}
+          </span>
+        </div>
+
+        <!-- status badge -->
+        <div class="step-status completed" *ngIf="item?.status?.code !== 'Upcoming' && item?.status?.code !== 'Pending'">
+          <i class='bx bxs-check-circle'></i> {{ "manageWorkflow.completed" | translate }}
+        </div>
+        <div class="step-status pending" *ngIf="item?.status?.code === 'Pending'">
+          <i class='bx bx-error-circle'></i> {{ "manageWorkflow.pending" | translate }}
+        </div>
+        <div class="step-status upcoming" *ngIf="item?.status?.code === 'Upcoming'">
+          <i class='bx bx-loader-circle'></i> {{ "manageWorkflow.upcoming" | translate }}
+        </div>
+      </div>
+
+      <div class="timeline-card-body">
+        <workflow-person-item
+          *ngIf="item?.owner; else status_name"
+          [ownerItem]="item?.owner"
+          [CompMode]="2"
+          [hasUserCard]="false"
+        ></workflow-person-item>
+
+        <ng-template #status_name>
+          <div class="status-name">{{ item?.name[lang] }}</div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #empty_state>
+    <div class="approval-timeline-item upcoming notStarted empty-state-container">
+      {{ emptyMsg | translate }}
+    </div>
+  </ng-template>
+</div>
+
+<!-- history model -->
+<workflow-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="modalID"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="history-model-header w-100">
+    <label class="modal-title">{{ 'manageWorkflow.stepHistory' | translate }}</label>
+
+    <div class="d-flex align-items-center justify-content-between mt-1">
+      <!-- <div class="step-number">{{ "manageWorkflow.step" | translate }} {{ currentItem?.number }}</div> -->
+      <div class="status-name">{{ currentItem?.name[lang] }}</div>
+      <!-- status badge -->
+      <div class="step-status completed" *ngIf="currentItem?.status?.code !== 'Upcoming' && currentItem?.status?.code !== 'Pending'">
+        <i class='bx bxs-check-circle'></i> {{ "manageWorkflow.completed" | translate }}
+      </div>
+      <div class="step-status pending" *ngIf="currentItem?.status?.code === 'Pending'">
+        <i class='bx bx-error-circle'></i> {{ "manageWorkflow.pending" | translate }}
+      </div>
+      <div class="step-status upcoming" *ngIf="currentItem?.status?.code === 'Upcoming'">
+        <i class='bx bx-loader-circle'></i> {{ "manageWorkflow.upcoming" | translate }}
+      </div>
+    </div>
+  </div>
+
+  <div modal-content class="history-model-content border-top">
+    <div class="new-model-dialog-body">
+
+      <!-- tasks timeline -->
+      <history-timeline
+        [lang]="lang"
+        [title]="'manageWorkflow.tasksHistory' | translate"
+        [items]="tasks?.slice()"
+      ></history-timeline>
+
+      <ng-container *ngIf="reviewHistory?.length !== 0 && showTasks">
+        <div class="separator"></div>
+
+        <!-- review timeline -->
+        <history-timeline
+          [lang]="lang"
+          [title]="'manageWorkflow.reviewHistory' | translate"
+          [items]="reviewHistory?.slice()"
+        ></history-timeline>
+      </ng-container>
+    </div>
+
+
+    
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer justify-content-center">
+      <button class="btn btn-dark flex-grow-1" (click)="onClosePopup()">
+        {{ "manageWorkflow.back" | translate }}
+      </button>
+    </div>
+  </div>
+</workflow-model>

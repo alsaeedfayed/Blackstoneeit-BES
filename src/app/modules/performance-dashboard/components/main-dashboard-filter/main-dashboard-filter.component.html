@@ -1,0 +1,39 @@
+<div class="filter">
+
+    <div class="scorecard">
+        <!-- <label>{{ "performanceDashboard.scorecard" | translate }} </label> -->
+        <app-select class="select"
+            (ngModelChange)="handleScorecardChange($event)"
+            bindValue="id"
+            [(ngModel)]="selectedScorecard"
+            [bindLabel]="lang == 'ar' ? 'titleAr' : 'title'"
+            [items]="scorecards">
+        </app-select>
+    </div>
+
+    <div class="period">
+        <!-- <label>{{ "performanceDashboard.SubmissionPeriod" | translate }}</label> -->
+        <app-select
+            (ngModelChange)="handelChangePeriod($event)"
+            bindValue="id"
+            [(ngModel)]="selectedPeriod"
+            [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+            [items]="period"
+        >
+        </app-select>
+      </div>
+    <sector-department-function
+        (onSelect)="onSelectedGroupChange($event)" [allowLabel]="false"
+    ></sector-department-function>
+
+    <div class="buttons">
+        <button class="btn btn-main search" (click)="search()">{{'shared.search' | translate}}</button>
+        <!-- <button *ngIf="isShowExport" class="btn export-btn" (click)="exportDataHandler()" [disabled]="isDownloading">
+            {{ "shared.export" | translate }}
+            <div class="icon">
+                <i class="bx bxs-download" [ngClass]="{ 'bx-burst': isDownloading }"></i>
+            </div>
+        </button> -->
+    </div>
+
+</div>

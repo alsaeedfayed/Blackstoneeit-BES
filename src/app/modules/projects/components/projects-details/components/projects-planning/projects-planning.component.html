@@ -1,0 +1,264 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <!-- <h3 class="form-title mb-0">{{ "projects.milestones" | translate }}</h3> -->
+  <!-- <div class="view-switch">
+    <button [class.active]="view === 'card'"
+            (click)="view = 'card'">
+      <i class="bx bx-list-ul"></i>
+    </button>
+    <div class="separator"></div>
+    <button [class.active]="view === 'chart'"
+            (click)="view = 'chart'">
+      <i class="bx bx-chart"></i>
+    </button>
+  </div> -->
+</div>
+
+<div *ngIf="view === 'card'">
+  <div
+    class="milestone-card"
+    *ngFor="let milestone of data?.milestones; let i = index"
+  >
+    <div
+      class="options-dropdown"
+      *ngIf="
+        !milestone?.isClosed &&
+        (isPmo || data?.hasPMPrivilege) &&
+        !data?.isProjectClosed
+      "
+    >
+      <app-dropdown
+        [items]="milestone?.options"
+        (select)="onMilestoneDropDownSelect($event, milestone)"
+      ></app-dropdown>
+    </div>
+    <div class="first-row row gx-4 m-auto">
+      <div class="milestone-details col-6">
+        <div class="title">
+          <h3>
+            {{ i + 1 }}- {{ milestone?.name[lang] }} ({{ milestone?.weight }}%)
+          </h3>
+          <p *ngIf="milestone?.description">
+            {{ milestone?.description }}
+          </p>
+          <!-- <div class="desc">
+            <p *ngIf="milestone?.description"
+               [ngClass]="{ 'custom-h': !isShowAllDesc }">
+              {{ milestone?.description }}
+            </p>
+            <div *ngIf="
+                milestone?.description && milestone?.description.length > 119
+              ">
+              <strong (click)="isShowAllDesc = !isShowAllDesc">{{
+                (isShowAllDesc ? "shared.seeLess" : "shared.seeMore")
+                | translate
+                }}</strong>
+            </div>
+          </div> -->
+        </div>
+        <span class="date">
+          <i class="bx bx-calendar"></i>
+          <span
+            >{{ "projects.dueDate" | translate }} :
+            {{ milestone?.dueDate | date : "dd/MM/yyyy" }}</span
+          >
+        </span>
+        <span class="cost">
+          <i class="bx bx-dollar"></i>
+          <span
+            >{{ "projects.cost" | translate }} :
+            {{
+              milestone?.cost
+                | currency : (lang === "en" ? " " + "AED " : " " + " درهم ")
+            }}
+          </span>
+        </span>
+        <div class="d-flex">
+          <span
+            *ngIf="milestone?.isClosed"
+            class="project-card-status-badge secondary mr-2 w-auto"
+            >{{ "shared.closed" | translate }}</span
+          >
+          <span
+            *ngIf="milestone?.isSubmittedOnTrack"
+            class="project-card-status-badge success w-auto"
+            >{{ "projects.onTrack" | translate }}</span
+          >
+          <span
+            *ngIf="milestone?.isSubmittedOnTrack === false"
+            class="project-card-status-badge danger w-auto"
+            >{{ "projects.offTrack" | translate }}</span
+          >
+        </div>
+      </div>
+      <div class="col-6 row gx-3">
+        <div class="miletsone-tasks-progress col-6">
+          <div class="d-flex flex-column">
+            <span>{{ "projects.tasksSummary" | translate }}:</span>
+            <app-progress-bar
+              [height]="25"
+              [data]="{
+                progress: item?.progress
+                  ? item?.progress
+                  : (milestone?.completedTasks / milestone?.tasks?.length) *
+                    100,
+                label:
+                  milestone?.completedTasks +
+                  '/' +
+                  milestone?.tasks?.length +
+                  ' ' +
+                  tasksText
+              }"
+            >
+            </app-progress-bar>
+          </div>
+        </div>
+        <div class="milestone-deliverable-stats col-6">
+          <div class="d-flex flex-column">
+            <span>{{ "projects.deliverablesSummary" | translate }}:</span>
+            <div class="bar-container">
+              <app-stats-bar
+                [items]="milestone?.deliverablesStats"
+              ></app-stats-bar>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="tasks-list-container">
+      <ng-container *ngIf="milestone?.tasks?.length > 0">
+        <li *ngFor="let task of milestone?.tasks" class="row gx-4 m-auto">
+          <div class="task-details col-4">
+            <i
+              class="bx bxs-check-circle"
+              (click)="onTaskComplete(task, milestone?.id)"
+              [ngClass]="{ active: task?.progress === 100 , 'cursoer-prevent': data?.isProjectClosed }"
+            ></i>
+            <h4>{{ task?.name[lang] }}</h4>
+          </div>
+          <div class="task-progress col">
+            <app-progress-bar
+              [data]="{
+                progress: task?.progress ? task?.progress : 0,
+                label: progressText
+              }"
+            >
+            </app-progress-bar>
+          </div>
+          <div class="task-date col">
+            <span class="label">{{ "projects.from" | translate }}</span>
+            <span *ngIf="task?.startDate" class="value">
+              {{
+                this.lang === "en"
+                  ? (task?.startDate | date : "dd/MM/yyyy hh:mm a")
+                  : (task?.startDate | localizeDate : "dd/MM/yyyy hh:mm a")
+              }}
+            </span>
+          </div>
+          <div class="task-date col">
+            <span class="label">{{ "projects.to" | translate }}</span>
+            <span *ngIf="task?.dueDate" class="value">
+              {{
+                this.lang === "en"
+                  ? (task?.dueDate | date : "dd/MM/yyyy hh:mm a")
+                  : (task?.dueDate | localizeDate : "dd/MM/yyyy hh:mm a")
+              }}
+            </span>
+          </div>
+          <div class="task-assignee col d-flex justify-content-around align-items-center">
+            <div class="horizontal-cards-item-cell committee-members">
+              <div class="cell-content d-flex justify-content-around align-items-end">
+                <avatar-stack  [members]="task?.assignedToUsers"></avatar-stack>
+                <span class="members-count" *ngIf="task?.assignedToUsers.length> 2">
+                {{ task?.assignedToUsers.length | membersCount : lang }}
+              </span>
+              </div>
+            </div>
+<!--            <div class="assignees w-100">-->
+<!--              <div-->
+<!--                class="profile-container mb-2 w-100"-->
+<!--                *ngFor="let user of task?.assignedToUsers"-->
+<!--              >-->
+<!--                <app-initials-->
+<!--                  *ngIf="!user?.userPicture?.url"-->
+<!--                  [dimensions]="{ height: 32, width: 32 }"-->
+<!--                  [name]="user?.name?.en"-->
+<!--                ></app-initials>-->
+<!--                <img-->
+<!--                  *ngIf="user?.userPicture?.url"-->
+<!--                  [src]="user?.userPicture?.url"-->
+<!--                  alt=""-->
+<!--                />-->
+<!--              </div>-->
+<!--            </div>-->
+
+            <!-- <div class="avatar-stack-container">
+              <avatar-stack
+                [members]="task?.assignedToUsers"
+                [initialsOnly]="true"
+              ></avatar-stack>
+              <span class="members-count">
+                {{ task?.assignedToUsers?.length | membersCount : lang }}
+              </span>
+            </div> -->
+          </div>
+          <!-- <div class="task-attachments ">
+            <div class="attachment"
+                 *ngFor="let doc of task?.attachments">
+              <i class="bx bx-file"></i>
+              <a target="_blank"
+                 [href]="doc.url">{{ doc?.fileName?.slice(0, 15)
+                }}<span *ngIf="doc?.fileName?.length > 15">...</span></a>
+            </div>
+          </div> -->
+          <div class="col">
+            <div class="d-flex justify-content-end h-100">
+              <app-dropdown
+                *ngIf="
+                  !milestone?.isClosed &&
+                  (isPmo || isPm) &&
+                  !data?.isProjectClosed
+                "
+                [items]="taskOptions"
+                (select)="onTaskDropDownSelect($event, task, milestone?.id)"
+              >
+              </app-dropdown>
+            </div>
+          </div>
+        </li>
+
+      </ng-container>
+
+
+      <div
+      *ngIf="milestone?.tasks?.length === 0"
+      class="d-flex justify-content-center align-items-center flex-column mt-4"
+    >
+      <app-empty-state
+        *ngIf="milestone?.tasks.length === 0"
+        [title]="'projects.tasksEmptyText' | translate"
+      ></app-empty-state>
+
+      <button
+        class="btn btn-primary"
+        *ngIf="
+          (isPmo || data?.hasPMPrivilege) &&
+          !data?.isProjectClosed &&
+          !milestone?.isClosed
+        "
+        (click)="onMilestoneDropDownSelect(addTasksLabel, milestone)"
+      >
+        {{ "projects.addTask" | translate }}
+      </button>
+    </div>
+    </ul>
+
+
+  </div>
+
+  <div *ngIf="view === 'chart'">
+    <app-projects-planning-gantt
+      [projectData]="data"
+    ></app-projects-planning-gantt>
+  </div>
+</div>

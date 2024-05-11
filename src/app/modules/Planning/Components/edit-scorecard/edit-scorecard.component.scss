@@ -1,0 +1,51 @@
+@import "src/assets/css/utils/variables.scss";
+
+.wrapper {
+  //margin: 80px 0;
+  .change-context {
+    h5 {
+      color: $black-color;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .change-input {
+      margin: 20px 0;
+
+      ::ng-deep {
+        app-textarea-filed {
+          .form-label {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .selected-scroecard {
+    margin: 25px 0;
+
+    h3 {
+      color: $black-color;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 0;
+    }
+  }
+}
+
+:host ::ng-deep app-radio-group {
+  flex-direction: column;
+  gap: 10px;
+}
+
+:host ::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 43px !important;
+}
+
+.hd-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}

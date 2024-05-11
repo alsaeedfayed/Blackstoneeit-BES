@@ -1,0 +1,37 @@
+<div class="d-flex justify-content-between committee-dashboard-types">
+  <div
+    class="d-flex justify-content-center w-50 committee-dashboard-types-canvas"
+  >
+    <canvas
+      class="my-chart"
+      id="myChart"
+      width="170"
+      height="170"
+      #myChart
+    ></canvas>
+    <span class="committee-dashboard-types-canvas-total">
+      {{ data?.total ? data?.total : 0 }}
+    </span>
+  </div>
+
+  <div class="d-flex justify-content-center w-50">
+    <div class="committee-dashboard-types-info">
+      <h3 class="committee-dashboard-types-info-title">
+        {{ "committeeDashboard.dashboard.committeeTypes" | translate }}
+      </h3>
+      <div class="committee-dashboard-types-info-permenant d-flex mt-3">
+        <span class="committee-dashboard-types-info-permenant-square"></span>
+        <span class="committee-dashboard-types-info-permenant-lable ml-2">
+          {{ "committeeDashboard.dashboard.permenant" | translate }}
+        </span>
+      </div>
+
+      <div class="committee-dashboard-types-info-temporary d-flex mt-3">
+        <span class="committee-dashboard-types-info-temporary-square"></span>
+        <span class="committee-dashboard-types-info-temporary-lable ml-2">
+          {{ "committeeDashboard.dashboard.temporary" | translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

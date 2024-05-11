@@ -1,0 +1,46 @@
+.innovation-card {
+  border-radius: 16px;
+  background: var(--others-white, #FFF);
+
+  .items {
+    justify-content: space-between;
+
+    .item {
+      flex-direction: column;
+      display: flex;
+      padding: 24px;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+      flex-shrink: 0;
+
+      .item-title {
+        font-size: 14px;
+        color: #111827;
+        font-weight: 600;
+        line-height: 40px;
+      }
+
+      .number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #111827;
+        line-height: 40px;
+      }
+
+      .percentage {
+        font-size: 14px;
+        color: #27A376;
+        font-weight: 500;
+        display: inline-block;
+        margin-inline-end: 5px;
+      }
+
+      .percentage-desc {
+        color: #687588;
+
+      }
+    }
+  }
+
+}

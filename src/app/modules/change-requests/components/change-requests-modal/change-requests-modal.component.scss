@@ -1,0 +1,40 @@
+@import 'src/assets/css/utils/variables.scss';
+@import 'src/assets/css/utils/mixins.scss';
+
+.selected-users-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+        margin-inline-end: 10px;
+        margin-bottom: 10px;
+
+        .project-card-status-badge {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            white-space: nowrap;
+
+            i {
+                font-size: 18px;
+                margin-inline-start: 10px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+
+::ng-deep ngb-typeahead-window {
+    width: 100% !important;
+    max-height: 250px;
+    overflow-y: auto;
+
+    button:hover,
+    button.active {
+        background-color: $main-color  !important;
+    }
+
+}

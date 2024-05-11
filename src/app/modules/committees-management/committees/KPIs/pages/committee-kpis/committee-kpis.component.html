@@ -1,0 +1,74 @@
+<!-- table -->
+<ng-container *ngIf="loading; else herder">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- decisions items -->
+<ng-template #herder>
+  <!-- page filters -->
+  <app-page-filters [searchPlaceHolder]="'committeeKPIs.searchPlaceholder' | translate" [hasExportBtn]="true"
+    [hasAdvancedFilter]="true" [appliedFiltersCount]="appliedFiltersCount" (search)="onSearch($event)"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()" (onClear)="clearFilter()" (onExportBtnClicked)="exportList()">
+    <app-kpis-filters [isFiltersEmpty]="emptyFIlters" [Objectives]="objectives"
+      (filtersNumber)="getFiltersCount($event)" (filter)="handelFilter($event)"></app-kpis-filters>
+  </app-page-filters>
+
+  <ng-container *ngIf="KPisLoading; else kpis">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton_rows"></ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #kpis>
+  <app-kpis-rows *ngIf="list?.length > 0" [totalItems]="totalItems" [list]="list" [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"></app-kpis-rows>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data [msg]="'committeeKPIs.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+<ng-template #skeleton_rows>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- create/edit KPI model -->
+<!-- <app-model
+ [dimensions]="{ width: 620, height: 750 }"
+ [id]="'new-committee-kpi'"
+ [hasBackBtn]="false"
+ [hasTitle]="false"
+ [isNewModel]="true"
+ (close)="closeNewKPIModel()"
+ >
+ <div modal-header class="w-100">
+   <label class="modal-title">
+     {{ (selectedKPI ?"committeesNewRequest.newKPIModel.updateItem":"committeesNewRequest.newKPIModel.createNewItem") | translate }}
+   </label>
+ </div>
+
+ <div modal-content class="border-top">
+   <app-new-kpi-model
+     *ngIf="isKPIModelOpened"
+     [language]="language"
+     [createLocally]="false"
+     [committeeId]="committeeId"
+     (onAdd)="getAllKPIs()"
+   ></app-new-kpi-model>
+ </div>
+
+ </app-model> -->

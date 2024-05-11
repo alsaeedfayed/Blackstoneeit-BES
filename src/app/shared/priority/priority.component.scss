@@ -1,0 +1,29 @@
+.bar-container {
+    height: 29px;
+    width: 100%;
+    min-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 11px;
+    overflow: hidden;
+
+    .item {
+        flex-grow: 1;
+        flex-basis: 0;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: 500;
+        font-size: 13.9352px;
+        line-height: 16px;
+        text-align: center;
+        letter-spacing: 0.02em;
+        color: #FFFFFF;
+
+        &.faded {
+            opacity: 0.3;
+        }
+    }
+}

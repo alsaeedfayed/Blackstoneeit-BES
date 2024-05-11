@@ -1,0 +1,135 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.back-button {
+  width: 43px;
+  height: 40px;
+  border: 1px solid #717986;
+  border-radius: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &-label {
+    color: #00db99;
+    font-weight: 500;
+    font-size: 18px;
+    margin-inline-start: 15px;
+    line-height: 21px;
+  }
+}
+
+.back-button-container {
+  position: sticky;
+  top: -20px;
+  @include rtl_value(left, 0, unset);
+  @include rtl_value(right, unset, 0);
+  z-index: 9999;
+  width: 100%;
+  background-color: #fff;
+}
+
+.modal-dialog {
+  @media (max-width: 992px) {
+    width: 80% !important;
+    min-width: auto !important;
+  }
+}
+
+.back-button {
+  @include rtl_value(transform, unset, rotate(180deg));
+}
+
+// new styles
+.new-model-dialog {
+  --header-height: 85px;
+  --increased-footer-height: 20px;
+  --padding-size: 20px;
+  border-radius: 0 !important;
+
+  @media (min-width: 450px) {
+    --body-height: calc(100vh - (var(--header-height) + var(--footer-height)));
+    --footer-height: 85px;
+  }
+
+  @media (max-width: 449px) {
+    --body-height: calc(
+      100vh -
+        (
+          var(--header-height) + var(--footer-height) -
+            (var(--increased-footer-height) * -2)
+        )
+    );
+    --footer-height: calc(85px + var(--increased-footer-height));
+  }
+
+  .modal-content {
+    padding: var(--header-height) 0 var(--footer-height);
+    overflow-y: hidden;
+  }
+
+  .new-model-dialog-header {
+    position: absolute;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    bottom: 100vh;
+    // transform: translateY(var(--header-height));
+    width: 100%;
+    height: var(--header-height);
+    padding: 0 var(--padding-size);
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+  }
+
+  ::ng-deep .modal-title {
+    color: $black-color;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 27px;
+  }
+
+  ::ng-deep .new-model-dialog-body {
+    height: var(--body-height);
+    padding: 0 var(--padding-size);
+    overflow-y: auto;
+  }
+
+  ::ng-deep .new-model-dialog-footer {
+    position: absolute;
+    z-index: 999;
+    left: 0;
+    top: 100vh;
+    transform: translateY(calc(var(--footer-height) * -2));
+    width: 100%;
+    height: var(--footer-height);
+    padding: 0 var(--padding-size);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    background-color: #fff;
+
+    @media (max-width: 449px) {
+      flex-direction: column;
+    }
+
+    &.has-three-btns {
+      @media (max-width: 768px) {
+        button {
+          flex: 1;
+          width: fit-content;
+          min-width: auto;
+        }
+      }
+    }
+
+    button {
+      width: 154px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+}

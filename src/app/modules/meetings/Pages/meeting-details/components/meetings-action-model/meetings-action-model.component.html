@@ -1,0 +1,42 @@
+<div class="new-model-dialog-body">
+  <form class="pb-2" [formGroup]="form">
+
+    <app-select *ngIf="ForwardActionType" formControlName="user" autofocus [title]="'Meetings.users' | translate" bindValue="id"
+        [placeholder]="'Meetings.selectUser' | translate" [control]="form | getControl: 'user'"
+        [bindLabel]="'fullName'" [items]="users" [multiple]="true" (onSearch)="searchUsers($event)">
+    </app-select>
+
+    <app-description-input-with-attachments
+      class="d-block pt-3"
+      title="{{ 'Meetings.comments' | translate }}"
+      formControlName="comments"
+      [control]="form | getControl: 'comments'"
+      (attachmentUploadEvent)="uploadFile($event)"
+      (onDelete)="deleteAttachment($event)"
+      [isCommentRequired]="option?.isCommentRequired"
+      [isAttchmentRequired]="option?.isAttachmentRequired"
+      [attachmentHint]="option?.attachmentHint"
+    ></app-description-input-with-attachments>
+  </form>
+</div>
+
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closeModel()">
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || loading || (option?.isAttachmentRequired && attachments?.length == 0)"
+    (click)="saveAction()"
+  >
+    <i *ngIf="loading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    <ng-container *ngIf="!loading">{{ 'shared.save' | translate }}</ng-container>
+  </button>
+</div>
+<!--
+[disabled]="model.isBtnLoading"
+(click)="model.onPopupSave()" -->

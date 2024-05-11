@@ -1,0 +1,65 @@
+// .presonal-item {
+//   display: flex;
+//   align-items: center;
+
+//   img {
+//     width: 35px;
+//     height: 35px;
+//   }
+
+//   .presonal-title {
+//     margin-inline-start: 10px;
+
+//     h5,
+//     p {
+//       margin: 0;
+//       color: rgb(116, 116, 116);
+//     }
+
+//     h5 {
+//       font-size: 16px;
+//       color: #3c557a;
+//     }
+//   }
+// }
+
+:host ::ng-deep {
+  person-item {
+    .personItem {
+      min-width: 100px;
+
+      .avatar {
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+.req-table-wrapper {
+  overflow-x: auto;
+}
+
+.list-button {
+  font-size: 18px;
+  background: transparent;
+  border: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 22px;
+  background-color: #00db99;
+  color: #fff;
+}
+
+.action-status {
+  display: flex;
+  gap: 5px;
+}
+
+.preogress {
+  min-width: 120px;
+}

@@ -1,0 +1,161 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.gap-15px {
+  gap: 15px;
+}
+
+.title-page {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  color: $dark-info-color;
+}
+
+.header-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .Period {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-inline-end: 10px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+
+    label {
+      margin-inline-end: 10px;
+    }
+  }
+
+  .side-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+.filter-expier-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+  app-select {
+    min-width: 200px;
+    display: block;
+  }
+
+  .bg-time {
+    background: #ff285e2d;
+    border-radius: 8px;
+    padding: 5px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 19px;
+    color: #ff285c;
+  }
+
+  .bg-submitted {
+    border-radius: 8px;
+    padding: 5px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 19px;
+    color: #10b759;
+    background: rgba(#10b759, 0.27);
+  }
+}
+
+.select {
+  width: 150px;
+}
+
+.group {
+  max-width: 315px;
+  // @include rtl_key(margin-, right, left, 0);
+  // @include rtl_key(margin-, left, right, 15px);
+}
+
+label {
+  color: #717986;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.02em;
+}
+
+.lbl-buttons {
+  display: flex;
+  align-items: center;
+
+  button {
+    @include rtl_key(margin-, left, right, 5px);
+    @include rtl_key(margin-, right, left, 0);
+  }
+}
+
+.bg-time {
+  background: #ff285e2d;
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #ff285c;
+}
+
+.bg-submitted {
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #10b759;
+  background: rgba(#10b759, 0.27);
+}
+
+app-skeleton-loader {
+  width: 200px;
+}
+
+.loader-skelton {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.loader-skelton-2 {
+  display: flex;
+  gap: 10px;
+}
+
+.header-title {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 15px;
+
+  h2 {
+    margin-bottom: 0 !important;
+  }
+
+  div {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    i {
+      font-size: 18px;
+      color: $main-color;
+    }
+  }
+}
+
+.alert-dismissible .btn-close {
+  @include rtl_key(null, left, right, auto);
+  @include rtl_key(null, right, left, 0);
+}

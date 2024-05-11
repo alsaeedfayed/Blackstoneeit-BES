@@ -1,0 +1,117 @@
+<div class="new-model-dialog-body">
+  <div class="new-attendee-form pb-2" [formGroup]="form">
+    <div class="row">
+      <!-- state title -->
+      <div class="col-md-6 mt-4">
+        <app-filed
+          class="d-block"
+          formControlName="title"
+          [control]="form | getControl : 'title'"
+          [title]="'newState.form.title' | translate"
+          [placeholder]="'newState.form.title' | translate"
+        ></app-filed>
+      </div>
+
+      <!-- state title ar -->
+      <div class="col-md-6 mt-4">
+        <app-filed
+          class="d-block rtl-text"
+          formControlName="arabicTitle"
+          [control]="form | getControl : 'arabicTitle'"
+          [title]="'newState.form.arabicTitle' | translate"
+          [placeholder]="'newState.form.arabicTitle' | translate"
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- state externalState -->
+    <div class="mt-4">
+      <label class="form-label">
+        {{ 'newState.form.externalState' | translate}}
+        <span class="astrix-red">*</span>
+      </label>
+
+      <ng-select
+        class="input-select attendees-select"
+        formControlName="mappedStatusCode"
+        [ngClass]="{ valid: (form | getControl : 'mappedStatusCode')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'newState.form.externalState' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [closeOnSelect]="true"
+      >
+        <ng-option
+          *ngFor="let externalState of externalStates"
+          [value]="externalState"
+        >
+          {{ externalState }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+          <!-- activate SLA -->
+          <div class="d-flex justify-content-between sla-wrapper my-3">
+            <label class="form-label sla-label">
+                {{ 'newState.form.activeSLA' | translate }}
+              </label>
+              <app-switch 
+                formControlName="isSLAOn"
+                (ngChange)="enabledChange($event)">
+            </app-switch>
+          </div>
+
+                <!-- Default flow -->
+          <div class="d-flex justify-content-between sla-wrapper">
+            <label class="form-label sla-label">
+                {{ 'newState.form.defaultFLow' | translate }}
+              </label>
+              <app-switch 
+                formControlName="isDefaultFlow"
+                (ngChange)="enabledChangeDefaultFlow($event)">
+            </app-switch>
+          </div>
+
+    <!-- state position -->
+    <div class="d-flex my-2 flex-column ">
+      <label class="form-label">
+          {{ 'newState.form.stateSetting' | translate }}
+          <span class="astrix-red">*</span>
+      </label>
+      <app-radio-group class="d-flex flex-column" bindValue="id" formControlName="stateOrder" (change)="SelectStateOrder()">
+
+      <app-radio-box 
+        [value]="1">
+          {{ 'newState.form.firstState' | translate }}
+      </app-radio-box>
+      <app-radio-box class="" 
+        [value]="2">
+          {{ 'newState.form.middleState' | translate }}
+      </app-radio-box>
+      <app-radio-box class="" 
+        [value]="3">
+          {{ 'newState.form.lastState' | translate }}
+      </app-radio-box>
+      </app-radio-group>
+  </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- cancel button -->
+  <button class="btn btn-info flex-grow-1" (click)="closePopup()">
+    {{ "shared.cancel" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || isBtnLoading"
+    (click)="save()"
+  >
+    <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    {{ "shared.save" | translate }}
+  </button>
+</div>

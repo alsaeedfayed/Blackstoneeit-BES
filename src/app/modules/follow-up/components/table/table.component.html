@@ -1,0 +1,319 @@
+<div class="req-table mt-4">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(1)">
+              {{ "followUp.title" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 1 && ascMode,
+                'sort-down': sortedCol && sortedCol == 1 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <!-- <th scope="col">{{'shared.creationDate' | translate}}</th> -->
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(2)">
+              {{ "followUp.type" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 2 && ascMode,
+                'sort-down': sortedCol && sortedCol == 2 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+        <th scope="col" style="width:150px">
+          <div class="sortable-row">
+            {{ "followUp.requestCreator" | translate }}
+          </div>
+        </th>
+        <th scope="col">
+          <div class="sortable-row" (click)="sort(6)">
+            {{ "followUp.creationDate" | translate }}
+            <div class="sort-icon" [ngClass]="{
+              'sort-up': sortedCol && sortedCol == 6 && ascMode,
+              'sort-down': sortedCol && sortedCol == 6 && DescMode
+            }">
+              <i class='bx bxs-up-arrow'></i>
+              <i class='bx bxs-down-arrow'></i>
+            </div>
+          </div>
+        </th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(3)">
+              {{ "followUp.completionDate" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 3 && ascMode,
+                'sort-down': sortedCol && sortedCol == 3 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col" [colSpan]="2">
+            <div class="sortable-row" (click)="sort(4)">
+              {{ "followUp.status" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 4 && ascMode,
+                'sort-down': sortedCol && sortedCol == 4 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="sortable-row" (click)="sort(5)">
+              {{ "followUp.progress" | translate }}
+              <div class="sort-icon" [ngClass]="{
+                'sort-up': sortedCol && sortedCol == 5 && ascMode,
+                'sort-down': sortedCol && sortedCol == 5 && DescMode
+              }">
+                <i class='bx bxs-up-arrow'></i>
+                <i class='bx bxs-down-arrow'></i>
+              </div>
+            </div>
+          </th>
+          <th scope="col">{{ "followUp.responsability" | translate }}</th>
+          <th scope="col">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems: totalCount ?? 10
+                  };
+            let i = index
+          "
+        >
+          <td>{{ item?.code }}</td>
+          <td>{{ item?.action }}</td>
+          <!-- <td>{{ (item?.creationDate | uTCToLocalDate) | date: 'dd/MM/yyyy' }} </td> -->
+          <td>
+            {{
+              lang == "ar"
+                ? (item?.typeCode | getType : types)?.nameAr
+                : (item?.typeCode | getType : types)?.nameEn
+            }}
+          </td>
+          <td>
+            <person-item
+              *ngIf="item?.creator"
+              [requesterItem]="item.creator"
+              [noCursor]="true"
+              [isUserCardFixed]="true"
+            ></person-item>
+          </td>
+          <td>
+            {{
+              lang === "en" ?
+              ((item?.creationDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+              ((item?.creationDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <td>
+            {{
+              lang === "en" ?
+              ((item?.dueDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+              ((item?.dueDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <td [colSpan]="2">
+            <div class="action-status">
+              <app-badge
+                *ngIf="item.response == followUpResponseMode.OnTrack"
+                [className]="'started'"
+                [label]="'followUp.onTrack' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item.response == followUpResponseMode.Delayed"
+                [className]="'inProgress'"
+                [label]="'followUp.delayed' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item.status == followUpStatusMode.Open"
+                [className]="'opened'"
+                [label]="'followUp.statusopened' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item.status == followUpStatusMode.Closed"
+                [className]="'closed'"
+                [label]="'followUp.statusclosed' | translate"
+              ></app-badge>
+            </div>
+          </td>
+          <td>
+            <div class="preogress">
+              <nz-progress
+                [nzPercent]="item?.progress"
+                [nzStrokeColor]="'#5271ff'"
+                [nzFormat]="progressFormat"
+              ></nz-progress>
+            </div>
+          </td>
+          <td>
+            <person-item
+              *ngIf="item?.owner"
+              [requesterItem]="item.owner"
+              [noCursor]="true"
+              [isUserCardFixed]="true"
+            ></person-item>
+          </td>
+          <td>
+            <div *ngIf="item?.options && item?.options?.length > 0">
+              <app-dropdown
+                (select)="onOptionSelect($event, item)"
+                [items]="item?.options"
+              ></app-dropdown>
+
+              <div class="modals" *ngIf="item.id == selectedItemId">
+
+                <!-- details model -->
+                <app-model
+                  [dimensions]="{ width: 700, height: 750 }"
+                  [id]="'update-follow-item' + item.id"
+                  [hasBackBtn]="false"
+                  [hasTitle]="false"
+                  [isNewModel]="true"
+                  (close)="closeUpdatePopup(item)"
+                >
+                  <div modal-header class="update-follow-item-model-header w-100">
+                    <label class="modal-title">
+                      {{ 'followUp.updateActionProgress' | translate }}
+                    </label>
+                  </div>
+
+                  <div modal-content class="update-follow-item-model-content border-top">
+                    <app-update-item-progress
+                      *ngIf="item.show && isViewDetailsClicked"
+                      [item]="item"
+                      (refreshData)="itemUpdatedHandler.emit()"
+                    ></app-update-item-progress>
+                  </div>
+                </app-model>
+
+                <!-- transfer model -->
+                <app-model
+                  [dimensions]="{ width: 700, height: 750 }"
+                  [id]="'follow-up-item-transfer' + item.id"
+                  [hasBackBtn]="false"
+                  [hasTitle]="false"
+                  [isNewModel]="true"
+                  (close)="closeTransferPopup(item)"
+                >
+                  <div modal-header class="follow-up-item-model-header w-100">
+                    <label class="modal-title">
+                      {{ 'followUp.transferFollowUpItem' | translate }}
+                    </label>
+                  </div>
+
+                  <div modal-content class="follow-up-item-model-content border-top">
+                    <app-follow-transfer-item
+                      *ngIf="item.show && isTransferClicked"
+                      [item]="item"
+                      (itemTransferHandler)="itemTransferHandler()"
+                    ></app-follow-transfer-item>
+                  </div>
+                </app-model>
+
+                <!-- <app-model
+                  [dimensions]="{ width: 856 }"
+                  [id]="'add-follow-up-item'"
+                  [title]="'followUp.addFollowUpItem' | translate"
+                >
+                  <div modal-content class="new-service-popup px-4">
+                    <app-follow-add-item
+                      [item]="{}"
+                      (itemAddedHandler)="itemUpdatedHandler.emit()"
+                    ></app-follow-add-item>
+                  </div>
+                </app-model> -->
+
+                <!-- edit/clone model -->
+                <app-model
+                  [dimensions]="{ width: 700, height: 750 }"
+                  [id]="'follow-up-item' + item.id"
+                  [hasBackBtn]="false"
+                  [hasTitle]="false"
+                  [isNewModel]="true"
+                  (close)="closeEditClonePopup(item)"
+                >
+                  <div modal-header class="follow-up-item-model-header w-100">
+                    <label class="modal-title">
+                      {{
+                        item.cloned ?
+                        ('followUp.addFollowUpItem' | translate) :
+                        ('followUp.editFollowUpItem' | translate)
+                      }}
+                    </label>
+                  </div>
+
+                  <div modal-content class="follow-up-item-model-content border-top">
+                    <app-follow-add-item
+                      *ngIf="item.editShow && (isEditClicked || isCloneClicked)"
+                      [item]="item"
+                      (itemAddedHandler)="itemUpdatedHandler.emit()"
+                    ></app-follow-add-item>
+                  </div>
+                </app-model>
+
+                <!-- actions model -->
+                <app-model
+                  [dimensions]="{ width: 700, height: 750 }"
+                  [id]="'actions-follow-item' + item.id"
+                  [hasBackBtn]="false"
+                  [hasTitle]="false"
+                  [isNewModel]="true"
+                  (close)="closeActionsPopup(item)"
+                >
+                  <div modal-header class="follow-up-item-model-header w-100">
+                    <label class="modal-title">
+                      {{
+                        item.isCloseTask ?
+                        ('followUp.closeTask' | translate) :
+                        item.isReopenTask ?
+                          ('followUp.reopenTask' | translate) :
+                          ('followUp.updateProgress' | translate)
+                      }}
+                    </label>
+                  </div>
+
+                  <div modal-content class="follow-up-item-model-content border-top">
+                    <app-follow-actions-item
+                      *ngIf="(isCloseClicked || isReOpenClicked || isUpdateProgressClicked)"
+                      [item]="item"
+                      (refreshData)="itemUpdatedHandler.emit()"
+                    ></app-follow-actions-item>
+                  </div>
+                </app-model>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="totalCount > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

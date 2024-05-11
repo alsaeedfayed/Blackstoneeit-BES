@@ -1,0 +1,648 @@
+<app-request-header
+  [title]="
+    eServiceId
+      ? ('EServices.createEService.editeHeaderTitle' | translate)
+      : ('EServices.createEService.createHeaderTitle' | translate)
+  "
+  [isValid]="form.valid"
+  (submit)="onSubmit()"
+></app-request-header>
+
+<div class="page-data mt-4">
+  <ng-container *ngIf="isLoading; else table_data">
+    <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <form class="new-event-form" [formGroup]="form">
+    <h3 *ngIf="eServiceId">
+      {{ lang == "en" ? serviceTitle : serviceTitleAr }}
+    </h3>
+    <div class="row mt-5">
+      <div class="col-12">
+        <app-radio-group
+          class="d-flex"
+          bindValue="id"
+          formControlName="unitCommitteeSwitcher"
+          (valueChanged)="onTypeChange($event)"
+        >
+          <app-radio-box [value]="0">
+            {{ "EServices.createEService.organizationalUnits" | translate }}
+          </app-radio-box>
+          <app-radio-box class="mx-4" [value]="1">
+            {{ "EServices.createEService.committees" | translate }}
+          </app-radio-box>
+        </app-radio-group>
+      </div>
+    </div>
+    <!-- related to controls  -->
+    <div class="row mt-4" *ngIf="form.get('unitCommitteeSwitcher').value == 0">
+      <label class="form-label">
+        {{ "EServices.createEService.relatedTo" | translate }}
+        <span class="required">*</span>
+      </label>
+      <div class="col-md-3 col-sm-4 col-12">
+        <app-select
+          class="d-block mt-3 select-control"
+          formControlName="sector"
+          [control]="form | getControl : 'sector'"
+          [placeholder]="
+            'EServices.createEService.sectorPlaceholder' | translate
+          "
+          [items]="sector"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+          (change)="onSelectChange($event, 1)"
+        ></app-select>
+      </div>
+
+      <div class="col-md-3 col-sm-4 col-12">
+        <app-select
+          class="d-block mt-3 select-control"
+          formControlName="department"
+          [control]="form | getControl : 'department'"
+          [placeholder]="
+            'EServices.createEService.departmentPlaceholder' | translate
+          "
+          [items]="department"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+          (change)="onSelectChange($event, 2)"
+        ></app-select>
+      </div>
+
+      <div class="col-md-3 col-sm-4 col-12">
+        <app-select
+          class="d-block mt-3 select-control"
+          formControlName="section"
+          [control]="form | getControl : 'section'"
+          [placeholder]="
+            'EServices.createEService.sectionPlaceholder' | translate
+          "
+          [items]="section"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'arabicName' : 'name'"
+          (change)="onSelectChange($event, 3)"
+        ></app-select>
+      </div>
+    </div>
+
+    <div class="mt-4" *ngIf="form.get('unitCommitteeSwitcher').value == 1">
+      <div class="row">
+        <div class="col-md-5 col-sm-7 col-12">
+          <app-select
+            class="d-block"
+            [control]="form | getControl : 'commitee'"
+            formControlName="commitee"
+            [placeholder]="'EServices.createEService.commiteeName' | translate"
+            [bindVlaue]="'id'"
+            [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+            [items]="commitee"
+            [title]="'EServices.createEService.commiteeName' | translate"
+            (change)="onSelectChange($event, 29)"
+          ></app-select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Addition Reason -->
+    <div class="form-group mt-4">
+      <app-text-editor
+        [id]="'additionReason'"
+        formControlName="additionReason"
+        [control]="form | getControl : 'additionReason'"
+        [title]="
+          eServiceId
+            ? ('EServices.createEService.editReason' | translate)
+            : ('EServices.createEService.additionReason' | translate)
+        "
+        [hasAttachments]="false"
+        (onKeyup)="restFieldAndTextEditorProbs('additionReason')"
+      ></app-text-editor>
+    </div>
+
+    <!-- addition main objectives control -->
+    <div class="form-group mt-4">
+      <app-text-editor
+        [id]="'additionMainObjectives'"
+        formControlName="additionMainObjectives"
+        [control]="form | getControl : 'additionMainObjectives'"
+        [title]="
+          eServiceId
+            ? ('EServices.createEService.requestMainObjective' | translate)
+            : ('EServices.createEService.additionMainObjectives' | translate)
+        "
+        [hasAttachments]="false"
+        (onKeyup)="restFieldAndTextEditorProbs('additionMainObjectives')"
+      ></app-text-editor>
+    </div>
+
+    <!-- effects control -->
+    <div class="form-group mt-4">
+      <app-text-editor
+        [id]="'effects'"
+        formControlName="effects"
+        [control]="form | getControl : 'effects'"
+        [title]="'EServices.createEService.effects' | translate"
+        [hasAttachments]="false"
+        (onKeyup)="restFieldAndTextEditorProbs('effects')"
+      ></app-text-editor>
+    </div>
+
+    <!-- attatchment control -->
+    <div class="form-group mt-4">
+      <app-attachments-files
+        [title]="'EServices.attachment' | translate"
+        [accept]="'doc,docx,pdf'"
+        [maxSize]="5"
+        [control]="form | getControl : 'attachment'"
+        [hint]="'EServices.attachmentHint' | translate"
+        (attachmentUploadEvent)="uploadFile($event)"
+      ></app-attachments-files>
+    </div>
+
+    <!-- title controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group col-sm-6 col-12 mt-4">
+        <app-filed
+          formControlName="title"
+          [control]="form | getControl : 'title'"
+          [title]="'EServices.createEService.title' | translate"
+          [placeholder]="
+            'EServices.createEService.titlePlaceholder' | translate
+          "
+          (onKeyup)="restFieldAndTextEditorProbs('title')"
+        ></app-filed>
+      </div>
+
+      <div class="form-group col-sm-6 col-12 mt-4">
+        <app-filed
+          formControlName="titleArabic"
+          [control]="form | getControl : 'titleArabic'"
+          [title]="'EServices.createEService.titleArabic' | translate"
+          [placeholder]="
+            'EServices.createEService.titleArabicPlaceholder' | translate
+          "
+          (onKeyup)="restFieldAndTextEditorProbs('titleArabic')"
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- description controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'description'"
+          formControlName="description"
+          [control]="form | getControl : 'description'"
+          [title]="'EServices.createEService.description' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('description')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'descriptionAr'"
+          formControlName="descriptionAr"
+          [control]="form | getControl : 'descriptionAr'"
+          [title]="'EServices.createEService.descriptionAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('descriptionAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group mt-4 col-sm-4 col-12">
+        <app-select
+          formControlName="serviceCategory"
+          autofocus
+          title="{{ 'EServices.createEService.serviceCategory' | translate }}"
+          bindValue="id"
+          placeholder="{{
+            'EServices.createEService.selectCategoryPlaceholder' | translate
+          }}"
+          [control]="form | getControl : 'serviceCategory'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+          [items]="EServiceCategory"
+          (change)="onSelectChange($event, 10)"
+        >
+        </app-select>
+      </div>
+
+      <div class="form-group mt-4 col-sm-4 col-12">
+        <app-select
+          formControlName="serviceType"
+          autofocus
+          title="{{ 'EServices.createEService.serviceType' | translate }}"
+          bindValue="id"
+          placeholder="{{
+            'EServices.createEService.serviceTypePlaceholder' | translate
+          }}"
+          [control]="form | getControl : 'serviceType'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+          [items]="EServiceType"
+          (change)="onSelectChange($event, 11)"
+        >
+        </app-select>
+      </div>
+
+      <div class="form-group mt-4 col-sm-4 col-12">
+        <label class="form-label"
+          >{{ "EServices.createEService.vitalService" | translate }}
+          <span class="required">*</span></label
+        >
+        <app-radio-group
+          class="d-flex gap-5"
+          bindValue="id"
+          formControlName="vitalService"
+        >
+          <app-radio-box [value]="true">
+            {{ "EServices.createEService.yes" | translate }}
+          </app-radio-box>
+          <app-radio-box [value]="false">
+            {{ "EServices.createEService.no" | translate }}
+          </app-radio-box>
+        </app-radio-group>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="form-group col-sm-6 col-12">
+        <app-select
+          formControlName="targetCustomersGroup"
+          autofocus
+          title="{{
+            'EServices.createEService.targetCustomersGroup' | translate
+          }}"
+          bindValue="id"
+          placeholder="{{
+            'EServices.createEService.targetCustomersGroupPlaceholder'
+              | translate
+          }}"
+          [control]="form | getControl : 'targetCustomersGroup'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+          [items]="EServiceTargetCustomer"
+          [multiple]="true"
+          (change)="onMultiSelectChange($event, 13)"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <!-- service requirements controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceRequirements'"
+          formControlName="serviceRequirements"
+          [control]="form | getControl : 'serviceRequirements'"
+          [title]="'EServices.createEService.serviceRequirements' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceRequirements')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceRequirementsAr'"
+          formControlName="serviceRequirementsAr"
+          [control]="form | getControl : 'serviceRequirementsAr'"
+          [title]="'EServices.createEService.serviceRequirementsAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceRequirementsAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <!-- service procedures controlS -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceProcedures'"
+          formControlName="serviceProcedures"
+          [control]="form | getControl : 'serviceProcedures'"
+          [title]="'EServices.createEService.serviceProcedures' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceProcedures')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceProceduresAr'"
+          formControlName="serviceProceduresAr"
+          [control]="form | getControl : 'serviceProceduresAr'"
+          [title]="'EServices.createEService.serviceProceduresAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceProceduresAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <!-- service fees control -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceFees'"
+          formControlName="serviceFees"
+          [control]="form | getControl : 'serviceFees'"
+          [title]="'EServices.createEService.serviceFees' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceFees')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceFeesAr'"
+          formControlName="serviceFeesAr"
+          [control]="form | getControl : 'serviceFeesAr'"
+          [title]="'EServices.createEService.serviceFeesAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceFeesAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="form-group mt-4 col-lg-4 col-md-6 col-12 d-flex flex-row align-items-center justify-content-start gap-3"
+      >
+        <label class="form-label col"
+          >{{ "EServices.createEService.isRelatedToService" | translate }}
+          <span class="required">*</span></label
+        >
+        <div class="radio-buttons-wrapper col">
+          <app-radio-group
+            class="d-flex gap-3"
+            bindValue="id"
+            formControlName="isRelatedToService"
+            (valueChanged)="setFieldValidator($event, 'relatedServices')"
+          >
+            <app-radio-box [value]="true">
+              {{ "EServices.createEService.yes" | translate }}
+            </app-radio-box>
+            <app-radio-box [value]="false">
+              {{ "EServices.createEService.no" | translate }}
+            </app-radio-box>
+          </app-radio-group>
+        </div>
+      </div>
+      <div class="form-group mt-4 col-lg-5 col-md-6 col-12 d-flex flex-column">
+        <app-select
+          [ngStyle]="{
+            display:
+              form.get('isRelatedToService').value === true ? 'block' : 'none'
+          }"
+          class="col-12"
+          formControlName="relatedServices"
+          autofocus
+          bindValue="id"
+          placeholder="{{
+            'EServices.createEService.relatedServicesPlaceholder' | translate
+          }}"
+          [control]="form | getControl : 'relatedServices'"
+          [bindLabel]="lang == 'ar' ? 'serviceTitleAr' : 'serviceTitle'"
+          [items]="relatedServices"
+          (change)="onSelectChange($event, 17)"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="form-group mt-4 col-lg-4 col-md-6 col-12 d-flex flex-row align-items-center justify-content-start gap-1"
+      >
+        <label class="form-label col"
+          >{{ "EServices.createEService.needApproval" | translate }}
+          <span class="required">*</span></label
+        >
+        <div class="radio-buttons-wrapper col">
+          <app-radio-group
+            class="d-flex gap-3"
+            bindValue="id"
+            formControlName="needApproval"
+            (valueChanged)="setFieldValidator($event, 'approval')"
+          >
+            <app-radio-box [value]="true">
+              {{ "EServices.createEService.yes" | translate }}
+            </app-radio-box>
+            <app-radio-box [value]="false">
+              {{ "EServices.createEService.no" | translate }}
+            </app-radio-box>
+          </app-radio-group>
+        </div>
+      </div>
+      <div class="form-group mt-4 col-lg-5 col-md-6 col-12 d-flex flex-column">
+        <app-filed
+          [ngStyle]="{
+            display: form.get('needApproval').value === true ? 'block' : 'none'
+          }"
+          class="col-12"
+          formControlName="approval"
+          [control]="form | getControl : 'approval'"
+          [placeholder]="
+            'EServices.createEService.approvalPlaceholder' | translate
+          "
+          (onKeyup)="restFieldAndTextEditorProbs('approval')"
+        ></app-filed>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-select
+          formControlName="serviceAppliedTimes"
+          autofocus
+          title="{{
+            'EServices.createEService.serviceAppliedTimes' | translate
+          }}"
+          bindValue="id"
+          placeholder="{{
+            'EServices.createEService.serviceAppliedTimesPlaceholder'
+              | translate
+          }}"
+          [control]="form | getControl : 'serviceAppliedTimes'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+          [items]="EServiceAppliedTimes"
+          (change)="onSelectChange($event, 20)"
+        >
+        </app-select>
+      </div>
+
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-select
+          formControlName="servicesChannels"
+          autofocus
+          title="{{ 'EServices.createEService.servicesChannels' | translate }}"
+          bindValue="id"
+          placeholder="{{
+            'EServices.createEService.servicesChannelsPlaceholder' | translate
+          }}"
+          [control]="form | getControl : 'servicesChannels'"
+          [bindLabel]="lang == 'ar' ? 'nameAr' : 'nameEn'"
+          [items]="EServiceChannels"
+          [multiple]="true"
+          (change)="onMultiSelectChange($event, 21)"
+        >
+        </app-select>
+      </div>
+    </div>
+
+    <!-- Complete Duratio controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-filed
+          formControlName="completeDuration"
+          [control]="form | getControl : 'completeDuration'"
+          [title]="'EServices.createEService.completeDuration' | translate"
+          [placeholder]="
+            'EServices.createEService.completeDurationPlaceholder' | translate
+          "
+          (onKeyup)="restFieldAndTextEditorProbs('completeDuration')"
+        ></app-filed>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-filed
+          formControlName="completeDurationAr"
+          [control]="form | getControl : 'completeDurationAr'"
+          [title]="'EServices.createEService.completeDurationAr' | translate"
+          [placeholder]="
+            'EServices.createEService.completeDurationArPlaceholder' | translate
+          "
+          (onKeyup)="restFieldAndTextEditorProbs('completeDurationAr')"
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- Service Suggestions controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceSuggestions'"
+          formControlName="serviceSuggestions"
+          [control]="form | getControl : 'serviceSuggestions'"
+          [title]="'EServices.createEService.serviceSuggestions' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceSuggestions')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceSuggestionsAr'"
+          formControlName="serviceSuggestionsAr"
+          [control]="form | getControl : 'serviceSuggestionsAr'"
+          [title]="'EServices.createEService.serviceSuggestionsAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceSuggestionsAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <!-- Service Bundles controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceBundles'"
+          formControlName="serviceBundles"
+          [control]="form | getControl : 'serviceBundles'"
+          [title]="'EServices.createEService.serviceBundles' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceBundles')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceBundlesAr'"
+          formControlName="serviceBundlesAr"
+          [control]="form | getControl : 'serviceBundlesAr'"
+          [title]="'EServices.createEService.serviceBundlesAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceBundlesAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <!-- FAQs controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceNotes'"
+          formControlName="serviceNotes"
+          [control]="form | getControl : 'serviceNotes'"
+          [title]="'EServices.createEService.serviceNotes' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceNotes')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'serviceNotesAr'"
+          formControlName="serviceNotesAr"
+          [control]="form | getControl : 'serviceNotesAr'"
+          [title]="'EServices.createEService.serviceNotesAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('serviceNotesAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <!-- Service Suggestions controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'FAQs'"
+          formControlName="FAQs"
+          [control]="form | getControl : 'FAQs'"
+          [title]="'EServices.createEService.FAQs' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('FAQs')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'FAQsAr'"
+          formControlName="FAQsAr"
+          [control]="form | getControl : 'FAQsAr'"
+          [title]="'EServices.createEService.FAQsAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('FAQsAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+
+    <!-- Service Suggestions controls -->
+    <div class="row" [ngClass]="lang == 'ar' ? 'rtl' : 'ltr'">
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'inquiries'"
+          formControlName="inquiries"
+          [control]="form | getControl : 'inquiries'"
+          [title]="'EServices.createEService.inquiries' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('inquiries')"
+        ></app-text-editor>
+      </div>
+      <div class="form-group mt-4 col-sm-6 col-12">
+        <app-text-editor
+          [id]="'inquiriesAr'"
+          formControlName="inquiriesAr"
+          [control]="form | getControl : 'inquiriesAr'"
+          [title]="'EServices.createEService.inquiriesAr' | translate"
+          [hasAttachments]="false"
+          (onKeyup)="restFieldAndTextEditorProbs('inquiriesAr')"
+        ></app-text-editor>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

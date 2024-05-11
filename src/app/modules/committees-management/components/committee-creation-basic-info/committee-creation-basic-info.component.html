@@ -1,0 +1,470 @@
+<div class="page">
+  <ng-container
+    *ngIf="
+      (loadingDetails && isUpdating) ||
+        (kpisLoading && isUpdating && !isChangeRequest) ||
+        (mainTasksLoading && isUpdating && !isChangeRequest) ||
+        lookupsLoading ||
+        isGoalsLoading ||
+        (loadingUsers && isUpdating) ||
+        (isImportedGoalsWithKPIsLoading && isUpdating) ||
+        (isImportedGoalsWithoutKPIsLoading && isUpdating) ||
+        (loadingCRPermission && isChangeRequest && isUpdating);
+        else form_data
+        "
+  >
+  <!-- (StrategicKpisLoading && isUpdating)|| -->
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+<ng-template #form_data>
+  <div class="new-committee-form" [formGroup]="form">
+    <!-- new committee tabs -->
+    <ul class="tabsmenu border-bottom flex-column flex-{{ breakpoint }}-row">
+      <li
+        *ngFor="let tab of tabs"
+        class="tabsmenu__item {{ tab.active ? 'active' : '' }}"
+      >
+        <a class="tabsmenu__link" (click)="activeTab(tab)">
+          {{ language == "ar" ? tab?.labelAr : tab?.label }}
+          <i
+            *ngIf="tab.valid"
+            class="bx bx-check text-success fw-bold fs-3"
+          ></i>
+          <!-- <i
+            *ngIf="tab.warning && tab.valid"
+            class="bx bx-x-circle text-warning fw-bold fs-3"
+          ></i> -->
+        </a>
+      </li>
+    </ul>
+    <!-- Committee Info -->
+    <section *ngIf="tabs[0].active" [ngClass]="'titleLang' + language">
+      <!-- committee name -->
+      <div class="row d-flex title-cont">
+        <div class="col-md-6 enNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block mt-4 ltr-text"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            formControlName="name"
+            [control]="form | getControl : 'name'"
+            [title]="
+              'committeesNewRequest.committeeForm.englishName' | translate
+            "
+            [placeholder]="
+              'committeesNewRequest.committeeForm.englishName' | translate
+            "
+          ></app-filed>
+        </div>
+
+        <div class="col-md-6 arNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block mt-4 rtl-text"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            formControlName="nameAr"
+            [control]="form | getControl : 'nameAr'"
+            [title]="
+              'committeesNewRequest.committeeForm.arabicName' | translate
+            "
+            [placeholder]="
+              'committeesNewRequest.committeeForm.arabicName' | translate
+            "
+          ></app-filed>
+        </div>
+      </div>
+
+      <!-- committee Category -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{
+            "committeesNewRequest.committeeForm.committeeCategory" | translate
+          }}
+          <span class="astrix-red">*</span>
+        </label>
+        <app-radio-group
+          class="d-flex flex-wrap gap-3"
+          formControlName="committeeType"
+          bindValue="id"
+        >
+          <app-radio-box
+            *ngFor="let category of committeeCategories"
+            [value]="category.code"
+          >
+            {{ language == "ar" ? category.nameAr : category.nameEn }}
+          </app-radio-box>
+        </app-radio-group>
+      </div>
+
+      <div class="row mt-5">
+        <!-- committee Duration Type -->
+        <div class="col-md-6">
+          <label class="form-label">
+            {{ "committeesNewRequest.committeeForm.committeeType" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <app-radio-group
+            class="d-flex"
+            bindValue="id"
+            formControlName="committeeDurationType"
+            (change)="onSelectCommitteeType()"
+          >
+            <app-radio-box [value]="1">
+              {{ "committeesNewRequest.committeeForm.permanent" | translate }}
+            </app-radio-box>
+            <app-radio-box class="mr-4 ml-4" [value]="2">
+              {{ "committeesNewRequest.committeeForm.temporary" | translate }}
+            </app-radio-box>
+          </app-radio-group>
+        </div>
+
+        <!-- committee duration -->
+        <div class="col-md-6" *ngIf="committeeDurationType.value == 2">
+          <app-select
+            class="d-block"
+            formControlName="duration"
+            [control]="form | getControl : 'duration'"
+            [title]="'committeesNewRequest.committeeForm.duration' | translate"
+            [placeholder]="
+              'committeesNewRequest.committeeForm.duration' | translate
+            "
+            [items]="committeeDurations"
+            [bindVlaue]="'code'"
+            [bindLabel]="language == 'ar' ? 'nameAr' : 'nameEn'"
+          ></app-select>
+        </div>
+      </div>
+
+      <label class="form-label mt-4">
+        {{
+          "committeesNewRequest.committeeForm.strategicGoals.title" | translate
+        }}
+      </label>
+
+      <!-- committee strategic goals -->
+      <app-committee-strategic-goals
+        [strategicGoals]="strategicGoals"
+        [mappedGoals]="mappedGoals"
+        [language]="language"
+        (onGoalsChanged)="getSelectedGoalsIds($event)"
+        (onGoalsChanged)="getSelectedGoalsWithoutKPIs($event)"
+      ></app-committee-strategic-goals>
+
+      <!-- committee description -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeesNewRequest.committeeForm.description" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <angular-editor formControlName="description" [config]="editorConfig">
+          <ng-template #customButtons>
+            <ae-toolbar-set>
+              <ae-button
+                iconClass="fa fa-paperclip fa-lg"
+                title="Attachment"
+                (buttonClick)="attachments.click()"
+              ></ae-button>
+            </ae-toolbar-set>
+          </ng-template>
+        </angular-editor>
+
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="
+            'committeesNewRequest.committeeForm.descriptionAttachmentsTypes'
+              | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+
+      <!-- committee tags -->
+      <div class="mt-4">
+        <app-filed
+          class="d-block"
+          formControlName="tags"
+          [control]="form | getControl : 'tags'"
+          [title]="'committeesNewRequest.committeeForm.tags' | translate"
+          [placeholder]="'committeesNewRequest.committeeForm.tags' | translate"
+          [isTagsFiled]="true"
+          [tags]="tags"
+        ></app-filed>
+      </div>
+    </section>
+
+    <!-- Committee Members  -->
+    <section *ngIf="tabs[1].active">
+      <div class="row">
+        <!-- committee chairman -->
+        <div class="col-md-6 mt-4">
+          <label class="form-label">
+            {{ "committeesNewRequest.committeeForm.chairman" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <small class="text-secondary d-block">
+            {{ "shared.userSearchHint" | translate }}
+          </small>
+
+          <ng-select
+            class="input-select"
+            formControlName="chairman"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="
+              'committeesNewRequest.committeeForm.chairman' | translate
+            "
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [closeOnSelect]="true"
+            [multiple]="false"
+            (scrollToEnd)="loadMoreEmployees()"
+            (search)="searchEmployees($event)"
+            [loading]="gettingEmployees && chairmanListFlag"
+            (focus)="onFocus('chairman')"
+            (change)="selected($event, 'chairman')"
+          >
+            <ng-option
+              *ngFor="let employee of employees"
+              [value]="employee?.id"
+              [disabled]="
+                employee.disabled && employee.id != form.value.chairman
+              "
+            >
+              {{language === 'en' ? employee.fullName : employee.fullArabicName}}
+            </ng-option>
+          </ng-select>
+        </div>
+
+        <!-- committee vice Chairman -->
+        <div class="col-md-6 mt-4">
+          <label class="form-label">
+            {{ "committeesNewRequest.committeeForm.viceChairman" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <small class="text-secondary d-block">
+            {{ "shared.userSearchHint" | translate }} /
+            {{ "committeesNewRequest.committeeForm.selectTwo" | translate }}
+          </small>
+
+          <ng-select
+            class="input-select viceChairman-select"
+            formControlName="viceChairmanIds"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="
+              'committeesNewRequest.committeeForm.viceChairman' | translate
+            "
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [closeOnSelect]="false"
+            [multiple]="true"
+            [maxSelectedItems]="2"
+            (scrollToEnd)="loadMoreEmployees()"
+            (search)="searchEmployees($event)"
+            [loading]="gettingEmployees && viceChairmanListFlag"
+            (focus)="onFocus('viceChairman')"
+            (change)="selected($event, 'viceChairman')"
+          >
+            <ng-option
+              *ngFor="let employee of employees"
+              [value]="employee?.id"
+              [disabled]="
+                employee.disabled &&
+                !form.value.viceChairmanIds?.includes(employee?.id)
+              "
+            >
+            {{language === 'en' ? employee.fullName : employee.fullArabicName}}
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+
+      <!-- committee Sponsor -->
+      <div class="col-md-6 mt-4">
+        <label class="form-label">
+          {{ "committeesNewRequest.committeeForm.sponsor" | translate }}
+          <i
+            class="bx bxs-error-circle text-dark"
+            [title]="
+              'committeesNewRequest.committeeForm.sponsorHint' | translate
+            "
+          ></i>
+          <span class="astrix-red">*</span>
+        </label>
+        <small class="text-secondary d-block">
+          {{ "shared.userSearchHint" | translate }}
+        </small>
+
+        <ng-select
+          class="input-select"
+          formControlName="sponsor"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="
+            'committeesNewRequest.committeeForm.sponsor' | translate
+          "
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [closeOnSelect]="true"
+          [multiple]="false"
+          (scrollToEnd)="loadMoreSponsors()"
+          (search)="searchSponsors($event)"
+          [loading]="sponsorListFlag"
+          (focus)="onFocus('sponsor')"
+        >
+          <ng-option *ngFor="let sponsor of sponsorsList" [value]="sponsor?.id">
+            {{language === 'en' ? sponsor.fullName : sponsor.fullArabicName}}
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <!-- committee secretory -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeesNewRequest.committeeForm.secretary" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <small class="text-secondary d-block">
+          {{ "shared.userSearchHint" | translate }} /
+          {{ "committeesNewRequest.committeeForm.selectTwo" | translate }}
+        </small>
+
+        <ng-select
+          class="input-select secretory-select"
+          formControlName="committeeSecretaryIds"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="
+            'committeesNewRequest.committeeForm.secretary' | translate
+          "
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [closeOnSelect]="false"
+          [multiple]="true"
+          [maxSelectedItems]="2"
+          (scrollToEnd)="loadMoreEmployees()"
+          (search)="searchEmployees($event)"
+          [loading]="gettingEmployees && secretaryListFlag"
+          (focus)="onFocus('secretary')"
+          (change)="selected($event, 'secretary')"
+        >
+          <ng-option
+            *ngFor="let employee of employees"
+            [value]="employee?.id"
+            [disabled]="
+              employee.disabled &&
+              !form.value.committeeSecretaryIds?.includes(employee?.id)
+            "
+          >
+          {{language === 'en' ? employee.fullName : employee.fullArabicName}}
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <!-- committee members -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeesNewRequest.committeeForm.members" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <small class="text-secondary d-block">
+          {{ "shared.userSearchHint" | translate }}
+        </small>
+
+        <ng-select
+          class="input-select members-select"
+          formControlName="memberIds"
+          [ngClass]="{ valid: (form | getControl : 'memberIds')?.valid }"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="
+            'committeesNewRequest.committeeForm.members' | translate
+          "
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          (scrollToEnd)="loadMoreEmployees()"
+          (search)="searchEmployees($event)"
+          [loading]="gettingEmployees && memberIdsListFlag"
+          (focus)="onFocus('memberIds')"
+          (change)="selected($event, 'memberIds')"
+        >
+          <ng-option
+            *ngFor="let employee of employees"
+            [value]="employee?.id"
+            [disabled]="
+              employee.disabled && !form.value.memberIds?.includes(employee?.id)
+            "
+          >
+            <person-item
+              [requesterItem]="employee"
+              [noCursor]="true"
+            ></person-item>
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <!-- external members  -->
+      <div class="row mt-4">
+        <app-committee-external-members
+          [language]="language"
+        ></app-committee-external-members>
+      </div>
+    </section>
+
+    <!-- Committee  KPIs -->
+    <section *ngIf="tabs[2].active">
+      <div class="row mt-3">
+        <app-committee-kpis-rows
+          [importedGoals]="importedGoalsWithKPIs"
+          [selectedKPIsIds]="importedKPIsIds"
+          [language]="language"
+          [isRequired]="true"
+          (onAdd)="KpiVerified($event)"
+        ></app-committee-kpis-rows>
+      </div>
+    </section>
+
+    <!-- Committee  Main tasks -->
+    <section *ngIf="tabs[3].active">
+      <div class="row mt-3">
+        <app-main-tasks-rows
+          [language]="language"
+          [isRequired]="true"
+          (onAdd)="mainTaskVerified($event)"
+        ></app-main-tasks-rows>
+      </div>
+    </section>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

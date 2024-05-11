@@ -1,0 +1,72 @@
+@import 'src/assets/css/utils/variables.scss';
+
+:host {
+    width: 100% !important;
+}
+
+.p-start {
+    padding-inline-start: 250px;
+}
+
+
+p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 31px;
+    color: $tertiary-color;
+    letter-spacing: 0.02em;
+    word-break: break-all;
+}
+
+.priority-card {
+    background: #FFFFFF;
+    border: 1px solid #CBCBCB;
+    border-radius: 8px;
+    padding: 11px 17px;
+    min-width: 218px;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .btn-link {
+        padding: 0;
+        height: fit-content;
+        min-height: unset;
+    }
+
+    .priority-label {
+        font-weight: 500;
+        font-size: 12.8696px;
+        line-height: 15px;
+        text-align: center;
+        letter-spacing: 0.02em;
+        margin-bottom: 10px;
+
+        &.low {
+            color: #FBC103;
+        }
+
+        &.medium {
+            color: #FF6E5A;
+        }
+
+        &.high {
+            color: #FF285C;
+        }
+
+    }
+
+    .priority-bar {
+        margin-bottom: 10px;
+    }
+
+    .priority-empty-state-label {
+        margin-bottom: 10px;
+        font-weight: 400;
+        font-size: 11.6275px;
+        line-height: 14px;
+        letter-spacing: 0.02em;
+        color: #888FA7;
+    }
+}

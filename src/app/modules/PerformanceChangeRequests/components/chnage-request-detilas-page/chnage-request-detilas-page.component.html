@@ -1,0 +1,48 @@
+<app-header-page
+  [title]="'cr.requestDetails' | translate"
+  [backButton]="true"
+  [showTotalItems]="false"
+  [isAddBtn]="false"
+></app-header-page>
+
+<ng-container *ngIf="isLoading; else data">
+  <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+</ng-container>
+
+<ng-template #data>
+  <div class="status">
+
+    <!-- action buttons -->
+    <workflow-action-options
+      class="d-block mb-3"
+      [title]="'cr.requestStatus' | translate"
+      [task]="task"
+      [options]="options"
+      [instanceId]="instanceId"
+      (onSaveAction)="actionTakenHandler($event)"
+    ></workflow-action-options>
+
+    <!-- approval timeline -->
+    <workflow-states
+      class="d-block mb-3"
+      [steps]="steps"
+    ></workflow-states>
+  </div>
+
+  <div class="details">
+    <cr-details-data [data]="reqData"></cr-details-data>
+  </div>
+
+  <!-- <div>
+    <app-request-history
+      [options]="options"
+      (updateReqEvent)="reloadRequest()"
+    ></app-request-history>
+  </div> -->
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+  <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+  <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+</ng-template>

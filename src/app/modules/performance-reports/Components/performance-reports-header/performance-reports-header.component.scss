@@ -1,0 +1,91 @@
+// mixins
+@import "../../../../../assets/css/utils/mixins.scss";
+// variables
+@import "../../../../../assets/css/utils/variables.scss";
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  .filter-expier-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // margin-top: 15px;
+
+    app-select {
+      min-width: 200px;
+      display: block;
+    }
+
+    .bg-time {
+      background: #ff285e2d;
+      border-radius: 8px;
+      padding: 5px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 19px;
+      color: #ff285c;
+    }
+  }
+
+  .left-filter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
+.select {
+  width: 150px;
+}
+
+.goal-select {
+  min-width: 340px;
+}
+
+.group {
+  width: 260px;
+  @include rtl_key(margin-, right, left, 0);
+  @include rtl_key(margin-, left, right, 15px);
+}
+
+label {
+  color: #717986;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.02em;
+}
+
+:host ::ng-deep .ant-select-selection-placeholder {
+  line-height: 44px !important;
+}
+
+:host ::ng-deep .ant-select-selection-item {
+  display: flex;
+  align-items: center;
+}
+
+.bg-submitted {
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #10b759;
+  background: rgba(#10b759, 0.27);
+}
+
+.bg-not-submitted {
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #e31b27;
+  background: rgba(#e31b27, 0.2);
+}

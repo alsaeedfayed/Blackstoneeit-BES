@@ -1,0 +1,224 @@
+<div class="new-model-dialog-body">
+  <div class="new-attendee-form pb-2" [formGroup]="form">
+    <!-- attendee name -->
+    <div class="mt-4" *ngIf="isUpdating">
+      <!-- *ngIf="attendee?.attendeeType != 3" -->
+      <person-item
+
+        [requesterItem]="attendee?.userInfo"
+        [noCursor]="true"
+      ></person-item>
+      <!-- <span *ngIf="attendee?.attendeeType == 3" class="initials">
+        {{ attendee?.name | initials }}
+      </span>
+      <span *ngIf="attendee?.attendeeType == 3">
+        {{ attendee?.name | capitalizeFirstLetter }}
+      </span> -->
+    </div>
+
+    <!-- attendee type -->
+    <div
+      class="mt-4"
+      *ngIf="!isUpdating || (attendee?.attendeeType != 3 && isUpdating)"
+    >
+      <app-select *ngIf="!isUpdating"
+        class="d-block"
+        formControlName="attendeeType"
+        [control]="form | getControl : 'attendeeType'"
+        [title]="'committeeNewMeeting.newAttendeeModel.type' | translate"
+        [placeholder]="'committeeNewMeeting.newAttendeeModel.type' | translate"
+        [items]="attendanceTypes"
+        [bindVlaue]="'id'"
+        [bindLabel]="language == 'ar' ? 'nameAr' : 'name'"
+      ></app-select>
+    </div>
+
+    <!--  new attendee inputs -->
+    <ng-container *ngIf="!isUpdating">
+      <!-- attendee name -->
+      <div class="row" *ngIf="attendanceType?.value == 3">
+        <!-- attendee first name -->
+
+        <div class="col-md-6 mt-4">
+          <app-filed
+            class="d-block"
+            formControlName="firstName"
+            [control]="form | getControl : 'firstName'"
+            [title]="
+              'committeeNewMeeting.newAttendeeModel.firstName' | translate
+            "
+            [placeholder]="
+              'committeeNewMeeting.newAttendeeModel.firstName' | translate
+            "
+          ></app-filed>
+        </div>
+        <!-- attendee last name -->
+        <div class="col-md-6 mt-4">
+          <app-filed
+            class="d-block"
+            formControlName="lastName"
+            [control]="form | getControl : 'lastName'"
+            [title]="
+              'committeeNewMeeting.newAttendeeModel.lastName' | translate
+            "
+            [placeholder]="
+              'committeeNewMeeting.newAttendeeModel.lastName' | translate
+            "
+          ></app-filed>
+        </div>
+      </div>
+
+      <!-- attendee email -->
+      <div class="col-md-12 mt-4" *ngIf="attendanceType?.value == 3">
+        <app-filed
+          class="d-block"
+          formControlName="email"
+          [control]="form | getControl : 'email'"
+          [title]="'committeeNewMeeting.newAttendeeModel.email' | translate"
+          [placeholder]="
+            'committeeNewMeeting.newAttendeeModel.email' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <!-- member -->
+      <div class="mt-4" *ngIf="attendanceType?.value != 3">
+        <label class="form-label">
+          {{ "committeeNewMeeting.newAttendeeModel.member" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+
+        <ng-select
+          class="input-select members-select"
+          formControlName="memberId"
+          [ngClass]="{ valid: (form | getControl : 'memberId')?.valid }"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="
+            'committeeNewMeeting.newAttendeeModel.member' | translate
+          "
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [multiple]="false"
+          [closeOnSelect]="true"
+          (scrollToEnd)="loadMoreEmployees()"
+          (search)="searchEmployees($event)"
+          [loading]="gettingEmployees"
+          (focus)="onFocus()"
+        >
+          <ng-option *ngFor="let employee of employees" [value]="employee?.id">
+            <person-item
+              [requesterItem]="employee"
+              [noCursor]="true"
+            ></person-item>
+          </ng-option>
+        </ng-select>
+      </div>
+    </ng-container>
+
+    <!-- attendance status -->
+    <div class="mt-4" *ngIf="isUpdating">
+      <label class="form-label">
+        {{ "committeeNewMeeting.newAttendeeModel.status" | translate }}
+        <span class="astrix-red">*</span>
+      </label>
+      <app-radio-group
+        class="d-flex flex-wrap gap-3 mt-3"
+        formControlName="attendeeStatus"
+        bindValue="id"
+      >
+        <app-radio-box
+          *ngFor="let status of attendanceStatus"
+          [value]="status.id"
+        >
+          {{ language == "ar" ? status.nameAr : status.name }}
+        </app-radio-box>
+      </app-radio-group>
+
+      <div class="my-4" *ngIf="form.value?.attendeeStatus == 2">
+        <label class="form-label">
+          {{ "committeeNewMeeting.newAttendeeModel.evidence" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <textarea
+          id="evidence"
+          type="textarea"
+          class="form-control evidenceArea"
+          rows="5"
+          formControlName="justificationReason"
+          (keyup)="getChangedValue(form?.value.justificationReason)"
+        ></textarea>
+
+        <!-- attatchments -->
+        <label class="form-label my-4">
+          {{ "committeeNewMeeting.newAttendeeModel.attachments" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+
+        <div
+          class="drop-zone"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <p class="fw-bold text-black">
+            {{ "committeeKPIs.details.drag" | translate }}
+          </p>
+          <div>
+            <span class="text-secondary">{{ "shared.or" | translate }}</span>
+            <a (click)="attachments.click()" class="text-primary">
+              {{ "committeeKPIs.details.browse" | translate }}
+            </a>
+            <span class="text-secondary">
+              {{ "committeeKPIs.details.choose" | translate }}
+            </span>
+          </div>
+        </div>
+
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="
+            'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || isBtnLoading || (isUpdating && oldAttachments?.length < 1 && attachments?.length < 1 && form.contains('justificationReason'))"
+    (click)="save()"
+  >
+    <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    {{ "shared.save" | translate }}
+  </button>
+</div>

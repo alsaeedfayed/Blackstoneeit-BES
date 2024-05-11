@@ -1,0 +1,94 @@
+<app-header-page
+  [title]="'performanceReports.perfReports' | translate"
+  [totalItems]="list?.length"
+  [backButton]="true"
+  [showButtons]="true"
+>
+  <ng-container buttons>
+    <div class="side-info" *ngIf="!dataLoading">
+      <div class="scorecard">
+        <label>{{ "performanceReports.scorecard" | translate }}:</label>
+        <app-select
+          class="select"
+          (ngModelChange)="handleScorecardChange($event)"
+          bindValue="id"
+          [(ngModel)]="selectedScorecard"
+          [bindLabel]="language == 'ar' ? 'titleAr' : 'title'"
+          [items]="scorecards"
+          [dropdownPosition]="'bottom'"
+        ></app-select>
+      </div>
+
+      <div class="Period">
+        <label>{{ "performanceReports.period" | translate }}:</label>
+        <app-select
+          class="select"
+          (ngModelChange)="handlePeriodChange($event)"
+          bindValue="id"
+          [(ngModel)]="selectedPeriod"
+          [bindLabel]="language == 'ar' ? 'nameAr' : 'name'"
+          [items]="periods"
+          [dropdownPosition]="'bottom'"
+        ></app-select>
+      </div>
+
+      <div *ngIf="data" class="custom">
+        <label
+          [ngClass]="{
+            'bg-submitted': isPublished,
+            'bg-not-submitted': !isPublished
+          }"
+        >
+          {{
+            isPublished
+              ? ("performanceReports.periodPublished" | translate)
+              : ("performanceReports.periodNotPublished" | translate)
+          }}
+        </label>
+      </div>
+    </div>
+
+    <div class="side-info" *ngIf="dataLoading">
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+    </div>
+  </ng-container>
+</app-header-page>
+
+<div class="header" *ngIf="!dataLoading">
+  <performance-reports-header
+    class="d-block mb-4"
+    [SelectedScorecardId]="selectedScorecard"
+    [SelectedPeriodId]="selectedPeriod"
+    (doneData)="getReports()"
+    (changeGroup)="selectedGroup = $event"
+    (changeGoal)="handleGoalChange($event)"
+  ></performance-reports-header>
+
+  <ng-container *ngIf="loading; else tables">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #tables>
+  <performance-reports-table
+    *ngIf="list.length > 0"
+    [list]="list"
+    [scorecardSubmissionId]="scorecardSubmissionId"
+  ></performance-reports-table>
+
+  <!-- no data msg -->
+  <div class="no-data" *ngIf="list?.length == 0">
+    <app-no-data [msg]="'performanceReports.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

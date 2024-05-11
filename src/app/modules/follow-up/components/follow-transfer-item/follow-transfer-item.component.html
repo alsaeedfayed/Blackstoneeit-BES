@@ -1,0 +1,106 @@
+<div class="new-model-dialog-body">
+  <div class="transfer-item-form pb-2" [formGroup]="form">
+    <ng-container *ngIf="loading; else form_data">
+      <div class="my-4">
+        <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-template #form_data>
+      <div class="transfer-item-form pb-2" [formGroup]="form">
+        <div class="mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <app-radio-group class="d-flex" bindValue="id" formControlName="type">
+                        <app-radio-box  [value]="1">
+                            {{ 'followUp.organizationMember' | translate }}
+                        </app-radio-box>
+                        <app-radio-box class="mr-4 ml-4"  [value]="2">
+                            {{ 'followUp.commiteeMembers' | translate }}
+                        </app-radio-box>
+                    </app-radio-group>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3" *ngIf="form.get('type').value == 2">
+            <div class="row">
+                <div class="col-6">
+                    <app-select class="d-block" [control]="form | getControl: 'commitee'" formControlName="commitee"
+                        [placeholder]="'followUp.commiteeName' | translate" [bindVlaue]="'id'"
+                        [bindLabel]="lang == 'ar'? 'nameAr':'name'" [items]="commitee"
+                        [title]="'followUp.commiteeName' | translate " (change)="getMembers()"></app-select>
+                </div>
+                <div class="col-6" *ngIf="!!(form | getControl: 'commitee').value">
+                    <app-select [bindLabel]="'fullName'"
+                        [placeholder]="'followUp.commiteeMember' | translate" [title]="'followUp.commiteeMember' | translate "
+                        formControlName="assginee" [control]="form | getControl: 'assginee'" [bindVlaue]="'id'"
+                        [items]="member" class="d-block"></app-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3" *ngIf="form.get('type').value == 1">
+            <div class="row" >
+                <div class="col-6">
+                    <app-select class="d-block mb-3" [control]="form | getControl: 'sector'" formControlName="sector"
+                        [placeholder]="'followUp.sectorPlaceholder' | translate" [bindVlaue]="'id'"
+                        [bindLabel]="lang == 'ar'? 'arabicName':'name'" [items]="sector"
+                        [title]="'followUp.sector' | translate "></app-select>
+                </div>
+                <div class="col-6" *ngIf="!!(form | getControl: 'sector').value">
+                    <app-select [bindLabel]="lang == 'ar'? 'arabicName' : 'name'"
+                        [placeholder]="'followUp.departmentPlaceholder' | translate" [title]="'followUp.department' | translate "
+                        formControlName="department" [control]="form | getControl: 'department'" [bindVlaue]="'id'"
+                        [items]="department" class="d-block" [clearable]="true"></app-select>
+                </div>
+                <div class="col-6" *ngIf="!!(form | getControl: 'department').value">
+                    <app-select [bindLabel]="lang == 'ar'? 'arabicName' : 'name'"
+                        [placeholder]="'followUp.sectionPlaceholder' | translate" [title]="'followUp.section' | translate "
+                        formControlName="section" [control]="form | getControl: 'section'" [bindVlaue]="'id'"
+                        [items]="section" class="d-block" [clearable]="true"></app-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3" *ngIf="!!(form | getControl: 'sector').value">
+            <app-select [bindLabel]="'fullName'" [placeholder]="'followUp.assigneePlaceholder' | translate"
+                [control]="form | getControl: 'assginee'" formControlName="assginee" [bindVlaue]="'id'" [items]="users"
+                class="d-block" [title]="'followUp.assignedTo' | translate" [clearable]="true"></app-select>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="close()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form?.invalid || btnLoading"
+    (click)="transferTask()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="btnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

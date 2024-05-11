@@ -1,0 +1,141 @@
+<app-header-page
+  [title]="'changeRequests.changeRequests' | translate"
+  [totalItems]="changeRequestsTotal"
+  [backButton]="true"
+></app-header-page>
+
+<!-- page filters -->
+<app-page-filters
+  [searchValue]="searchModel?.keyword"
+  [hasAssignedSwitch]="true"
+  [assignedSwitchId]="'onlyMe'"
+  [assignedSwitchLabel]="'changeRequests.assignedToMe' | translate"
+  [assignedSwitchValue]="filterModel?.hasTask"
+  [hasAdvancedFilter]="true"
+  [popupAdvancedFilter]="true"
+  [appliedFiltersCount]="filterModel?.appliedFiltersCount"
+  (onSwitch)="onAssignedToMeChange($event)"
+  (search)="handleSearchFilter($event)"
+  (onOpenAdvancedFilterModel)="onFilter()"
+></app-page-filters>
+
+<!-- <div class="filters my-4">
+  <app-select
+    [placeholder]="'shared.sortBy' | translate"
+    [items]="sortItems"
+    [value]="searchModel.sortBy"
+    [bindVlaue]="'name'"
+    [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+    [dropdownPosition]="'bottom'"
+    (change)="onSort($event)"
+  ></app-select>
+</div> -->
+
+<div class="requests-list" *ngIf="!loading && changeRequests?.length > 0">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="request-index">#</th>
+        <th scope="col">{{ 'changeRequests.title' | translate }}</th>
+        <th scope="col" class="request-name">{{ 'changeRequests.projectName' | translate }}</th>
+        <th scope="col">{{ 'shared.status' | translate }}</th>
+        <th scope="col">{{ 'shared.date' | translate }}</th>
+        <th scope="col">{{ 'shared.createdBy' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="
+        let item of changeRequests
+          | paginate
+            : {
+                itemsPerPage: searchModel?.pageSize,
+                currentPage: searchModel?.page,
+                totalItems: changeRequestsTotal
+              };
+        let i =index;
+      ">
+        <td class="request-index">
+          {{ i | tableItemIndex : searchModel?.pageSize : searchModel?.page }}
+        </td>
+        <td>
+          <a class="hoverableLink" [routerLink]="'/change-requests/details/' + item?.id">
+            {{ item?.title }}
+          </a>
+        </td>
+        <td class="request-name">
+          {{ item?.project?.name[lang] }}
+        </td>
+        <td>
+          <app-badge
+            *ngIf="item.status.title.en === 'Approved'"
+            [className]="'complete'"
+            [label]="item?.status.title[lang]"
+          ></app-badge>
+          <app-badge
+            *ngIf="item.status.title.en === 'Rejected'"
+            [className]="'rejected'"
+            [label]="item?.status.title[lang]"
+          ></app-badge>
+          <app-badge
+            *ngIf="item.status.title.en === 'Returned for Correction'"
+            [className]="'closed'"
+            [label]="item?.status.title[lang]"
+          ></app-badge>
+          <app-badge
+            *ngIf="item.status.mappedStatusCode === 'PendingForReview'"
+            [className]="'inProgress'"
+            [label]="item?.status.title[lang]"
+          ></app-badge>
+        </td>
+        <td>
+          {{
+            lang === "en" ?
+            ((item.createdDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+            ((item.createdDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+          }}
+        </td>
+        <td>
+          <person-item
+            *ngIf="item?.createdBy"
+            [ownerItem]="item.createdBy"
+            [CompMode]="2"
+            [noCursor]="true"
+            [isUserCardFixed]="true"
+          ></person-item>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="no-data" *ngIf="!loading && changeRequests?.length === 0">
+  <app-no-data [msg]="'changeRequests.noChangeRequestsAvailable' | translate"></app-no-data>
+</div>
+
+<pagination-controls
+  *ngIf="!loading && changeRequests?.length !== 0 && changeRequestsTotal > searchModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+<div class="mt-2" *ngIf="loading && (!changeRequests || changeRequestsTotal == 0)">
+  <app-skeleton-loader class="w-100" [mode]="'table'" *ngFor="let i of [1, 2, 3, 4, 5, 6]"></app-skeleton-loader>
+</div>
+
+<app-loading-modal
+  [displayModal]="displayLoadingModal"
+  [content]="loadingModalText"
+></app-loading-modal>
+
+<!-- Change requests modal -->
+<app-change-requests-modal
+  [lang]="lang"
+  [states]="requestStates"
+  [filters]="filterModel"
+  (resetFilter)="onResetFilterConfirmed($event)"
+  (filter)="onFilterConfirmed($event)"
+></app-change-requests-modal>

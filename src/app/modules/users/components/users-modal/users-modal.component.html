@@ -1,0 +1,178 @@
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'users'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onCancel()"
+>
+  <div modal-header class="groups-model-header w-100">
+    <label class="modal-title">
+      {{ title }}
+    </label>
+  </div>
+
+  <div modal-content class="groups-model-content border-top">
+    <div class="new-model-dialog-body">
+
+      <!-- Create User Popup -->
+      <div *ngIf="(mode$ | async)  === 'create-user'">
+        <form class="pb-2" [formGroup]="form">
+          <div class="row">
+
+            <!-- position -->
+            <div class="col-md-4">
+              <app-filed
+                class="d-block mt-3"
+                id="position"
+                [formControl]="form.controls['position']"
+                [control]="form | getControl: 'position'"
+                [title]="'users.position' | translate"
+                [placeholder]="'users.typePosition' | translate"
+                [length]="5"
+              ></app-filed>
+            </div>
+
+            <!-- first name -->
+            <div class="col-md-8">
+              <app-filed
+                class="d-block mt-3"
+                id="firstName"
+                [formControl]="form.controls['firstName']"
+                [control]="form | getControl: 'firstName'"
+                [title]="'users.firstName' | translate"
+                [placeholder]="'users.typeFirstName' | translate"
+              ></app-filed>
+            </div>
+          </div>
+
+          <!-- last name -->
+          <app-filed
+            class="d-block mt-3"
+            id="lastName"
+            [formControl]="form.controls['lastName']"
+            [control]="form | getControl: 'lastName'"
+            [title]="'users.lastName' | translate"
+            [placeholder]="'users.typeLastName' | translate"
+          ></app-filed>
+
+          <!-- arabic full name name -->
+          <app-filed
+            class="d-block mt-3"
+            id="fullArabicName"
+            [formControl]="form.controls['fullArabicName']"
+            [control]="form | getControl: 'fullArabicName'"
+            [title]="'users.arabicName' | translate"
+            [placeholder]="'users.typeFullArabicName' | translate"
+          ></app-filed>
+
+          <!-- email -->
+          <app-filed
+            class="d-block mt-3"
+            id="email"
+            [formControl]="form.controls['email']"
+            [control]="form | getControl: 'email'"
+            [title]="'users.email' | translate"
+            [placeholder]="'users.typeEmail' | translate"
+            [dir]="'ltr'"
+          ></app-filed>
+
+          <!-- phone number -->
+          <div class="form-group mt-3">
+            <label for="mobile" class="form-label">
+              {{ "users.mobile" | translate }}
+            </label>
+            <input
+              id="mobile"
+              type="tel"
+              class="form-control"
+              formControlName="phoneNumber"
+              [dropSpecialCharacters]="true"
+              prefix="+971 "
+              dir="ltr"
+              mask="00 000 0000"
+              (input)="mobileValidation($event)"
+            />
+            <small class="form-error align-items-start" *ngIf="!isValidMobile">
+              <i class="bx bxs-error-circle"></i>
+              <span>{{ "users.doesNotMatchMobileNumberFormat" | translate }}</span>
+            </small>
+          </div>
+
+          <!-- groups -->
+          <div class="form-group mt-3">
+            <label for="" class="form-label">
+              {{ 'users.groups' | translate }}
+            </label>
+
+            <custom-select-tree
+              [items]="groups"
+              [formControl]="form.controls['groupsIds']"
+              [control]="form | getControl: 'groupsIds'"
+            ></custom-select-tree>
+          </div>
+
+          <!-- password -->
+          <app-filed
+            *ngIf="displayPasswords"
+            class="d-block mt-3"
+            id="password"
+            [formControl]="form.controls['password']"
+            [control]="form | getControl: 'password'"
+            [title]="'users.password' | translate"
+            placeholder="***********"
+            [isPassword]="true"
+          ></app-filed>
+
+          <!-- password confirmation -->
+          <app-filed
+            *ngIf="displayPasswords"
+            class="d-block mt-3"
+            id="passwordConfirmation"
+            [formControl]="form.controls['passwordConfirmation']"
+            [control]="form | getControl: 'passwordConfirmation'"
+            [title]="'users.passwordConfirmation' | translate"
+            placeholder="***********"
+            [isPassword]="true"
+          ></app-filed>
+        </form>
+      </div>
+
+      <!-- Set roles Popup -->
+      <div *ngIf="(mode$ | async) === 'set-roles'">
+        <app-select
+          class="d-block mt-3"
+          [search]="true"
+          [multiple]="true"
+          [items]="roles"
+          [placeholder]="'users.selectRoles' | translate"
+          [bindVlaue]="'name'"
+          [bindLabel]="lang === 'en' ? 'name' : 'nameAr'"
+          [(ngModel)]="selectedRoles"
+        ></app-select>
+      </div>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+
+      <!-- back button -->
+      <button
+        class="btn btn-dark flex-grow-1"
+        (click)="onCancel()"
+      >
+        {{ 'shared.back' | translate }}
+      </button>
+
+      <!-- save button -->
+      <button
+        class="btn btn-main flex-grow-1"
+        [disabled]="((mode$ | async)  === 'create-user' && form?.invalid) || isBtnLoading"
+        (click)="onSubmit()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+        {{ 'shared.save' | translate }}
+      </button>
+    </div>
+  </div>
+</app-model>

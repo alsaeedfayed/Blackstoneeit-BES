@@ -1,0 +1,86 @@
+@import "src/assets/css/utils/variables.scss";
+//forms
+@import "../../../assets/css/components/form-inputs.scss";
+
+.w-100 {
+  width: 100%;
+}
+
+.dropdown-label {
+  margin-inline-end: 12px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: $dark-gray-color;
+}
+
+.dropdown-container {
+  position: relative;
+
+  select {
+    padding: 12px 40px 12px 12px !important;
+  }
+
+  button {
+    padding: 13px;
+    padding-inline-end: 40px;
+    background: $white-color;
+    border: 1px solid #f1f2f7;
+    border-radius: 8px;
+    min-width: 165px;
+    width: fit-content;
+    height: 45px;
+    background-image: url("../../../assets/icons/chevron-down.svg");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    text-align: start;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: $tertiary-color;
+    white-space: nowrap;
+
+    &:disabled {
+      background: #f8f8f8;
+    }
+  }
+
+  ul {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    left: unset;
+    list-style: none;
+    min-width: 165px;
+    width: 100%;
+    transition: all 0.3s ease;
+    z-index: 200;
+    display: none;
+    background: $white-color;
+    border: 1px solid #f1f2f7;
+    backdrop-filter: blur(150px);
+    border-radius: 0px 0px 8px 8px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    &.active {
+      display: block;
+      border-top: none;
+    }
+
+    li {
+      cursor: pointer;
+      padding: 0.6rem 11px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      color: $secondary-color;
+
+      &:hover {
+        color: $tertiary-color;
+        background-color: #f5f7fa;
+      }
+    }
+  }
+}

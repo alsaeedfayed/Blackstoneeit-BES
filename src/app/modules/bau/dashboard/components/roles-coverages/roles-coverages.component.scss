@@ -1,0 +1,86 @@
+.roles-coverage {
+  background: #fff;
+  border-radius: 10px;
+  // &.scrollable {
+  //   max-height: 285px; /* Adjust the height as needed */
+  //   overflow-y: auto; /* Add a vertical scrollbar if necessary */
+  // }
+  .wrapper {
+    padding: 20px 13px;
+
+    .header-text {
+      color: #7a838f;
+      font-weight: 600;
+      size: 12px;
+    }
+
+    .roles {
+      margin-top: 16px;
+
+      .progress {
+        height: 30px;
+        border-radius: 7px;
+        background-color: #c8d1d8;
+        .progress-bar {
+          text-align: start;
+          color: #efefef;
+          font-weight: 400;
+          font-size: 10px;
+          position: relative;
+          background-color: #0066ff;
+        }
+        .progress-bar-text {
+          position: absolute;
+          color: white;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 300px;
+
+          &.low {
+            // color: #2c3e50;
+          }
+          &.ar {
+            top: 10%;
+            right: 10px;
+          }
+          &.en {
+            top: 28%;
+            left: 10px;
+          }
+        }
+        .tasks-count {
+          position: absolute;
+          font-weight: 400;
+          font-size: 10px;
+          &.ar {
+            top: 10%;
+            left: 10px;
+          }
+          &.en {
+            top: 28%;
+            right: 10px;
+          }
+        }
+      }
+    }
+
+}
+
+}
+.full {
+  color: #fff;
+}
+::ng-deep{
+  .progress-bar{
+    background-color: linear-gradient('#0066FF' , '#0652C3') !important;
+  }
+}
+.no-data {
+  min-height: 200px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}

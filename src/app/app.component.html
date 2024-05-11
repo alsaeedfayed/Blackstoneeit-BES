@@ -1,0 +1,7 @@
+<router-outlet></router-outlet>
+<app-confirm-modal
+    [btnContent]="'shared.confirm' | translate" [btnStyle]="'main'"
+    (confirm)="onConfirmed()"
+    [content]="confirmMsg" [id]="'warning-license'"
+    [showOkOnlyBtn]="true"
+></app-confirm-modal> 

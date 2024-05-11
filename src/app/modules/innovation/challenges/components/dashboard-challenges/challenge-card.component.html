@@ -1,0 +1,63 @@
+<div class="challenge-card d-flex justify-content-between">
+  <div class="image-header" [style.background-image]="'url('+ challenge.coverImage?.fileUrl + ')'">
+  </div>
+
+  <!--  <img class="image-header" src="assets/img/7ed8b3466a7d3d34f203058a85bc03f4.jpg">-->
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <app-badge
+        [className]="'primary'"
+        [label]="Statues.getStatusString(challenge.status)"
+      ></app-badge>
+      <div class="date">
+        <span>{{challenge.creationDate | date}}</span>
+      </div>
+    </div>
+    <h2>{{challenge.title}}</h2>
+    <p [innerHTML]="challenge.description"></p>
+    <div class="additional-info">
+      <div class="row">
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="organizer right-divider">
+            <span>{{'challenges.card.organizer'  | translate}}</span>
+            <div class="organizer-desc">
+              <person-item
+                [requesterItem]="challenge.organizer"
+                [noCursor]="true"
+                [isUserCardFixed]="true"
+
+              ></person-item>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 col-12">
+          <div class="Focus-area right-divider">
+            <span>{{'challenges.card.focusArea'  | translate}}</span>
+            <h4>
+              <ng-container *ngFor="let name of challenge.focusArea">{{name + ','}}</ng-container>
+            </h4>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-12">
+          <div class="End-date right-divider">
+            <span>{{'challenges.card.endDate'  | translate}}</span>
+            <h4>{{challenge.endDate | date}}</h4>
+          </div>
+        </div>
+        <div class="col-lg-2 col-sm-6 col-12">
+          <div class="idea">
+            <span>{{'challenges.card.idea'  | translate}}</span>
+            <h4>{{challenge.ideasCount}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions d-flex justify-content-end">
+      <a href="#">{{'challenges.card.viewMore'  | translate}}</a>
+      <!--      <a href="#">{{'challenges.card.openDetails'  | translate}}</a>-->
+    </div>
+  </div>
+
+</div>
+
+

@@ -1,0 +1,22 @@
+.goals-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  .table {
+    --id-width: 60px;
+
+    .goal-id {
+      width: var(--id-width);
+    }
+
+    .goal-title {
+      max-width: 250px;
+    }
+
+    .goal-status {
+      app-badge {
+        white-space: nowrap;
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+<div class="new-model-dialog-body">
+  <!-- tabs -->
+  <div class="table-wrapper mt-4 chrtabs">
+    <app-tabs class="d-block mt-1">
+      <!-- changed data details items tab -->
+      <app-tab [title]="'changeRequests.details.changedData' | translate">
+        <div>
+          <app-basic-information-rows
+            [basicInfoList]="changedDataTasks"
+            [lang]="language"
+            [noDataMsg]="'changeRequests.details.noDataChangedData' | translate"
+          ></app-basic-information-rows>
+        </div>
+      </app-tab>
+
+      <!-- full details  tab -->
+      <app-tab [title]="'changeRequests.details.fullDetails' | translate">
+        <div class="full-container" *ngIf="!isAddedTask; else isAddedTassk">
+          <div class="weight-target mt-2">
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.titleEn" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ taskDetails?.title }}</span>
+            </div>
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.titleAr" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ taskDetails?.titleAr }}</span>
+            </div>
+          </div>
+
+          <div class="full-description mt-3">
+            <span class="full-description-lable">
+              {{ "changeRequests.details.dueDate" | translate }}
+            </span>
+            <span class="full-description-body mt-2">
+              {{
+                language === "en"
+                  ? ((taskDetails?.dueDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((taskDetails?.dueDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </div>
+
+          <div class="full-description mt-3">
+            <span class="full-description-lable">
+              {{ "changeRequests.details.description" | translate }}
+            </span>
+            <span
+              class="full-description-body mt-2"
+              [innerHTML]="taskDetails?.description"
+            ></span>
+          </div>
+
+          <div class="full-attatchments mt-3">
+            <span class="full-attatchments-lable">
+              {{ "changeRequests.details.attatchmens" | translate }}
+            </span>
+            <div class="my-3">
+              <uploaded-attachments-files
+                *ngIf="attatchments?.length > 0; else noAttatchments"
+                class="d-block mt-3"
+                [files]="attatchments"
+                [canDeleted]="false"
+              ></uploaded-attachments-files>
+              <ng-template #noAttatchments>
+                {{ "changeRequests.details.noAtt" | translate }}
+              </ng-template>
+            </div>
+          </div>
+
+
+        </div>
+
+        <ng-template #isAddedTassk>
+          <!-- added kpis  -->
+          <div class="weight-target mt-2" style="padding: 2rem">
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.titleEn" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ taskDetails?.title }}</span>
+            </div>
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.titleAr" | translate }}
+              </span>
+              <span class="weight-target mt-2">{{ taskDetails?.titleAr }}</span>
+            </div>
+
+            <div>
+              <span class="weight-target-lable">
+                {{ "changeRequests.details.changeType" | translate }}
+              </span>
+              <span
+                class="weight-target mt-2"
+                [ngClass]="
+                  changedTypes[taskDetails?.recordingStatus]?.className
+                "
+              >
+                {{
+                  language === "en"
+                    ? changedTypes[taskDetails?.recordingStatus]?.name
+                    : changedTypes[taskDetails?.recordingStatus]?.nameAr
+                }}
+              </span>
+            </div>
+          </div>
+
+          <div class="full-description mt-3">
+            <span class="full-description-lable">
+              {{ "changeRequests.details.description" | translate }}
+            </span>
+            <span
+              class="full-description-body mt-2"
+              [innerHTML]="taskDetails?.description"
+            ></span>
+          </div>
+
+          <div class="full-attatchments mt-3">
+            <span class="full-attatchments-lable">
+              {{ "changeRequests.details.attatchmens" | translate }}
+            </span>
+            <div class="my-3">
+              <uploaded-attachments-files
+                *ngIf="attatchments?.length > 0; else noAttatchments"
+                class="d-block mt-3"
+                [files]="attatchments"
+                [canDeleted]="false"
+              ></uploaded-attachments-files>
+              <ng-template #noAttatchments>
+                {{ "changeRequests.details.noAtt" | translate }}
+              </ng-template>
+            </div>
+          </div>
+
+        </ng-template>
+      </app-tab>
+    </app-tabs>
+  </div>
+</div>
+ <!-- footer buttons -->
+ <div class="new-model-dialog-footer">
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+</div>

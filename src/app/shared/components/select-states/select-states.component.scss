@@ -1,0 +1,24 @@
+@import'../../../../assets/css/utils/mixins.scss';
+
+.item {
+  border-radius: 40px;
+  background: rgba(172, 181, 193, 0.15);
+  @include rtl_key(padding-, right, left, 0);
+  @include rtl_key(padding-, left, right, 10px);
+  &-remove {
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    color: #96a6bd;
+  }
+}
+.astrix-red {
+  color: red;
+}
+input{
+  width: 85%;
+}
+
+.alert-msg {
+  color: red;
+}

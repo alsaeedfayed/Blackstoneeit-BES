@@ -1,0 +1,38 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.analytics-widgets {
+  container: analytics-widgets / inline-size;
+
+  &-items {
+    display: grid;
+    gap: 1rem;
+
+    @container analytics-widgets (min-width: 800px) {
+      & {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @container analytics-widgets (min-width: 500px) and (max-width: 799px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  ::ng-deep app-stats-widget {
+    .stats-widget {
+      height: 100%;
+    }
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}

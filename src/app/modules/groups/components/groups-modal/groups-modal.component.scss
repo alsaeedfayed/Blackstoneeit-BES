@@ -1,0 +1,28 @@
+@import "src/assets/css/utils/variables.scss";
+
+.groups-form {
+  ::ng-deep ngb-typeahead-window {
+    width: 100% !important;
+    position: absolute !important;
+    z-index: 10000 !important;
+    max-height: 250px;
+    overflow-y: auto;
+
+    button:hover,
+    button.active {
+      background-color: #00db99 !important;
+    }
+  }
+
+  .astrix-red {
+    color: red;
+  }
+
+  .form-select {
+    padding-top: 10px !important;
+  }
+
+  .color-red {
+    color: red !important;
+  }
+}

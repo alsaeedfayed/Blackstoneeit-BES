@@ -1,0 +1,22 @@
+
+<label *ngIf="title" class="form-label"> {{title}}
+  <span *ngIf="isRequired" class="opacity-0">*</span>
+</label>
+<div>
+  <app-filed
+    class="d-block"
+    formControlName="from"
+    [control]="form | getControl : 'weightFrom'"
+    [title]="'committeeKPIs.filters.weightFrom' | translate"
+    [placeholder]="'committeeKPIs.filters.weightFrom' | translate"
+  ></app-filed>
+
+  <!-- Target to -->
+  <app-filed
+    class="d-block"
+    formControlName="to"
+    [control]="form | getControl : 'weightTo'"
+    [title]="'committeeKPIs.filters.weightTo' | translate"
+    [placeholder]="'committeeKPIs.filters.weightTo' | translate"
+  ></app-filed>
+</div>

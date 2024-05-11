@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-12 col-md-8 bar-chart">
+    <canvas
+      ref="canvas"
+      style="height: 370px !important"
+      id="taskImpelentationChart"
+      #taskImpelentationChart
+    ></canvas>
+  </div>
+
+  <div class="col-12 col-md-4 total-chart">
+
+    <div class="per-total">
+      <canvas
+      class="my-chart2"
+      id="implementationPer"
+      #implementationPer
+    ></canvas>
+
+    <div class="per-total-total d-flex flex-column align-items-center gap-2">
+      <span>{{'bau.dashboard.total' | translate}}</span>
+      <span>{{implementationData?.total }}</span>
+    </div>
+    </div>
+
+
+
+    <!-- <div class="chart-container">
+      <circle-progress
+        [percent]="100"
+        [showUnits]="false"
+        [showTitle]="false"
+        [showSubtitle]="false"
+        [radius]="80"
+        [outerStrokeWidth]="15"
+        [outerStrokeColor]="'rgba(102, 153, 254, 1) '"
+        [innerStrokeColor]="'#96A6BD26'"
+        [showInnerStroke]="true"
+        [innerStrokeWidth]="8"
+        [space]="-20"
+        [showBackground]="false"
+        [animation]="true"
+        [animationDuration]="200"
+      ></circle-progress>
+     <div class="total-chart-count d-flex flex-column gap-2">
+      <span >
+        {{ implementationData?.total }}
+      </span>
+      <span>{{'bau.dashboard.total' | translate}}</span>
+     </div>
+    </div> -->
+  </div>
+</div>

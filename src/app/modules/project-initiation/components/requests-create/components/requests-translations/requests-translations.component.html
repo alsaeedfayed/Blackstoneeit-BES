@@ -1,0 +1,393 @@
+<h3 class="form-title mb-3">
+  {{ "initiationForm.projectTranslation" | translate }}
+</h3>
+
+<div class="translationButtons mb-4">
+  <button class="btn btn-main" (click)="translateAll('en', 'ar')">
+    <i class="bx bx-right-arrow-circle mr-2"></i>
+    <span>{{ "shared.translateFromEnToAr" | translate }}</span>
+  </button>
+
+  <button class="btn btn-main" (click)="translateAll('ar', 'en')">
+    <i class="bx bx-left-arrow-circle mr-2"></i>
+    <span>{{ "shared.translateFromArToEn" | translate }}</span>
+  </button>
+</div>
+
+<form [formGroup]="translatedEnFieldsForm">
+  <div class="row" [class.flex-row-reverse]="lang === 'ar'">
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">Project Name:</label>
+        <input
+          type="text"
+          #inp1
+          formControlName="projectNameEn"
+          class="form-control en"
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          [inputvalue]="inp1.value"
+        />
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectNameEn?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4" dir="rtl">
+      <label for="" class="form-label form-label-ar">اسم المشروع:</label>
+      <input
+        type="text"
+        formControlName="projectNameAr"
+        #inp2
+        class="form-control ar"
+        inputtranslation
+        [from]="'ar'"
+        [to]="'en'"
+        [inputvalue]="inp2.value"
+      />
+      <small
+        class="form-error"
+        *ngIf="
+          getTranslatedEnFieldsForm.projectNameAr?.errors?.required &&
+          isFormSubmitted
+        "
+      >
+        <i class="bx bx-error-circle mr-2"></i>
+        {{ "This field is required" | translate }}
+      </small>
+    </div>
+  </div>
+
+  <div class="row" [class.flex-row-reverse]="lang === 'ar'">
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">Project Description:</label>
+        <textarea
+          class="form-textarea en"
+          formControlName="projectDescriptionEn"
+          #inp3
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          [inputvalue]="inp3.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectDescriptionEn?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="rtl">
+        <label for="" class="form-label form-label-ar">وصف المشروع:</label>
+        <textarea
+          class="form-textarea ar"
+          formControlName="projectDescriptionAr"
+          inputtranslation
+          [from]="'ar'"
+          [to]="'en'"
+          #inp4
+          [inputvalue]="inp4.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectDescriptionAr?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" [class.flex-row-reverse]="lang === 'ar'">
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">Project Scope:</label>
+        <textarea
+          class="form-textarea en"
+          formControlName="projectScopeEn"
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          #inp5
+          [inputvalue]="inp5.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectScopeEn?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="rtl">
+        <label for="" class="form-label form-label-ar">نطاق المشروع:</label>
+        <textarea
+          class="form-textarea ar"
+          formControlName="projectScopeAr"
+          inputtranslation
+          [from]="'ar'"
+          [to]="'en'"
+          #inp6
+          [inputvalue]="inp6.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectScopeAr?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" [class.flex-row-reverse]="lang === 'ar'">
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">Project Out of Scope:</label>
+        <textarea
+          class="form-textarea en"
+          formControlName="projectOutScopeEn"
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          #inp7
+          [inputvalue]="inp7.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectOutScopeEn?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="rtl">
+        <label for="" class="form-label form-label-ar">
+          خارج نطاق المشروع :
+        </label>
+        <textarea
+          class="form-textarea ar"
+          formControlName="projectOutScopeAr"
+          inputtranslation
+          [from]="'ar'"
+          [to]="'en'"
+          #inp8
+          [inputvalue]="inp8.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectOutScopeAr?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" [class.flex-row-reverse]="lang === 'ar'">
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">Project Expected Outcomes:</label>
+        <textarea
+          class="form-textarea en"
+          formControlName="projectExpectedOutcomesEn"
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          #inp9
+          [inputvalue]="inp9.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectExpectedOutcomesEn?.errors
+              ?.required && isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="rtl">
+        <label for="" class="form-label form-label-ar">
+          النتائج المتوقعة للمشروع:
+        </label>
+        <textarea
+          class="form-textarea ar"
+          formControlName="projectExpectedOutcomesAr"
+          inputtranslation
+          [from]="'ar'"
+          [to]="'en'"
+          #inp10
+          [inputvalue]="inp10.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectExpectedOutcomesAr?.errors
+              ?.required && isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" [class.flex-row-reverse]="lang === 'ar'">
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">Project Expected Benefits:</label>
+        <textarea
+          class="form-textarea en"
+          formControlName="projectExpectedBenefitsEn"
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          #inp11
+          [inputvalue]="inp11.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectExpectedBenefitsEn?.errors
+              ?.required && isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="rtl">
+        <label for="" class="form-label form-label-ar">
+          الفوائد المتوقعة من المشروع:
+        </label>
+        <textarea
+          class="form-textarea ar"
+          formControlName="projectExpectedBenefitsAr"
+          inputtranslation
+          [from]="'ar'"
+          [to]="'en'"
+          #inp12
+          [inputvalue]="inp12.value"
+        ></textarea>
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.projectExpectedBenefitsAr?.errors
+              ?.required && isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="organizationForm?.deliveryType?.code === 'ExternalTeam'"
+    class="row"
+    [class.flex-row-reverse]="lang === 'ar'"
+  >
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="ltr">
+        <label for="" class="form-label">External Entity:</label>
+        <input
+          type="text"
+          class="form-control en"
+          formControlName="externalEntitiesEn"
+          inputtranslation
+          [from]="'en'"
+          [to]="'ar'"
+          #inp13
+          [inputvalue]="inp13.value"
+        />
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.externalEntitiesEn?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col-6 mb-4">
+      <div class="form-group" dir="rtl">
+        <label for="" class="form-label form-label-ar">الهيئة الخارجية:</label>
+        <input
+          type="text"
+          class="form-control ar"
+          formControlName="externalEntitiesAr"
+          inputtranslation
+          [from]="'ar'"
+          [to]="'en'"
+          #inp14
+          [inputvalue]="inp14.value"
+        />
+        <small
+          class="form-error"
+          *ngIf="
+            getTranslatedEnFieldsForm.externalEntitiesAr?.errors?.required &&
+            isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "This field is required" | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,6 @@
+<div class="d-flex align-items-center employee-service justify-content-between header-page pt-3">
+  <h2 class="title-page mb-0">{{ "serviceCatalog.serviceCatalog" | translate }}</h2>
+  <div class="d-flex search ">
+    <app-search (search)="changeSearch($event)" [searchKey]="searchKey"></app-search>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="progress-bar-container">
+  <div
+    *ngIf="zones.completed > 0"
+    [ngClass]="{
+      'completed-split-border-radius':
+        zones.completed > 0 && zones.inProgress > 0,
+        'ar': lang == 'ar',
+        'en': lang !== 'ar'
+    }"
+    class="completed"
+    [style.width.%]="calculateWidth('completed')"
+  >
+  <span>{{ zones.completed }}</span>
+
+  </div>
+  <div
+    *ngIf="zones.inProgress > 0"
+    [ngClass]="{
+      'inProgress-split-border-radius':
+        zones.completed > 0 && zones.inProgress > 0,
+      'ar': lang == 'ar',
+      'en': lang !== 'ar'
+    }"
+    class="in-progress"
+    [style.width.%]="calculateWidth('inProgress')"
+  >
+  <span>{{ zones.inProgress }}</span>
+
+  </div>
+</div>

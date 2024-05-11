@@ -1,0 +1,166 @@
+.badge-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: fit-content;
+  // min-width: 10em !important;
+  min-height: 22px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 0 10px;
+  border-radius: 40px;
+
+  &::before {
+    content: "";
+    height: 8px;
+    width: 8px;
+    background-color: rgb(var(--color));
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &.active {
+    // rgb(15, 193, 97)
+    --color: 15, 193, 97;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.08);
+  }
+
+  &.new,
+  &.started {
+    // rgb(0, 117, 255)
+    --color: 0, 117, 255;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.2);
+  }
+
+  &.inprogress {
+    // rgb(255, 76, 52)
+    --color: 255, 76, 52;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.2);
+  }
+
+  &.inProgress {
+    // rgb(255, 195, 73)
+    --color: 255, 195, 73;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.1);
+  }
+
+  &.opened {
+    // rgb(27, 227, 167)
+    --color: 27, 227, 167;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.2);
+  }
+
+  &.rejected {
+    // rgb(255, 115, 115)
+    --color: 255, 115, 115;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.08);
+  }
+
+  &.closed {
+    // rgb(172, 181, 193)
+    --color: 172, 181, 193;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.15);
+  }
+
+  &.cancelled {
+    // rgb(87, 87, 87)
+    --color: 87, 87, 87;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.2);
+  }
+
+  &.Warning {
+    // rgb(255, 255, 255)
+    --color: 255, 255, 255;
+    color: rgb(var(--color));
+    background-color: rgba(254, 214, 0, 1);
+  }
+
+  &.pendingMom {
+    // rgb(235, 148, 0)
+    --color: 235, 148, 0;
+    color: rgb(var(--color));
+    background-color: rgba(235, 148, 0, 0.078);
+  }
+
+  &.complete {
+    // rgb(15, 193, 97)
+    --color: 15, 193, 97;
+    color: rgb(var(--color));
+    background-color: rgba(15, 193, 97, 0.078);
+  }
+
+  &.momReviewed {
+    // rgb(196, 214, 0)
+    --color: 196, 214, 0;
+    color: rgb(var(--color));
+    background-color: rgba(196, 214, 0, 0.078);
+  }
+
+  &.needMOMReview {
+    // rgb(60, 166, 189)
+    --color: 60, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(157, 189, 150, 0.141);
+  }
+
+  &.draft {
+    // rgb(150, 166, 189)
+    --color: 150, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(150, 166, 189, 0.141);
+  }
+
+  &.notDueYet {
+    // rgb(41, 45, 50)
+    --color: 41, 45, 50;
+    color: rgb(var(--color));
+    background-color: rgba(41, 45, 50, 0.078);
+  }
+
+  // Importance level for tasks in committees
+  &.highLevel {
+    // rgb(255, 72, 72)
+    --color: 255, 72, 72;
+    color: rgb(var(--color));
+    background-color: rgba(255, 72, 72, 0.09);
+  }
+
+  &.mediumLevel {
+    // rgb(255, 168, 0)
+    --color: 255, 168, 0;
+    color: rgb(var(--color));
+    background-color: rgba(255, 168, 0, 0.09);
+  }
+
+  &.lowLevel {
+    // rgb(150, 166, 189)
+    --color: 150, 166, 189;
+    color: rgb(var(--color));
+    background-color: rgba(172, 181, 193, 0.149);
+  }
+  &.success {
+    color: #0fc161;
+    background-color: rgba(60, 250, 91, 0.149);
+  }
+  &.secondary {
+    color: #c4c4c4;
+    background-color: rgba(237, 237, 237, 0.149);
+  }
+  &.danger {
+    color: #dc0808;
+    background-color: rgba(221, 98, 98, 0.149);
+  }
+
+  
+}

@@ -1,0 +1,9 @@
+<section>
+    <p>{{title}}</p>
+    <div class="file">
+        <img *ngIf="icon?.toLocaleLowerCase().includes('xls')" src="assets/img/excel.png" />
+        <i *ngIf="icon?.toLocaleLowerCase().includes('pdf')" class="bx bxs-file-pdf"></i>
+        <i *ngIf="icon?.toLocaleLowerCase().includes('doc')" class="bx bxs-file"></i>
+        <strong [style.cursor]="uri ? 'pointer': 'default'" (click)="downloadTemplate()">{{text}}</strong>
+    </div>
+</section>

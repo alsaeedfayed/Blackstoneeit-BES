@@ -1,0 +1,170 @@
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="id">#</th>
+          <th scope="col" class="committee-name titlee">
+            <div class="sortable-row" (click)="sort(sortKey.Title)">
+              {{ "changeRequests.table.reason" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up': sortedCol && sortedCol == sortKey.Title && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.Title && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="created-By">
+            {{ "changeRequests.table.CreatedBy" | translate }}
+          </th>
+
+          <th scope="col" class="assigned-to">
+            {{ "changeRequests.table.AssignedTo" | translate }}
+          </th>
+
+          <th scope="col" class="committee-type namee">
+            {{ "changeRequests.table.CommitteeName" | translate }}
+          </th>
+
+          <th scope="col" class="created-on">
+            <div class="sortable-row" (click)="sort(sortKey.CreationDate)">
+              {{ "changeRequests.table.CreatedOn" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.CreationDate && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.CreationDate && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="committee-chairman">
+            {{ "committeesRequests.table.committeeChairman" | translate }}
+          </th>
+
+          <th scope="col" class="status">
+            <div class="sortable-row" (click)="sort(sortKey.Status)">
+              {{ "changeRequests.table.Status" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.Status && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.Status && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <td class="id">
+            <a
+              class="hoverableLink"
+              [routerLink]="
+                item?.status == 0
+                  ? '/committees-management/edit-change-request/' + item?.id
+                  : '/committees-management/modify-requests/details/' + item?.id
+              "
+            >
+              {{ item?.code }}
+            </a>
+          </td>
+
+          <td class="committee-name">
+            {{ item?.reason }}
+          </td>
+
+          <td class="created-by">
+            {{
+              language == "ar"
+                ? item?.creatorInfo?.fullArabicName
+                : item?.creatorInfo?.fullName
+            }}
+          </td>
+
+          <td class="assigned-to">
+            {{ language == "en" ? item?.stepName : item?.stepNameAr }}
+          </td>
+
+          <td class="committee-name">
+            {{
+              language === "en" ? item?.committeeName : item?.committeeNameAr
+            }}
+          </td>
+
+          <td class="created-on">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+
+          <td class="committee-chairman">
+            {{
+              language == "ar"
+                ? item?.committeeChairmanInfo?.fullArabicName
+                : item?.committeeChairmanInfo?.fullName
+            }}
+          </td>
+
+          <td class="status">
+            <app-badge
+              [className]="statuses[item?.status]['className']"
+              [label]="
+                language == 'ar'
+                  ? statuses[item?.status]['nameAr']
+                  : statuses[item?.status]['name']
+              "
+            ></app-badge>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

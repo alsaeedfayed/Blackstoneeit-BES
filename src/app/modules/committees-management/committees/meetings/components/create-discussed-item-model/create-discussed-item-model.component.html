@@ -1,0 +1,159 @@
+<ng-container *ngIf="false; else form_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #form_data>
+  <div class="new-model-dialog-body">
+    <div class="new-discussed-item-form pb-2" [formGroup]="form">
+      <div class="row">
+        <!-- task title -->
+        <div class="col-md-6 mt-4">
+          <app-filed
+            [length]="100"
+            class="d-block"
+            formControlName="name"
+            [control]="form | getControl : 'name'"
+            [title]="
+              'committeeMeetingDetails.discussedItems.discussedItemsModel.taskTitle'
+                | translate
+            "
+            [placeholder]="
+              'committeeMeetingDetails.discussedItems.discussedItemsModel.taskTitle'
+                | translate
+            "
+          ></app-filed>
+        </div>
+
+        <!-- duration -->
+        <div class="col-md-6 mt-4">
+          <app-filed
+            class="d-block"
+            formControlName="duration"
+            [control]="form | getControl : 'duration'"
+            [title]="
+              'committeeMeetingDetails.discussedItems.discussedItemsModel.duration'
+                | translate
+            "
+            [placeholder]="
+              'committeeMeetingDetails.discussedItems.discussedItemsModel.durationPlaceholder'
+                | translate
+            "
+            [onlyNumber]="true"
+          ></app-filed>
+        </div>
+      </div>
+
+      <!-- description -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{
+            "committeeMeetingDetails.discussedItems.discussedItemsModel.description"
+              | translate
+          }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+        <angular-editor formControlName="description" [config]="editorConfig">
+          <ng-template #customButtons>
+            <ae-toolbar-set>
+              <ae-button
+                iconClass="fa fa-paperclip fa-lg"
+                title="Attachment"
+                (buttonClick)="attachments.click()"
+              ></ae-button>
+            </ae-toolbar-set>
+          </ng-template>
+        </angular-editor>
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="
+            'committeeMeetingDetails.discussedItems.discussedItemsModel.descriptionAttachmentsTypes'
+              | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          (viewFile)="onViewLocalFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          (viewFile)="onViewLocalFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+
+      <!-- presented by -->
+
+      <div class="mt-4">
+        <label class="form-label">
+          {{
+            "committeeMeetingDetails.discussedItems.discussedItemsModel.presentedBy"
+              | translate
+          }}
+          <span class="astrix-red">*</span>
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+
+        <ng-select
+          class="input-select attendees-select"
+          formControlName="presentedBy"
+          [ngClass]="{ valid: (form | getControl : 'presentedBy')?.valid }"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="
+            'committeeMeetingDetails.discussedItems.discussedItemsModel.presentedBy'
+              | translate
+          "
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [multiple]="false"
+          [closeOnSelect]="true"
+        >
+          <ng-option
+            *ngFor="let presenter of attendees"
+            [value]="presenter?.name"
+          >
+            <person-item
+              *ngIf="presenter?.userInfo"
+              [requesterItem]="presenter?.userInfo"
+              [noCursor]="true"
+            ></person-item>
+          </ng-option>
+        </ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form.invalid || isBtnLoading || uploadingFile"
+      (click)="saveNewDiscussedItem()"
+    >
+      <i
+        *ngIf="isBtnLoading || uploadingFile"
+        class="bx bx-loader-alt bx-spin ml-1"
+      ></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</ng-template>

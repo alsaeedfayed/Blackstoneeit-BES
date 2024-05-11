@@ -1,0 +1,200 @@
+<div class="tasks-list-container">
+  <div class="tasks-list">
+    <table>
+      <tr>
+        <th class="task-title">
+          {{ "bau.dashboard.taskTitle" | translate }}
+        </th>
+        <th class="task-progress">
+          {{ "bau.dashboard.progress" | translate }}
+        </th>
+        <th class="task-status">
+          {{ "bau.dashboard.trackStatus" | translate }}
+        </th>
+
+        <th class="task-status">
+          {{ "bau.dashboard.status" | translate }}
+        </th>
+        <th class="task-date">
+          {{ "bau.dashboard.dueDate" | translate }}
+        </th>
+        <th class="task-related-to">
+          {{ "bau.dashboard.relatedTo" | translate }}
+        </th>
+        <th class="task-mainTask">
+          {{ "bau.dashboard.mainTask" | translate }}
+        </th>
+        <th class="task-date">
+          <div class="sortable-row" (click)="onLastUpdateSort()">
+            {{ "bau.dashboard.lastUpdate" | translate }}
+            <div
+              class="sort-icon"
+              [ngClass]="{
+                'sort-up': lastUpdateSortOrder === 'sorted',
+                'sort-down': lastUpdateSortOrder === 'reversed'
+              }"
+
+            >
+              <i class="bx bxs-up-arrow"></i>
+              <i class="bx bxs-down-arrow"></i>
+            </div>
+          </div>
+        </th>
+      </tr>
+      <tr
+        *ngFor="
+          let task of list
+            | paginate
+              : {
+                  itemsPerPage: paginationModel?.pageSize,
+                  currentPage: paginationModel?.pageIndex,
+                  totalItems
+                };
+          let i = index
+        "
+      >
+        <td class="task-title">
+          <!-- <a class="hoverableLink"> -->
+          <a
+            class="hoverableLink truncate-text"
+            (click)="openTaskDetailsModel(task)"
+            [title]="language == 'en' ? task?.titleEn : task?.titleAr"
+          >
+            {{
+              (language == "en" ? task?.titleEn : task?.titleAr)
+            }}
+          </a>
+        </td>
+
+        <td class="task-progress">
+          <div class="d-flex align-items-center gap-2">
+            <div class="progress-bar flex-grow-1">
+              <span
+                class="fill {{ task?.progress | porgressColor }}"
+                [ngStyle]="{ width: task?.progress + '%' }"
+              ></span>
+            </div>
+            <span class="percentage">{{ task.progress }}%</span>
+          </div>
+        </td>
+
+        <td class="task-status">
+          <app-badge
+            [className]="taskTrackStatuses[task?.trackStatus]?.className"
+            [label]="
+              language == 'en'
+                ? taskTrackStatuses[task?.trackStatus]['name']
+                : taskTrackStatuses[task?.trackStatus]['nameAr']
+            "
+          ></app-badge>
+        </td>
+        <td class="task-status">
+          <app-badge
+            [className]="taskStatuses[task?.status]?.className"
+            [label]="
+              language == 'en'
+                ? taskStatuses[task?.status]['name']
+                : taskStatuses[task?.status]['nameAr']
+            "
+          ></app-badge>
+        </td>
+
+        <td class="task-date">
+          <span *ngIf="task?.dueDate">
+            {{
+              language === "en"
+                ? ((task?.dueDate | uTCToLocalDate).toLocaleString()
+                  | date : "d MMM y")
+                : ((task?.dueDate | uTCToLocalDate).toLocaleString()
+                  | localizeDate : "d MMM y")
+            }}
+          </span>
+        </td>
+
+        <td class="task-related-to" class="">
+          <span class="truncate-text" *ngIf="task?.group?.en" [title]="task?.group[language]">
+            {{ task?.group[language]}}
+          </span>
+        </td>
+
+        <td class="task-mainTask">
+          <span
+          class="truncate-text"
+            [title]="
+              language === 'en'
+                ? task?.mainTask?.titleEn
+                : task?.mainTask?.titleAr
+            "
+          >
+            {{
+              (language === "en"
+                ? task?.mainTask?.titleEn
+                : task?.mainTask?.titleAr
+              )
+            }}
+          </span>
+        </td>
+
+        <td class="task-date">
+          <span *ngIf="task?.updatedDate">
+            {{
+              language === "en"
+                ? ((task?.updatedDate | uTCToLocalDate).toLocaleString()
+                  | date : "d MMM y")
+                : ((task?.updatedDate | uTCToLocalDate).toLocaleString()
+                  | localizeDate : "d MMM y")
+            }}
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+<!-- task details modal -->
+<app-model
+  [dimensions]="{ width: isDetailsModelOpened ? 900 : 500, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+    <label class="modal-title" *ngIf="isDetailsModelOpened">
+      {{ "bau.bauTasks.detailsModel.title" | translate }}
+    </label>
+
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">
+      {{ "bau.bauTasks.detailsModel.title" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+    <app-task-details-modal
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdateStatus)="updateTaskStatus($event)"
+    ></app-task-details-modal>
+
+    <app-update-task-progress-modal
+      *ngIf="isUpdateProgressModelOpened"
+      [task]="openedTask"
+      [language]="language"
+      (onBack)="openTaskDetailsModel(openedTask)"
+      (onUpdate)="onUpdateTaskProgress()"
+    ></app-update-task-progress-modal>
+  </div>
+</app-model>

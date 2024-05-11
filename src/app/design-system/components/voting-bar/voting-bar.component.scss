@@ -1,0 +1,45 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.vote {
+  &-progress {
+    position: relative;
+    background-color: #f2f2f2;
+    padding: 0.3125rem;
+    border-radius: 2.5rem;
+    overflow: hidden;
+    &-bar {
+      display: block;
+      position: absolute;
+      top: 0;
+      @include rtl_value(left, 0, auto);
+      @include rtl_value(right, auto, 0);
+      height: 100%;
+      width: 0%;
+      background-color: $light-main-color;
+    }
+    &-label {
+      line-height: normal !important;
+      word-break: normal;
+      background-color: white;
+      min-width: 30px;
+      padding: 0px 10px;
+      border-radius: 20px;
+      margin: 0.5%;
+      text-align: center;
+      font-size: 14px;
+    }
+  }
+}
+
+.bg {
+  &-success {
+    background-color: #0fc161 !important;
+  }
+  &-secondary {
+    background-color: #c4c4c4 !important;
+  }
+  &-danger {
+    background-color: #dc0808 !important;
+  }
+}

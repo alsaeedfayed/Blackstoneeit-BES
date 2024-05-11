@@ -1,0 +1,16 @@
+<div class="analysis">
+  <div class="widgets-area">
+    <div class="smallWidgets">
+      <text-widget *ngFor="let widget of textWidgets" [data]="widget"></text-widget>
+    </div>
+
+    <div class="largeWidget">
+      <app-actual-target-statistics-submission
+        [toolTips]="toolTips"
+        [performance]="performanceScore"
+        [actual]="actualScore"
+        [target]="targetScore"
+      ></app-actual-target-statistics-submission>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+@mixin card-shadow {
+    background: #ffffff;
+    box-shadow: 6px 8px 26px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+}
+
+@mixin table-shadow {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: $white-color;
+}
+
+@mixin button-shadow {
+    background: $white-color;
+    box-shadow: 2px 2px 6px rgb(0 0 0 / 8%);
+    border-radius: 10px;
+}
+
+// font
+@mixin font($fontSize,$fontWeight) {
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+}
+
+// Size
+@mixin size($width,$height) {
+    width: $width;
+    height: $height;
+}
+
+// prefixer
+@mixin prefixer($property, $value, $prefixes:()){
+    @each $prefix in $prefixes {
+        #{'-' + $prefix + '-' + $property}: $value;
+    }
+    #{$property}: $value;
+}
+
+// border-radius
+@mixin bRadius($r){
+    @include prefixer(border-radius,$r, webkit moz o ms)
+}
+
+// Animation
+@mixin KAnimation($animName) {
+    @-webkit-keyframes #{$animName} {
+      @content;
+    }
+    @-moz-keyframes #{$animName} {
+      @content;
+    }
+    @keyframes #{$animName} {
+      @content;
+    }
+}
+
+@mixin rtl_key($property, $ltr-value, $rtl-value, $unit) {
+  #{$property}#{$ltr-value}: $unit;
+
+  [dir="rtl"] & {
+    #{$property}#{$rtl-value}: $unit;
+  }
+
+  :host-context([dir="rtl"]) & {
+    #{$property}#{$rtl-value}: $unit;
+  }
+}
+
+// Value
+
+@mixin rtl_value($property, $ltr-value, $rtl-value) {
+  #{$property}: $ltr-value !important;
+
+  [dir="rtl"] & {
+    #{$property}: $rtl-value !important;
+  }
+
+  :host-context([dir="rtl"]) & {
+    #{$property}: $rtl-value !important;
+  }
+}

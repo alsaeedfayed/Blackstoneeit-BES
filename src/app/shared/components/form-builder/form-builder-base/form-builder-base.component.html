@@ -1,0 +1,44 @@
+<!-- Dynamic Form -->
+<form id="form" [formGroup]="dynamicFormGroup" *ngIf="initDom">
+  <div class="row">
+    <!-- Dynamic Controls Binding -->
+    <ng-container *ngFor="let control of formArr">
+      <div [ngSwitch]="control.type">
+        <div class="mt-4 form-label" *ngSwitchCase="'Text'">
+          <label class="mb-1">
+            {{ language == "en" ? control.title.en : control.title.ar }}
+          </label>
+          <span *ngIf="control.isRequired" style="color: red">*</span>
+          <input
+            [formControlName]="control?.key"
+            type="text"
+            class="form-control mt-2"
+          />
+        </div>
+
+        <div class="mt-4 form-label" *ngSwitchCase="'number'">
+          <label class="mb-1">
+            {{ language == "en" ? control.title.en : control.title.ar }}
+          </label>
+          <span *ngIf="control.isRequired" style="color: red">*</span>
+          <input
+            [formControlName]="control.key"
+            type="number"
+            class="form-control"
+          />
+        </div>
+        <div class="mt-4 form-label" *ngSwitchCase="'TextArea'">
+          <label class="mb-1">
+            {{ language == "en" ? control.title.en : control.title.ar }}
+          </label>
+          <span *ngIf="control.isRequired" style="color: red">*</span>
+          <angular-editor
+          [formControlName]="control?.key"
+          [config]="editorConfig"
+        ></angular-editor>
+        </div > 
+
+      </div>
+    </ng-container>
+  </div>
+</form>

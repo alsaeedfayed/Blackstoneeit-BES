@@ -1,0 +1,187 @@
+<!-- main-task info -->
+<div class="block-content main-task-info mb-3">
+  <div
+    class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3"
+  >
+    <h3 class="block-title mb-0">
+      {{ "bau.bauTasks.mainTaskDetails.detailsTitle" | translate }}
+    </h3>
+
+    <app-badge
+      [className]="mainTaskTrackStatuses[mainTask?.progressStatus]['className']"
+      [label]="
+        language == 'en'
+          ? mainTaskTrackStatuses[mainTask?.progressStatus]['name']
+          : mainTaskTrackStatuses[mainTask?.progressStatus]['nameAr']
+      "
+    ></app-badge>
+  </div>
+
+  <ul class="main-task-info-list">
+    <!-- title -->
+    <li class="main-task-info-list-item">
+      <h4 class="block-subtitle mb-2">
+        {{ "bau.bauTasks.mainTaskDetails.title" | translate }}
+      </h4>
+
+      <div>
+        {{ language == "en" ? mainTask?.titleEn : mainTask?.titleAr }}
+      </div>
+    </li>
+    <!-- assigned to -->
+    <li class="main-task-info-list-item">
+      <h4 class="block-subtitle mb-2">
+        {{ "bau.bauTasks.mainTaskDetails.assignedTo" | translate }}
+      </h4>
+
+      <div class="main-task-info-list-item-content">
+        <person-item
+          [requesterItem]="mainTask?.assignedTo"
+          [noCursor]="true"
+        ></person-item>
+      </div>
+    </li>
+    <!-- from -->
+    <li class="main-task-info-list-item">
+      <h4 class="block-subtitle mb-2">
+        {{ "bau.bauTasks.mainTaskDetails.from" | translate }}
+      </h4>
+
+      <div class="main-task-info-list-item-content">
+        {{
+          language === "en"
+            ? ((mainTask.startDate | uTCToLocalDate : true).toLocaleString()
+              | date : "d MMM")
+            : ((mainTask.startDate | uTCToLocalDate : true).toLocaleString()
+              | localizeDate : "d MMM")
+        }}
+      </div>
+    </li>
+    <!-- to -->
+    <li class="main-task-info-list-item">
+      <h4 class="block-subtitle mb-2">
+        {{ "bau.bauTasks.mainTaskDetails.to" | translate }}
+      </h4>
+
+      <div class="main-task-info-list-item-content">
+        {{
+          language === "en"
+            ? ((mainTask.endDate | uTCToLocalDate : true).toLocaleString()
+              | date : "d MMM")
+            : ((mainTask.endDate | uTCToLocalDate : true).toLocaleString()
+              | localizeDate : "d MMM")
+        }}
+      </div>
+    </li>
+    <!-- related to -->
+    <li class="main-task-info-list-item">
+      <h4 class="block-subtitle mb-2">
+        {{ "bau.bauTasks.mainTaskDetails.relatedTo" | translate }}
+      </h4>
+
+      <div class="main-task-info-list-item-content">
+        {{ language === "en" ? (mainTask?.section?.name || mainTask?.department?.name || mainTask?.sector?.name) : (mainTask?.section?.arabicName || mainTask?.department?.arabicName || mainTask?.sector?.arabicName) }}
+
+      </div>
+    </li>
+
+    <!-- priority -->
+    <li class="main-task-info-list-item">
+      <h4 class="block-subtitle mb-2">
+        {{ "bau.bauTasks.mainTaskDetails.priority" | translate }}
+      </h4>
+
+      <div class="main-task-info-list-item-content-priority">
+        <app-badge
+          [className]="
+            mainTasksPriorities[mainTask?.importanceLevel]['className']
+          "
+          [label]="
+            language == 'en'
+              ? mainTasksPriorities[mainTask?.importanceLevel]['name']
+              : mainTasksPriorities[mainTask?.importanceLevel]['nameAr']
+          "
+        ></app-badge>
+      </div>
+    </li>
+  </ul>
+  <div class="d-flex gap-5">
+    <!-- progress -->
+    <div class="col-4 progress-container p-2">
+      <div class="task-progress m-2">
+        <div class="block-title my-2">
+          {{ "bau.bauTasks.progress" | translate }}
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <div class="progress-bar flex-grow-1">
+            <span
+              class="fill {{ mainTask?.progress | progressColorBau }}"
+              [ngStyle]="{ width: mainTask?.progress + '%' }"
+            ></span>
+          </div>
+          <span class="percentage">{{ mainTask.progress | number }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- related Roles -->
+    <div class="col d-flex gap-5">
+      <div class="" *ngIf="mainTask?.linkedRoles?.length > 0">
+        <div class="block-sectionTitle mb-2">
+          {{
+            "bau.bauTasks.mainTaskDetails.relatedRolesAndResponsibilities"
+              | translate
+          }}
+        </div>
+        <ul>
+          <li
+            class="my-1"
+            *ngFor="let role of mainTask?.linkedRoles; let i = index"
+          >
+            <span>{{ i + 1 }}.</span>
+            {{ language == "en" ? role?.nameEn : role?.nameAr }}
+          </li>
+        </ul>
+      </div>
+      <!-- description -->
+      <div class="" *ngIf="mainTask?.description">
+        <div class="block-sectionTitle mb-1">
+          {{ "bau.bauTasks.detailsModel.description" | translate }}
+        </div>
+
+        <div
+          class="angular-editor-description"
+          [innerHTML]="mainTask?.description | truncate : descTextLimit"
+        ></div>
+
+        <button
+          class="see-more-btn"
+          *ngIf="mainTask?.description?.length > descTextInitialLimit"
+          (click)="toggleMoreText()"
+        >
+          <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+            {{ "bau.seeMore" | translate }}
+          </ng-container>
+          <ng-template #seeLess>
+            {{ "bau.seeLess" | translate }}
+          </ng-template>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- attachments -->
+  <div class="my-2" *ngIf="mainTask?.attachments?.length > 0">
+    <h3 class="block-sectionTitle mb-1">
+      {{ "shared.attachments" | translate }}
+    </h3>
+    <ng-container>
+      <uploaded-attachments-files
+        class="d-block mb-1"
+        [files]="mainTask?.attachments"
+        [canDeleted]="false"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </ng-container>
+  </div>
+</div>

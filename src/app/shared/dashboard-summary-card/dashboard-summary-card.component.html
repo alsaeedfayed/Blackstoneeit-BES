@@ -1,0 +1,71 @@
+<div class="cards">
+  <div class="summary-card-container on-track">
+    <div class="data">
+      <span class="value">{{ onTrackProjects }}</span>
+      <span class="label">{{ "shared.onTrackProjects" | translate }}</span>
+      <span class="percentage">
+        {{ "shared.onTrack" | translate }} ({{ data?.onTrack }}%)
+      </span>
+    </div>
+    <div class="chart">
+      <circle-progress [percent]="data?.onTrack" [radius]="35" [outerStrokeWidth]="10" [innerStrokeWidth]="0"
+        [outerStrokeColor]="'#00DB99'" [backgroundColor]="'#DAF4EC'" [animation]="true" [animationDuration]="200"
+        [showTitle]="false" [showSubtitle]="false" [showUnits]="false" [showBackground]="true"
+        [backgroundPadding]="-15"></circle-progress>
+    </div>
+  </div>
+
+  <div class="summary-card-container off-track">
+    <div class="data">
+      <span class="value">{{ offTrackProjects }}</span>
+      <span class="label">{{ "shared.offTrackProjects" | translate }}</span>
+      <span class="percentage">
+        {{ "shared.offTrack" | translate }} ({{ data?.offTrack }}%)
+      </span>
+    </div>
+    <div class="chart">
+      <circle-progress [percent]="data?.offTrack" [radius]="35" [outerStrokeWidth]="10" [innerStrokeWidth]="0"
+        [outerStrokeColor]="'#FF6C6C'" [backgroundColor]="'#FFD9D9'" [animation]="true" [animationDuration]="200"
+        [showTitle]="false" [showSubtitle]="false" [showUnits]="false" [showBackground]="true"
+        [backgroundPadding]="-15"></circle-progress>
+    </div>
+  </div>
+
+  <div class="summary-card-container completed">
+    <div class="data">
+      <span class="value">{{ completedProjects }}</span>
+      <span class="label">{{ "shared.completedProjects" | translate }}</span>
+      <span class="percentage">
+        {{ "shared.completed" | translate }} ({{ data?.totalCompleted }}%)
+      </span>
+    </div>
+    <div class="chart">
+      <circle-progress [percent]="data?.totalCompleted" [radius]="35" [outerStrokeWidth]="10" [innerStrokeWidth]="0"
+        [outerStrokeColor]="'#8b8b8b'" [backgroundColor]="'#c8c8c8'" [animation]="true" [animationDuration]="200"
+        [showTitle]="false" [showSubtitle]="false" [showUnits]="false" [showBackground]="true"
+        [backgroundPadding]="-15"></circle-progress>
+    </div>
+  </div>
+
+  <div class="summary-card-container total">
+    <div class="data">
+      <span class="value">{{ data?.offTrackTotal + data?.onTrackTotal + data?.totalCompleted }}</span>
+      <span class="label">{{ "shared.totalProjects" | translate }}</span>
+      <!-- <span class="percentage">
+        <span>
+          {{ data?.conversionRate ? data?.conversionRate + "%" : "0%" }}
+        </span>
+        {{ "dashboard.conversionRate" | translate }}
+      </span> -->
+    </div>
+    <!-- <div class="chart">
+      <canvas
+        class="my-chart"
+        id="myChart"
+        #myChart
+        width="120"
+        height="80"
+      ></canvas>
+    </div> -->
+  </div>
+</div>

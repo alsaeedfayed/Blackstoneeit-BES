@@ -1,0 +1,15 @@
+.initials {
+  &-container {
+    container-type: inline-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin-inline-end: 15px;
+    border-radius: 50%;
+  }
+
+  font-size: 32cqw;
+}

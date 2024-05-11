@@ -1,0 +1,165 @@
+<div class="row">
+  <div class="d-flex align-items-center justify-content-end">
+    <!-- <label class="form-label">
+      {{ "committeesNewRequest.committeeForm.mainTasks" | translate }}
+      <span *ngIf="isRequired" class="astrix-red">*</span>
+    </label> -->
+
+    <button
+      *ngIf="mainTasks?.length > 0"
+      class="add-new-btn"
+      (click)="openNewMainTaskModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "committeesNewRequest.committeeForm.addNewMainTask" | translate }}
+    </button>
+  </div>
+</div>
+
+<div class="MainTask-list pt-3">
+  <table *ngIf="mainTasks?.length > 0">
+    <tr>
+      <th class="MainTask-title">
+        {{ "committeesNewRequest.mainTasksRows.title" | translate }}
+      </th>
+
+      <th>
+        {{ "committeeTasks.priority" | translate }}
+      </th>
+
+      <th class="task-assigned-to">
+        {{ "committeeTasks.assignedTo" | translate }}
+      </th>
+      <th>
+        {{ "committeesNewRequest.mainTasksRows.dueDate" | translate }}
+      </th>
+      <th  class="MainTask-actions"></th>
+    </tr>
+    <tr
+      *ngFor="let mainTask of mainTasks"
+      [ngClass]="{ disabledRow: mainTask?.isDisabled }"
+    >
+      <!-- english title -->
+      <td class="MainTask-title">
+        {{ language === "en" ? mainTask?.title : mainTask?.titleAr }}
+      </td>
+      <!-- arabic title -->
+
+      <td class="task-status">
+        <app-badge
+          [className]="importanceLevels[mainTask?.importanceLevel]['className']"
+          [label]="
+            language == 'en'
+              ? importanceLevels[mainTask?.importanceLevel]['name']
+              : importanceLevels[mainTask?.importanceLevel]['nameAr']
+          "
+        ></app-badge>
+      </td>
+
+      <td
+        class="task-assigned-to"
+        [ngClass]="{
+          invalidMember: !committeeMembersIds?.includes(
+            mainTask?.assignedToInfo?.id
+          )
+        }"
+      >
+        <person-item
+          [requesterItem]="mainTask?.assignedToInfo"
+          [noCursor]="true"
+          [isUserCardFixed]="true"
+        ></person-item>
+      </td>
+
+      <!-- dueDate -->
+      <td>
+        <span>
+          {{
+            language === "en"
+              ? ((mainTask?.dueDate | uTCToLocalDate).toLocaleString()
+                | date : "d MMM y")
+              : ((mainTask?.dueDate | uTCToLocalDate).toLocaleString()
+                | localizeDate : "d MMM y")
+          }}
+        </span>
+      </td>
+      <!-- actions -->
+      <td  class="MainTask-actions d-flex gap-2 my-2">
+        <button
+          *ngIf="!mainTask?.isDisabled"
+          [title]="'shared.update' | translate"
+          class="edit-grid-item-btn"
+          (click)="openNewMainTaskModel(mainTask)"
+        >
+          <i class="bx bx-edit-alt fs-5"></i>
+        </button>
+        <button
+          *ngIf="!mainTask?.isDisabled"
+          [title]="'shared.delete' | translate"
+          class="edit-grid-item-btn"
+          (click)="deleteMainTask(mainTask.title)"
+        >
+          <i class="bx bx-trash text-danger fs-5"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <div class="no-data" *ngIf="mainTasks?.length == 0 || !mainTasks">
+    <!-- <app-no-data [msg]="'committeesNewRequest.mainTasksRows.noDataMsg' | translate"></app-no-data> -->
+    <p class="text-secondary">
+      {{ "committeesNewRequest.mainTasksRows.noDataMsg" | translate }}
+    </p>
+    <button
+      class="btn btn-main"
+      (click)="openNewMainTaskModel()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "committeesNewRequest.committeeForm.addNewMainTask" | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- create/edit Main task model -->
+<app-model
+  [dimensions]="{ width: 900, height: 750 }"
+  [id]="'new-main-task'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeNewMainTaskModel()"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{
+        (selectedMainTask
+          ? "committeesNewRequest.newMainTaskModel.updateItem"
+          : "committeesNewRequest.newMainTaskModel.createNewItem"
+        ) | translate
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="border-top">
+    <!-- <app-new-main-task-model
+      *ngIf="isTaskModelOpened"
+      [language]="language"
+      [title]="selectedMainTask?.title"
+    ></app-new-main-task-model> -->
+
+    <create-task-model
+      *ngIf="isTaskModelOpened"
+      [title]="selectedMainTask?.title"
+      [isTask]="false"
+    ></create-task-model>
+  </div>
+</app-model>
+
+<!-- modal to confirm delete a main task -->
+<app-confirm-modal
+  [id]="'delete-task'"
+  [content]="'committeesNewRequest.mainTasksRows.deleteConfirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteMainTaskConfirmed()"
+></app-confirm-modal>

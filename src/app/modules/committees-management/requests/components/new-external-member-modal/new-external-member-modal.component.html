@@ -1,0 +1,106 @@
+<div class="new-model-dialog-body">
+  <div [ngClass]="'externalMembers'+language" class="new-attendee-form pb-2" [formGroup]="form">
+    <!-- name en,ar -->
+    <div class="row externalTitleContainer">
+      <!-- member name -->
+      <div class="col-md-6 mt-4 enNameLable">
+        <app-filed
+          [length]="100"
+          class="d-block ltr-text"
+          formControlName="nameEn"
+          [control]="form | getControl : 'nameEn'"
+          [title]="'committeesNewRequest.newExternalMember.nameEn' | translate"
+          [placeholder]="
+            'committeesNewRequest.newExternalMember.nameEn' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <!-- member name ar -->
+      <div class="col-md-6 mt-4 arNameLable">
+        <app-filed
+          [length]="100"
+          class="d-block rtl-text"
+          formControlName="nameAr"
+          [control]="form | getControl : 'nameAr'"
+          [title]="'committeesNewRequest.newExternalMember.nameAr' | translate"
+          [placeholder]="
+            'committeesNewRequest.newExternalMember.nameAr' | translate
+          "
+        ></app-filed>
+      </div>
+    </div>
+
+    <!-- email -->
+    <div class="row mt-4">
+      <app-filed
+        class="d-block"
+        formControlName="email"
+        [control]="form | getControl : 'email'"
+        [title]="'committeesNewRequest.newExternalMember.email' | translate"
+        [placeholder]="
+          'committeesNewRequest.newExternalMember.email' | translate
+        "
+      ></app-filed>
+    </div>
+    <!-- phone -->
+    <div class="row mt-4">
+      <app-filed
+        class="d-block"
+        formControlName="phoneNumber"
+        [control]="form | getControl : 'phoneNumber'"
+        [title]="'committeesNewRequest.newExternalMember.phoneNumber' | translate"
+        [placeholder]="
+          'committeesNewRequest.newExternalMember.phoneNumber' | translate
+        "
+      ></app-filed>
+    </div>
+    <!-- position , entity -->
+    <div class="row">
+      <!-- position -->
+      <div class="col-md-6 mt-4 ">
+        <app-filed
+          [length]="100"
+          class="d-block"
+          formControlName="position"
+          [control]="form | getControl : 'position'"
+          [title]="'committeesNewRequest.newExternalMember.position' | translate"
+          [placeholder]="
+            'committeesNewRequest.newExternalMember.position' | translate
+          "
+        ></app-filed>
+      </div>
+
+      <!-- entity  -->
+      <div class="col-md-6 mt-4">
+        <app-filed
+          class="d-block member-entity"
+          formControlName="entity"
+          [control]="form | getControl : 'entity'"
+          [title]="'committeesNewRequest.newExternalMember.entity' | translate"
+          [placeholder]="
+            'committeesNewRequest.newExternalMember.entity' | translate
+          "
+        ></app-filed>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- cancel button -->
+  <button class="btn btn-info flex-grow-1" (click)="closePopup()">
+    {{ "shared.cancel" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || isBtnLoading"
+    (click)="save()"
+  >
+    <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    {{ "shared.save" | translate }}
+  </button>
+</div>

@@ -1,0 +1,40 @@
+<h5 class="mb-2">{{ 'shared.customerSatisfaction' | translate }}</h5>
+
+<div class="row">
+  <div class="chart col-md-8 col-sm-12 col-xs-12">
+    <div class="rate-box" *ngFor="let item of rateBox">
+      <span class="value">{{ item.value }}</span>
+
+      <div class="progress-bar">
+        <span class="progress" [style.width]="item.progress + '%'"></span>
+      </div>
+
+      <span class="count">{{ item.count }}</span>
+    </div>
+  </div>
+
+  <div class="global col-md-4 col-xs-12 col-sm-12">
+    <span class="global-value">{{ globalValue }}</span>
+
+    <div class="rating-icons">
+      <span class="one">
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+      </span>
+      <span #two class="two">
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+      </span>
+    </div>
+
+    <span class="total-reviews">
+      {{ 'shared.totalReviews' | translate }}: {{ nFormat(totalReviews) }}
+    </span>
+  </div>
+</div>

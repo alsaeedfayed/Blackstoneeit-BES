@@ -1,0 +1,373 @@
+<div class="new-transition-container d-flex">
+    <form class="width-100" [formGroup]="transitionForm">
+        <!-- transition title -->
+        <div class=" mt-4 langBtns-container">
+            <div [class.lang-btns-rtl]="language == 'ar'" class="langBtns  d-flex">
+                <button class="lang-btn" [class.lang-btn-active]="transitionTitleLanguage == 'english'"  (click)="transitionTitleLanguage = 'english'">English</button>
+                |
+                <button class="lang-btn" [class.lang-btn-active]="transitionTitleLanguage == 'arabic'"   (click)="transitionTitleLanguage = 'arabic'">Arabic</button>
+            </div>
+          <app-filed 
+          [control]="transitionForm | getControl : 'title'"
+          [hidden]="transitionTitleLanguage  === 'arabic'"
+            formControlName="title"
+            [title]="'stateTransitions.addTransition.transitionTitle' | translate"
+            [placeholder]="'Transition Title...'"
+            [dir]="'ltr'"
+          ></app-filed>
+          <app-filed 
+          [control]="transitionForm | getControl : 'arabicTitle'"
+          [hidden]="transitionTitleLanguage  === 'english'"
+          formControlName="arabicTitle"
+          [title]="'stateTransitions.addTransition.transitionTitle' | translate"
+          [placeholder]="'عنوان الانتقال...'"
+          [dir]="'rtl'"
+        ></app-filed>
+        </div>
+        
+  <div class="row">
+      <div class="col-md-6 mt-4">
+        <div class="">
+            <label class="form-label">
+              {{ 'stateTransitions.addTransition.originState' | translate}}
+              <span class="astrix-red">*</span>
+            </label>
+            <ng-select
+              class="input-select attendees-select"
+              formControlName="fromStateId"
+              [dir]="language === 'en' ? 'ltr' : 'rtl'"
+              [placeholder]="'stateTransitions.addTransition.originState'  | translate">
+              <ng-option
+                [value]="selectedState?.id">
+                <span>{{selectedState?.title[this.language]}}</span>
+              </ng-option>
+            </ng-select>
+          </div>
+          </div>
+        <div class="col-md-6 mt-4">
+            <div class="">
+                <label class="form-label">
+                  {{ 'stateTransitions.addTransition.destinationState' | translate}}
+                  <span class="astrix-red">*</span>
+                </label>
+                <ng-select
+                  class="input-select attendees-select"
+                  formControlName="toStateId"
+                  [dir]="language === 'en' ? 'ltr' : 'rtl'"
+                  [clearable]="true"
+                  [placeholder]="'stateTransitions.addTransition.destinationState'  | translate"
+                  [closeOnSelect]="true">
+                  <ng-option
+                    *ngFor="let val of destinationStates "
+                    [value]="val">
+                    <span>{{val?.title}}</span>
+                  </ng-option>
+                </ng-select>
+              </div>
+              </div>
+  </div>
+
+  <div class="row">
+      <!-- button label  -->
+      <div class="col-md-6 mt-4 langBtns-container">
+        <div [class.lang-btns-rtl]="language == 'ar'"  class="langBtns d-flex">
+            <button class="lang-btn" [class.lang-btn-active]="buttonLabelLanguage == 'english'"  (click)="buttonLabelLanguage = 'english'">English</button>
+            |
+            <button class="lang-btn" [class.lang-btn-active]="buttonLabelLanguage == 'arabic'"   (click)="buttonLabelLanguage = 'arabic'">Arabic</button>
+        </div>
+        <app-filed
+        [control]="transitionForm | getControl : 'label'"
+        [hidden]="buttonLabelLanguage == 'arabic'"
+          class="rtl-text"
+          formControlName="label"
+          [title]="'stateTransitions.addTransition.buttonLabel' | translate"
+          [placeholder]="'Button Label...'"
+          [dir]="'ltr'"
+        ></app-filed>
+        <app-filed
+        [control]="transitionForm | getControl : 'arabicLabel'"
+        [hidden]="buttonLabelLanguage == 'english'"
+        class="rtl-text"
+        formControlName="arabicLabel"
+        [title]="'stateTransitions.addTransition.buttonLabel' | translate"
+        [placeholder]="'...تسمية الزر' | translate"
+        [dir]="'rtl'"
+      ></app-filed>
+      </div>
+      <!-- button color -->
+      <div class="col-md-6 mt-4">
+  <div class="">
+      <label class="form-label">
+        {{ 'stateTransitions.addTransition.buttonColor' | translate}}
+        <span class="astrix-red">*</span>
+      </label>
+      <ng-select
+        class="input-select attendees-select"
+        formControlName="buttonTag"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [clearable]="true"
+        [placeholder]=" 'stateTransitions.addTransition.buttonColor'  | translate"
+        [closeOnSelect]="true">
+        <ng-option
+          *ngFor="let val of buttonColorOptions "
+          [value]="val">
+          <span>{{val}}</span>
+        </ng-option>
+      </ng-select>
+    </div>
+    </div>
+  </div>
+
+  <div class="row">
+      <!-- aurhorization type -->
+      <div class="form-group col-6 mt-4">
+   <label for=""
+          class="form-label">{{'stateTransitions.addTransition.authorizationType' | translate}}</label>
+   <div class="d-flex flex-wrap">
+              <!-- aurhorization type requester-->
+     <div class="form-group mb-0  position-relative">
+       <input id="requester"
+              name="authorizationType"
+              type="radio"
+              value="Requester"
+              formControlName="authorizationType"
+              class="form-input-radio-hidden">
+       <label for="requester"
+              class="form-label radio-button-label">
+         {{'stateTransitions.addTransition.requester' | translate}}
+         <i class="bx bxs-user-voice"></i>
+       </label>
+     </div>
+             <!-- aurhorization type specific users-->
+     <div class="form-group mb-0 position-relative">
+       <input id="users"
+              name="authorizationType"
+              type="radio"
+              value="User"
+              formControlName="authorizationType"
+              class="form-input-radio-hidden">
+       <label for="users"
+              class="form-label radio-button-label">
+         {{'stateTransitions.addTransition.specificUsers' | translate}}
+         <i class="bx bx-group"></i>
+       </label>
+     </div>
+     <!-- aurhorization type specific roles-->
+     <div class="form-group mb-0  position-relative">
+       <input id="roles"
+              name="authorizationType"
+              type="radio"
+              value="Role"
+              formControlName="authorizationType"
+              class="form-input-radio-hidden">
+       <label for="roles"
+              class="form-label radio-button-label">
+         {{'stateTransitions.addTransition.specificRoles' | translate}} 
+         <i class="bx bxs-user-badge"></i>
+       </label>
+     </div>
+   </div>
+ </div>
+   <!-- allowed roles  should appear only if authorization type  specific roles is true -->
+<div *ngIf="transitionForm.get('authorizationType').value === 'Role'" class="mt-4 col-md-6">
+  <label class="form-label">
+    {{ 'stateTransitions.addTransition.allowedRoles' | translate}}
+    <span class="astrix-red">*</span>
+  </label>
+
+  <ng-select
+    class="input-select"
+    formControlName="roles"
+    [ngClass]="{ valid: (transitionForm | getControl : 'roles')?.valid }"
+    [dir]="language === 'en' ? 'ltr' : 'rtl'"
+    [searchable]="true"
+    [clearable]="true"
+    [multiple]="true"
+    (keyup)="onRoleInputChange($event)"
+    [placeholder]="'stateTransitions.addTransition.allowedRoles' | translate"
+    [notFoundText]="'shared.noItemsFound' | translate"
+  >
+    <ng-option
+      *ngFor="let role of roles"
+      [value]="role"
+    >
+      {{ role?.name }}
+    </ng-option>
+  </ng-select>
+</div>
+
+<!-- allowed users  should appear only if authorization type  specific users is true -->
+<div *ngIf="transitionForm.get('authorizationType').value === 'User'" class="mt-4 col-md-6">
+  <label class="form-label">
+    {{ 'stateTransitions.addTransition.allowedUsers' | translate}}
+    <span class="astrix-red">*</span>
+  </label>
+
+  <ng-select
+    class="input-select"
+    formControlName="users"
+    [ngClass]="{ valid: (transitionForm | getControl : 'users')?.valid }"
+    [dir]="language === 'en' ? 'ltr' : 'rtl'"
+    [searchable]="true"
+    [clearable]="true"
+    (keyup)="onUserInputChange($event)"
+    [placeholder]="'stateTransitions.addTransition.allowedUsers' | translate"
+    [notFoundText]="'shared.noItemsFound' | translate"
+    [multiple]="true"
+  >
+    <ng-option
+      *ngFor="let user of users"
+      [value]="user"
+    >
+      {{ user?.fullName }}
+    </ng-option>
+  </ng-select>
+</div>
+
+  </div>
+  <!-- <div class="row">
+      <div class="form-group col-6 mt-4">
+          <label for=""
+                 class="form-label">{{'Option' | translate}}</label>
+          <div class="d-flex flex-wrap">
+            <div class="form-group mb-0  position-relative">
+              <input id="single"
+                     name="option"
+                     type="radio"
+                     formControlName="option"
+                     [checked]="true"
+                     value="Single"
+                     class="form-input-radio-hidden">
+              <label for="single"
+                     class="form-label radio-button-label">
+                {{'stateTransitions.addTransition.single' | translate}}
+                <i class="bx bx-right-arrow-alt"></i>
+              </label>
+            </div>
+            <div class="form-group mb-0 position-relative">
+              <input id="reversable"
+                     name="option"
+                     type="radio"
+                     formControlName="option"
+                     value="Reversable"
+                     class="form-input-radio-hidden">
+              <label for="reversable"
+                     class="form-label radio-button-label">
+                {{'stateTransitions.addTransition.reversable' | translate}}
+                <i class='bx bx-repeat'></i>
+              </label>
+            </div>
+            <div class="form-group mb-0  position-relative">
+              <input id="sequential"
+                     name="option"
+                     type="radio"
+                     formControlName="option"
+                     value="Sequential"
+                     class="form-input-radio-hidden">
+              <label for="sequential"
+                     class="form-label radio-button-label">
+                {{'stateTransitions.addTransition.sequential' | translate}}
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="24"
+                     height="24"
+                     viewBox="0 0 24 24"
+                     fill="none">
+                  <path d="M21 16L16.1538 12V15.3333H5V16.6667H16.1538V20L21 16Z"
+                        fill="#C5C6C7" />
+                  <path d="M17 7L12.1538 3V6.33333H5V7.66667H12.1538V11L17 7Z"
+                        fill="#C5C6C7" />
+                </svg>
+              </label>
+            </div>
+            <div class="form-group mb-0  position-relative">
+              <input id="parallel"
+                     name="option"
+                     type="radio"
+                     formControlName="option"
+                     value="Parallel"
+                     class="form-input-radio-hidden">
+              <label for="parallel"
+                     class="form-label radio-button-label">
+                {{'stateTransitions.addTransition.parallel' | translate}}
+                <i class='bx bx-shuffle'></i>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-6 mt-4">
+          <label for=""
+                 class="form-label">{{'stateTransitions.addTransition.minimumVote' | translate}}</label>
+          <input type="number"
+                 formControlName="minVoteCount"
+                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                 class="form-input">
+        </div>
+  </div> -->
+
+  <div class="row">
+      <!-- comment required -->
+      <div class="form-group flex-row align-items-center justify-content-between mt-2">
+          <label for="comment-checkbox"
+                 class="form-label stage-label mb-0">{{'stateTransitions.addTransition.commentRequired' | translate}}</label>
+          <input id="comment-checkbox"
+                 type="checkbox"
+                 formControlName="commentTag"
+                 class="form-input-checkbox">
+        </div>
+        <div class="row">
+          <!-- comment Title should appear only if form control comment required is true -->
+          <div *ngIf="transitionForm.get('commentTag').value" class=" mt-4 langBtns-container">
+            <div [class.lang-btns-rtl]="language == 'ar'"  class="langBtns d-flex">
+                <button class="lang-btn" [class.lang-btn-active]="commentTileLanguage == 'english'"  (click)="commentTileLanguage = 'english'">English</button>
+                |
+                <button class="lang-btn" [class.lang-btn-active]="commentTileLanguage == 'arabic'"  (click)="commentTileLanguage = 'arabic'">Arabic</button>
+            </div>
+              <app-filed
+              [dir]="'ltr'"
+              [control]="transitionForm | getControl : 'commentTitle'"
+              [hidden]="commentTileLanguage == 'arabic'"
+                formControlName="commentTitle"
+                [title]="'stateTransitions.addTransition.commentTitle' | translate"
+                [placeholder]="'Comment title'"
+              ></app-filed>
+              <app-filed
+              [control]="transitionForm | getControl : 'arabicCommentTitle'"
+              [dir]="'rtl'"
+              [hidden]="commentTileLanguage == 'english'"
+              formControlName="arabicCommentTitle"
+              [title]="'stateTransitions.addTransition.commentTitle' | translate"
+              [placeholder]="'...عنوان التعليق' | translate"
+            ></app-filed>
+            </div>
+        </div>
+
+        <!-- attachment required -->
+        <div class="form-group flex-row align-items-center justify-content-between mt-2">
+          <label for="attachment-checkbox"
+                 class="form-label stage-label mb-0">{{'stateTransitions.addTransition.attachmentRequired' | translate}}</label>
+          <input id="attachment-checkbox"
+                 type="checkbox"
+                 formControlName="isAttachmentRequired"
+                 class="form-input-checkbox">
+        </div>
+
+        <!-- action visibility -->
+        <!-- <div class="form-group flex-row align-items-center justify-content-between mt-2" >
+          <label for="action-visibility-checkbox"
+                 class="form-label stage-label mb-0">{{'stateTransitions.addTransition.externalVisibility' | translate}}</label>
+          <input id="action-visibility-checkbox"
+                 type="checkbox"
+                 formControlName="isActionVisibleExternally"
+                 class="form-input-checkbox">
+        </div> -->
+  </div>
+</form>
+<div class="btn-actions-container d-flex  new-model-dialog-footer">
+  <div class="sub-btn-actions-container d-flex">
+      <button class="btn btn-info flex-grow-1" (click)="cancelAddTran()">{{'stateTransitions.addTransition.cancel' | translate}}</button>
+      <button [disabled]="!transitionForm.valid" class="btn btn-main flex-grow-1" (click)="addTransition()">{{'stateTransitions.addTransition.add' | translate}} +</button>
+  </div>
+</div>
+</div>
+

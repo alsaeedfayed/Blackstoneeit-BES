@@ -1,0 +1,57 @@
+<!-- members table -->
+<div class="changed-members-table">
+  <div *ngIf="changedMainTasks?.length" class="table mt-4">
+    <div class="table-wrapper">
+      <div style="font-weight: 500; font-size: 16px">
+        {{ "changeRequests.details.mainTasks" | translate }}
+      </div>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th scope="col" class="title">
+              {{ "changeRequests.details.title2" | translate }}
+            </th>
+
+            <th scope="col" class="changeType">
+              {{ "changeRequests.details.changeType" | translate }}
+            </th>
+
+            <th scope="col" class="details">
+              {{ "changeRequests.details.details" | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of changedMainTasks; let i = index">
+            <td class="name">
+              {{ lang === "en" ? item?.title : item?.titleAr }}
+            </td>
+
+
+
+            <td class="changedtype">
+              <span [ngClass]="changedTypes[item?.recordingStatus]?.className">
+                {{
+                  lang === "en"
+                    ? changedTypes[item?.recordingStatus]?.name
+                    : changedTypes[item?.recordingStatus]?.nameAr
+                }}
+              </span>
+            </td>
+
+            <td class="details">
+             <a type="button" (click)="openChangedTasksModal(item)" *ngIf="item?.hasDetails" class="viewDetails">{{"changeRequests.details.viewDetails" | translate}}</a>
+             <span *ngIf="!item.hasDetails">-</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="no-data" *ngIf="!changedMainTasks?.length">
+  <app-no-data
+    [msg]="'changeRequests.details.noDataMainTasks' | translate"
+  ></app-no-data>
+</div>

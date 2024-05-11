@@ -1,0 +1,33 @@
+<div class="position-relative w-100">
+  <input class="form-control w-100"
+         [class.disabled]="disabled"
+         placeholder="{{'shared.selectDate' | translate}}"
+         name="d2"
+         [minDate]="allowPastDate ? null : minDate"
+         #c2="ngModel"
+         (dateSelect)="dateChange($event)"
+         (ngModelChange)="dateChange($event)"
+         [(ngModel)]="date"
+         (click)="d2.toggle()"
+         readonly
+         [disabled]="disabled"
+         ngbDatepicker
+         #d2="ngbDatepicker">
+  <div class="input-group-append datepicker-toggle d-flex">
+    <button [disabled]="disabled"
+            class="btn btn-outline-secondary calendar"
+            (click)="d2.toggle()"
+            type="button"><i class="bx bxs-calendar"></i></button>
+
+
+     <button
+     *ngIf="showClear"
+     [disabled]="disabled"
+     class="btn btn-outline-danger calendar"
+     (click)="reset()"
+     type="button"
+   >
+     <i class="bx bx-x"></i>
+   </button>
+  </div>
+</div>

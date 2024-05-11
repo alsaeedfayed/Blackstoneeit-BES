@@ -1,0 +1,12 @@
+<div class="spent-total">
+  <canvas
+  class="my-chart"
+  id="spentTotal"
+  #spentTotal
+></canvas>
+
+<div class="spent-total-spent d-flex flex-column gap-2 align-items-center">
+ <span> {{'bau.dashboard.spentBudget' | translate}}</span>
+  <span>{{data?.spentAmount | formatMoney}} {{'bau.AED' | translate}}</span>
+</div>
+</div>

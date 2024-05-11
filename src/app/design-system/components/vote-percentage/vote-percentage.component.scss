@@ -1,0 +1,49 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.vote-percentage {
+  position: relative;
+  height: 2.125rem;
+  background-color: #f2f2f2;
+  padding: 0.3125rem 0.75rem;
+  border-radius: 2.5rem;
+  overflow: hidden;
+
+  .progress-bar {
+    display: block;
+    position: absolute;
+    top: 0;
+    @include rtl_value(left, 0, auto);
+    @include rtl_value(right, auto, 0);
+    height: 100%;
+    width: 0%;
+    background-color: $light-main-color;
+  }
+
+  .label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+  }
+
+  .percent {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    background-color: $white-color;
+    padding: 0 0.625rem;
+    border-radius: 2.5rem;
+  }
+
+  &.is-readonly {
+    .label {
+      pointer-events: none;
+    }
+  }
+
+  &:not(.is-readonly) {
+    .label {
+      cursor: pointer;
+    }
+  }
+}

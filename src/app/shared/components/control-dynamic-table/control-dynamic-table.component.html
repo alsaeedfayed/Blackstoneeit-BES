@@ -1,0 +1,27 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="form-index" *ngIf="showIndex">#</th>
+          <th scope="col" *ngFor="let column of columns">{{ lang == 'ar' ? column.arLabel : column.enLabel }}</th>
+          <th scope="col" class="form-actions" *ngIf="showActions">{{  lang == 'ar' ? 'الإجراءات' :'Actions' }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows; let i = index">
+          <td class="form-index" *ngIf="showIndex">
+            {{i + 1}}
+            <!-- {{i + 1 | tableItemIndex : paginationModle?.pageSize : paginationModle?.pageIndex}} -->
+          </td>
+          <td *ngFor="let column of columns">
+            {{row[column.label]}}
+          </td>
+          <td *ngIf="showActions">
+            <i class="bx bx-trash icon red" (click)="deleteRow(row.id)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

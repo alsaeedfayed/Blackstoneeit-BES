@@ -1,0 +1,94 @@
+<!-- <div class="mb-64px">
+  <div *ngIf="!isFilterDisplayed" class="d-flex align-items-center">
+    <div class="mr-3">
+      <app-filter-dropdown [items]="sectorsItems" (selectEvent)="onTypeSelect($event)" [title]="'Sector'">
+      </app-filter-dropdown>
+    </div>
+    <div class="mr-3">
+      <app-filter-dropdown [items]="departmentsItems" (selectEvent)="onStateSelect($event)" [title]="'Area'">
+      </app-filter-dropdown>
+    </div>
+    <div class="mr-auto">
+      <app-filter-dropdown [items]="areasItems" (selectEvent)="onSort($event)" [title]="'Department'">
+      </app-filter-dropdown>
+    </div>
+    <div class="search-bar-container mr-2 w-25">
+      <input type="text" (keyup)="onSearch($event)" placeholder="{{ 'shared.search' | translate }}">
+      <i class="bx bx-search"></i>
+    </div>
+    <div class="d-flex align-items-center" (click)="isFilterDisplayed = true">
+      <button class="btn btn-link p-0">{{ "shared.advancedFilter" | translate }}</button>
+    </div>
+  </div>
+  <div *ngIf="isFilterDisplayed">
+    <button class="back-btn mb-4" (click)="isFilterDisplayed = false">
+      <div class="arrow"><i class="bx bx-left-arrow-alt"></i></div>
+      <span>{{ "shared.advancedSearch" | translate }}</span>
+    </button>
+  </div>
+</div> -->
+
+<div class="mb-4">
+  <app-dashboard-filters></app-dashboard-filters>
+</div>
+
+<div class="dashboard-cards" *ngIf="projectsData">
+  <div>
+    <app-dashboard-summary-card
+      [data]="projectsData"
+    ></app-dashboard-summary-card>
+  </div>
+  <div class="flex-grow-1">
+    <app-dashboard-finance-summary></app-dashboard-finance-summary>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <app-dashboard-project-status
+      [data]="projectsData"
+    ></app-dashboard-project-status>
+  </div>
+  <div class="col-md-4 mb-4">
+    <app-categories></app-categories>
+  </div>
+  <div class="col-md-4 mb-4">
+    <app-origins></app-origins>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-4">
+    <app-deliverables></app-deliverables>
+  </div>
+  <div class="col-md-6 mb-4">
+    <app-dashboard-project-managers></app-dashboard-project-managers>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="mb-4">
+      <app-priorities></app-priorities>
+    </div>
+    <!-- <div class="mb-4">
+      <app-dashboard-project-managers></app-dashboard-project-managers>
+    </div> -->
+  </div>
+  <div class="col-md-6">
+    <div class="mb-4" *ngIf="!data.sectorId">
+      <app-dashboard-sectors></app-dashboard-sectors>
+    </div>
+    <div class="mb-4" *ngIf="data.sectorId">
+      <app-dashboard-departments></app-dashboard-departments>
+    </div>
+  </div>
+</div>
+
+<div class="mb-4">
+  <app-high-risks-list></app-high-risks-list>
+</div>
+
+<div>
+  <app-details-list></app-details-list>
+</div>

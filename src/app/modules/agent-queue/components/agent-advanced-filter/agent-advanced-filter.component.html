@@ -1,0 +1,115 @@
+<div class="new-model-dialog-body">
+  <div class="agent-filter-form pb-2" [formGroup]="form">
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'agentQueue.requester' | translate }}
+      </label>
+
+      <ng-select
+        class="input-select"
+        formControlName="requesterId"
+        [searchable]="true"
+        [placeholder]="'shared.all' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+      >
+        <ng-option *ngFor="let requester of requesters" [value]="requester?.id">
+          {{ requester?.fullName }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'agentQueue.requestNumber' | translate }}
+      </label>
+
+      <input
+        class="form-control"
+        type="text"
+        formControlName="requestNumber"
+      />
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'agentQueue.service' | translate }}
+      </label>
+
+      <ng-select
+        class="input-select"
+        formControlName="serviceId"
+        [searchable]="true"
+        [placeholder]="'shared.all' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+      >
+        <ng-option *ngFor="let service of services" [value]="service.serviceId">
+          {{ lang === 'en' ? service.title : service.titleAr }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'agentQueue.creationDate' | translate }}
+      </label>
+
+      <app-date-range
+        formControlName="creationDate"
+        [dir]="lang=== 'en' ? 'ltr' : 'rtl'"
+      ></app-date-range>
+    </div>
+
+    <div class="filter mt-3">
+      <label class="form-label">
+        {{ 'agentQueue.lastUpdateDateRange' | translate }}
+      </label>
+
+      <app-date-range
+        formControlName="updatedDate"
+        [dir]="lang=== 'en' ? 'ltr' : 'rtl'"
+      ></app-date-range>
+    </div>
+
+    <div class="filter mt-3 d-flex align-items-ceneter">
+      <label class="form-label mr-4">
+        {{ 'agentQueue.rating' | translate }}
+      </label>
+
+      <bar-rating
+        [readOnly]="false"
+        [max]="5"
+        [theme]="'stars'"
+        [rate]="form.value.rating"
+        (rateChange)="setRating($event)"
+      ></bar-rating>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onPopupClose()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- clear button -->
+  <button
+    class="btn btn-outline-main flex-grow-1"
+    (click)="onFilterReset()"
+  >
+    {{ 'shared.clearFilter' | translate }}
+  </button>
+
+  <!-- filter button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    (click)="onFilterConfirmed()"
+  >
+    {{ 'shared.filter' | translate }}
+  </button>
+</div>

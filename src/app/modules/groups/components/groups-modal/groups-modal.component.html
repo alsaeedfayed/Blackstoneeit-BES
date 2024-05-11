@@ -1,0 +1,96 @@
+<div class="new-model-dialog-body">
+  <div class="groups-form pb-2" [formGroup]="groupForm">
+
+    <!-- group name -->
+    <div class="form-group mt-4">
+      <app-filed
+        [formControl]="groupForm.controls.name"
+        [isSubmitted]="isFormSubmitted"
+        [control]="groupForm | getControl: 'name'"
+        title="{{ 'groups.name' | translate}}"
+      ></app-filed>
+    </div>
+
+    <!-- group arabic name -->
+    <div class="form-group mt-4">
+      <app-filed
+        [formControl]="groupForm.controls.arabicName"
+        [isSubmitted]="isFormSubmitted"
+        [control]="groupForm | getControl: 'arabicName'"
+        title="{{ 'groups.arabicName' | translate}}"
+        [dir]="'rtl'"
+      ></app-filed>
+    </div>
+
+    <!-- group code -->
+    <div class="form-group mt-4">
+      <app-filed
+        [isSubmitted]="isFormSubmitted"
+        [length]="3"
+        [formControl]="groupForm.controls.code"
+        [control]="groupForm | getControl: 'code'"
+        title="{{ 'groups.groupCode' | translate}}"
+      ></app-filed>
+    </div>
+
+    <!-- parent group -->
+    <div class="form-group mt-4">
+      <label for="" class="form-label">{{ 'groups.parentGroup' | translate }}</label>
+      <input
+        id="typeahead-focus"
+        type="text"
+        class="form-control"
+        [formControl]="groupForm.controls.parentGroupId"
+        [ngbTypeahead]="searchGroups"
+        [resultFormatter]="formatter"
+        [inputFormatter]="formatter"
+        id="typeahead-prevent-manual-entry"
+        [editable]="false"
+        (focus)="focus$.next($any($event).target.value)"
+        (click)="click$.next($any($event).target.value)"
+        #instance="ngbTypeahead"
+      />
+    </div>
+
+    <!-- level -->
+    <div class="form-group mt-4">
+      <app-select
+        [formControl]="groupForm.controls.level"
+        [control]="groupForm | getControl: 'level'"
+        [title]="'groups.level' | translate"
+        [placeholder]="'groups.level' | translate"
+        [items]="levels"
+        [bindVlaue]="'value'"
+        [bindLabel]="'label'"
+        [dropdownPosition]="'top'"
+      ></app-select>
+      <small *ngIf="getGroupForm.level.errors?.required && isFormSubmitted"
+             class="form-error">
+        <!-- <i class="bx bxs-error-circle"></i> -->
+        <span class="color-red">{{ "shared.thisFieldIsRequired" | translate }}</span>
+      </small>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onCancelPopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="groupForm.invalid || isBtnLoading"
+    (click)="onRegisterGroup()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

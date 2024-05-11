@@ -1,0 +1,31 @@
+@import "/src/assets/css/utils/variables.scss";
+
+.gap-13px {
+  gap: 13px;
+}
+
+.h-200px {
+  height: 200px !important;
+}
+
+.card-skeleton {
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.04);
+  background-color: $white-color;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding-top: 20px !important;
+}
+
+.vh-40 {
+  height: 40vh;
+}
+
+.dashboard-card {
+  flex-grow: 1;
+  width: 250px;
+  height: 110px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 15px;
+}

@@ -1,0 +1,78 @@
+<div class="page">
+  <app-header-page
+    [title]="'committeeWeightSettings.pageTitle' | translate"
+    [isAddBtn]="true"
+
+    [showTotalItems] = "false"
+
+  >
+  <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+    <button class="btn btn-main col-12 col-md-3 flex-grow-1" [disabled]="form.invalid || isLoading || loaderSave" (click)="submitWeight()">
+      <i *ngIf="loaderSave" class="bx bx-loader-alt bx-spin ml-1"></i>
+      {{ 'shared.save' | translate }}
+    </button>
+  </div>
+
+
+
+  </app-header-page>
+
+
+
+  <!-- table -->
+  <ng-container *ngIf="isLoading; else weight_settings">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+
+
+  <!-- voting templates table -->
+<ng-template #weight_settings>
+  <div class="pb-2 row container-weight" [formGroup]="form">
+    <app-filed   class="d-block mt-3 col-12 col-md-6" formControlName="meetingWeight" [control]="form | getControl: 'meetingWeight'"
+      [title]="'committeeWeightSettings.weightOfMeetings' | translate"
+      [disabled]="disableFields"
+      [isNumber] = "true"
+      [minValue]="0"
+      [maxValue]="100"
+      [validMax]="false"
+      [placeholder]="'committeeWeightSettings.weightOfMeetings' | translate"></app-filed>
+      <div class="col-md-6 col-12"></div>
+      <app-filed class="d-block mt-3 col-12 col-md-6" formControlName="taskWeight" [control]="form | getControl: 'taskWeight'"
+      [title]="'committeeWeightSettings.tasksRate' | translate"
+      [disabled]="disableFields"
+      [isNumber] = "true"
+      [minValue]="0"
+      [maxValue]="100"
+
+      [placeholder]="'committeeWeightSettings.tasksRate' | translate"></app-filed>
+      <div class="col-md-6 col-12"></div>
+
+      <app-filed  class="d-block mt-3 col-12 col-md-6" formControlName="kpiRateWeight" [control]="form | getControl: 'kpiRateWeight'"
+      [title]="'committeeWeightSettings.kpisRate' | translate"
+      [disabled]="disableFields"
+      [isNumber] = "true"
+      [minValue]="0"
+      [maxValue]="100"
+
+      [placeholder]="'committeeWeightSettings.kpisRate' | translate"></app-filed>
+
+
+
+  </div>
+</ng-template>
+
+</div>
+
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

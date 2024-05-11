@@ -1,0 +1,23 @@
+@import"../../../../../assets/css/utils/mixins.scss";
+
+.overall-summary {
+    min-height: 800px;
+    .noGroup {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .data {
+        .analytics {
+            width: 100%;
+           // display: flex;
+            margin-bottom: 20px;
+        }
+        .levels-performance {
+            background-color: #fff;
+            box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.04);
+            margin-bottom: 30px;
+        }
+    }
+}

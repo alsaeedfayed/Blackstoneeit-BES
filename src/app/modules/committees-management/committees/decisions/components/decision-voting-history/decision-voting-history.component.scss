@@ -1,0 +1,61 @@
+app-page-filters {
+  position: relative;
+  z-index: 100;
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1rem 2rem;
+
+  ::ng-deep app-no-data {
+    .no-data {
+      position: static;
+      top: initial;
+      left: initial;
+      transform: none;
+    }
+
+    img {
+      display: block;
+      margin: auto;
+      width: 101px;
+      height: 83px;
+    }
+
+    p {
+      width: auto;
+      font-size: 0.875rem;
+      margin: 1.5rem 0 0;
+    }
+  }
+}
+.row-gap-3 {
+  row-gap: 1rem;
+}
+
+.btn {
+  border-radius: 20px !important;
+  border: 1px solid #c1c1c1 !important;
+  font-size: small;
+
+  &:hover,
+  &.active {
+    background-color: #c1c1c1 !important;
+  }
+}
+
+.filterBtn{
+  border: .6px solid #E1E1E1;
+  outline: none;
+  padding: 8px 10px;
+  background: transparent;
+  border-radius: 49px;
+
+  &:hover,
+  &.active {
+    background-color: #E1E1E1 !important;
+  }
+}

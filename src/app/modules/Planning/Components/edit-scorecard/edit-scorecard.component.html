@@ -1,0 +1,214 @@
+<div class="wrapper">
+  <!-- Header -->
+  <app-header-page
+    [title]="'Planning.editScorecardForm' | translate"
+    [showTotalItems]="false"
+    [backButton]="true"
+    [showButtons]="true"
+  >
+    <ng-container buttons>
+      <button
+        class="btn btn-main"
+        [disabled]="model.loading || model.btnloading || model.editScorecardForm.invalid"
+        (click)="model.saveChnages()"
+      >
+        <i *ngIf="model.btnloading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        <ng-container>
+          {{ "shared.saveChanges" | translate }}
+        </ng-container>
+      </button>
+
+      <button class="btn btn-outline-secondary" [routerLink]="['/planning']">
+        {{ "shared.cancel" | translate }}
+      </button>
+    </ng-container>
+  </app-header-page>
+
+  <form [formGroup]="model.editScorecardForm">
+    <div class="level-select row">
+      <!-- Level -->
+      <div class="col-md-3">
+        <label for="">{{ "Planning.selectLevel" | translate }}</label>
+
+        <app-select
+          bindValue="id"
+          [placeholder]="'Planning.selectLevel' | translate"
+          [items]="levels"
+          [bindLabel]="model.lang == 'en' ? 'label' : 'labelAr'"
+          formControlName="level"
+          (change)="model.chaneLevelHandler($event)"
+        ></app-select>
+      </div>
+
+      <div class="col-md-6">
+        <div
+          class="group col-md-9"
+          *ngIf="model.f['level'].value && model.f['level'].value != 1"
+        >
+          <!-- Group -->
+          <label class="form-label" style="margin-bottom: 0">
+            {{
+              model.f["level"].value == 2
+                ? model.sectorsLabel
+                : model.f["level"].value == 3
+                ? model.departmentsLabel
+                : model.sectionsLabel
+            }}
+          </label>
+
+          <ng-select
+            class="select-ddl"
+            formControlName="groupId"
+            [clearable]="false"
+            [searchable]="true"
+            [items]="model.filteredGroups"
+            [placeholder]="'Planning.selectGroup' | translate"
+            [bindLabel]="model.lang === 'en' ? 'name' : 'arabicName'"
+            bindValue="id"
+            (change)="
+              model.selectedGroup = $event; model.groupSelectedHandler()
+            "
+          ></ng-select>
+        </div>
+      </div>
+    </div>
+
+    <div class="change-context">
+      <div class="pt-3">
+        <h5 class="form-label">{{ "Planning.chnageContext" | translate }}</h5>
+        <!-- Change context type -->
+        <app-radio-group
+          class="d-flex"
+          formControlName="changeContext"
+          (valueChanged)="model.typeChangedHandler($event)"
+        >
+          <app-radio-box
+            [value]="1"
+            [active]="model.f['changeContext'].value === 1"
+          >
+            {{ "Planning.chnageRequestRelated" | translate }}
+          </app-radio-box>
+
+          <app-radio-box
+            [value]="2"
+            [active]="model.f['changeContext'].value === 2"
+          >
+            {{ "Planning.AdHoc" | translate }}
+          </app-radio-box>
+        </app-radio-group>
+      </div>
+
+      <div class="change-input col-6">
+        <app-select
+          bindValue="id"
+          [bindLabel]="model.lang == 'en' ? 'title' : 'titleAr'"
+          [placeholder]="'shared.PleaseSelect' | translate"
+          formControlName="changeRequestIds"
+          [items]="model.relatedChangeRequests"
+          [ngStyle]="{
+            display: model.f['changeContext'].value === 1 ? 'block' : 'none'
+          }"
+        ></app-select>
+
+        <app-textarea-filed
+          [placeholder]="'Planning.reason' | translate"
+          formControlName="changeContent"
+          [control]="model.editScorecardForm | getControl : 'changeContent'"
+          [ngStyle]="{
+            display: model.f['changeContext'].value === 2 ? 'block' : 'none'
+          }"
+        ></app-textarea-filed>
+      </div>
+    </div>
+
+    <div class="selected-scroecard">
+      <div class="hd-title">
+        <h3>{{ "Planning.ScoreCard" | translate }}:</h3>
+
+        <button
+          *ngIf="model.isShowAddGoal"
+          class="btn btn-main"
+          (click)="model.openAddGoalPopup()"
+        >
+          <i class="bx bx-plus"></i>
+          {{ "Planning.addNewGoal" | translate }}
+        </button>
+      </div>
+
+      <div class="list-wrapper" *ngIf="!model.loadingGoals">
+        <!-- (addActionTriggerer)="model.openAddGoalPopup($event)" -->
+        <goal-items
+          [viewMode]="3"
+          [flatenedGoalItems]="model.viewedGoalsList"
+          [ShowAction]="true"
+          (editActionTriggered)="model.openEditGoalPopup($event)"
+          (deleteActionTriggerer)="model.deleteGoal($event)"
+          (undoActionTriggerer)="model.undoDeletedGoal($event)"
+        ></goal-items>
+      </div>
+
+      <div #skeleton *ngIf="model.loadingGoals">
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+        <app-skeleton-loader mode="table"></app-skeleton-loader>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Edit Goals -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'Goal-action-edit'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeEditGoalModel()"
+>
+  <div modal-header class="edit-goal-model-header w-100">
+    <label class="modal-title">
+      {{ editGoalTitle }}
+    </label>
+  </div>
+
+  <div modal-content class="edit-goal-model-content border-top">
+    <cr-add-goal
+      *ngIf="model.showEditModel"
+      [id]="model.scoreCardId"
+      (update)="model.updateGoals()"
+      (setEditedGoal)="model.editGoalHandler($event)"
+    ></cr-add-goal>
+  </div>
+</app-model>
+
+<!-- Add Goals -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'Goal-action-add'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeAddGoalModel()"
+>
+  <div modal-header class="add-goal-model-header w-100">
+    <label class="modal-title">
+      {{ addGoalTitle }}
+    </label>
+  </div>
+
+  <div modal-content class="add-goal-model-content border-top">
+    <add-goal
+      *ngIf="model.showAddModel"
+      [id]="model.scoreCardId"
+      [isEditScoreCard]="true"
+      (update)="model.updateGoals()"
+      (setAddedGoal)="model.addGoalHandler($event)"
+      [ShowParents]="true"
+      [Parents]="model.parents"
+    ></add-goal>
+  </div>
+</app-model>

@@ -1,0 +1,149 @@
+<div class="data-breakdown">
+  <div class="top">
+    <!-- <div class="right-controls" *ngIf="_data?.length > 0">
+      <div class="tree-controls">
+        <div
+          class="expand-button"
+          (click)="toggleViewGoals(true)"
+          *ngIf="allowExpandAll"
+        >
+          <i class="bx bx-chevrons-down"></i>
+          <span>{{ "shared.expnadAll" | translate }}</span>
+        </div>
+        <div
+          class="expand-button"
+          (click)="toggleViewGoals(false)"
+          *ngIf="!allowExpandAll"
+        >
+          <i class="bx bx-chevrons-up"></i>
+          <span>{{ "shared.collapseAll" | translate }}</span>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div class="data" *ngIf="_data?.length > 0">
+    <div class="table-header">
+      <div class="columns">
+        <div class="column" *ngIf="showColumns">
+          <span>{{ "designSystem.weight" | translate }} ({{ totalWeight + otherWeight }})</span>
+        </div>
+        <div class="column" *ngIf="showColumns">
+          <span>{{ "designSystem.target" | translate }}</span>
+        </div>
+        <div class="column-status">
+          <div
+            class="expand-button"
+            (click)="toggleViewGoals(true)"
+            *ngIf="allowExpandAll"
+          >
+            <i class="bx bx-chevrons-down"></i>
+            <span>{{ "shared.expand" | translate }}</span>
+          </div>
+          <div
+            class="expand-button"
+            (click)="toggleViewGoals(false)"
+            *ngIf="!allowExpandAll"
+          >
+            <i class="bx bx-chevrons-up"></i>
+            <span>{{ "shared.collapse" | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul>
+      <ng-container
+        *ngTemplateOutlet="
+          recursiveListTmpl;
+          context: { list: _data, parent: null }
+        "
+      ></ng-container>
+    </ul>
+    <ng-template #recursiveListTmpl let-list="list" let-parent="parent">
+      <li *ngFor="let goal of list">
+        <div class="panel-header">
+          <div class="header">
+            <div class="icons">
+              <i
+                [style.display]="
+                  !goal?.open && goal?.children?.length > 0 ? 'block' : 'none'
+                "
+                [ngClass]="'bx bx-chevron-right'"
+                (click)="toggleNestedList(goal)"
+              ></i>
+              <i
+                [style.display]="
+                  goal?.open && goal?.children?.length > 0 ? 'block' : 'none'
+                "
+                class="bx bx-chevron-down"
+                (click)="toggleNestedList(goal)"
+              ></i>
+            </div>
+
+            <input
+              *ngIf="goal?.goalTypeId == 4 && isEditAble"
+              type="checkbox"
+              class="mx-2"
+              [(ngModel)]="goal.isChecked"
+              (change)="goalChecked(goal)"
+            />
+            <span class="goalId">{{ goal?.id }}</span>
+            <div class="type" [style.background]="goal?.goalType?.color">
+              <span>
+                {{
+                  lang == "ar"
+                    ? goal?.goalType?.arabicName
+                    : goal?.goalType?.name
+                }}
+              </span>
+            </div>
+            <div class="hd-title">
+              <strong>{{ lang == "ar" ? goal?.titleAr : goal?.title }}</strong>
+            </div>
+          </div>
+          <div class="columns" *ngIf="goal?.goalTypeId == 4 && showColumns">
+            <div class="column">
+              <span>{{ goal?.internalWeight + "%" }}</span>
+            </div>
+            <div class="column">
+              <span>{{ goal?.totalTarget  }}</span>
+              <span *ngIf="goal?.measurementMethod == 1">%</span>
+              <span *ngIf="goal?.measurementMethod == 2">#</span>
+              <!-- <span *ngIf="goal?.measurementMethod == 3">#</span> -->
+              <span *ngIf="goal?.measurementMethod == 4">
+                {{ "shared.AED" | translate }}
+              </span>
+              <span *ngIf="goal?.measurementMethod == 5">date</span>
+            </div>
+            <div class="column-status">
+            </div>
+          </div>
+          <div class="columns" *ngIf="canDeleteNotMeasurableGoals && goal?.goalTypeId != 4">
+            <div class="column-delete">
+              <div class="d-flex gap-2">
+                <button
+                  *ngIf="canDeleteNotMeasurableGoals"
+                  [title]="'shared.delete' | translate"
+                  class="edit-grid-item-btn"
+                  (click)="deleteGoal(goal)"
+                >
+                  <i class="bx bx-trash text-danger fs-5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul
+          [style.display]="goal?.open ? 'block' : 'none'"
+          *ngIf="goal?.children?.length > 0"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              recursiveListTmpl;
+              context: { list: goal?.children, parent: goal }
+            "
+          ></ng-container>
+        </ul>
+      </li>
+    </ng-template>
+  </div>
+</div>

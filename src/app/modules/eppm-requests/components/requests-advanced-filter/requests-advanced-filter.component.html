@@ -1,0 +1,193 @@
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'request-filter'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="advanced-filter-model-header w-100">
+    <label class="modal-title">
+      {{ 'shared.advancedFilter' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="advanced-filter-model-content border-top">
+    <div class="new-model-dialog-body">
+      <div class="advanced-filter-form pb-2">
+        <form [formGroup]="filterForm">
+
+          <div class="form-group mt-3">
+            <label for="" class="form-label">
+              {{ 'eppmRequests.projectName' | translate }}
+            </label>
+
+            <input class="form-control" type="text" formControlName="projectName">
+          </div>
+
+          <div class="row">
+            <div class="form-group col-6 mt-3">
+              <label for="" class="form-label">
+                {{ 'eppmRequests.manager' | translate }}
+              </label>
+
+              <div class="position-relative">
+                <input type="text"
+                  class="form-control mb-2"
+                  formControlName="managerId"
+                  #input
+                  [ngbTypeahead]="searchUsers"
+                  [resultFormatter]="formatter"
+                  [inputFormatter]="formatter"
+                  [placeholder]="'eppmRequests.searchUsers' | translate"
+                />
+              </div>
+            </div>
+
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="projectType"
+                [control]="filterForm | getControl: 'projectType'"
+                [title]="'eppmRequests.projectType' | translate"
+                [placeholder]="'eppmRequests.selectType' | translate"
+                [items]="requestsTypes"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="categoryId"
+                [control]="filterForm | getControl: 'categoryId'"
+                [title]="'eppmRequests.category' | translate"
+                [placeholder]="'eppmRequests.selectCategory' | translate"
+                [items]="requestsCategories"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="originId"
+                [control]="filterForm | getControl: 'originId'"
+                [title]="'eppmRequests.origin' | translate"
+                [placeholder]="'eppmRequests.selectOrigin' | translate"
+                [items]="requestsOrigins"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="projectStatus"
+                [control]="filterForm | getControl: 'projectStatus'"
+                [title]="'shared.status' | translate"
+                [placeholder]="'shared.selectState' | translate"
+                [items]="requestsStates"
+                [bindVlaue]="'name'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="sectorId"
+                [control]="filterForm | getControl: 'sectorId'"
+                [title]="'eppmRequests.sector' | translate"
+                [placeholder]="'eppmRequests.selectSector' | translate"
+                [items]="requestsSectors"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="departmentId"
+                [control]="filterForm | getControl: 'departmentId'"
+                [title]="'eppmRequests.department' | translate"
+                [placeholder]="'eppmRequests.selectDepartment' | translate"
+                [items]="requestsDepartments"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+
+            <div class="form-group col-6 mt-3">
+              <app-select
+                formControlName="priorityLevel"
+                [control]="filterForm | getControl: 'priorityLevel'"
+                [title]="'eppmRequests.priorityLevel' | translate"
+                [placeholder]="'eppmRequests.selectPriorityLevel' | translate"
+                [items]="requestsPriorities"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                [clearable]="true"
+              ></app-select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-6 mt-3">
+              <label for="" class="form-label">
+                {{ 'eppmRequests.startDate' | translate }}
+              </label>
+
+              <app-datepicker formControlName="projectStartDate" [allowPastDate]="true"></app-datepicker>
+            </div>
+
+            <div class="form-group col-6 mt-3">
+              <label for="" class="form-label">
+                {{ 'eppmRequests.endDate' | translate }}
+              </label>
+
+              <app-datepicker formControlName="projectEndDate" [allowPastDate]="true"></app-datepicker>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+
+      <!-- back button -->
+      <button
+        class="btn btn-dark flex-grow-1"
+        (click)="onPopupClose()"
+      >
+        {{ 'shared.back' | translate }}
+      </button>
+
+      <!-- clear button -->
+      <button
+        class="btn btn-outline-main flex-grow-1"
+        (click)="onFilterResetConfirmed()"
+      >
+        {{ 'shared.clearFilter' | translate }}
+      </button>
+
+      <!-- save button -->
+      <button
+        class="btn btn-main flex-grow-1"
+        (click)="onFilter()"
+      >
+        {{ 'shared.filter' | translate }}
+      </button>
+    </div>
+  </div>
+</app-model>

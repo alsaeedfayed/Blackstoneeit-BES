@@ -1,0 +1,127 @@
+<div class="goals-table">
+  <div class="goals-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="goal-id">{{ "shared.id" | translate }}</th>
+          <th scope="col" class="goal-title">{{ "shared.title" | translate }}</th>
+          <th scope="col">{{ "performanceReports.unit" | translate }}</th>
+          <th scope="col" class="goal-status">{{ "shared.status" | translate }}</th>
+          <th scope="col">{{ "performanceReports.type" | translate }}</th>
+          <th scope="col">{{ "performanceReports.totalTarget" | translate }}</th>
+          <th scope="col">{{ "performanceReports.TargetTD" | translate }}</th>
+          <th scope="col">{{ "performanceReports.ActualTD" | translate }}</th>
+          <th scope="col">{{ "performanceReports.weight" | translate }}</th>
+          <th scope="col">{{ "performanceReports.Score" | translate }}</th>
+          <th scope="col">{{ "performanceReports.owner" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody class="details">
+        <ng-container
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModle?.pageSize,
+                    currentPage: paginationModle?.pageIndex,
+                    totalItems: list.length
+                  }
+          "
+        >
+          <tr style="position: relative">
+            <!-- ID -->
+            <td class="goal-id">
+              {{ item?.id }}
+            </td>
+            <!-- Title -->
+            <td class="goal-title">
+              {{ language == "en" ? item?.title : item?.titleAr }}
+            </td>
+
+            <!-- Unit -->
+            <td>
+              <span *ngIf="item?.group">
+                {{ language == "en" ? item?.group?.name : item?.group?.arabicName }}
+              </span>
+              <span class="rectangle-badge badge-muted" *ngIf="!item?.group">
+                {{ "shared.N/A" | translate }}
+              </span>
+            </td>
+
+            <!-- Status -->
+            <td class="goal-status">
+              <app-badge
+                *ngIf="item?.achievementStatus == AchievementStatusEnum.OffTrack"
+                [className]="'inprogress'"
+                [label]="'performanceReports.offTrack' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item?.achievementStatus == AchievementStatusEnum.OnTrack"
+                [className]="'active'"
+                [label]="'performanceReports.onTrack' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item?.achievementStatus == AchievementStatusEnum.OverAcheived"
+                [className]="'started'"
+                [label]="'performanceReports.overAchived' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item?.achievementStatus == AchievementStatusEnum.BaseLine"
+                [className]="'closed'"
+                [label]="'performanceReports.baseline' | translate"
+              ></app-badge>
+            </td>
+
+            <!-- Type -->
+            <td>{{ getMeasurmentMethodText(item?.measurementMethod) }}</td>
+
+            <!-- Total Target -->
+            <td>
+              {{ item?.totalTarget }}{{ getMeasurmentUnit(item?.measurementMethod) }}
+            </td>
+
+            <!-- Target TD -->
+            <td>
+              {{ item?.targetTD }}{{ getMeasurmentUnit(item?.measurementMethod) }}
+            </td>
+
+            <!-- Actual Td -->
+            <td>
+              {{ item?.actualTD }}{{ getMeasurmentUnit(item?.measurementMethod) }}
+            </td>
+
+            <!-- Weight -->
+            <td>{{ item?.internalWeight }}%</td>
+
+            <!-- Score -->
+            <td>{{ item?.score }}%</td>
+
+            <!-- Owner -->
+            <td>
+              <person-item
+                *ngIf="item?.owner"
+                [requesterItem]="item?.owner"
+                [noCursor]="true"
+                [isUserCardFixed]="true"
+              ></person-item>
+
+              <span class="rectangle-badge badge-muted" *ngIf="!item?.owner">
+                {{ "shared.N/A" | translate }}
+              </span>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="list.length > paginationModle?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

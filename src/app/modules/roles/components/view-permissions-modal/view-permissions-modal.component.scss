@@ -1,0 +1,27 @@
+.title {
+  text-transform: capitalize;
+}
+
+.permissions-container {
+  display: flex;
+  gap: 1.25rem 10%;
+  flex-wrap: wrap;
+
+  ul {
+    list-style: disc;
+    list-style-position: inside;
+    width: 45%;
+
+    @media (max-width: 992px) {
+      width: 100%;
+    }
+
+    .title {
+      font-size: 1.125rem;
+    }
+
+    li {
+      margin-inline-start: 1rem;
+    }
+  }
+}

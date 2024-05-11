@@ -1,0 +1,86 @@
+<h3 class="form-title mb-3">{{ "shared.comments" | translate }}</h3>
+
+<div class="wrapper">
+  <div class="comments-container" #commentsContainer>
+    <div class="comment-container" *ngFor="let comment of comments">
+      <div class="first-col">
+        <img
+          *ngIf="comment?.addedBy?.userPicture?.url"
+          [src]="comment?.addedBy?.userPicture?.url"
+          alt=""
+        />
+        <div class="initials">
+          <app-initials
+            *ngIf="!comment?.addedBy?.userPicture?.url"
+            [dimensions]="{ height: 48, width: 48 }"
+            [name]="comment?.addedBy?.name?.en"
+          ></app-initials>
+        </div>
+      </div>
+
+      <div class="second-col">
+        <div class="name-and-time">
+          <span class="name">{{ comment?.addedBy?.name[lang] }}</span>
+          <span class="time">{{ comment?.timeAgo }}</span>
+        </div>
+
+        <span class="position">{{ comment?.addedBy?.position }}</span>
+
+        <p class="comment-text">{{ comment?.text }}</p>
+
+        <div class="like-btn-and-count">
+          <button (click)="toggleLikeBtn(comment?.id)">
+            <i *ngIf="!comment?.liked" class="bx bx-heart"></i>
+            <i *ngIf="comment?.liked" class="bx bxs-heart"></i>
+          </button>
+
+          <span>{{ comment.likesCount }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- empty state msg -->
+    <div class="h-100 d-flex flex-column justify-content-center pt-4" *ngIf="comments?.length === 0">
+      <app-empty-state
+        [title]="'shared.noCommentsYet' | translate"
+      ></app-empty-state>
+    </div>
+  </div>
+
+  <div class="comment-input-container mb-3">
+    <div class="first-col">
+      <app-initials
+        [dimensions]="{ height: 48, width: 48 }"
+        [name]="currentUserData.userName"
+      ></app-initials>
+      <!-- <img
+        [src]="currentUserData?.userPicture?.url"
+        *ngIf="currentUserData?.userPicture?.url"
+        alt=""
+      /> -->
+      <!-- <div>
+        <span class="name">{{ currentUserData?.userName }}</span>
+        <span class="position" *ngIf="currentUserData?.position">{{ currentUserData?.position }}</span>
+      </div> -->
+    </div>
+
+    <div class="second-col">
+      <textarea
+        [formControl]="comment"
+        [placeholder]="'shared.writeYourCommentHere' | translate"
+      ></textarea>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button
+      class="btn btn-main gap-2 py-3 px-4"
+      [disabled]="isBtnLoading"
+      (click)="onAddComment()"
+    >
+      <span>{{ "shared.submitComment" | translate }}</span>
+      <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin m-0"></i>
+      <i *ngIf="!isBtnLoading" class="bx bx-send m-0"></i>
+    </button>
+  </div>
+</div>

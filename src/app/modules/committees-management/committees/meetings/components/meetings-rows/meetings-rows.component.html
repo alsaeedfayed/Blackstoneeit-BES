@@ -1,0 +1,70 @@
+<div class="mt-4">
+  <ul class="horizontal-cards">
+    <li class="horizontal-cards-item" *ngFor="
+      let item of list
+        | paginate
+          : {
+              itemsPerPage: paginationModel?.pageSize,
+              currentPage: paginationModel?.pageIndex,
+              totalItems
+            };
+      let i = index
+    ">
+      <div class="card-container">
+        <div class="card-content">
+          <div class="horizontal-cards-item-cell meeting-title">
+            <div class="cell-title">{{ "committeeMeetings.list.meetingTitle" | translate }}</div>
+            <div class="cell-content">{{ item?.name }}</div>
+          </div>
+          <div class="horizontal-cards-item-cell created-by">
+            <div class="cell-title">{{ "committeeMeetings.list.createdBy" | translate }}</div>
+            <div class="cell-content">{{ language == "ar" ? item?.creatorInfo?.fullArabicName :  item?.creatorInfo?.fullName }}</div>
+          </div>
+          <div class="horizontal-cards-item-cell location">
+            <div class="cell-title">{{ "committeeMeetings.list.location" | translate }}</div>
+            <div class="cell-content">
+              <div class="location-icon icon-{{item?.locationType}}">
+                <ng-container *ngIf="item?.locationType == 1; else not_video">
+                  <i class='bx bxs-video'></i>
+                </ng-container>
+                <ng-template #not_video>
+                  <i class='bx bxs-building'></i>
+                </ng-template>
+              </div>
+              {{ language === "en" ?locationTypes[item.locationType]['name'] : locationTypes[item.locationType]['nameAr'] }}
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell starting-date">
+            <div class="cell-title">{{ "committeeMeetings.list.startingDate" | translate }}</div>
+            <div class="cell-content">
+              {{ item?.date | meetingTimeLeft: item?.timeFrom: item?.timeTo :language }}
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell meeting-status">
+            <div class="cell-title">{{ "committeeMeetings.list.status" | translate }}</div>
+            <div class="cell-content">
+              <app-badge
+                [className]="statuses[item?.status]['className']"
+                [label]=" language == 'en' ? statuses[item?.status]['name'] :statuses[item?.status]['nameAr']"
+              ></app-badge>
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell meeting-actions">
+            <button (click)="goToMeetingDetails(item?.id)">{{ "committeeMeetings.list.details" | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

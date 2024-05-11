@@ -1,0 +1,235 @@
+<div class="page">
+ 
+
+  <ng-container *ngIf="loading ||( !isUpdating && gettingCommitteeMembers); else form_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- new meeting form -->
+<ng-template #form_data>
+  <app-header-page
+  [title]="(!isUpdating ? 'committeeNewMeeting.newMeeting':'committeeNewMeeting.updateMeeting') | translate"
+  [showTotalItems]="false">
+  <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+
+    <!-- cancel button -->
+    <button class="btn btn-transparent" (click)="backToLastPage()">
+      {{ "shared.cancel" | translate }}
+    </button>
+
+    <!-- save draft button -->
+    <button 
+    *ngIf="meeting?.canSave || !isUpdating "
+      class="btn btn-info" 
+      [disabled]="form.invalid || isBtnLoading || !basicFormValidation " 
+      (click)="saveMeetingAsDraft()">
+        <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{ ( (meeting?.status == 0 || !isUpdating) ?"committeeNewMeeting.saveDraft":"committeeNewMeeting.save" ) | translate }}
+    </button>
+
+    <!-- publish button -->
+    <button 
+    *ngIf=" meeting?.canPublish  || !isUpdating "
+      class="btn btn-main" 
+      [disabled]="form.invalid || isBtnLoading || !basicFormValidation" 
+      (click)="publishMeetingBtn()">
+        <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+        {{ "committeeNewMeeting.publish" | translate }}
+    </button>
+  </div>
+  </app-header-page>
+
+  <app-meeting-common-fields 
+    [meetingData]="meeting"
+    [maxFileSizeInMB]="maxFileSizeInMB"
+    [language]="language"
+    [isUpdating]="isUpdating"
+    (newMeeting)="getMeetingData($event)"
+    (fileUploading)="fileUploading($event)"
+    (formValidated)="formValidated($event)"
+  >
+  </app-meeting-common-fields>
+
+   <!-- meeting create mode -->
+   <div class="new-meeting-form" [formGroup]="form">
+    <div class="block-content mb-3"> 
+
+      <!-- meeting attendees -->
+      <div class="meeting-attendees">
+        <label class="form-label">
+          {{ 'committeeNewMeeting.meetingForm.attendees' | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+
+        <ng-select class="input-select attendees-select" 
+          formControlName="attendeeIds"
+          [ngClass]="{ valid: (form | getControl: 'attendeeIds')?.valid }" 
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true" 
+          [clearable]="true" 
+          [placeholder]="'committeeNewMeeting.meetingForm.attendees' | translate"
+          [notFoundText]="'shared.noItemsFound' | translate" 
+          [multiple]="true" 
+          [closeOnSelect]="false"
+          (scrollToEnd)="loadMoreEmployees()"
+          (search)="searchEmployees($event)"
+          [loading]="gettingEmployees"
+          (focus)="onFocus($event)">
+
+          <ng-option *ngFor="let employee of employees" [value]="employee?.id">
+            <person-item [requesterItem]="employee" [noCursor]="true"></person-item>
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <label class="form-label mb-3 mt-4">
+        {{ 'committeeNewMeeting.meetingForm.guestInfoTitle' | translate }}
+      </label>
+
+      <!-- external attendees -->
+      <div class="external-attendees-container">
+        <div class="external-attendees" *ngFor="let guest of guests?.controls | keyvalue  let i = index">
+          <ng-container formArrayName="externalAttendees">
+            <ng-container [formGroupName]="guest?.key">
+              <!-- guest first name -->
+              <app-filed
+                class="d-block mt-4"
+                formControlName="firstName"
+                [control]="guest?.value | getControl: 'firstName'"
+                [title]="'committeeNewMeeting.meetingForm.firstName' | translate"
+                [placeholder]="'committeeNewMeeting.meetingForm.firstName' | translate"
+              ></app-filed>
+
+              <!-- guest last name -->
+              <app-filed
+                class="d-block mt-4"
+                formControlName="lastName"
+                [control]="guest?.value | getControl: 'lastName'"
+                [title]="'committeeNewMeeting.meetingForm.lastName' | translate"
+                [placeholder]="'committeeNewMeeting.meetingForm.lastName' | translate"
+              ></app-filed>
+
+              <!-- guest email -->
+              <app-filed
+                class="d-block mt-4"
+                formControlName="email"
+                [control]="guest?.value | getControl: 'email'"
+                [title]="'committeeNewMeeting.meetingForm.email' | translate"
+                [placeholder]="'committeeNewMeeting.meetingForm.email' | translate"
+              ></app-filed>
+
+              <button class="remove-attendee-btn text-secondary" (click)="removeExternalAttendee(i)">
+                <i class='bx bx-x'></i>
+              </button>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+     
+      <!-- add new guest button -->
+      <div class="d-flex justify-content-{{ guests.length ==0 ? 'between' :'end'}} ms-3 mt-4">
+        <div class="row text-center" *ngIf="guests.length == 0">
+          {{ 'shared.noGuestsYet'| translate}}
+        </div>
+        <button class="btn btn-transparent " (click)="addGuest()">
+          <i class='bx bx-plus'></i>
+          {{ 'committeeNewMeeting.meetingForm.addGuest' | translate }}
+        </button>
+      </div>
+
+      <h3 class="block-title mb-3 mt-4">{{ 'committeeNewMeeting.meetingForm.meetingNotificationTitle' | translate }}</h3>
+
+      <!-- switch buttons -->
+      <div class="row">
+        <div class="col-md-6 mt-3">
+          <app-switch-btn [id]="'sendNotificationToAllAttendee'"
+            [label]="'committeeNewMeeting.meetingForm.sendNotificationToAllAttendees' | translate"
+            [value]="(form | getControl: 'sendNotificationToAllAttendee')?.value"
+            (onChange)="onSwitchControlChange($event, 'sendNotificationToAllAttendee')"></app-switch-btn>
+        </div>
+
+        <div class="col-md-6 mt-3">
+          <app-switch-btn [id]="'includeAgenda'" [label]="'committeeNewMeeting.meetingForm.includeAgenda' | translate"
+            [value]="(form | getControl: 'includeAgenda')?.value"
+            (onChange)="onSwitchControlChange($event, 'includeAgenda')"></app-switch-btn>
+        </div>
+
+        <div class="col-md-6 mt-3">
+          <app-switch-btn [id]="'sendNotificationToGuest'"
+            [label]="'committeeNewMeeting.meetingForm.sendNotificationToGuest' | translate"
+            [value]="(form | getControl: 'sendNotificationToGuest')?.value"
+            (onChange)="onSwitchControlChange($event, 'sendNotificationToGuest')"></app-switch-btn>
+        </div>
+
+        <div class="col-md-6 mt-3">
+          <app-switch-btn [id]="'includeAttachment'"
+            [label]="'committeeNewMeeting.meetingForm.includeAttachments' | translate"
+            [value]="(form | getControl: 'includeAttachment')?.value"
+            (onChange)="onSwitchControlChange($event, 'includeAttachment')"></app-switch-btn>
+        </div>
+      </div>
+
+      <!-- message -->
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeeNewMeeting.meetingForm.message" | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+        <angular-editor formControlName="notificationMessage" [config]="editorConfig">
+          <ng-template #customButtons>
+            <ae-toolbar-set>
+              <ae-button
+                iconClass="fa fa-paperclip fa-lg"
+                title="Attachment"
+                (buttonClick)="messageAttachments.click()"
+              ></ae-button>
+            </ae-toolbar-set>
+          </ng-template>
+        </angular-editor>
+        <input hidden
+          #messageAttachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event, 'message')"
+        >
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="messageUploadedFiles"
+          [supportedTypes]="'committeeNewMeeting.meetingForm.messageAttachmentsTypes' | translate"
+          (deleteFile)="onDeleteFile($event, 'message')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldMessageAttachments"
+          (deleteFile)="onDeleteFile($event, 'oldMessage')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- modal to confirm request sending -->
+<app-confirm-modal
+  [id]="'publish-meeting'"
+  [content]="'committeeNewMeeting.confirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="publishMeeting()"
+></app-confirm-modal>

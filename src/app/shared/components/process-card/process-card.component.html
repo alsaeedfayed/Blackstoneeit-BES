@@ -1,0 +1,31 @@
+<!----------- process card ---------->
+<div class="card-defaults process-card">
+      <div class="header">
+            <div class="process-badge" [class]="randomClass">
+                  <span>{{data?.title[lang]?.slice(0,2).toUpperCase()}}</span>
+            </div>
+            <span *ngIf="data?.isEnabled" class="_badge b-active"> {{'active' | translate}}
+            </span>
+            <span *ngIf="!data?.isEnabled" class="_badge b-inactive"> {{'inactive' | translate}}
+            </span>
+      </div>
+      <h5 class="title"> {{data?.title[lang]?.slice(0, 30)}}<span *ngIf="data?.title[lang]?.length > 30">...</span></h5>
+      <div *ngIf="data?.updatedDate" class="date"> {{'Last update' | translate}}: {{data?.updatedDate | date:
+            'dd/MM/yyyy'}} </div>
+      <div *ngIf="!data?.updatedDate" class="date"> {{'Date created' |translate}}: {{data?.createdDate | date:
+            'dd/MM/yyyy'}} </div>
+      <div class="d-flex badges-container">
+            <div class="d-flex align-items-center badge" *ngFor="let state of status; let i = index">
+                  <span class="process-state-badge mr-1">
+                        <span class="badge-dot" [class]="randomClasses[i]"></span>
+                        {{state?.title[lang]}}
+                  </span>
+                  <img *ngIf="(i + 1) != status.length" class="m-1 state-seperator-arrow"
+                        src="/assets/icons/arrow-right.svg" alt="">
+
+                  <!-- <span *ngIf="i == 2"
+                        class="dots"><i class='bx bx-dots-horizontal-rounded'></i></span> -->
+            </div>
+      </div>
+
+</div>

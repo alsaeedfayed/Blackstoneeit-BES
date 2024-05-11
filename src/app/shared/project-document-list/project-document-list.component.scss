@@ -1,0 +1,44 @@
+@import "src/assets/css/utils/variables.scss";
+
+.filter-select {
+  display: block;
+  min-width: 165px;
+}
+
+.documents-table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    .file-name {
+      max-width: 300px;
+
+      .attachment {
+        display: flex;
+        align-items: center;
+
+        a {
+          text-decoration: none;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: inherit;
+          white-space: normal;
+          word-break: break-word;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        i {
+          font-size: 22px;
+          margin-inline-end: 5px;
+          color: #717986;
+        }
+      }
+    }
+  }
+}
+
+.desc {
+  word-break: break-all;
+}

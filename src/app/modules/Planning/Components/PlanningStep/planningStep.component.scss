@@ -1,0 +1,106 @@
+// Planning Step
+
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+:host {
+  min-width: 258px;
+}
+
+.steps {
+  display: flex;
+  .step-name {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .step {
+    position: relative;
+    margin-inline-end: 8px;
+    // z-index: 1055;
+    .info {
+      display: flex;
+      justify-content: space-between;
+    }
+    &.isActive {
+      &::after {
+        content: "";
+        background-color: $main-color;
+      }
+    }
+    &::after {
+      content: "";
+      width: 20px;
+      height: 1px;
+      background-color: #28293f;
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+    }
+    &:last-child {
+      &::after {
+        width: 0px;
+      }
+      &.notLast {
+        &::after {
+          width: 40px;
+          right: -49px;
+        }
+      }
+    }
+  }
+}
+.planning-item {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: 20px;
+  flex-shrink: 0;
+  &.isActive {
+    .step-name {
+      p {
+        color: $main-color;
+        border-bottom: 2px solid $main-color;
+      }
+      &::before {
+        background: $main-color;
+      }
+    }
+  }
+  .step-name {
+    color: $secondary-color;
+    display: flex;
+    margin: 5px 0 15px;
+    position: relative;
+    p {
+      flex-shrink: 0;
+      border-bottom: 2px solid#C5C5C5;
+      width: calc(100% - 35px);
+      margin-inline-start: 30px;
+    }
+    &::before {
+      width: 21.44px;
+      height: 20px;
+      content: "";
+      background: #c5c5c5;
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: absolute;
+      top: 17px;
+      @include rtl_value(left, 0, auto);
+      @include rtl_value(right, auto, 0);
+    }
+  }
+}
+
+.stepBlock {
+  padding: 8px;
+  @include bRadius(8px);
+  border: 1px solid #ddd;
+  margin-inline-end: 10px;
+  background-color: #fff;
+  min-width: 219px;
+  cursor: pointer;
+  height: 122px;
+}

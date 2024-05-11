@@ -1,0 +1,195 @@
+<app-header-page
+  [title]="'committeeDashboard.pageTitle' | translate"
+  [backButton]="true"
+  [showTotalItems]="false"
+  [isAddBtn]="false"
+></app-header-page>
+<!-- [backTo]="backToUrl" -->
+
+<!-- <app-kpis-performance-status></app-kpis-performance-status> -->
+<!-- <app-form-builder-base
+  [formArr]="formArr"
+  (formValue)="formValues($event)"
+></app-form-builder-base> -->
+
+<!-- page filters -->
+<app-page-filters
+  [appliedFiltersCount]="appliedFiltersCount"
+  [hasAdvancedFilter]="true"
+  [hasExportBtn]="true"
+  [hasSearch]="false"
+  (onClear)="clearFilter()"
+  (onSearchBtnCLicked)="onSearchBtnCLicked()"
+  (onExportBtnClicked)="exportPng()"
+>
+  <!-- FILTERS -->
+  <app-committees-filter
+    [isFiltersEmpty]="emptyFIlters"
+    (filtersNumber)="getFiltersCount($event)"
+    (filter)="handelFilter($event)"
+  ></app-committees-filter>
+</app-page-filters>
+
+<ng-container
+  *ngIf="
+    isTypesLoading ||
+      isCategoriesLoading ||
+      isTotalCommitteesCountLoading ||
+      isTotalDecisionsCountLoading ||
+      isTotalMeetingsCountLoading ||
+      isTotalTaskCountLoading ||
+      isCommitteAuditsLoading;
+    else dashBoard
+  "
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #dashBoard>
+  <div class="committees-dashboard mt-3" id="elementEx" #screen>
+    <!-- COMMITTIEES TYPES & CATEGORIES -->
+    <div class="committess-dashboard-types-categories w-100">
+      <h3 class="committess-dashboard-types-categories-title">
+        {{
+          "committeeDashboard.dashboard.committeeTypesCategories" | translate
+        }}
+      </h3>
+      <div class="d-flex justify-content-between flex-wrap gap-2">
+        <div class="typeschart" style="flex-grow: 1">
+          <app-committee-types [data]="committeesTypes"></app-committee-types>
+        </div>
+        <div class="categeorychart" style="flex-grow: 1">
+          <app-committee-categories
+            [data]="committeesCategories"
+          ></app-committee-categories>
+        </div>
+
+        <div class="activechart" style="flex-grow: 1">
+          <app-active-statuses [data]="activeStatuses"></app-active-statuses>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL COMMITTIEES -->
+    <!-- <h3 class="committees-dashboard-performance-title mt-3">
+      {{ "committeeDashboard.dashboard.financialCommittees" | translate }}
+    </h3> -->
+    <div
+      class="committees-dashboard-states d-flex justify-content-between gap-2 flex-wrap mt-2"
+    >
+      <app-stats-widget
+        style="flex-grow: 1"
+        [id]="'totalCommittees'"
+        [count]="totalCommittees?.total"
+        [title]="'committeeDashboard.dashboard.totaleCommittees' | translate"
+        [icon]="'bx bx-file'"
+        [type]="'primary'"
+      ></app-stats-widget>
+      <app-stats-widget
+        style="flex-grow: 1"
+        [id]="'totalMeetings'"
+        [count]="totalMeetings?.total"
+        [title]="'committeeDashboard.dashboard.totalMeetings' | translate"
+        [icon]="'bx bx-video-recording'"
+        [type]="'default'"
+      ></app-stats-widget>
+      <app-stats-widget
+        style="flex-grow: 1"
+        [id]="'totalDecisions'"
+        [count]="totalDecisions?.total"
+        [title]="'committeeDashboard.dashboard.totalDecision' | translate"
+        [icon]="'bx bx-notepad'"
+        [type]="'warning'"
+      ></app-stats-widget>
+      <app-stats-widget
+        style="flex-grow: 1"
+        [id]="'totalTasks'"
+        [count]="totalTasks?.total"
+        [title]="'committeeDashboard.dashboard.totalTasks' | translate"
+        [icon]="'bx bx-task'"
+        [type]="'success'"
+      ></app-stats-widget>
+    </div>
+
+    <!-- PERFORMANCE GUAGE CHARTS -->
+    <div class="mt-4 committees-dashboard-performance">
+      <h3 class="committees-dashboard-performance-title">
+        {{ "committeeDashboard.dashboard.committeePerformance" | translate }}
+      </h3>
+      <committee-performance-dashboard
+        [performanceData]="committeeAudits"
+      ></committee-performance-dashboard>
+    </div>
+
+    <!-- LIST OF COMMITTEES -->
+    <div class="mt-4 committees-dashboard-performance">
+      <h3 class="committees-dashboard-performance-title">
+        {{ "committeeDashboard.dashboard.listOfCommittees" | translate }}
+      </h3>
+
+      <!-- in case we need some filter for the table -->
+      <app-page-filters
+        (onClear)="clearFilter()"
+        [hasExportBtn]="list?.length > 0"
+        (onExportBtnClicked)="exportList()"
+        (onSearchBtnCLicked)="onSearchBtnCLicked()"
+        [hasAdvancedFilter]="false"
+        [hasSearch]="false"
+      ></app-page-filters>
+
+      <!-- audits table  -->
+      <div class="mt-3">
+        <app-dashboard-committees-rows
+          *ngIf="list?.length > 0"
+          [SortedCol]="sortedCol"
+          [SortDirection]="sortDirection"
+          [totalItems]="totalItems"
+          [list]="list"
+          [paginationModel]="paginationModel"
+          (sortFilter)="handleSortFilter($event)"
+          (onPaginateEvent)="handlePaginationChange($event)"
+        ></app-dashboard-committees-rows>
+        <div class="no-data" *ngIf="list?.length == 0 || !list">
+          <app-no-data
+            [msg]="'committeeDashboard.dashboard.noDataMsg' | translate"
+          ></app-no-data>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTATCHMENTS -->
+    <div
+      class="drop-zone"
+      (drop)="onDrop($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+    >
+      <p>drag your files</p>
+
+      <!-- BROWSE FILES  -->
+      <div>
+        <a class="text-primary" (click)="attatchments.click()">Browse</a>
+      </div>
+      <input
+        type="file"
+        hidden
+        #attatchments
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event)"
+      />
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

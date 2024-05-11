@@ -1,0 +1,21 @@
+<div [formGroup]="form">
+  <app-filed
+    class="d-block"
+    formControlName="name"
+    title="{{ 'manageForms.formName' | translate }}"
+    [control]="form | getControl: 'name'"
+    placeholder="{{ 'manageForms.enterFormName' | translate }}"
+  ></app-filed>
+
+  <div class="buttons py-4">
+    <button class="btn btn-gray-outline" (click)="closePopup()">{{ 'shared.cancel' | translate }}</button>
+    <button
+      class="btn btn-main"
+      [disabled]="form.invalid"
+      (click)="createForm()"
+    >
+      <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      {{ 'shared.save' | translate }}
+    </button>
+  </div>
+</div>

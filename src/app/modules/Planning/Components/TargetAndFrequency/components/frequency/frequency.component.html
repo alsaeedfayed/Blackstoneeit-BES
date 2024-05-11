@@ -1,0 +1,67 @@
+<div class="freq-wrapper">
+  <form [formGroup]="model.form">
+    <!-- Monthly Template -->
+    <div *ngIf="model.MonthlyFreq">
+      <div class="row">
+        <div class="col-md-4" *ngFor="let mounth of model.monthes">
+          <frequency-input
+            [title]="mounth.label"
+            [Item]="model.selectedType"
+            class="intial col-md-4 pl-0"
+            *ngIf="model.form.get(mounth.formControlName)"
+            [formControl]="model.f[mounth.formControlName]"
+            [isSubmitted]="model.isSubmitted"
+            [disabled]="model.isDisableAllInputs"
+            [control]="model.form | getControl: mounth.formControlName"
+          ></frequency-input>
+        </div>
+      </div>
+    </div>
+    <!-- Quarteerly Template -->
+    <div *ngIf="model.QuarterlyFreq">
+      <div class="row">
+        <div class="col-md-6" *ngFor="let quart of model.quarts">
+          <frequency-input
+            [title]="quart.label"
+            [Item]="model.selectedType"
+            *ngIf="model.form.get(quart.formControlName)"
+            class="intial col-md-6 pl-0"
+            [formControl]="model.f[quart.formControlName]"
+            [isSubmitted]="model.isSubmitted"
+            [disabled]="model.isDisableAllInputs"
+            [control]="model.form | getControl: quart.formControlName"
+          ></frequency-input>
+        </div>
+      </div>
+    </div>
+    <!-- Bi Yearly Template -->
+    <div *ngIf="model.BiYearlyFreq">
+      <div class="row">
+        <div class="col-md-6" *ngFor="let bi of model.biYear">
+          <frequency-input
+            [title]="bi.label"
+            [Item]="model.selectedType"
+            class="intial col-md-6 pl-0"
+            *ngIf="model.f[bi.formControlName]"
+            [formControl]="model.f[bi.formControlName]"
+            [isSubmitted]="model.isSubmitted"
+            [disabled]="model.isDisableAllInputs"
+            [control]="model.form | getControl: bi.formControlName"
+          ></frequency-input>
+        </div>
+      </div>
+    </div>
+    <!-- Yearly Template -->
+    <div *ngIf="model.YearlyFreq">
+      <!-- <frequency-input
+        [title]="'Total'"
+        [Item]="model.selectedType"
+        class="intial col-md-4 pl-0"
+        [formControl]="model.f['value']"
+        *ngIf="model.f['value']"
+        [isSubmitted]="model.isSubmitted"
+        [control]="model.form | getControl: 'value'"
+      ></frequency-input> -->
+    </div>
+  </form>
+</div>

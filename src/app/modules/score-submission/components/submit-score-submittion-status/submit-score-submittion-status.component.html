@@ -1,0 +1,123 @@
+<div class="new-model-dialog-body">
+  <div class="pb-2">
+    <div class="req-table" *ngIf="!loading">
+      <div class="basic-scorecard-information" *ngIf="data">
+        <div class="info">
+          <h5>
+            {{ "scoreSubmission.scorecardName" | translate }}:
+          </h5>
+          <p>{{ data?.scorecardTitle }}</p>
+        </div>
+        <div class="info">
+          <h5>
+            {{ "scoreSubmission.scorecardNameAr" | translate }}:
+          </h5>
+          <p>{{ data?.scorecardTitleAr }}</p>
+        </div>
+        <div class="info">
+          <h5>
+            {{ "scoreSubmission.period" | translate }}:
+          </h5>
+          <p>{{ data?.period }}</p>
+        </div>
+        <div class="info">
+          <h5>
+            {{ "scoreSubmission.periodAr" | translate }}:
+          </h5>
+          <p>{{ data?.periodAr }}</p>
+        </div>
+      </div>
+
+      <div class="req-table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">{{ "shared.groupName" | translate }}</th>
+              <th scope="col">{{ "shared.groupNameAr" | translate }}</th>
+              <th scope="col">{{ "shared.level" | translate }}</th>
+              <th scope="col">{{ "shared.status" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let groupStatus of data?.groups">
+              <!-- Title -->
+              <td>
+                {{ groupStatus.groupName }}
+              </td>
+              <!-- Arabic Title -->
+              <td class="Arabic">
+                {{ groupStatus.groupNameAr }}
+              </td>
+              <!-- Level -->
+              <td>
+                {{ getLevelText(groupStatus.level) }}
+              </td>
+              <!-- Status -->
+              <td>
+                <app-badge
+                  [className]="getStatusName(groupStatus.status)?.className"
+                  [label]="getStatusName(groupStatus.status)?.label"
+                ></app-badge>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="mt-2">
+      <app-skeleton-loader
+        *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+        class="w-100"
+        [mode]="'table'"
+      ></app-skeleton-loader>
+    </div>
+  </div>
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">{{ "shared.groupName" | translate }}</th>
+          <th scope="col">{{ "shared.groupNameAr" | translate }}</th>
+          <th scope="col">{{ "shared.level" | translate }}</th>
+          <th scope="col">{{ "shared.status" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let groupStatus of data?.groups">
+          <!-- Title -->
+          <td>
+            {{ groupStatus.groupName }}
+          </td>
+          <!-- Arabic Title -->
+          <td class="Arabic">
+            {{ groupStatus.groupNameAr }}
+          </td>
+          <!-- Level -->
+          <td>
+            {{ getLevelText(groupStatus.level) }}
+          </td>
+          <!-- Status -->
+          <td>
+            <app-badge
+              [className]="getStatusName(groupStatus.status)?.className"
+              [label]="getStatusName(groupStatus.status)?.label"
+            ></app-badge>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+</div>

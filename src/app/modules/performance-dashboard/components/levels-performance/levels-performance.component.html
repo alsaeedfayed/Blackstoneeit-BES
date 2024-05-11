@@ -1,0 +1,30 @@
+<div class="levels-performance">
+    <!-- Tabs -->
+    <ul class="tabsmenu border-bottom flex-column flex-lg-row">
+        <li *ngFor="let item of _data" class="tabsmenu__item" (click)="selectedTabId = item?.type?.id" [class.active]="selectedTabId == item?.type?.id">
+            <a class="tabsmenu__link"> {{ language == 'ar' ? item?.type?.arabicName : item?.type?.name }}
+<!--              {{'performanceDashboard.levelPerformance' | translate}} -->
+            </a>
+        </li>
+    </ul>
+    <div class="content" *ngIf="_data?.length > 0">
+        <div *ngFor="let item of _data" [id]="item?.type?.id">
+            <type-level-performance *ngIf="selectedTabId == item?.type?.id" [goals]="item?.goals" [type]="item?.type"></type-level-performance>
+        </div>
+    </div>
+    <!-- <div class="data" *ngIf="_data?.length > 0">
+        <div class="item" *ngFor="let item of _data">
+            <div class="type-title">
+                <p>{{ language == 'ar' ? item?.type?.arabicName : item?.type?.name }} {{'performanceDashboard.levelPerformance' | translate}}</p>
+            </div>
+            <div class="content">
+                <type-level-performance [goals]="item?.goals" [type]="item?.type"></type-level-performance>
+            </div>
+        </div>
+    </div> -->
+    <div class="noData" *ngIf="_data.length == 0">
+        <img src="assets/img/no-data.png" />
+        <p>{{ 'shared.noData' | translate}}</p>
+    </div>
+
+</div>

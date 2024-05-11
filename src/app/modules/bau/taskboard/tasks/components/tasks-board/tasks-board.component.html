@@ -1,0 +1,115 @@
+
+
+<!-- page filters -->
+<app-page-filters
+  [lang]="language"
+  [searchPlaceHolder]="'bau.bauTasks.searchPlaceholder' | translate"
+  [hasAssignedSwitch]="true"
+  [assignedSwitchId]="'assignedToMe'"
+  [assignedSwitchLabel]="'bau.bauTasks.assignedToMe' | translate"
+  [hasListViewBtn]="true"
+  [hasCardsViewBtn]="true"
+  [viewMode]="tasksViewMode"
+  [hasAdvancedFilter]="true"
+  [appliedFiltersCount]="appliedFiltersCount"
+  (search)="onSearch($event)"
+  (onSwitch)="getTasksAssignedToMe($event)"
+  (onSearchBtnCLicked)="onSearchBtnCLicked()"
+  (onClear)="clearFilter()"
+  (onViewModeChange)="changeViewMode($event)"
+  [IsFiltersVisible]="hasFilters"
+>
+  <app-tasks-filters
+    [isFiltersEmpty]="emptyFIlters"
+    (filtersNumber)="getFiltersCount($event)"
+    (filter)="handelFilter($event)"
+  ></app-tasks-filters>
+</app-page-filters>
+
+<!-- tasks items -->
+<ng-container *ngIf="isLoadingTasks; else tasks_items">
+  <div class="my-4">
+    <ng-container
+      *ngIf="tasksViewMode == 'cards'"
+      [ngTemplateOutlet]="cards_skeleton"
+    ></ng-container>
+    <ng-container
+      *ngIf="tasksViewMode == 'list'"
+      [ngTemplateOutlet]="list_skeleton"
+    ></ng-container>
+  </div>
+</ng-container>
+
+<!-- tasks items -->
+<ng-template #tasks_items>
+
+  <!-- board view -->
+  <app-board-tasks-cols
+    *ngIf="tasks?.length > 0 && tasksViewMode == 'cards'"
+    class="d-block mt-4"
+    [tasks]="tasks"
+    (changeHappened)="onChangeHappened()"
+  ></app-board-tasks-cols>
+
+  <!-- list view -->
+  <app-task-table
+    *ngIf="tasks?.length > 0 && tasksViewMode == 'list'"
+    class="d-block mt-4"
+    [language]="language"
+    [list]="tasks"
+    [totalItems]="totalItems"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+    [SortedCol]="sortedCol"
+    [SortDirection]="sortDirection"
+    (sortFilter)="handleSortFilter($event)"
+    (changeHappened)="onChangeHappened()"
+  ></app-task-table>
+
+  <div class="no-data" *ngIf="tasks?.length == 0 || !tasks">
+    <app-no-data [msg]="'bau.bauTasks.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+
+
+<!-- loader skeleton for the columns -->
+<ng-template #cards_skeleton>
+  <div class="row row-gap-3">
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #list_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

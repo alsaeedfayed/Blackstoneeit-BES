@@ -1,0 +1,107 @@
+<ul class="board-tasks-cols">
+  <li
+    *ngFor="let taskStatusCol of allTasks; let i = index"
+    class="board-tasks-col"
+    (dragover)="dropzoneDragOver($event)"
+    (dragleave)="dropzoneDragLeave($event)"
+    (drop)="dropzoneDropCards($event)"
+    [id]="'status-col-' + i"
+  >
+    <!-- column head -->
+    <div class="board-tasks-col-head">
+      <strong class="col-name">
+        {{ language == "en" ? statuses[i]["name"] : statuses[i]["nameAr"] }}
+      </strong>
+      <span class="col-count">{{ taskStatusCol.length }}</span>
+    </div>
+
+    <!-- column cards -->
+    <div
+      class="board-tasks-col-dropzone"
+      (dragover)="dropzoneDragOver($event)"
+      (dragleave)="dropzoneDragLeave($event)"
+      (drop)="dropzoneDropCards($event)"
+    ></div>
+
+    <!--  cards -->
+    <ng-container *ngFor="let task of taskStatusCol; let j = index">
+      <board-task-card
+        [id]="task?.id"
+        tabindex="0"
+        draggable="true"
+        [lang]="language"
+        [task]="task"
+        (dragstart)="cardDragStart($event, task?.id, j)"
+        (click)="openTaskDetailsModel(task)"
+        (keyup.enter)="openTaskDetailsModel(task)"
+        (subTaskDetails)="openTaskDetailsModel($event)"
+      ></board-task-card>
+      <div
+        class="board-tasks-col-dropzone"
+        (dragover)="dropzoneDragOver($event)"
+        (dragleave)="dropzoneDragLeave($event)"
+        (drop)="dropzoneDropCards($event)"
+      ></div>
+    </ng-container>
+  </li>
+</ul>
+
+<!-- task details modal -->
+<app-model
+  [dimensions]="{ width: isDetailsModelOpened ? 900 : 900, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+    <label class="modal-title" *ngIf="isDetailsModelOpened">
+      {{ "committeeTasks.detailsModel.title" | translate }}
+    </label>
+
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">
+      {{ "committeeTasks.detailsModel.title" | translate }}
+    </label>
+    <!-- change title  -->
+    <label class="modal-title" *ngIf="isUpdatingTask">
+      {{ "committeeTasks.updateTask" | translate }}
+    </label>
+    <!-- <label class="modal-title">{{ ( isDetailsModelOpened ? 'committeeTasks.detailsModel.title' :'committeeTasks.updateProgress.title') | translate }}</label> -->
+
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+    <task-details-model
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdate)="updateTask($event)"
+      (onDelete)="deleteTask()"
+    ></task-details-model>
+
+    <app-update-progress-model
+      *ngIf="isUpdateProgressModelOpened"
+      [task]="openedTask"
+      [language]="language"
+      (onBack)="openTaskDetailsModel(openedTask)"
+    ></app-update-progress-model>
+
+    <!-- edit mode task -->
+    <create-task-model
+      [taskId]="openedTask?.id"
+      *ngIf="isUpdatingTask"
+      [committeeId]="committeeId"
+      (taskAdded)="onChangeHappened()"
+    ></create-task-model>
+
+    <!-- modal to confirm task deletion -->
+    <app-confirm-modal
+      [id]="'delete-task'"
+      [content]="confirmMsg"
+      [btnContent]="'shared.confirm' | translate"
+      [btnStyle]="'main'"
+      (confirm)="onDeleteTaskConfirmed()"
+    ></app-confirm-modal>
+  </div>
+</app-model>

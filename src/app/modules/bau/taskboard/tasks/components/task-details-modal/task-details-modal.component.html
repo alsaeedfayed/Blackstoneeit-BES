@@ -1,0 +1,333 @@
+<ng-container *ngIf="loading || loadingFiles; else details_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <button class="btn btn-dark w-100" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+</div>
+<ng-template #details_data>
+  <div class="new-model-dialog-body d-flex flex-column w-100">
+    <!-- task name -->
+    <div class="row" id="top">
+      <h3 class="task-title fs-6 my-3 col-12">
+        {{ language == "en" ? task?.titleEn : task?.titleAr }}
+      </h3>
+    </div>
+
+    <!-- highlight table -->
+    <div class="d-flex gap-2 tables mb-4">
+      <table class="highlight-table">
+        <!-- sector -->
+        <tr *ngIf="task?.sector">
+          <th>{{ "bau.bauTasks.detailsModel.sector" | translate }}</th>
+          <td>
+            {{ language == "en" ? task?.sector.name : task?.sector.arabicName }}
+          </td>
+        </tr>
+        <!-- department -->
+        <tr *ngIf="task?.department">
+          <th>{{ "bau.bauTasks.detailsModel.department" | translate }}</th>
+          <td>
+            {{
+              language == "en"
+                ? task?.department.name
+                : task?.department.arabicName
+            }}
+          </td>
+        </tr>
+        <!-- section -->
+        <tr *ngIf="task?.section">
+          <th>{{ "bau.bauTasks.detailsModel.section" | translate }}</th>
+          <td>
+            {{
+              language == "en" ? task?.section.name : task?.section.arabicName
+            }}
+          </td>
+        </tr>
+        <!-- status -->
+        <tr>
+          <th>{{ "bau.bauTasks.detailsModel.status" | translate }}</th>
+          <td class="task-status">
+            <!-- chang status  -->
+            <div class="task-status-select" [formGroup]="statusForm">
+              <ng-select
+                formControlName="status"
+                [clearable]="false"
+                class="input-select"
+                [ngClass]="{ valid: (form | getControl : 'status')?.valid }"
+                [searchable]="false"
+                [notFoundText]="'shared.noItemsFound' | translate"
+                (change)="setImportanceLevelValue($event,task.id)"
+              >
+                <ng-option *ngFor="let item of taskStatuses" [value]="item?.id" >
+                  <app-badge
+                    [className]="item?.className"
+                    [label]="language == 'ar' ? item['nameAr'] : item['name']"
+                  ></app-badge>
+                </ng-option>
+              </ng-select>
+            </div>
+            <i *ngIf="changeStatusLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+          </td>
+        </tr>
+      </table>
+      <table class="highlight-table">
+        <!-- chaired by -->
+        <tr>
+          <th>{{ "bau.bauTasks.detailsModel.createdBy" | translate }}</th>
+          <td>
+            <person-item
+              [requesterItem]="task?.creatorInfo"
+              [noCursor]="true"
+            ></person-item>
+          </td>
+        </tr>
+
+        <!-- priority -->
+        <tr>
+          <th>{{ "bau.bauTasks.detailsModel.priority" | translate }}</th>
+          <td class="task-status">
+            <app-badge
+              [className]="taskPriorities[task?.importanceLevel]['className']"
+              [label]="
+                language == 'en'
+                  ? taskPriorities[task?.importanceLevel]['name']
+                  : taskPriorities[task?.importanceLevel]['nameAr']
+              "
+            ></app-badge>
+          </td>
+        </tr>
+
+        <!-- assigned to -->
+        <tr>
+          <th>{{ "bau.bauTasks.detailsModel.assignee" | translate }}</th>
+          <td>
+            <person-item
+              [requesterItem]="task?.assignedToInfo"
+              [noCursor]="true"
+            ></person-item>
+          </td>
+        </tr>
+
+        <!-- due date -->
+        <tr>
+          <th>{{ "bau.bauTasks.detailsModel.dueDate" | translate }}</th>
+          <td class="task-dueDate">
+            <div>
+              {{
+                language === "en"
+                  ? ((task?.dueDate | uTCToLocalDate : true).toLocaleString()
+                    | date : "d MMM y")
+                  : ((task?.dueDate | uTCToLocalDate : true).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- progress -->
+    <div class="progress-container p-2 mb-3">
+      <div class="task-progress m-2">
+        <label class="progress-title">
+          {{ "bau.bauTasks.progress" | translate }}
+        </label>
+        <div class="d-flex align-items-center gap-2">
+          <div class="progress-bar flex-grow-1">
+            <span
+              class="fill {{ task?.progress | progressColorBau }}"
+              [ngStyle]="{ width: task?.progress + '%' }"
+            ></span>
+          </div>
+          <span class="percentage">{{ task.progress | number }}%</span>
+        </div>
+      </div>
+      <!-- hidden in status not in progress -->
+      <button
+        class="btn btn-dark m-2 px-5"
+        (click)="updateTaskProgress()"
+        *ngIf="task?.status == 1"
+      >
+        <i class="bx bxs-edit"></i>
+        {{ "bau.bauTasks.detailsModel.updateProgress.title" | translate }}
+      </button>
+    </div>
+
+    <!-- description -->
+    <div class="mb-1" *ngIf="task?.description">
+      <div class="block-title">
+        {{ "bau.bauTasks.detailsModel.description" | translate }}
+      </div>
+
+      <div
+        class="angular-editor-description"
+        [innerHTML]="task?.description | truncate : descTextLimit"
+      ></div>
+
+      <button
+        class="see-more-btn"
+        *ngIf="task?.description?.length > descTextInitialLimit"
+        (click)="toggleMoreText()"
+      >
+        <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+          {{ "bau.seeMore" | translate }}
+        </ng-container>
+        <ng-template #seeLess>
+          {{ "bau.seeLess" | translate }}
+        </ng-template>
+      </button>
+    </div>
+
+    <!-- attachments -->
+    <div class="my-2" *ngIf="task?.attachments.length > 0">
+      <h3 class="block-title">
+        {{ "shared.attachments" | translate }}
+      </h3>
+      <ng-container>
+        <uploaded-attachments-files
+          class="d-block mb-1"
+          [files]="task?.attachments"
+          [canDeleted]="false"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </ng-container>
+    </div>
+
+    <!-- comments items, files & history tabs -->
+    <ul class="tabsmenu border-bottom flex-column flex-{{ breakpoint }}-row">
+      <li
+        *ngFor="let tab of tabs"
+        class="tabsmenu__item {{ tab.active ? 'active' : '' }}"
+      >
+        <a class="tabsmenu__link" (click)="activeTab(tab)">
+          {{ language == "ar" ? tab?.labelAr : tab?.label }}
+          <i
+            *ngIf="tab.valid"
+            class="bx bx-check text-success fw-bold fs-3"
+          ></i>
+        </a>
+      </li>
+    </ul>
+
+    <!-- comments tab -->
+    <section *ngIf="tabs[0].active">
+      <div class="comments-area d-flex flex-column h-100">
+        <!-- comments list -->
+        <ng-container *ngIf="task?.comments?.length > 0; else noComments">
+          <app-comment-box
+            [comments]="task?.comments"
+            [language]="language"
+            [selectedComment]="selectedComment"
+            [doesDateHasOffset]="true"
+          ></app-comment-box>
+        </ng-container>
+        <ng-template #noComments>
+          <div class="flex-grow-1 py-5 my-5 text-center">
+            {{ "shared.noCommentsYet" | translate }}
+          </div>
+        </ng-template>
+
+        <!-- comment box -->
+        <div
+          class="comment-box"
+          [formGroup]="form"
+          (keyup.enter)="addNewComment()"
+          *ngIf="task?.status == 1"
+        >
+          <!-- <app-filed
+              class="d-block"
+              formControlName="comment"
+              [control]="form | getControl: 'comment'"
+              [placeholder]="'bau.bauTasks.detailsModel.commentPlaceholder' | translate"
+            ></app-filed> -->
+          <!-- upload files button -->
+          <button
+            class="upload-files-btn btn"
+            title="Attachment"
+            (click)="attachments.click()"
+          >
+            <i class="bx bx-paperclip"></i>
+          </button>
+          
+          <app-mention-box
+            class="d-block"
+            [clearComment]="clearComment"
+            (getComment)="getComment($event)"
+          ></app-mention-box>
+          <input
+            hidden
+            #attachments
+            type="file"
+            [accept]="supportedAttachmentTypes.join(',')"
+            (change)="onUploadFile($event)"
+          />
+          <!-- post comment button -->
+          <button
+            class="post-btn btn"
+            (click)="addNewComment()"
+            [disabled]="!hasComment || sendingComment"
+          >
+            <i *ngIf="!sendingComment" class="bx bx-send"></i>
+            <i *ngIf="sendingComment" class="bx bx-loader-alt bx-spin ml-1"></i>
+          </button>
+        </div>
+        <uploaded-attachments-files
+          *ngIf="uploadedFiles?.length > 0"
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [maxSize]="maxFileSizeInMB"
+          [showHint]="false"
+          (deleteFile)="onDeleteFile($event)"
+        ></uploaded-attachments-files>
+      </div>
+    </section>
+    <!-- files tab -->
+    <section *ngIf="tabs[1].active">
+      <ng-container *ngIf="allFiles.length > 0; else noFiles">
+        <uploaded-attachments-files
+          class="d-block mt-4"
+          [files]="allFiles"
+          [showHint]="false"
+          [canDeleted]="false"
+        ></uploaded-attachments-files>
+      </ng-container>
+    </section>
+    <!-- history tab -->
+    <section *ngIf="tabs[2].active">
+      <app-tasks-history
+        [taskId]="task?.id"
+        [language]="language"
+        (onDetails)="scrollToElement($event)"
+      ></app-tasks-history>
+    </section>
+  </div>
+</ng-template>
+<!-- loader skeleton for the table -->
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<ng-template #noFiles>
+  <div class="text-center py-5">
+    {{ "shared.noDocumentsYet" | translate }}
+  </div>
+</ng-template>
+
+<ng-template #noAttachments>
+  <div class="text-center py-1">
+    {{ "shared.noDocumentsYet" | translate }}
+  </div>
+</ng-template>

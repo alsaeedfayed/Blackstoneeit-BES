@@ -1,0 +1,16 @@
+.required {
+  color: red;
+}
+
+.rtl {
+  flex-direction: row-reverse;
+}
+
+::ng-deep {
+  // .input-select.ng-select .ng-select-container {
+  //   height: auto;
+  // }
+  angular-editor {
+    background-color: white;
+  }
+}

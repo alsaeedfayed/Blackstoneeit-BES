@@ -1,0 +1,228 @@
+@import "src/assets/css/utils/variables.scss";
+
+
+.votingBar {
+  width: 100%;
+}
+
+::ng-deep {
+  .noVoting {
+    margin-top: -.2rem;
+    .status{
+      visibility: hidden;
+    }
+  }
+
+  .vote-progress {
+    .bg-danger {
+      //left : 100% !important
+    }
+  }
+}
+
+::ng-deep {
+  .en {
+    .votingBarNo {
+      direction: rtl !important;
+      .vote-progress{
+        .vote-progress-bar{
+          right:  0 !important;
+        }
+        .vote-progress-label {
+          direction: ltr !important;
+        }
+      }
+
+    }
+
+    .votingBarYes{
+      direction: ltr !important;
+      .vote-progress{
+        .vote-progress-bar{
+         // left:  0 !important;
+        }
+        .vote-progress-label {
+         // direction: ltr !important;
+        }
+      }
+    }
+  }
+
+  .ar {
+    .votingBarNo {
+      direction: rtl !important;
+      .vote-progress{
+        .vote-progress-bar{
+          right:  0 !important;
+        }
+        .vote-progress-label {
+          direction: rtl !important;
+        }
+      }
+
+    }
+
+
+    .votingBarYes{
+      direction: ltr !important;
+      .vote-progress{
+        .vote-progress-bar{
+          left: 0 !important;
+          right: unset !important;
+        }
+        .vote-progress-label {
+         direction: rtl !important;
+        }
+      }
+    }
+  }
+
+}
+.horizontal-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 0;
+
+  &-item {
+    background-color: #ffffff;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0rem 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+
+    .card-container {
+      container: card-item / inline-size;
+    }
+
+    .card-content {
+      --actions-width: 140px;
+
+      @container card-item (min-width: 750px) {
+        & {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+
+      @container card-item (max-width: 750px) {
+        & {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr;
+          gap: 2.5rem;
+        }
+      }
+
+      @container card-item (max-width: 550px) {
+        & {
+          grid-template-columns: 2fr 1fr;
+        }
+      }
+
+      @container card-item (max-width: 400px) {
+        & {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+
+    &-cell {
+      &:not(.decision-actions) {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-inline-end: 2.5rem;
+        flex: 1;
+      }
+
+      @container card-item (min-width: 750px) {
+        .card-content & {
+          &.decision-title {
+            // width: calc((100% - var(--actions-width)) * 0.4);
+
+            .cell-content {
+              word-break: break-word;
+            }
+          }
+
+          &.decision-voting {
+            // width: calc((100% - var(--actions-width)) * 0.2);
+            flex-grow: 3;
+
+            .cell-content {
+              display: flex;
+              align-items: center;
+              gap: 0.625rem;
+
+              vote-percentage {
+                width: 100%;
+              }
+            }
+
+            .members-count {
+              white-space: nowrap;
+            }
+          }
+
+          &.created-by,
+          &.created-on,
+          &.closing-date,
+          &.decision-type {
+            // width: calc(((100% - var(--actions-width)) * 0.4) / 4);
+          }
+
+          &.decision-type {
+            app-badge {
+              .badge-status {
+                white-space: nowrap;
+              }
+            }
+          }
+
+          &.decision-actions {
+            width: 50px;
+          }
+        }
+      }
+
+      &.decision-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        button, a {
+          background: none;
+          padding: 0;
+          border: 0;
+          font-weight: 500;
+
+          &:first-child {
+            color: #96a6bd;
+          }
+
+          &:last-child {
+            color: #0066ff;
+          }
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .separator {
+          color: #96a6bd;
+        }
+      }
+
+      .cell-title {
+        color: $info_color;
+        font-size: 0.75rem;
+      }
+
+      .cell-content {
+        line-height: 1.25rem;
+        font-weight: 500;
+      }
+    }
+  }
+}

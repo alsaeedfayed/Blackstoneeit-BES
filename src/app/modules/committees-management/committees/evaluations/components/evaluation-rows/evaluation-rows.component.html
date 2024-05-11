@@ -1,0 +1,133 @@
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="committee-name">
+            <div class="sortable-row" (click)="sort(sortKey.type)">
+              {{ "committeesEvaluations.table.evaluationType" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up': sortedCol && sortedCol == sortKey.type && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.type && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="status">
+            <div class="sortable-row" (click)="sort(sortKey.status)">
+              {{ "committeesEvaluations.table.status" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.status && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.status && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="created-by">
+            {{ "committeesEvaluations.table.lastUpdateDate" | translate }}
+          </th>
+
+          <th scope="col" class="assigned-to">
+            {{ "committeesEvaluations.table.observations" | translate }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of list.data
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <!-- <td class="id">
+            {{
+              i
+                | tableItemIndex
+                  : paginationModel?.pageSize
+                  : paginationModel?.pageIndex
+            }}
+          </td> -->
+          <td class="committee-name">
+            <a
+              class="hoverableLink"
+              [routerLink]="
+                '/committees-management/evaluation/details/' + item?.id
+              "
+            >
+              {{ language === "en" ? item?.typeName : item?.typeNameAr }}
+            </a>
+          </td>
+
+          <td class="status">
+            <app-badge
+              [className]="statuses[item?.status]['className']"
+              [label]="
+                language == 'ar'
+                  ? statuses[item?.status]['nameAr']
+                  : statuses[item?.status]['name']
+              "
+            ></app-badge>
+          </td>
+
+          <td class="created-on">
+            <span *ngIf="item?.updatedDate">
+              {{
+                language === "en"
+                  ? ((item?.updatedDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.updatedDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+
+          <td class="assigned-to">
+            <span style="color: rgb(114, 197, 121)">
+              {{ item?.openObservations }}
+              {{ "committeesEvaluations.table.open" | translate }}
+            </span>
+
+            <span style="color: #ff2929">
+              <span>/</span>
+
+              {{ item?.closedObservations }}
+              {{ "committeesEvaluations.table.close" | translate }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

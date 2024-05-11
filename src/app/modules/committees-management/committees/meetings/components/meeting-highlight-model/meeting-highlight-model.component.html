@@ -1,0 +1,106 @@
+<ng-container *ngIf="loading  else data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #data>
+  <div class="new-model-dialog-body">
+    <h3 class="fs-6 my-3">{{ meeting?.name }}</h3>
+
+    <!-- description -->
+    <div class="meeting-description mb-4" *ngIf="meeting?.notes">
+      <div class="angular-editor-description" [innerHTML]="meeting?.notes | truncate: descTextLimit"></div>
+
+      <button
+        class="see-more-btn mt-2"
+        *ngIf="meeting?.notes?.length > descTextInitialLimit"
+        (click)="toggleMoreText()"
+      >
+        <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+          {{ 'committeesManagement.seeMore' | translate }}
+        </ng-container>
+        <ng-template #seeLess>
+          {{ 'committeesManagement.seeLess' | translate }}
+        </ng-template>
+      </button>
+    </div>
+
+    <div class="d-flex gap-3 flex-wrap w-100 mb-4">
+      <!-- creator -->
+      <div class="meeting-creator flex-grow-1">
+        <div class="block-title">{{ 'committeeMeetings.highlightModel.creator' | translate }}</div>
+
+        <person-item [requesterItem]="meeting?.creatorInfo" [noCursor]="true"></person-item>
+      </div>
+
+      <!-- MOM recorded by -->
+      <div class="meeting-mom-recorded flex-grow-1" *ngIf="meeting?.momRecordedBy">
+        <div class="block-title">{{ 'committeeMeetings.highlightModel.momRecordedBy' | translate }}</div>
+
+        <person-item [requesterItem]="meeting?.momRecordedByInfo" [noCursor]="true"></person-item>
+      </div>
+    </div>
+
+    <div class="d-flex gap-3 flex-wrap w-100 mb-4">
+      <!-- location -->
+      <div class="meeting-location flex-grow-1" *ngIf="meeting?.location">
+        <div class="block-title">{{ 'committeeMeetings.highlightModel.location' | translate }}</div>
+
+        <span>{{ meeting?.location }}</span>
+      </div>
+
+      <!-- date -->
+      <div class="meeting-date flex-grow-1" *ngIf="meeting?.date">
+        <div class="block-title">{{ 'committeeMeetings.highlightModel.date' | translate }}</div>
+
+        <span>
+          {{
+            lang === "en" ?
+            ((meeting?.date | uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+            ((meeting?.date | uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+          }}
+        </span>
+      </div>
+
+      <!-- duration -->
+      <div class="meeting-duration flex-grow-1" *ngIf="meeting?.timeFrom && meeting?.timeTo">
+        <div class="block-title">{{ 'committeeMeetings.highlightModel.duration' | translate }}</div>
+
+        <span>
+          {{
+            lang === "en" ?
+            ((meeting?.timeFrom | uTCToLocalDate).toLocaleString() | date: "hh:mm a") :
+            ((meeting?.timeFrom | uTCToLocalDate).toLocaleString() | localizeDate : "hh:mm a")
+          }}
+          -
+          {{
+            lang === "en" ?
+            ((meeting?.timeTo | uTCToLocalDate).toLocaleString() | date: "hh:mm a") :
+            ((meeting?.timeTo | uTCToLocalDate).toLocaleString() | localizeDate : "hh:mm a")
+          }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- cancel button -->
+    <button
+     class="btn btn-info flex-grow-1"
+     (click)="closePopup()"
+   >
+     {{ 'shared.cancel' | translate }}
+   </button>
+    <button class="btn btn-main flex-grow-1" (click)="goToMeetingDetails()">
+      {{ 'committeeMeetings.highlightModel.moreDetails' | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the model -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,33 @@
+<ul class="comments-list flex-grow-1 mt-4 mb-5">
+  <li
+    *ngFor="let comment of comments; let i = index"
+    [id]="'comment-'+ comment?.id"
+    class="
+    comments-list-item 
+    {{ comment.createdBy == userId ? 'my-comment' : 'other-comment' }}
+    "
+    >
+    <div class="comments-list-item-head">
+      <person-item
+        [requesterItem]="comment?.creatorInfo"
+        [noCursor]="true"
+      ></person-item>
+      <span class="comments-list-item-head-date">
+        {{ comment?.creationDate | uTCToLocalDate : doesDateHasOffset | timePassed : language }}
+      </span>
+    </div>
+    <div class="comments-list-item-body text-break">
+      <app-mention-div
+        [comment]="comment?.comment"
+        [mentionedInfo]="comment?.mentionedUserInfo"
+      ></app-mention-div>
+    </div>
+    <uploaded-attachments-files
+      *ngIf="comment.attachments.length > 0"
+      class="d-block mt-4"
+      [files]="comment?.attachments"
+      [showHint]="false"
+      [canDeleted]="false"
+    ></uploaded-attachments-files>
+  </li>
+</ul>

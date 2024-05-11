@@ -1,0 +1,63 @@
+{
+  "eppmRequests": {
+    "projectName": "أسم المشروع",
+    "manager": "المدير",
+    "searchUsers": "البحث عن المستخدمين",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "sector": "القطاع",
+    "searchSectors": "ابحث عن القطاعات",
+    "clearFilter": "مسح الفلتر",
+    "filter": "فلتر",
+    "requests": "طلبات المشاريع",
+    "createProject": "إنشاء مشروع",
+    "assignedToMe": "الموكلة لى",
+    "advancedFilter": "بحث متقدم",
+    "noRequestsFound": "لم يتم العثور على طلبات",
+    "type": "النوع",
+    "projectType": "نوع المشروع",
+    "deliveryType": "نوع التنفيذ",
+    "category": "التصنيف",
+    "origin": "الأصل",
+    "department": "الإدارة",
+    "priorityLevel": "مستوى الأولوية",
+    "selectType": "اختر النوع",
+    "selectSector": "حدد القطاع",
+    "selectCategory": "اختر التصنيف",
+    "selectOrigin": "اختر الأصل",
+    "selectDepartment": "حدد الإدارة",
+    "selectPriorityLevel": "حدد مستوى الأولوية",
+    "deliverables": "المخرجات",
+    "milestones": "المراحل",
+    "days": "أيام",
+    "months": "شهور",
+    "years": "سنوات",
+    "seeMore": "تحميل المزيد",
+    "view": {
+      "card": "بطاقة",
+      "tree": "شجرة",
+      "list": "قائمة"
+    },
+    "table": {
+      "head": {
+        "name": "اسم المشروع",
+        "manager": "مدير المشروع",
+        "status": "الحالة",
+        "type": "النوع",
+        "deliveryType": "نوع التنفيذ",
+        "start": "البداية",
+        "end": "النهاية",
+        "milestones": "عدد المراحل",
+        "deliverables": "عدد التسليمات"
+      },
+      "body": {
+        "": ""
+      }
+    },
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": ""
+  }
+}

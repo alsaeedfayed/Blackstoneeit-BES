@@ -1,0 +1,30 @@
+<div class="form-container"
+  *ngIf="(entityBuilderConfig.mode != entityBuilderModeEnum.Editable )|| entityBuilderConfig.mode == entityBuilderModeEnum.Editable">
+
+  <!-- <div class="header-title"> -->
+    <!-- <h3 *ngIf="!!formData.name && entityBuilderConfig.mode == entityBuilderModeEnum.Editable">
+      {{formData.name}}
+    </h3> -->
+      <!-- <h4 *ngIf="!!formData.description && entityBuilderConfig.mode == entityBuilderModeEnum.Editable">
+        {{formData.description}}
+      </h4> -->
+
+    <!-- <div *ngIf="entityBuilderConfig.mode != entityBuilderModeEnum.Editable">
+      <app-filed [placeholder]="'shared.stepName' | translate" [(ngModel)]="formData.name"
+        [title]="'shared.stepName' | translate"></app-filed>
+    </div> -->
+    <!-- <div *ngIf="entityBuilderConfig.mode != entityBuilderModeEnum.Editable" class=" mt-4">
+      <app-textarea-filed [(ngModel)]="formData.description" [placeholder]="'shared.formDescription' | translate"
+        [title]="'shared.formDescription' | translate"></app-textarea-filed>
+    </div> -->
+
+  <!-- </div> -->
+
+  <ng-container *ngFor="let control of formData.controls">
+    <div class="control">
+      <!-- [formDataDetails]="_formDataDetails" -->
+      <app-control-builder [controls]="formData.controls" [control]="control" (errorDuplicateHandler)="errorDuplicate=$event;updateHandler.emit($event)"
+      (dynamicRowsAndColumnsHandler)="emitDynamicRowsAndColumns($event)"></app-control-builder>
+    </div>
+  </ng-container>
+</div>

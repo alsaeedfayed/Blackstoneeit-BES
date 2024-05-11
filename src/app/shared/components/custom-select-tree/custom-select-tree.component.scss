@@ -1,0 +1,29 @@
+.arrow {
+    color: #262626;
+    margin: 0.5em;
+    font-size: 0.6em;
+    cursor: pointer;
+}
+
+input[type='checkbox']{
+    margin: 0.5em;
+}
+
+ul {
+    list-style: none;
+    padding: 0px 0px 0px 20px;
+}
+
+    ul.inner_ul li:before {
+        font-size: 18px;
+        margin-left: -11px;
+        margin-top: -5px;
+        vertical-align: middle;
+        float: left;
+        width: 8px;
+        color: #41424e;
+    }
+
+.inner_ul {
+    padding: 0px 0px 0px 35px;
+}

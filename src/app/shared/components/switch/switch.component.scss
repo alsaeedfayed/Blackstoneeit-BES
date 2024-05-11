@@ -1,0 +1,65 @@
+@import "src/assets/css/utils/variables.scss";
+
+.wrapper {
+  position: relative;
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 58px;
+  height: 28px;
+  background: #a0a0a0;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+
+label:after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: lighten($main-color, 25%);
+}
+input:checked + label:after {
+  background: $main-color;
+}
+
+input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+input.disabled + label {
+  cursor: not-allowed;
+}
+
+label:active:after {
+  width: 40px;
+}
+
+// centering
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

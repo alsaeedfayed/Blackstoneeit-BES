@@ -1,0 +1,163 @@
+@import "src/assets/css/utils/variables.scss";
+
+.challenge-form {
+  background: #ffffff;
+  padding: 20px;
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.01);
+
+  .editor-section {
+    margin-top: 29px;
+  }
+
+  label {
+    font-size: 14px;
+    color: #111827;
+    font-weight: 500;
+  }
+
+  .title-class ::ng-deep label {
+    font-size: 14px;
+    color: #111827;
+    font-weight: 500;
+  }
+
+  .checkboxes-items {
+    .card {
+      padding: 16px 20px;
+    }
+  }
+
+  app-checkbox {
+    margin-top: 10px;
+  }
+
+  .input-file {
+    width: 100%;
+    border: 1px solid #cbcbcb;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 54px;
+
+    .upload-label {
+      font-size: 14px;
+      color: #111827;
+    }
+  }
+
+  .upload-hint {
+    font-size: 12px;
+    color: #687588;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  .astrix-red {
+    color: red;
+  }
+
+  .drop-zone {
+    border: 2px dotted rgba(39, 163, 118, 1);
+    border-radius: 7px;
+    text-align: center;
+    padding: 60px 10px;
+    margin-top: 5px;
+  }
+
+}
+
+:host ::ng-deep {
+  .angular-editor-button[title="Insert Link"], .angular-editor-button[title="Unlink"] {
+    display: none
+  }
+
+  app-nz-date-picker {
+    .form-group {
+      margin-top: 0 !important;
+    }
+  }
+
+  .page-header {
+    margin-bottom: 18px !important;
+  }
+
+  .form-control {
+    height: 54px !important;
+  }
+
+  .input-select.ng-select .ng-select-container {
+    height: 54px !important;
+  }
+
+  .action-buttons .btn-transparent {
+    color: #96A6BD;
+  }
+
+
+  angular-editor-toolbar .angular-editor-toolbar {
+    background-color: #ffffff !important;
+    padding: 18px !important;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .angular-editor .angular-editor-wrapper .angular-editor-textarea {
+    margin-top: 0px !important;
+    min-height: 187px !important;
+    border-radius: 0 0 16px 16px;
+  }
+}
+
+.awards-value {
+  ::ng-deep .form-group {
+    margin-top: 0px !important;
+  }
+}
+
+.checkboxes-items .check {
+  margin-bottom: 10px;
+  input[type=checkbox] {
+    border-radius: 6px;
+    border-color: #CBD5E0;
+    width: 21px;
+    height: 21px;
+  }
+
+  label {
+    color: #111827;
+    font-size: 14px;
+    margin-inline-start: 10px;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  input[type=checkbox]:checked {
+    border-radius: 6px;
+    background: #27A376;
+    border-color: #27A376 !important;
+  }
+}
+.mt-2rem{
+  margin-top: 2rem;
+}
+.error-message{
+  color: red;
+}
+//responsive
+@media screen and (max-width: 768px) {
+  ::ng-deep {
+    .action-buttons {
+      width: 100%;
+
+      .btn {
+        font-size: 12px;
+        min-width: 80px;
+        padding: 8px 10px;
+      }
+    }
+  }
+}

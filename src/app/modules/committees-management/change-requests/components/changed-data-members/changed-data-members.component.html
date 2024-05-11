@@ -1,0 +1,66 @@
+   <!-- members table -->
+   <div class="changed-members-table">
+    <div *ngIf="changedDataMembers?.length" class="table mt-4">
+      <div class="table-wrapper">
+        <div style="font-weight: 500; font-size: 16px">
+          {{ "changeRequests.details.members" | translate }}
+        </div>
+        <table class="table mt-3">
+          <thead>
+            <tr>
+              <th scope="col" class="name" >
+                {{ "changeRequests.details.name" | translate }}
+              </th>
+
+              <!-- <th scope="col" class="position" >
+                {{ "changeRequests.details.position" | translate }}
+              </th> -->
+
+              <th scope="col" class="role" >
+                {{ "changeRequests.details.role" | translate }}
+              </th>
+
+              <th scope="col" class="changedType" >
+                {{ "changeRequests.details.changeType" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of changedDataMembers; let i = index">
+              <td class="name">
+
+               <person-item
+                  *ngIf="changedDataMembers.length > 0"
+                  [requesterItem]="changedDataMembers[i]?.member"
+                  [noCursor]="true"
+                ></person-item>
+              </td>
+
+              <!-- <td class="position">{{item?.member?.position}}</td> -->
+
+              <td class="role">
+                {{lang === "en" ? memberTypes[( item?.memberType) -1]?.name : memberTypes[(item?.memberType) -1]?.nameAr }}
+              </td>
+
+              <td class="changedtype">
+
+                <span
+                [ngClass]="changedTypes[item?.recordStatus]?.className"
+              >
+
+              {{lang === "en" ? changedTypes[item?.recordStatus]?.name : changedTypes[item?.recordStatus]?.nameAr}}
+            </span>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!changedDataMembers?.length">
+    <app-no-data
+      [msg]="'changeRequests.details.noDataMemebers' | translate"
+    ></app-no-data>
+  </div>

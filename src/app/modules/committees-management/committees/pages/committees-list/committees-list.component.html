@@ -1,0 +1,65 @@
+<div class="page">
+  <app-header-page
+    [title]="'committeesList.committeesList' | translate"
+    [totalItems]="totalItems"
+    [isAddBtn]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <app-button [permission]="createCommitteePermission">
+        <button class="btn btn-main" (click)="goToAddCommittee()">
+          <i class="bx bx-plus"></i>
+          {{ "committeesList.add" | translate }}
+        </button>
+      </app-button>
+    </div>
+  </app-header-page>
+
+  <!-- page filters -->
+  <app-page-filters
+    [searchPlaceHolder]="'committeesList.searchPlaceholder' | translate"
+    [appliedFiltersCount]="appliedFiltersCount"
+    [hasAdvancedFilter]="true"
+    (onClear)="clearFilter()"
+    (search)="onSearch($event)"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+  >
+    <app-committees-filters
+      [isFiltersEmpty]="emptyFIlters"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-committees-filters>
+  </app-page-filters>
+
+  <!-- list -->
+  <ng-container *ngIf="loading; else list_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- committees list items -->
+<ng-template #list_data>
+  <committees-rows
+    *ngIf="list?.length > 0"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></committees-rows>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data [msg]="'committeesList.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

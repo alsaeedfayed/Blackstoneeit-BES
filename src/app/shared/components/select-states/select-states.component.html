@@ -1,0 +1,53 @@
+<div class="d-flex flex-column ">
+  <!-- control label -->
+  <label [for]="id" class="form-label" *ngIf="title">
+    {{ title }}
+    <span class="astrix-red" *ngIf="isRequired">*</span>
+  </label>
+  <div class="d-flex justify-content-between gap-3">
+    <input
+      class="form-control "
+      [type]="'text'"
+      [dir]="language === 'en' ? 'ltr' : 'rtl'"
+      [ngClass]="{ valid: control?.valid }"
+      [id]="id"
+      [placeholder]="placeholder"
+      [disabled]="disable"
+      (keyup.enter)="addItem()"
+      (input)="change()"
+      (blur)="focus()"
+      [(ngModel)]="value"
+    />
+    <button (click)="addItem()" class="btn btn-dark" [disabled]="!value">
+      <i class="bx bx-plus" style="color: #ffffff"></i>
+      <span>{{ "shared.add" | translate }}</span>
+    </button>
+  </div>
+  <span *ngIf="isTextNotValid" class="alert-msg">
+    {{notValidMessage | translate}}
+  </span>
+  <ng-container *ngIf="!!showValidations">
+    <app-validation
+      *ngIf="(control?.touched || isSubmitted) && control?.invalid"
+      [title]="title"
+      [control]="control"
+      [length]="length"
+      [minLength]="minLength"
+    ></app-validation>
+
+  </ng-container>
+  
+  <div class="d-flex flex-wrap my-3">
+    <div
+      *ngFor="let item of states; let i = index"
+      class="item d-flex me-1 mb-2 align-items-center text-break"
+    >
+      {{ item }}
+      <button (click)="removeItem(i)" class="item-remove">
+        <i class="bx bx-x"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+

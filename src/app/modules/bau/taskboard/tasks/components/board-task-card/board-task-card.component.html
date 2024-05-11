@@ -1,0 +1,72 @@
+<div class="board-task-card status-{{ task?.status }}">
+  <div
+    class="d-flex align-items-center justify-content-between gap-3 flex-wrap my-3"
+  >
+    <!-- groups -->
+    <app-badge
+      class="priority d-block"
+      [className]="importanceLevels[task?.importanceLevel]['className']"
+      [label]="
+        lang == 'en'
+          ? importanceLevels[task?.importanceLevel]['name']
+          : importanceLevels[task?.importanceLevel]['nameAr']
+      "
+    ></app-badge>
+
+    <!-- date -->
+    <div class="board-task-card-date" *ngIf="task?.creationDate">
+      {{
+        lang === "en"
+          ? ((task?.creationDate | uTCToLocalDate : true).toLocaleString()
+            | date : "d MMM y")
+          : ((task?.creationDate | uTCToLocalDate : true).toLocaleString()
+            | localizeDate : "d MMM y")
+      }}
+    </div>
+  </div>
+
+  <!-- title -->
+  <h4
+    class="board-task-card-title"
+    [title]="lang == 'en' ? task?.titleEn : task?.titleAr"
+  >
+    {{ (lang == "en" ? task?.titleEn : task?.titleAr) | truncate : 20 }}
+  </h4>
+
+  <!-- priority -->
+  <!--  -->
+
+  <!-- progress -->
+  <div class="board-task-card-progress">
+    <div class="progress-percentage">
+      <span class="label">{{ "bau.bauTasks.progress" | translate }}</span>
+      <span class="percent">{{ task?.progress }}%</span>
+    </div>
+    <div class="progress-bar">
+      <span
+        class="fill {{ task?.progress | porgressColor }}"
+        [ngStyle]="{ width: task?.progress + '%' }"
+      ></span>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div class="board-task-card-footer">
+    <person-item
+      [requesterItem]="task?.assignedToInfo"
+      [noCursor]="true"
+      [hasUserCard]="false"
+    ></person-item>
+
+    <ul class="task-meta">
+      <li class="task-meta-item">
+        <i class="bx bx-folder-open"></i>
+        <span class="task-meta-count">{{ task?.attachmentsCount }}</span>
+      </li>
+      <li class="task-meta-item">
+        <i class="bx bx-comment-dots"></i>
+        <span class="task-meta-count">{{ task?.commentsCount }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

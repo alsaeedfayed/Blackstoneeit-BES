@@ -1,0 +1,130 @@
+.challenge-card {
+  background: #FFF;
+  margin-top: 13px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  box-shadow: 0px 0px 26px 0px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  border: 1px solid #F1F1F1;
+
+  .image-header {
+    min-width: 333px;
+    min-height: 245px;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-inline-start: 16px;
+  }
+
+  .card-body {
+    padding: 0 24px;
+
+    .date span {
+      color: #687588;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 16px;
+      margin-bottom: 9px;
+    }
+
+    p {
+      text-overflow: ellipsis;
+      font-size: 14px;
+      color: #687588;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      white-space: pre-wrap;
+      margin-bottom: 30px;
+      overflow: auto;
+    }
+
+    .view-all {
+      color: #687588;
+      font-size: 14px;
+    }
+
+    .additional-info {
+      .organizer-desc {
+        display: flex;
+      }
+
+      img {
+        width: 35px;
+        height: 35px;
+        border-radius: 34px;
+      }
+
+      span {
+        color: #687588;
+        font-size: 14px;
+        display: inline-block;
+        margin-bottom: 11px;
+      }
+
+      h4 {
+        color: #000;
+        font-size: 16px;
+      }
+    }
+
+    .actions {
+      margin-top: 30px;
+
+      a {
+        color: #0437F2;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .right-divider {
+    border-inline-end: 2px solid #F1F2F4;
+  }
+
+  ::ng-deep {
+    .badge-status {
+      white-space: nowrap;
+    }
+
+    .badge-status::before {
+      display: none
+    }
+
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .challenge-card {
+    flex-direction: column;
+    padding-top: 0;
+
+    .image-header {
+      min-width: auto;
+      width: auto;
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 5px;
+    }
+
+    .right-divider {
+      border-bottom: 2px solid #F1F2F4;
+      border-inline-end: none;
+    }
+
+    .card-body .actions {
+      margin-top: 5px;
+    }
+  }
+
+}

@@ -1,0 +1,30 @@
+{
+  "manageServices": {
+    "serviceTitle": "Service Title",
+    "enterServiceTitle": "Enter Service Title",
+    "serviceArabicTitle": "Service Arabic Title",
+    "enterServiceArabicTitle": "Enter Service Arabic Title",
+    "serviceDescription": "Service Description",
+    "enterServiceDescription": "Enter Service Description",
+    "serviceCategory": "Service Category",
+    "selectCategory": "Select classification",
+    "targetAudience": "Target Audience",
+    "selectGroup": "Select Group",
+    "selectRole": "Select Role",
+    "selectForm": "Select Form",
+    "selectProcess": "Select Process",
+    "publishThisService": "Publish this service",
+    "category": "Category",
+    "form": "Form",
+    "process": "Process",
+    "lastUpdate": "Last update",
+    "published": "Published",
+    "areYouSureYouWantToUnpublish": "Are you sure you want to unpublish",
+    "areYouSureYouWantToPublish": "Are you sure you want to publish",
+    "manageServices": "Manage Services",
+    "createService": "Create Service",
+    "newService": "New Service",
+    "noDataMsg": "Hmm.. looks like you don't have any Services",
+    "editService": "Edit Service"
+  }
+}

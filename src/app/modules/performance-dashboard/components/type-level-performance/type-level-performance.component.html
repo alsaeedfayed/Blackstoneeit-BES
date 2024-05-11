@@ -1,0 +1,30 @@
+<!-- <div class="level">
+    <div class="chart">
+        <canvas style="min-height: 460px;" id="myTypeChart" #myTypeChart></canvas>
+    </div>
+</div> -->
+<div class="level">
+  <!--  {{_goals| json}}-->
+  <div class="w-100">
+    <ng-container *ngFor="let goal of _goals">
+      <!--        <span>{{goal.title}}</span> - -->
+      <!--        <span>{{goal.progress}}</span>-->
+      <div class="chart-item row w-100">
+        <div class="item-progress-bar col-6  pt-2  d-flex justify-content-end align-items-center">
+          <span class=" d-inline-block" *ngIf="goal?.status == status.NotDue">
+            <app-badge [className]="'notDue'" [label]="getLabel('notDue')"></app-badge>
+          </span>
+          <div class="d-flex align-items-center" *ngIf="goal?.status != status.NotDue">
+            <span class="mx-4">{{goal.progress}}%</span>
+            <hr [style.width]="+goal.progress * 4 + 'px'" [style.min-width]="+goal.progress * 4 + 'px'"
+                [ngClass]="setCssClass(goal.progress)" align="right" />
+          </div>
+        </div>
+        <span class=" pt-2 col-6 goal-title">
+          <span class="d-inline-block goal-title">{{lang == 'en' ? goal.title : goal.titleAr}}</span>
+        </span>
+      </div>
+    </ng-container>
+  </div>
+
+</div>

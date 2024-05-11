@@ -1,0 +1,212 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.content-block {
+  background: $white-color;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+}
+
+.duration-label-container {
+  display: flex;
+  width: 222px;
+  justify-content: space-between;
+  background: $light-gray-color;
+  border-radius: 7px;
+  padding: 14px 0;
+
+  .duration-label-col {
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &:not(:last-child) {
+      border-right: 2px solid #cddcee;
+    }
+
+    .counter {
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+      color: $tertiary-color;
+      margin-bottom: 5px;
+    }
+
+    .counter-description {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 14px;
+      color: $secondary-color;
+    }
+  }
+}
+
+p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 31px;
+  color: #3c557a;
+  letter-spacing: 0.02em;
+}
+
+.template-cards-container {
+  height: 600px;
+
+  .template-card {
+    display: flex;
+    align-items: center;
+    height: 123.46px;
+    margin-bottom: 24px;
+    background: $white-color;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+    cursor: pointer;
+
+    &.active {
+      border: 1.04625px solid $main-color;
+      position: relative;
+      background: rgba($main-color, 0.04);
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: -17px;
+        top: 50%;
+        transform: translateY(-50%) rotate(270deg);
+        border-width: 8px;
+        border-style: solid;
+        border-color: $main-color transparent transparent transparent;
+
+        @include rtl_value(left, auto, -17px);
+        @include rtl_value(right, -17px, auto);
+      }
+
+      .icon {
+        background-color: $main-color;
+      }
+
+      h4 {
+        color: $main-color;
+      }
+    }
+
+    .icon {
+      background: #3c557a;
+      border-radius: 10.4625px;
+      width: 50px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 22px;
+      margin-inline-end: 12px;
+      flex-shrink: 0;
+    }
+
+    h4 {
+      color: #3c557a;
+      font-weight: 500;
+      font-size: 18.8325px;
+      line-height: 22px;
+      word-break: break-word;
+    }
+  }
+}
+
+.template-details-container {
+  width: 100%;
+  border: 1px solid #dadada;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.deliverable-input-container {
+  position: relative;
+
+  .deliverable-input {
+    padding: 12px 0;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #cbcbcb;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: $tertiary-color;
+
+    &::placeholder {
+      color: #cbcbcb;
+    }
+  }
+
+  .deliverable-btn {
+    position: absolute;
+    @include rtl_value(right, 0, auto);
+    @include rtl_value(left, auto, 0);
+    top: 50%;
+    transform: translateY(-50%);
+
+    // @include rtl_value(left, unset, 30px);
+    // @include rtl_value(right, 30px, unset);
+  }
+}
+
+.deliverables-list {
+  list-style: none;
+  margin-top: 36px;
+  padding: 0 15px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #cbcbcb;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+
+    span {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 19px;
+      color: $tertiary-color;
+    }
+
+    i {
+      font-size: 26px;
+      color: #cbcbcb;
+      cursor: pointer;
+
+      &:hover {
+        color: $tertiary-color;
+      }
+    }
+  }
+}
+
+.milestone-empty-state {
+  &.disabled {
+    .btn {
+      border: 2px solid #cbcbcb !important;
+      color: #cbcbcb !important;
+      pointer-events: none;
+      background-color: transparent;
+      cursor: not-allowed !important;
+    }
+  }
+}
+
+.input-with-currency {
+  input {
+    @include rtl_value("padding-left", 47px, 12px);
+    @include rtl_value("padding-right", 12px, 55px);
+  }
+
+  .currency-label {
+    @include rtl_value(left, 10px, unset);
+    @include rtl_value(right, unset, 10px);
+  }
+}

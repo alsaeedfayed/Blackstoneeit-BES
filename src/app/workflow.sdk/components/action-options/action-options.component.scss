@@ -1,0 +1,11 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.actions {
+  .title {
+    color: $tertiary-color;
+    @include font(20px, 500);
+    line-height: 23px;
+    margin-bottom: 0;
+  }
+}

@@ -1,0 +1,121 @@
+<div class="scorecardTree">
+  <!-- Score Card Tree Header -->
+  <app-page-filters
+    *ngIf="id"
+    class="d-block mb-4"
+    [lang]="lang"
+    [hasSearch]="false"
+    [hasListViewBtn]="true"
+    [hasTreeViewBtn]="true"
+    [hasExpandTreeBtn]="model.HasItems && model.getTreeView"
+    [isTreeExpanded]="model.expandedChildren.length > 0"
+    [viewMode]="'tree'"
+    [hasAddBtn]="isAllowedToAdd"
+    [addBtnLabel]="'Planning.addNewGoal' | translate"
+    (onAddBtnCLicked)="model.openPopup()"
+    (onTreeExpanded)="model.setExpand($event)"
+    (onViewModeChange)="model.chnageViewMode($event == 'tree' ? 1 : 2)"
+  ></app-page-filters>
+
+  <ng-container *ngIf="model.loading; else items">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+
+  <!-- Score Card Tree -->
+  <ng-template #items class="scoreCardTree">
+    <div class="items" *ngIf="model.HasItems">
+      <goal-items
+        [viewMode]="model.viewMode"
+        [goalItems]="model.goalItems"
+        [expandedChildrenItems]="model.expandedChildren"
+        (addChildEvent)="model.showModel = true; model.isEditChild = false"
+        (editChildEvent)="model.openEditChild()"
+        (deleteChildEvent)="deleteGoal($event)"
+        (setExpandedChildrenEvent)="model.setExpanded($event)"
+      ></goal-items>
+
+      <!-- <div class="total-weight" *ngIf="isPlanning">
+        {{"Planning.submissionTotalWeight" | translate}} : <span>{{submissionTotalWeight}}%</span>
+      </div> -->
+    </div>
+
+    <!-- no data msg -->
+    <div class="no-data" *ngIf="!model.HasItems">
+      <app-no-data [msg]="'Planning.noData' | translate"></app-no-data>
+
+      <div class="buttons">
+        <!-- <button class="btn btn-main">
+          <i class="bx bx-plus"></i>
+          Clone Previous Scorecard
+        </button> -->
+
+        <button
+          *ngIf="isAllowedToAdd"
+          class="btn btn-outline-main"
+          (click)="model.openAddNewGoal()"
+        >
+          <i class="bx bx-plus"></i>
+          {{ "Planning.addNewGoal" | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </ng-template>
+</div>
+
+<!-- Add Goal Popup in case of no data -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'Add-Goal-no'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeAddGoalNoDataModel()"
+>
+  <div modal-header class="add-goal-model-header w-100">
+    <label class="modal-title">
+      {{ 'Planning.addGoal' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="add-goal-model-content border-top">
+    <add-goal
+      *ngIf="model.showNoDataModel"
+      [id]="id"
+      (update)="updateList()"
+    ></add-goal>
+  </div>
+</app-model>
+
+<!-- Add Goal Popup -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'Add-Goal'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeAddGoalModel()"
+>
+  <div modal-header class="add-goal-model-header w-100">
+    <label class="modal-title">
+      {{ model.isEditChild ? model.editGoalTitle : model.addGoalTitle }}
+    </label>
+  </div>
+
+  <div modal-content class="add-goal-model-content border-top">
+    <add-goal
+      *ngIf="model.showModel"
+      [id]="id"
+      (update)="updateList()"
+    ></add-goal>
+  </div>
+</app-model>

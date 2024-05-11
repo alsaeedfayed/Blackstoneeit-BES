@@ -1,0 +1,73 @@
+<div class="requests-filters-container">
+  <div class="requests-filters" [formGroup]="form">
+
+    <!-- committee type select -->
+    <app-select
+      class="d-block"
+      formControlName="committeeType"
+      [control]="form | getControl: 'committeeType'"
+      [title]="'committeesRequests.advancedFilterModal.committeeCategory' | translate"
+      [placeholder]="'committeesRequests.advancedFilterModal.selectCommitteeCategory' | translate"
+      [items]="committeeTypes"
+      [bindVlaue]="'code'"
+      [bindLabel]="language == 'ar' ? 'nameAr' : 'nameEn'"
+      [clearable]="true"
+      (change)="changeFilter()"
+    ></app-select>
+
+    <!-- committee chairman select -->
+    <div>
+      <label class="form-label">
+        {{ 'committeesRequests.advancedFilterModal.committeeChairman' | translate}}
+        <span class="astrix-transparent">*</span>
+      </label>
+
+      <ng-select
+        class="input-select"
+        formControlName="chairman"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeesRequests.advancedFilterModal.selectCommitteeChairman' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [closeOnSelect]="true"
+        (scrollToEnd)="loadMoreEmployees()"
+        (search)="searchEmployees($event)"
+        [loading]="gettingEmployees"
+        (focus)="onFocus()"
+        (change)="changeFilter()"
+      >
+        <ng-option *ngFor="let committeeChairman of committeeChairmans" [value]="committeeChairman?.id">
+          {{committeeChairman?.fullName}}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- status select -->
+    <div>
+      <label class="form-label">
+        {{ 'committeesRequests.advancedFilterModal.status' | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="status"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl: 'status')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeesRequests.advancedFilterModal.selectStatus' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setStatusValue($event)"   
+      >
+        <ng-option *ngFor="let item of statuses" [value]="item?.id">
+          <app-badge
+            [className]="item['className']"
+            [label]="language == 'ar' ? item['nameAr'] : item['name']"
+          ></app-badge>
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+</div>

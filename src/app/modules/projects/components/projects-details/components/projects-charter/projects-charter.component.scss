@@ -1,0 +1,294 @@
+@import "src/assets/css/utils/variables.scss";
+
+.details-card {
+  container: details-card / inline-size;
+  background: $white-color;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+
+  .first-row,
+  .second-row {
+    display: grid;
+    gap: 1rem;
+
+    @container details-card (min-width: 500px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  .first-row {
+    .project-type,
+    .project-category {
+      height: 70px;
+      flex: 1;
+      background-color: $light-gray-color;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 18px;
+
+      h3 {
+        color: $black-color;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        letter-spacing: 0.02em;
+        margin-bottom: 5px;
+      }
+
+      span {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+        color: #717986;
+      }
+    }
+
+    .card-stats-box {
+      width: 100%;
+      height: 70px;
+    }
+  }
+
+  .second-row {
+    .project-details-title {
+      color: $info_color;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0 0 0.5rem;
+    }
+
+    .project-details-content {
+      color: $black-color;
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.25rem !important;
+    }
+  }
+}
+
+.card-with-icon {
+  height: 67px;
+}
+
+.team-members-card {
+  padding: 25px 27px;
+  border: 1px solid #cbcbcb;
+  border-radius: 8px;
+
+  .card-row {
+    &:not(:last-child) {
+      margin-bottom: 33px;
+    }
+  }
+}
+
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.pr-40px {
+  padding-inline-end: 40px !important;
+}
+
+.duration-label-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background: $light-gray-color;
+  padding: 14px 0;
+  border-radius: 7px;
+
+  .duration-label-col {
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &:not(:last-child) {
+      border-inline-end: 2px solid #cddcee;
+    }
+
+    .counter {
+      color: $black-color;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+      margin-bottom: 5px;
+    }
+
+    .counter-description {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 14px;
+      color: $secondary-color;
+    }
+  }
+}
+
+p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 31px;
+  color: #3c557a;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: $white-color;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+
+  .item {
+    h3 {
+      color: $black-color;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 21px;
+      letter-spacing: 0.02em;
+    }
+
+    .project-manager {
+      display: flex;
+      align-items: center;
+    }
+
+    .name {
+      color: $black-color;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 100%;
+    }
+
+    .position {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 150%;
+      color: #8b8b8b;
+    }
+  }
+}
+
+.priority-card,
+.risks-card,
+.deliverables-card {
+  background: #ffffff;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+
+  h3 {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.02em;
+  }
+
+  span {
+    font-weight: 500;
+    font-size: 15.8205px;
+    line-height: 19px;
+    letter-spacing: 0.02em;
+  }
+}
+
+.priority-card {
+  span {
+    color: #ff8b7b;
+  }
+}
+
+.risks-card {
+  span {
+    color: #3c557a;
+  }
+}
+
+.deliverables-card {
+  span {
+    color: #3c557a;
+  }
+}
+
+.font-16 {
+  font-size: 16px !important;
+}
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.members-container {
+  overflow: auto;
+  max-height: 12em;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.margin-right-left {
+  margin-left: 1em !important;
+  margin-right: 1em !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.icons-container {
+  align-items: center;
+  display: flex;
+  i {
+    color: #cbcbcb;
+  }
+  .delete {
+    font-size: 2em;
+  }
+  .edit {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 1300px) {
+  .stake-holders {
+    font-size: 12px !important;
+  }
+}
+
+.paddnin-x {
+  padding: 48px 12px !important;
+}
+
+:host ::ng-deep {
+  app-priority {
+    .bar-container {
+      min-width: auto;
+    }
+  }
+
+  app-stats-bar {
+    .bar-container {
+      min-width: auto;
+      margin-block: 1.5rem 0;
+    }
+  }
+}
+
+.initial-container{
+  width: 40px !important;
+}

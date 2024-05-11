@@ -1,0 +1,86 @@
+.full-container{
+  padding: 2rem;
+}
+
+
+.full-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-year {
+    font-weight: 400;
+    font-size: 14px;
+    color: #292D32;
+  }
+  &-quarter {
+    font-weight: 400;
+    font-size: 12px;
+    color: #96A6BD;
+  }
+}
+
+.full-title{
+  font-weight: 700;
+  font-size: 16px;
+  color: #292D32;
+}
+
+.weight-target {
+  display: flex;
+  gap: 3rem;
+  &-lable{
+    font-weight: 500;
+    font-size: 14px;
+    color: #96A6BD;
+  }
+}
+
+
+.full-description {
+  display: inline-grid;
+  &-lable {
+    font-weight: 400;
+    font-size: 14px;
+    color: #96A6BD;
+  }
+
+  &-body {
+    font-weight: 400;
+    font-size: 14px;
+    color: #121824;
+  }
+}
+
+.full-attatchments{
+  &-lable{
+    font-weight: 400;
+    font-size: 16px;
+    color: #96A6BD;
+  }
+}
+
+
+// ::ng-deep {
+//   .modal-content{
+//     overflow-y: scroll !important;
+//   }
+// }
+
+
+.Added {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0FC161;
+}
+
+.updated {
+  font-weight: 600;
+  font-size: 14px;
+  color: #EB9400;
+}
+
+.removed {
+  font-weight: 600;
+  font-size: 14px;
+  color: #FF7373;
+}

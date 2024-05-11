@@ -1,0 +1,5 @@
+<ul class="states-filter-container">
+  <li *ngFor="let state of states" class="state-filter-item" [class.active]="state.isActive">
+    {{state?.title}}
+  </li>
+</ul>

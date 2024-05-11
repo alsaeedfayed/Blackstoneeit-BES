@@ -1,0 +1,115 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.all-members{
+  width: 90%;
+}
+.chairman-container {
+  background-color: $main-color;
+  padding: 15px 10px 15px 10px;
+  border-radius: 10px;
+  height: 100px;
+  h4 {
+    color: #ffffff;
+  }
+
+  ::ng-deep person-item {
+    .personItem {
+      > .avatar {
+        .letters,
+        img {
+          height: 3rem !important;
+          width: 3rem !important;
+          position: relative;
+        }
+
+        .letters {
+          font-size: 0.75rem;
+        }
+      }
+
+      > .info {
+        .name {
+          font-size: 0.875rem;
+          margin-bottom: 0;
+          color: #ffffff;
+        }
+        .job {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+  .bxs-user{
+    position: absolute;
+    background-color: #eb9400;
+    color: #ffffff;
+    padding: 2px;
+    top: 76px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  .en-icon{
+    left: 24px;
+  }
+  .ar-icon{
+    left: 183px;
+  }
+}
+.secretory-container {
+  background-color: #f2f5ff;
+  padding: 15px 10px 15px 10px;
+  border-radius: 10px;
+  h4 {
+    color: #96a6bd;
+  }
+
+  ::ng-deep person-item {
+    .personItem {
+      > .avatar {
+        .letters,
+        img {
+          height: 3rem !important;
+          width: 3rem !important;
+        }
+
+        .letters {
+          font-size: 0.75rem;
+        }
+      }
+
+      > .info {
+        .name {
+          font-size: 0.875rem;
+          margin-bottom: 0;
+          // color: #ffffff;
+        }
+        .job {
+          color: #96a6bd;
+        }
+      }
+    }
+  }
+}
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-subtitle {
+    color: $info_color;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+}

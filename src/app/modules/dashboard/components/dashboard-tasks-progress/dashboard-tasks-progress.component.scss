@@ -1,0 +1,60 @@
+@import "src/assets/css/utils/variables.scss";
+
+.tasks-progress-container {
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    border: 1px solid #eef0f7;
+
+    .first-col {
+      display: flex;
+      align-items: center;
+
+      .title {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 24px;
+        color: $tertiary-color;
+        margin-inline-end: 20px;
+      }
+    }
+
+    .second-col {
+      display: flex;
+      align-items: center;
+
+      .key {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-inline-end: 9px;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          margin-inline-end: 12px;
+          background: #00db99;
+          display: block;
+        }
+
+        .label {
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 16px;
+          color: #8b8b8b;
+        }
+      }
+    }
+  }
+
+  .bar-chart {
+    padding: 32px 30px;
+  }
+}

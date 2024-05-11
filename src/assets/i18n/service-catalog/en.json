@@ -1,0 +1,19 @@
+{
+  "serviceCatalog": {
+    "startService": "Start Service",
+    "removeFavoriteConfirmationMsg": "Are you sure, you want to remove from favorite the",
+    "favoriteConfirmationMsg": "Are you sure, you want to favorite the",
+    "service": "service",
+    "serviceCatalog": "Service Catalog",
+    "requestTitle": "Request Title",
+    "enterRequestTitle": "Enter Request Title",
+    "requestAttachments": "Request Attachments",
+    "serviceSavedSuccessfully": "Service saved successfully",
+    "somethingWentWrong": "Something went wrong",
+    "favoriteServices": "Favorite Services",
+    "allServices": "All Services",
+    "noDataMsg": "Hmm.. looks like you don't have any Services",
+    "notEqualValue": "The first library should not match the second one.",
+    "noForm": "You need to select a form for this service in the administrator panel to start the service."
+  }
+}

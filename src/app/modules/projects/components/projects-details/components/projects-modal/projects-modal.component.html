@@ -1,0 +1,850 @@
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'project'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onPopupClose()"
+>
+  <div modal-header class="projects-model-header w-100">
+    <label class="modal-title">
+      <ng-container *ngIf="popupConfig?.title">
+        {{ popupConfig?.title[lang] }}
+      </ng-container>
+    </label>
+  </div>
+
+  <div modal-content class="projects-model-content border-top">
+    <div class="new-model-dialog-body">
+      <!-- Tasks Form -->
+      <form
+        class="pt-3 pb-2"
+        *ngIf="popupConfig?.mode === 'task'"
+        [formGroup]="taskForm"
+      >
+        <div class="row gx-4 mb-4">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="" class="form-label mb-0">
+                {{ "projects.taskName" | translate }}:
+              </label>
+              <input
+                type="text"
+                placeholder="{{ 'projects.writeTaskTitleHere' | translate }}"
+                formControlName="name"
+                class="border-bottom-input"
+              />
+              <small
+                class="form-error mb-2"
+                *ngIf="getTaskForm.name?.errors?.required && isFormSubmitted"
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group position-relative">
+              <label for="" class="form-label mb-0">
+                {{ "projects.taskAssignees" | translate }}
+              </label>
+              <input
+                type="text"
+                class="border-bottom-input"
+                (selectItem)="onSelectUser($event, input)"
+                #input
+                [ngbTypeahead]="searchUsers"
+                [resultFormatter]="formatter"
+                [inputFormatter]="formatter"
+                placeholder="{{ 'projects.searchUsers' | translate }}"
+              />
+
+              <ul
+                *ngIf="selectedUsers?.length !== 0"
+                class="selected-users-list mt-2"
+              >
+                <li *ngFor="let user of selectedUsers">
+                  <span class="project-card-status-badge primary">
+                    {{ user?.name ? user?.name[lang] : user?.fullName }}
+                    <i (click)="onUnselectUser(user.id)" class="bx bx-x"></i>
+                  </span>
+                </li>
+              </ul>
+
+              <small
+                class="form-error mb-2"
+                *ngIf="selectedUsers?.length === 0 && isFormSubmitted"
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row gx-4">
+          <div class="col-6">
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "projects.startDate" | translate }}:
+              </label>
+              <app-datepicker
+                [allowPastDate]="true"
+                formControlName="startDate"
+              ></app-datepicker>
+              <small
+                class="form-error mb-2"
+                *ngIf="getTaskForm.startDate?.errors?.required && isFormSubmitted"
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group mb-4">
+              <label for="" class="form-label">
+                {{ "projects.dueDate" | translate }}:
+              </label>
+              <app-datepicker
+                [allowPastDate]="true"
+                formControlName="dueDate"
+              ></app-datepicker>
+              <small
+                class="form-error mb-2"
+                *ngIf="getTaskForm.dueDate?.errors?.required && isFormSubmitted"
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.taskProgress" | translate }}:
+          </label>
+          <app-custom-range-control
+            [minRange]="0"
+            [maxRange]="100"
+            [step]="5"
+            [unit]="'%'"
+            formControlName="progress"
+          ></app-custom-range-control>
+          <small
+            class="form-error mb-2"
+            *ngIf="getTaskForm.progress?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.description" | translate }}:
+          </label>
+          <textarea
+            formControlName="description"
+            class="form-textarea"
+          ></textarea>
+          <small
+            class="form-error mb-2"
+            *ngIf="getTaskForm.description?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="" class="form-label">
+            {{ "projects.attachments" | translate }}:
+          </label>
+          <div class="file-input-container mb-2 w-100 mr-2">
+            <label for="task-file-input" class="file-input">
+              <i class="bx bx-upload"></i>
+              <span class="cta-text">
+                {{ "projects.clickToSelectFile" | translate }}
+              </span>
+              <!-- <span class="supported-files-text">{{'projects.supportedFormats' | translate}}</span> -->
+              <!-- accept="image/*" -->
+              <input
+                type="file"
+                #taskInput
+                (change)="onUploadFile($event, taskInput)"
+                id="task-file-input"
+              />
+            </label>
+            <div *ngIf="selectedFiles !== 0" class="selected-files">
+              <div
+                *ngFor="let file of selectedAttachments; let i = index"
+                class="file mb-1"
+              >
+                <i class="bx bx-paperclip"></i>
+                <span class="file-name">{{ file.title }}</span>
+                <button (click)="onFileDelete(i)">
+                  {{ "shared.delete" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Risks Form -->
+      <form
+        class="pt-3 pb-2"
+        *ngIf="popupConfig?.mode === 'risk'"
+        [formGroup]="riskForm"
+      >
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.riskTitle" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <input type="text" formControlName="title" class="form-control" />
+          <small
+            class="form-error mb-2"
+            *ngIf="getRiskForm?.title?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <app-select
+            formControlName="type"
+            [control]="riskForm | getControl: 'type'"
+            [title]="'projects.riskType' | translate"
+            [placeholder]="'projects.selectType' | translate"
+            [items]="risksTypes"
+            [bindVlaue]="'id'"
+            [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+          ></app-select>
+          <small
+            class="form-error mb-2"
+            *ngIf="getRiskForm?.type?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.describeMitigationMeasures" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <textarea
+            formControlName="riskControl"
+            class="form-textarea"
+          ></textarea>
+          <small
+            class="form-error mb-2"
+            *ngIf="getRiskForm?.riskControl?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="" class="form-label">
+                {{ "projects.mitigationDueDate" | translate }}
+                <span class="astrix-red">*</span>
+              </label>
+              <app-datepicker formControlName="mitigationDate"></app-datepicker>
+              <small
+                class="form-error mb-2"
+                *ngIf="
+                  getRiskForm?.mitigationDate?.errors?.required &&
+                  isFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group">
+              <label for="" class="form-label">
+                {{ "projects.riskOwner" | translate }}
+                <span class="astrix-red">*</span>
+              </label>
+              <div class="position-relative">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="typeahead-prevent-manual-entry"
+                  [editable]="false"
+                  formControlName="ownerId"
+                  #input
+                  [ngbTypeahead]="searchUsers"
+                  [resultFormatter]="formatter"
+                  [inputFormatter]="formatter"
+                  placeholder="{{ 'projects.searchUsers' | translate }}"
+                />
+              </div>
+              <small
+                class="form-error mb-2"
+                *ngIf="
+                  getRiskForm?.ownerId?.errors?.required && isFormSubmitted
+                "
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-6">
+            <div class="form-group">
+              <app-select
+                formControlName="likelihood"
+                [control]="riskForm | getControl: 'likelihood'"
+                [title]="'projects.likelihood' | translate"
+                [placeholder]="'projects.selectLikelihood' | translate"
+                [items]="likelihoods"
+                [bindVlaue]="'name'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                (change)="getRiskRate()"
+              ></app-select>
+              <small
+                class="form-error mb-2"
+                *ngIf="getRiskForm?.likelihood?.errors?.required && isFormSubmitted"
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group">
+              <app-select
+                formControlName="impact"
+                [control]="riskForm | getControl: 'impact'"
+                [title]="'projects.impact' | translate"
+                [placeholder]="'projects.selectImpact' | translate"
+                [items]="impacts"
+                [bindVlaue]="'name'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+                (change)="getRiskRate()"
+              ></app-select>
+              <small
+                class="form-error mb-2"
+                *ngIf="getRiskForm?.impact?.errors?.required && isFormSubmitted"
+              >
+                <i class="bx bx-error-circle mr-2"></i>
+                {{ "shared.thisFieldIsRequired" | translate }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-4" *ngIf="getRiskForm?.riskRate?.value">
+          <label for="" class="form-label">
+            {{ "projects.riskAssessment" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <div class="d-flex flex-column w-100 h-100">
+            <p class="mb-2">
+              {{ "projects." + getRiskForm?.riskRate?.value.toLowerCase() | translate }}
+            </p>
+            <div class="w-100">
+              <app-risk-rating
+                [formView]="true"
+                [rate]="getRiskForm?.riskRate?.value"
+              ></app-risk-rating>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.notes" | translate }}
+          </label>
+          <textarea formControlName="notes" class="form-textarea"></textarea>
+          <small
+            class="form-error mb-2"
+            *ngIf="getRiskForm?.Notes?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="" class="form-label">
+            {{ "projects.attachments" | translate }}
+          </label>
+          <div class="file-input-container mb-2 w-100 mr-2">
+            <label for="risk-file-input" class="file-input">
+              <i class="bx bx-upload"></i>
+              <span class="cta-text">
+                {{ "projects.clickToSelectFile" | translate }}
+              </span>
+              <!-- <span class="supported-files-text">{{'projects.supportedFormats' | translate}}</span> -->
+              <input
+                type="file"
+                #riskInput
+                (change)="onUploadFile($event, riskInput)"
+                id="risk-file-input"
+              />
+            </label>
+            <div *ngIf="selectedFiles !== 0" class="selected-files">
+              <div
+                *ngFor="let file of selectedAttachments; let i = index"
+                class="file mb-1"
+              >
+                <i class="bx bx-paperclip"></i>
+                <span class="file-name">{{ file.title }}</span>
+                <button (click)="onFileDelete(i)">
+                  {{ "shared.delete" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Invoices Form -->
+      <form
+        class="pt-3 pb-2"
+        *ngIf="popupConfig?.mode === 'invoice'"
+        [formGroup]="invoiceForm"
+      >
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.number" | translate }}:
+          </label>
+          <input formControlName="number" type="text" class="form-control" />
+          <small
+            class="form-error mb-2"
+            *ngIf="getInvoiceForm?.number?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.date" | translate }}:
+          </label>
+          <app-datepicker formControlName="date"></app-datepicker>
+          <small
+            class="form-error mb-2"
+            *ngIf="getInvoiceForm?.date?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.amount" | translate }}:
+          </label>
+          <div class="input-with-currency">
+            <input
+              type="text"
+              dir="ltr"
+              formControlName="amount"
+              class="form-control"
+              placeholder="00.0000"
+            />
+            <div class="currency-label">{{ "shared.AED" | translate }}</div>
+          </div>
+          <small
+            class="form-error mb-2"
+            *ngIf="getInvoiceForm?.amount?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+
+          <small
+          class="form-error mb-2"
+          *ngIf="getInvoiceForm?.amount?.errors?.pattern && isFormSubmitted"
+          >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.pattern" | translate }}
+          </small>
+
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "projects.deliverables" | translate }}:
+          </label>
+          <input
+            [resultFormatter]="deliverablesInputformatter"
+            id="typeahead-focus"
+            type="text"
+            class="form-control mb-2"
+            [ngbTypeahead]="searchDeliverables"
+            (selectItem)="onSelectDeliverable($event, instance)"
+            (focus)="focus$.next($any($event).target.value)"
+            (click)="click$.next($any($event).target.value)"
+            #instance="ngbTypeahead"
+          />
+          <ul
+            *ngIf="selectedDeliverables?.length !== 0"
+            class="selected-users-list"
+          >
+            <li *ngFor="let deliverable of filter(selectedDeliverables)">
+              <span class="project-card-status-badge primary">
+                {{ deliverable?.title[lang] }}
+                <i
+                  (click)="onUnselectDeliverable(deliverable.id)"
+                  class="bx bx-x"
+                ></i>
+              </span>
+            </li>
+          </ul>
+
+          <small
+            class="form-error mb-2"
+            *ngIf="selectedDeliverables?.length === 0 && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group mb-4">
+          <label for="" class="form-label">
+            {{ "shared.status" | translate }}:
+          </label>
+          <app-custom-radio-buttons-control
+            formControlName="isPaid"
+            [cardHeight]="50"
+            [items]="invoiceStatusList"
+          ></app-custom-radio-buttons-control>
+          <small
+            class="form-error mb-2"
+            *ngIf="getInvoiceForm?.isPaid?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.thisFieldIsRequired" | translate }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="" class="form-label">
+            {{ "projects.attachments" | translate }}:
+          </label>
+          <div class="file-input-container mb-2 w-100 mr-2">
+            <label for="invoice-file-input" class="file-input">
+              <i class="bx bx-upload"></i>
+              <span class="cta-text">
+                {{ "projects.clickToSelectFile" | translate }}
+              </span>
+              <!-- <span class="supported-files-text">{{'projects.supportedFormats' | translate}}</span> -->
+              <input
+                type="file"
+                #invoiceInput
+                (change)="onUploadFile($event, invoiceInput)"
+                id="invoice-file-input"
+              />
+            </label>
+            <div *ngIf="selectedFiles !== 0" class="selected-files">
+              <div
+                *ngFor="let file of selectedAttachments; let i = index"
+                class="file mb-1"
+              >
+                <i class="bx bx-paperclip"></i>
+                <span class="file-name">{{ file.title }}</span>
+                <button (click)="onFileDelete(i)">
+                  {{ "shared.delete" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Settings Form -->
+      <form
+        class="pt-3 pb-2"
+        *ngIf="popupConfig?.mode === 'setting'"
+        [formGroup]="settingsForm"
+      >
+        <div class="form-group">
+          <label for="" class="form-label">
+            {{ "projects.projectManagerDelegate" | translate }}:
+          </label>
+          <div class="position-relative">
+            <input
+              id="typeahead-focus"
+              type="text"
+              class="form-control"
+              formControlName="delegatedManagerId"
+              [ngbTypeahead]="searchProjectTeamMembers"
+              [resultFormatter]="formatter"
+              [inputFormatter]="formatter"
+              (focus)="focus$.next($any($event).target.value)"
+              (click)="click$.next($any($event).target.value)"
+              #instance="ngbTypeahead"
+            />
+          </div>
+        </div>
+      </form>
+
+      <!-- Milestone Form -->
+      <form
+        class="pt-3 pb-2"
+        *ngIf="popupConfig?.mode === 'milestone'"
+        [formGroup]="milestoneForm"
+      >
+        <div
+          class="form-group mb-4"
+          *ngIf="popupConfig?.crConfig?.requestType?.includes('Schedule')"
+        >
+          <label for="" class="form-label">
+            {{ "shared.name" | translate }}:
+          </label>
+          <input formControlName="name" type="text" class="form-control" />
+          <small
+            class="form-error"
+            *ngIf="getMilestoneForm?.name?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+
+        <div
+          class="form-group mb-4"
+          *ngIf="popupConfig?.crConfig?.requestType?.includes('Schedule')"
+        >
+          <label for="" class="form-label">
+            {{ "shared.description" | translate }}:
+          </label>
+          <textarea
+            class="form-textarea"
+            formControlName="description"
+          ></textarea>
+          <small
+            class="form-error"
+            *ngIf="
+              getMilestoneForm?.description?.errors?.required && isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+
+        <div
+          class="form-group mb-4"
+          *ngIf="popupConfig?.crConfig?.requestType?.includes('Schedule')"
+        >
+          <label for="" class="form-label">
+            {{ "projects.weight" | translate }}:
+          </label>
+          <app-custom-range-control
+            [maxRange]="100"
+            [minRange]="0"
+            [step]="5"
+            [unit]="'%'"
+            formControlName="weight"
+          ></app-custom-range-control>
+
+          <small class="form-hint">
+            {{ "projects.projectRemainingWeight" | translate }}:
+            {{ milestonesRemainingWeight }}%
+          </small>
+          <small
+            class="form-error"
+            *ngIf="
+              getMilestoneForm?.weight?.errors?.required && isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+
+        <div
+          class="form-group mb-4"
+          *ngIf="
+            popupConfig?.crConfig?.requestType?.includes('Cost') ||
+            (popupConfig?.crConfig?.requestType?.includes('Schedule') &&
+              !getMilestoneForm?.id.value)
+          "
+        >
+          <label for="" class="form-label">
+            {{ "projects.cost" | translate }}:
+          </label>
+          <div class="input-with-currency">
+            <input
+              type="number"
+              dir="ltr"
+              formControlName="cost"
+              (keyup)="
+                onCostChange(
+                  getMilestoneForm?.id.value ||
+                    getMilestoneForm?.generatedId.value
+                )
+              "
+              class="form-control"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              placeholder="00.0000"
+            />
+            <div class="currency-label">{{ "shared.AED" | translate }}</div>
+          </div>
+
+          <small class="form-hint">
+            {{ "projects.projectRemainingBudget" | translate }}:
+            {{ milestonesRemainingBudget | number}} {{ "shared.AED" | translate }}
+          </small>
+          <small
+            class="form-error"
+            *ngIf="getMilestoneForm?.cost?.errors?.required && isFormSubmitted"
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+
+        <div
+          class="form-group mb-4"
+          *ngIf="popupConfig?.crConfig?.requestType?.includes('Schedule')"
+        >
+          <label for="" class="form-label">
+            {{ "projects.dueDate" | translate }}:
+          </label>
+          <app-datepicker
+            [allowPastDate]="true"
+            formControlName="dueDate"
+          ></app-datepicker>
+          <small class="form-hint">
+            {{
+              ("projects.endDate" | translate) != "projects.endDate"
+                ? ("projects.endDate" | translate)
+                : ("changeRequests.endDate" | translate)
+            }}
+            : {{ projectEndDate | date : "dd/MM/yyyy" }} -
+            {{
+              ("projects.projectRemainingDays" | translate) !=
+              "projects.projectRemainingDays"
+                ? ("projects.projectRemainingDays" | translate)
+                : ("changeRequests.projectRemainingDays" | translate)
+            }}
+            : {{ projectLeftDuration }}
+          </small>
+          <small
+            class="form-error"
+            *ngIf="
+              getMilestoneForm?.dueDate?.errors?.required && isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+
+        <div
+          class="form-group mb-4"
+          *ngIf="
+            (popupConfig?.crConfig?.requestType?.includes('Schedule') &&
+              !getMilestoneForm?.id.value) ||
+            popupConfig?.crConfig?.requestType?.includes('Scope')
+          "
+        >
+          <label for="" class="form-label">
+            {{ "projects.deliverables" | translate }}:
+          </label>
+          <div class="deliverable-input-container">
+            <input
+              type="text"
+              #milestoneDeliverablesInput
+              (keyup.enter)="
+                onAddDeliverable(
+                  $event?.target?.value,
+                  milestoneDeliverablesInput
+                )
+              "
+              formArrayName="deliverables"
+              placeholder="{{ 'projects.typeDeliverableName' | translate }}"
+              class="deliverable-input"
+            />
+            <button
+              class="btn btn-link deliverable-btn"
+              (click)="
+                onAddDeliverable(
+                  milestoneDeliverablesInput?.value,
+                  milestoneDeliverablesInput
+                )
+              "
+            >
+              {{ "projects.addDeliverable" | translate }}
+            </button>
+          </div>
+          <small
+            class="form-error"
+            *ngIf="
+              getMilestoneForm?.deliverables?.errors?.required &&
+              isFormSubmitted
+            "
+          >
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "projects.deliverableValidation" | translate }}
+          </small>
+          <ul
+            class="deliverables-list"
+            *ngIf="getMilestoneDeliverable?.controls?.length !== 0"
+          >
+            <li
+              *ngFor="
+                let deliverable of filter(getMilestoneDeliverable.controls);
+                let i = index
+              "
+            >
+              <span>{{ deliverable?.value?.title }}</span>
+              <i
+                *ngIf="!deliverable?.value?.isAccepted"
+                (click)="onDeleteDeliverable(i)"
+                class="bx bx-x"
+              ></i>
+            </li>
+          </ul>
+        </div>
+      </form>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+      <!-- back button -->
+      <button
+        class="btn btn-dark flex-grow-1"
+        (click)="onPopupClose()"
+      >
+        {{ "shared.back" | translate }}
+      </button>
+
+      <!-- save button -->
+      <button
+        class="btn btn-main flex-grow-1"
+        [disabled]="isFileUploading"
+        (click)="onPopupSave()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isFileUploading"></i>
+        {{ "shared.save" | translate }}
+      </button>
+    </div>
+  </div>
+</app-model>

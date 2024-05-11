@@ -1,0 +1,58 @@
+.table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    --index-width: 50px;
+    --actions-width: 70px;
+    width: 100%;
+
+    .user-index {
+      width: var(--index-width);
+    }
+
+    .user-mobile {
+      white-space: nowrap;
+    }
+
+    .user-actions {
+      width: var(--actions-width);
+    }
+
+    ::ng-deep {
+      person-item {
+        .personItem {
+          &.header-person {
+            width: fit-content;
+          }
+        }
+      }
+    }
+  }
+}
+
+.list-button {
+  font-size: 18px;
+  background: transparent;
+  border: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 22px;
+  background-color: #00db99;
+  color: #fff;
+}
+
+::ng-deep {
+  .ag-cell {
+    display: flex;
+    align-items: center;
+  }
+
+  .ag-header-icon, .ag-floating-filter-button {
+    display: none;
+  }
+}

@@ -1,0 +1,25 @@
+<div #dropdownOptionsBtn class="dropdown-container" (click)="handleDropdown()">
+  <i *ngIf="!icon" class="bx bx-dots-vertical-rounded"></i>
+  <i *ngIf="icon" class="bx bx-filter-alt"></i> 
+  <p *ngIf="icon && filled" class="applied-filters-count filter-on">1</p>
+
+  <angular-popper
+    [show]="showDropDown"
+    [target]="dropdownOptionsBtn"
+    [positionFixed]="true"
+  >
+    <div class="options-list" content>
+      <div class="options-list-item" *ngFor="let item of items">
+        <button
+        [ngClass]="{'selected-background': selectedOption === item.item && icon}"
+          [class]="item?.textColor"
+          [disabled]="item?.disabled"
+          (click)="selectedItem(item?.item)"
+        >
+          {{ item?.item | translate }}
+          <i [class]="item?.icon"></i>
+        </button>
+      </div>
+    </div>
+  </angular-popper>
+</div>

@@ -1,0 +1,340 @@
+<!-- Goal Items -->
+<ng-container [ngSwitch]="model.viewMode">
+
+  <!-- Tree View -->
+  <ng-template [ngSwitchCase]="1">
+    <div class="wrapper">
+      <ul>
+        <ng-container
+          *ngTemplateOutlet="
+            recursiveListTmpl;
+            context: { list: model.goalItems, parent: null }
+          "
+        ></ng-container>
+      </ul>
+    </div>
+
+    <ng-template #recursiveListTmpl let-list="list" let-parent="parent">
+      <li *ngFor="let item of list">
+        <goal-item
+          [Item]="item"
+          [parentItem]="parent"
+          [expandedArr]="expandedChildren"
+          (onAddChild)="addChildEvent.emit()"
+          (onEditChild)="editChildEvent.emit()"
+          (onDeleteChild)="model.deleteGoal($event)"
+          (onChnageCollapse)="updateExpanedArray($event, item.id)"
+        ></goal-item>
+
+        <ul
+          *ngIf="item.children.length > 0"
+          [ngStyle]="{ display: getIsExpanded(item.id) ? 'flex' : 'none' }"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              recursiveListTmpl;
+              context: { list: item.children, parent: item }
+            "
+          ></ng-container>
+        </ul>
+      </li>
+    </ng-template>
+  </ng-template>
+
+  <!-- List view -->
+  <ng-template [ngSwitchCase]="2">
+    <div *ngIf="model.goalListItems && model.goalListItems.length > 0">
+      <div class="goals-table">
+        <div class="goals-table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" class="goal-index">#</th>
+                <th scope="col">{{ "shared.level" | translate }}</th>
+                <th scope="col" class="goal-title">{{ "shared.title" | translate }}</th>
+                <th scope="col">{{ "Planning.weight" | translate }}</th>
+                <th scope="col">{{ "Planning.frequency" | translate }}</th>
+                <th scope="col">{{ "Planning.type" | translate }}</th>
+                <th scope="col">{{ "Planning.yearlyTarget" | translate }}</th>
+                <th scope="col">{{ "Planning.by" | translate }}</th>
+                <th scope="col" *ngIf="ShowAction">
+                  {{ "Planning.action" | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="details">
+              <tr
+                style="position: relative"
+                *ngFor="
+                  let goal of model.goalListItems
+                    | paginate
+                      : {
+                          itemsPerPage: model.paginationModle?.pageSize,
+                          currentPage: model.paginationModle?.pageIndex,
+                          totalItems: model.goalListItems.length
+                        };
+                  let i = index
+                "
+              >
+                <!-- Index -->
+                <td class="goal-index">
+                  {{ i | tableItemIndex : model.paginationModle?.pageSize : model.paginationModle?.pageIndex }}
+                </td>
+
+                <!-- Level -->
+                <td class="level-col">
+                  <div class="info" *ngIf="!goal.isSubmitted">
+                    <i class="bx bx-info-circle"></i>
+                    <div class="toolTip">
+                      <span>{{ "Planning.notSubmitted" | translate }}</span>
+                    </div>
+                  </div>
+                  <div class="level">
+                    <span class="current">
+                      {{ model.GoalLevelText(goal.level) }}
+                    </span>
+                    <span *ngIf="goal.group">
+                      <span *ngIf="goal.group.code" class="meta-level">
+                        {{ goal.group.code }}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="type id-type">
+                    <span class="type id">{{ goal.id }}</span>
+                  </div>
+                  <div class="type" [style.background]="goal.goalType.color">
+                    <span>
+                      {{ model.lang == "en" ? goal.goalType.name : goal.goalType.arabicName }}
+                    </span>
+                  </div>
+                </td>
+                <!-- Title -->
+                <td class="goal-title">{{ model.lang == "en" ? goal.title : goal.titleAr }}</td>
+                <!-- Weight -->
+                <td>{{ goal.internalWeight + "%" ?? "-" }}</td>
+                <!-- Frequency -->
+                <td>{{ model.GoalfrequencyText(goal.frequency) }}</td>
+                <!-- Type -->
+                <td>
+                  {{ model.getMeasurmentMethodText(goal.measurementMethod) }}
+                </td>
+                <!-- Yearly Target -->
+                <td>
+                  <span *ngIf="goal.measurementMethod == 5">
+                    {{
+                      model.lang === "en"
+                        ? (model.convertUTCDateToLocalDate(
+                            goal?.dateGoalTarget?.kpiDate2
+                          ) | date : "dd/MM/yyyy hh:mm a")
+                        : (model.convertUTCDateToLocalDate(
+                            goal?.dateGoalTarget?.kpiDate2
+                          ) | localizeDate : "dd/MM/yyyy hh:mm a")
+                    }}
+                  </span>
+                  <span *ngIf="goal.measurementMethod != 5">
+                    <span *ngIf="!goal.isBaseline">
+                      {{ goal.totalTarget }}
+                      {{ model.addittion(goal.measurementMethod) }}
+                    </span>
+                    <span *ngIf="goal.isBaseline">
+                      {{ "Planning.baselineKBI" | translate }}
+                    </span>
+                  </span>
+                </td>
+                <!-- By -->
+                <td>
+                  <person-item [creatorData]="goal.owner"></person-item>
+                </td>
+                <td *ngIf="ShowAction">
+                  <app-dropdown
+                    [items]="GoalActions"
+                    (select)="onActionDropDownSelect($event, goal)"
+                  ></app-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <pagination-controls
+        *ngIf="model.goalListItems.length > model.paginationModle?.pageSize"
+        (pageChange)="model.onPaginate($event)"
+        class="my-pagination"
+        maxSize="5"
+        responsive="true"
+        [previousLabel]="'shared.prev' | translate"
+        [nextLabel]="'shared.next' | translate"
+      ></pagination-controls>
+    </div>
+
+    <div
+      *ngIf="model.goalListItems && model.goalListItems.length == 0"
+      class="empty-table"
+    >
+      <app-no-data [msg]="'Planning.noDataText' | translate"></app-no-data>
+    </div>
+  </ng-template>
+
+  <!-- List View For change requests -->
+  <ng-template [ngSwitchCase]="3">
+    <div *ngIf="model.flatenedGoalItems && model.flatenedGoalItems.length > 0">
+      <div class="goals-table">
+        <div class="goals-table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" class="goal-index">#</th>
+                <th scope="col">{{ "Planning.level" | translate }}</th>
+                <th scope="col" class="goal-title">{{ "Planning.title" | translate }}</th>
+                <th scope="col">{{ "Planning.weight" | translate }}</th>
+                <th scope="col">{{ "Planning.frequency" | translate }}</th>
+                <th scope="col">{{ "Planning.type" | translate }}</th>
+                <th scope="col">{{ "Planning.yearlyTarget" | translate }}</th>
+                <th scope="col">{{ "Planning.by" | translate }}</th>
+                <th scope="col" *ngIf="ShowAction">
+                  {{ "Planning.action" | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="details">
+              <tr
+                style="position: relative"
+                *ngFor="
+                  let goal of model.flatenedGoalItems
+                    | paginate
+                      : {
+                          itemsPerPage: model.paginationModle?.pageSize,
+                          currentPage: model.paginationModle?.pageIndex,
+                          totalItems: model.flatenedGoalItems.length
+                        };
+                  let i = index
+                "
+              >
+                <!-- Index -->
+                <td class="goal-index">
+                  {{ i | tableItemIndex : model.paginationModle?.pageSize : model.paginationModle?.pageIndex }}
+                </td>
+
+                <!-- Level -->
+                <td class="level-col">
+                  <div
+                    class="info"
+                    *ngIf="goal.goalStatus && goal.goalStatus !== 4"
+                  >
+                    <div class="custom-toolTip">
+                      <i
+                        [class]="'bx ' + getChangeStatus(goal.goalStatus).icon"
+                      ></i>
+                      <span class="tooltiptext tooltip-bottom">
+                        {{ getChangeStatus(goal.goalStatus).label }}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="isRemovedGoal(goal.goalStatus)"
+                    class="info"
+                    (click)="UndoActionHandler(goal)"
+                    style="cursor: pointer"
+                  >
+                    <div class="custom-toolTip">
+                      <i class="bx bx-undo"></i>
+                      <div class="tooltiptext tooltip-bottom">
+                        <span>{{ "shared.undo" | translate }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="level">
+                    <span class="current">
+                      {{ model.GoalLevelText(goal.level) }}
+                    </span>
+                    <span *ngIf="goal.group">
+                      <span *ngIf="goal.group.code" class="meta-level">
+                        {{ goal.group.code }}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="type id-type">
+                    <span class="type id">{{ goal.id }}</span>
+                  </div>
+                  <div class="type" [style.background]="goal.goalType.color">
+                    <span>
+                      {{ model.lang == "en" ? goal.goalType.name : goal.goalType.arabicName }}
+                    </span>
+                  </div>
+                </td>
+                <!-- Title -->
+                <td class="goal-title">{{ model.lang == "en" ? goal.title : goal.titleAr }}</td>
+                <!-- Weight -->
+                <td>{{ goal.internalWeight ?? "-" }}</td>
+                <!-- Frequency -->
+                <td>{{ model.GoalfrequencyText(goal.frequency) }}</td>
+                <!-- Type -->
+                <td>
+                  {{ model.getMeasurmentMethodText(goal.measurementMethod) }}
+                </td>
+                <!-- Yearly Target -->
+                <td>
+                  <span *ngIf="goal.measurementMethod != 5">
+                    <span *ngIf="!goal.isBaseline">
+                      {{ goal.totalTarget }}
+                      {{ model.addittion(goal.measurementMethod) }}
+                    </span>
+                    <span *ngIf="goal.isBaseline">
+                      {{ "Planning.baselineKBI" | translate }}
+                    </span>
+                  </span>
+                  <span *ngIf="goal.measurementMethod == 5">
+                    {{
+                      model.lang === "en"
+                        ? (model.convertUTCDateToLocalDate(
+                            goal?.dateGoalTarget?.kpiDate2
+                          ) | date : "dd/MM/yyyy hh:mm a")
+                        : (model.convertUTCDateToLocalDate(
+                            goal?.dateGoalTarget?.kpiDate2
+                          ) | localizeDate : "dd/MM/yyyy hh:mm a")
+                    }}
+                  </span>
+                </td>
+                <!-- By -->
+                <td>
+                  <person-item [creatorData]="goal.owner"></person-item>
+                </td>
+                <td *ngIf="ShowAction && goal.goalStatus && goal.goalStatus">
+                  <app-dropdown
+                    [items]="GoalActions"
+                    (select)="onActionDropDownSelect($event, goal)"
+                  ></app-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <pagination-controls
+        *ngIf="model.flatenedGoalItems.length > model.paginationModle?.pageSize"
+        (pageChange)="model.onPaginate($event)"
+        class="my-pagination"
+        maxSize="5"
+        responsive="true"
+        [previousLabel]="'shared.prev' | translate"
+        [nextLabel]="'shared.next' | translate"
+      ></pagination-controls>
+    </div>
+
+    <div
+      *ngIf="model.flatenedGoalItems && model.flatenedGoalItems.length == 0"
+      class="empty-table"
+    >
+      <app-no-data [msg]="'Planning.noDataText' | translate"></app-no-data>
+    </div>
+  </ng-template>
+</ng-container>
+
+<app-confirm-modal
+  [content]="model.confirmMsg ?? model.confirmModalText"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="model.onDeleteGoalConfirmed()"
+></app-confirm-modal>

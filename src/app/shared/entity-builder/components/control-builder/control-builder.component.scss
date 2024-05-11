@@ -1,0 +1,164 @@
+@import "/src/assets/css/utils/mixins.scss";
+
+.control {
+  background: #ffffff;
+  // border: 1px solid #ABABAB;
+  // border-radius: 18px;
+  // margin: 20px 0;
+  // padding: 20px;
+  padding: 8px 0;
+  position: relative;
+}
+
+.msg {
+  color: red;
+  span {
+    display: block;
+  }
+}
+
+.buttons-step {
+  position: relative;
+  // transform: translateY(-13%);
+  // bottom: 3.5em;
+  z-index: 80;
+
+  @include rtl_value(left, auto, 35px);
+  @include rtl_value(right, 35px, auto);
+  
+
+  button {
+    background: none;
+    border: 0;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    margin-inline-start: 5px;
+    color: #717986;
+  }
+}
+
+.hint {
+  position: inherit;
+  // transform: translateY(-13%);
+  // bottom: -32px;
+  // z-index: 99;
+  margin-bottom: 0;
+  // @include rtl_value(left, 4px, auto);
+  @include rtl_value(right, auto, 4px);
+  color: #717986;
+  text-transform: capitalize;
+}
+
+:host {
+  ::ng-deep {
+    .modal-content {
+      overflow: auto;
+    }
+
+    app-entity-modal {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+      .popup-body {
+        overflow: auto;
+      }
+    }
+  }
+}
+
+.absolute{
+  position: absolute !important;
+}
+
+.width-100{
+  width: 100% !important;
+}
+
+.top-1{
+  top: 1em !important;
+}
+
+.top-2{
+  top: 2em !important;
+}
+
+.top-3{
+  &.en{
+    top: 3em !important;
+  }
+  &.ar{
+    top: 3.5em !important;
+    &.number , &.short-text{
+      top: 3em !important;
+    }
+  }
+  
+}
+
+.top-4{
+  top: 4em !important;
+}
+
+.top-5{
+  top: 5em !important;
+}
+
+.top-8{
+  top: 8em !important;
+}
+
+.top-9{
+  top: 9em !important;
+}
+
+.float-right{
+  float: right;
+}
+
+.float-left{
+  float: left;
+}
+
+::ng-deep {
+  .hint {
+    ol,
+    ul {
+      list-style: revert !important;
+      padding: revert;
+      margin: revert;
+      padding: 5px 18px;
+    }
+  }
+}
+.repeater-label {
+  color: #717986;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+.repeater {
+  min-width: 100%;
+  min-height: 200px;
+  margin-bottom: 15px;
+  padding: 10px;
+ // background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  .placholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .add {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+.astrix-red {
+  color: red;
+}

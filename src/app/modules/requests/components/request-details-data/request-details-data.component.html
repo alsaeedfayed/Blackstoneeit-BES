@@ -1,0 +1,417 @@
+<div class="req-date">
+  <div class="basic-info">
+    <!-- <p class="address">{{ "requests.basicInformation" | translate }}</p> -->
+    <div class="data-info">
+      <!-- <div class="info">
+        <div class="item-info">{{ 'requests.requestTitle' | translate }}</div>
+        <div class="item-info">
+          {{ data?.requestInformation?.requestTitle }}
+        </div>
+      </div> -->
+      <div class="first-row">
+        <div class="title">
+          {{
+            lang === "en" ?
+            data?.requestInformation?.serviceName :
+            data?.requestInformation?.serviceNameAr
+          }}
+        </div>
+        <div class="status">
+          <app-badge
+            *ngIf="data?.requestInformation?.status == requestStatusEnum.Started"
+            [className]="'started'"
+            [label]="'requests.active' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="data?.requestInformation?.status == requestStatusEnum.Canceled"
+            [className]="'canceled'"
+            [label]="'requests.cancelled' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="data?.requestInformation?.status == requestStatusEnum.Rejected"
+            [className]="'rejected'"
+            [label]="'requests.rejected' |translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="data?.requestInformation?.status == requestStatusEnum.Closed"
+            [className]="'closed'"
+            [label]="'requests.closed' | translate"
+          ></app-badge>
+        </div>
+      </div>
+      <div class="moreInfo">
+        <div class="info">
+          <div class="item-info">{{ "requests.requestNumber" | translate }}</div>
+          <div class="item-info">
+            {{ data?.requestInformation.requestNumber }}
+          </div>
+        </div>
+        <div class="info">
+          <div class="item-info">{{ "requests.requestedOn" | translate }}</div>
+          <div class="item-info">
+            {{ lang === "en" ? (convertUTCDateToLocalDate(data?.requestInformation?.creationDate) | date : "dd/MM/yyyy hh:mm a") : (convertUTCDateToLocalDate(data?.requestInformation?.creationDate) | localizeDate : "dd/MM/yyyy hh:mm a") }}
+          </div>
+        </div>
+        <div class="info">
+          <div class="item-info">{{ "requests.requestedBy" | translate }}</div>
+          <div class="item-info">
+            <person-item
+              *ngIf="personInfo && !_isCapturing"
+              [requesterItem]="personInfo"
+              [noCursor]="true"
+            ></person-item>
+            <person-item
+              *ngIf="tempPersonInfo && _isCapturing"
+              [requesterItem]="tempPersonInfo"
+              [noCursor]="true"
+            ></person-item>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="info" *ngIf="data?.requestInformation?.attachments?.length > 0">
+        <div class="item-info">{{ 'requests.attachments' | translate }}</div>
+        <div class="item-info">
+          <ul>
+            <li *ngFor="let attachment of data?.requestInformation?.attachments">
+              <a [title]="attachment.fileName" (click)="getFileURL(attachment.fileName)">{{ attachment.fileName?.length
+                > 15 ? attachment.fileName.slice(0,15).concat("...") : attachment.fileName }}</a>
+            </li>
+          </ul>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="request-details">
+    <p class="address">{{ "requests.requestDetails" | translate }}</p>
+    <div class="all">
+      <div class="data-details">
+        <div class="form-value">
+          <div class="item">{{ "requests.requestTitle" | translate }}</div>
+          <div class="item item-value width-100">
+            {{ data?.requestInformation?.requestTitle }}
+          </div>
+        </div>
+        <ng-container *ngFor="let value of data?.formDataDetails">
+          <!-- [style.cursor]="value?.allowComment ? 'pointer' : 'default'" [class.selected]="value.selected" (click)="clickFormDataDetailsItem(value)" -->
+          <div class="form-value" *ngIf="value?.type && !value.hidden" >
+
+            <div class="item item-value" *ngIf="lang != 'ar' && value?.type != controlTypeMode.File && value.type != controlTypeMode.repeater && value.type != controlTypeMode.DownloadTemplate ">
+              <span> {{ value.name }}</span>
+              <!-- <div class="actions_comments">
+                <div class="actions" *ngIf="value?.allowComment && !value?.status">
+                  <span (click)="approveComment()"><i class='bx bx-check-circle green'></i></span>
+                  <span (click)="rejectComment()"><i class='bx bx-x-circle red'></i></span>
+                </div>
+                <div class="comments-badge-status">
+                  <div class="statuses">
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Approved"
+                      [className]="'opened'"
+                      [label]="'shared.Approved' | translate"
+                    ></app-badge>
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Rejected"
+                      [className]="'rejected'"
+                      [label]="'shared.rejected' |translate"
+                    ></app-badge>
+                  </div>
+                  <div class="comment-badge">
+                    <span class="comments-number" *ngIf="value?.allowComment">
+                      <img src="assets/icons/comment.svg" *ngIf="!value.selected"/>
+                      <img src="assets/icons/comment-selected.svg" *ngIf="value.selected"/>
+                      <span class="number">{{ value?.comments?.length ? value?.comments?.length : 0 }} </span>
+                    </span>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+            <div class="item" *ngIf="lang == 'ar' && value?.type != controlTypeMode.File && value.type != controlTypeMode.repeater && value.type != controlTypeMode.DownloadTemplate">
+              <span>{{ value.arName }}</span>
+              <!-- <div class="actions_comments">
+                <div class="actions" *ngIf="value?.allowComment && !value?.status">
+                  <span (click)="approveComment()"><i class='bx bx-check-circle green'></i></span>
+                  <span (click)="rejectComment()"><i class='bx bx-x-circle red'></i></span>
+                </div>
+                <div class="comments-badge-status">
+                  <div class="statuses">
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Approved"
+                      [className]="'opened'"
+                      [label]="'shared.Approved' | translate"
+                    ></app-badge>
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Rejected"
+                      [className]="'rejected'"
+                      [label]="'shared.rejected' |translate"
+                    ></app-badge>
+                  </div>
+                  <div class="comment-badge">
+                    <span class="comments-number" *ngIf="value?.allowComment">
+                      <img src="assets/icons/comment.svg" *ngIf="!value.selected"/>
+                      <img src="assets/icons/comment-selected.svg" *ngIf="value.selected"/>
+                      <span class="number">{{ value?.comments?.length ? value?.comments?.length : 0 }} </span>
+                    </span>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+            <div class="item item-value" *ngIf="lang != 'ar' && value?.type == controlTypeMode.File && value.valueText != '[]' && value?.valueText != '&quot;&quot;'">
+              <span>{{ value.name }}</span>
+              <!-- <div class="actions_comments">
+                <div class="actions" *ngIf="value?.allowComment && !value?.status">
+                  <span (click)="approveComment()"><i class='bx bx-check-circle green'></i></span>
+                  <span (click)="rejectComment()"><i class='bx bx-x-circle red'></i></span>
+                </div>
+                <div class="comments-badge-status">
+                  <div class="statuses">
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Approved"
+                      [className]="'opened'"
+                      [label]="'shared.Approved' | translate"
+                    ></app-badge>
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Rejected"
+                      [className]="'rejected'"
+                      [label]="'shared.rejected' |translate"
+                    ></app-badge>
+                  </div>
+                  <div class="comment-badge">
+                    <span class="comments-number" *ngIf="value?.allowComment">
+                      <img src="assets/icons/comment.svg" *ngIf="!value.selected"/>
+                      <img src="assets/icons/comment-selected.svg" *ngIf="value.selected"/>
+                      <span class="number">{{ value?.comments?.length ? value?.comments?.length : 0 }} </span>
+                    </span>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+            <div class="item" *ngIf="lang == 'ar' && value?.type == controlTypeMode.File && value.valueText != '[]' && value?.valueText != '&quot;&quot;'">
+              <span>{{ value.arName }}</span>
+              <!-- <div class="actions_comments">
+                <div class="actions" *ngIf="value?.allowComment && !value?.status">
+                  <span (click)="approveComment()"><i class='bx bx-check-circle green'></i></span>
+                  <span (click)="rejectComment()"><i class='bx bx-x-circle red'></i></span>
+                </div>
+                <div class="comments-badge-status">
+                  <div class="statuses">
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Approved"
+                      [className]="'opened'"
+                      [label]="'shared.Approved' | translate"
+                    ></app-badge>
+                    <app-badge
+                      *ngIf="value?.status == commentStatus.Rejected"
+                      [className]="'rejected'"
+                      [label]="'shared.rejected' |translate"
+                    ></app-badge>
+                  </div>
+                  <div class="comment-badge">
+                    <span class="comments-number" *ngIf="value?.allowComment">
+                      <img src="assets/icons/comment.svg" *ngIf="!value.selected"/>
+                      <img src="assets/icons/comment-selected.svg" *ngIf="value.selected"/>
+                      <span class="number">{{ value?.comments?.length ? value?.comments?.length : 0 }} </span>
+                    </span>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+            <div class="item item-value width-100"
+              *ngIf="
+                value.type != controlTypeMode.Date &&
+                value.type != controlTypeMode.File &&
+                value.type != controlTypeMode.repeater &&
+                value.type != controlTypeMode.DownloadTemplate &&
+                value.type != controlTypeMode.Checkbox &&
+                ((value.type != controlTypeMode.MultipleSelect) || (value?.type == controlTypeMode.MultipleSelect && !value?.other)) && value.type != controlTypeMode.RichText
+                && value.type != controlTypeMode.RadioButton
+              "
+            >
+              {{ value.valueText && lang == "en" ? value.valueText :
+                 value.valueTextAr && lang == "ar" ? value.valueTextAr
+                : "-" }}
+              <div *ngIf="checkOther(value?.other)">
+                <div class="item item-value">{{'( ' + ('shared.other' | translate) + ' )'}}</div>
+                <div class="item item-value">
+                  <p *ngFor="let item of value?.other?.split('%sperator%'); let i = index">
+                    {{
+                      checkDate(formatDate(item)) ?
+                      (convertUTCDateToLocalDate(formatDate(item)) | date : "dd/MM/yyyy") :
+                      checkDateRange(formatDate(item)) ?
+                      ((convertUTCDateToLocalDate(formatDate(item).split(",")[0]) | date : "dd/MM/yyyy")+" , "+(convertUTCDateToLocalDate(formatDate(item).split(",")[1]) | date : "dd/MM/yyyy")) :
+                      checkObject(item) ? checkObject(item) :  item
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="item item-value text-editor" *ngIf="value.type == controlTypeMode.RichText && !value.hidden" >
+              <div [innerHTML]="value.valueText"></div>
+            </div>
+
+            <div class="item item-value" *ngIf="this.lang != 'ar' && value.type == controlTypeMode.RadioButton && !value.hidden" >
+              {{value.valueText ? value.valueText : '-'}}
+            </div>
+
+            <div class="item item-value" *ngIf="this.lang == 'ar' && value.type == controlTypeMode.RadioButton && !value.hidden" >
+              {{value.valueTextAr ? value.valueTextAr : '-'}}
+            </div>
+
+            <div class="item item-value" *ngIf="value.type == controlTypeMode.RadioButton && !value.hidden && value.other">{{'( ' + ('shared.other' | translate) + ' )'}}</div>
+            <div class="item item-value" *ngIf="value.type == controlTypeMode.RadioButton && !value.hidden && value.other">
+              <p>{{value?.other}}</p>
+            </div>
+
+            <div class="item" *ngIf="value.type == controlTypeMode.Checkbox || (value.type == controlTypeMode.MultipleSelect && value?.other)">
+              <ul *ngIf="lang == 'en'">
+                <ng-container *ngFor="let listItem of convetToArray(value.valueText); let i = index">
+                  <li class="checkItem" *ngIf="value.valueText">
+                  <span>{{ listItem }}</span>
+                  <div *ngIf="checkOther(value?.other)">
+                    <div class="item item-value" *ngIf="value?.other?.split('%sperator%')[i]">{{'( ' + ('shared.other' | translate) + ' )'}}</div>
+                    <div class="item item-value">
+                      <p>{{checkDate(formatDate(value?.other?.split('%sperator%')[i])) ? (convertUTCDateToLocalDate(formatDate(value?.other?.split('%sperator%')[i])) | date : "dd/MM/yyyy") :
+                        checkDateRange(formatDate(value?.other?.split('%sperator%')[i])) ? ((convertUTCDateToLocalDate(formatDate(value?.other?.split('%sperator%')[i]).split(",")[0]) | date : "dd/MM/yyyy")+" , "+(convertUTCDateToLocalDate(formatDate(value?.other?.split('%sperator%')[i]).split(",")[1]) | date : "dd/MM/yyyy")) :
+                        checkObject(value?.other?.split('%sperator%')[i]) ? checkObject(value?.other?.split('%sperator%')[i])  : value?.other?.split('%sperator%')[i]}}</p>
+                    </div>
+                  </div>
+                </li>
+                <span *ngIf="!value.valueText">-</span>
+                </ng-container>
+              </ul>
+              <ul *ngIf="lang == 'ar'">
+                <ng-container *ngFor="let listItem of convetToArray(value.valueTextAr); let i = index">
+                  <li class="checkItem" *ngIf="value.valueText" >
+                  <span>{{ listItem }}</span>
+                  <div *ngIf="checkOther(value?.other)">
+                    <div class="item item-value" *ngIf="value?.other?.split('%sperator%')[i]">{{'( ' + ('shared.other' | translate) + ' )'}}</div>
+                    <div class="item item-value">
+                      <p>{{checkDate(formatDate(value?.other?.split('%sperator%')[i])) ? (convertUTCDateToLocalDate(formatDate(value?.other?.split('%sperator%')[i])) | date : "dd/MM/yyyy") :
+                        checkDateRange(formatDate(value?.other?.split('%sperator%')[i])) ? ((convertUTCDateToLocalDate(formatDate(value?.other?.split('%sperator%')[i]).split(",")[0]) | date : "dd/MM/yyyy")+" , "+(convertUTCDateToLocalDate(formatDate(value?.other?.split('%sperator%')[i]).split(",")[1]) | date : "dd/MM/yyyy")) :
+                        value?.other?.split('%sperator%')[i]}}</p>
+                    </div>
+                  </div>
+                </li>
+                <span *ngIf="!value.valueText">-</span>
+                </ng-container>
+              </ul>
+
+
+            </div>
+
+            <div class="item item-value width-100" *ngIf="value.type == controlTypeMode.Date">
+              {{ value.valueText ? (convertUTCDateToLocalDate(value.valueText) | date : "dd/MM/yyyy") : '-'  }}
+            </div>
+
+            <div class="item item-value" *ngIf="value?.type == controlTypeMode.File && value?.valueText != '&quot;&quot;'">
+              <ul class="uploaded-files" *ngIf="lang == 'en'">
+                <li class="file-name-li" *ngFor="let attachment of toArray(value.value)">
+                  <div class="file-details" *ngIf="attachment">
+                    <i [class]="'bx ' + 'bxs-file-' + attachment?.extension?.split('.')[1]"></i>
+                    <div>
+                      <span class="name">{{ attachment?.fileName?.split("_")[0] }}</span>
+                    </div>
+                  </div>
+                  <button (click)="onViewFile(attachment)" class="file-view-btn">
+                    <i class="bx bx-show"></i>
+                  </button>
+                </li>
+              </ul>
+              <ul class="uploaded-files" *ngIf="lang == 'ar'">
+                <li class="file-name-li" *ngFor="let attachment of toArray(value.value)">
+                  <div class="file-details" *ngIf="attachment">
+                    <i [class]="'bx ' + 'bxs-file-' + attachment?.extension?.split('.')[1]"></i>
+                    <div>
+                      <span class="name">{{ attachment?.fileName?.split("_")[0] }}</span>
+                    </div>
+                  </div>
+                  <button (click)="onViewFile(attachment)" class="file-view-btn">
+                    <i class="bx bx-show"></i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="item" *ngIf="value.type == controlTypeMode.repeater">
+              <div class="asd">
+                <span>{{lang == 'ar' ? value?.arName : value?.name }}</span>
+                <!-- <div class="actions_comments">
+                  <div class="actions" *ngIf="value?.allowComment && !value?.status">
+                    <span (click)="approveComment()"><i class='bx bx-check-circle green'></i></span>
+                    <span (click)="rejectComment()"><i class='bx bx-x-circle red'></i></span>
+                  </div>
+                  <div class="comments-badge-status">
+                    <div class="statuses">
+                      <app-badge
+                        *ngIf="value?.status == commentStatus.Approved"
+                        [className]="'opened'"
+                        [label]="'shared.Approved' | translate"
+                      ></app-badge>
+                      <app-badge
+                        *ngIf="value?.status == commentStatus.Rejected"
+                        [className]="'rejected'"
+                        [label]="'shared.rejected' |translate"
+                      ></app-badge>
+                    </div>
+                    <div class="comment-badge">
+                      <span class="comments-number" *ngIf="value?.allowComment">
+                        <img src="assets/icons/comment.svg" *ngIf="!value.selected"/>
+                        <img src="assets/icons/comment-selected.svg" *ngIf="value.selected"/>
+                        <span class="number">{{ value?.comments?.length ? value?.comments?.length : 0 }} </span>
+                      </span>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+              <control-dynamic-table *ngIf="(value?.valueText).columns?.length > 0" [columns]="(value?.valueText).columns" [rows]="(value?.valueText).rows" [showIndex]="false" [showActions]="false"></control-dynamic-table>
+              <p *ngIf="(value?.valueText).columns?.length == 0" >-</p>
+            </div>
+
+            <div class="item item-value" *ngIf="value?.type == controlTypeMode.DownloadTemplate">
+              <div class="download-template">
+                <download-template
+                [title]="lang == 'ar' ? value?.arName : value?.name"
+                [text]="lang == 'ar' ? value?.valueTextAr : value?.valueText"
+                [icon]="getLinkIcon(value?.value)"
+                [uri]="getLinkURI(value?.value)"
+              ></download-template>
+              </div>
+            </div>
+
+            <div  class="last-commented-user" *ngIf="value?.lastCommentorInfo">
+              <person-item [requesterItem]="value?.lastCommentorInfo" [noCursor]="true" ></person-item>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- <div class="form-value" *ngIf="data?.requestInformation?.attachments.length > 0">
+          <div class="item">{{ 'requests.attachments' | translate }}</div>
+          <div class="item">
+            <ul>
+              <li *ngFor="let attachment of data?.requestInformation?.attachments">
+                <a (click)="getFileURL(attachment.fileName)">{{ attachment.fileName }}</a>
+              </li>
+            </ul>
+          </div>
+        </div> -->
+      </div>
+      <!-- <div class="comments" *ngIf="item?.allowComment">
+        <request-comments [Item]="item"></request-comments>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,71 @@
+<div class="">
+  <div class="sla-categories-container">
+    <div class="sla-categories-container-header">
+      <h5 class="mb-3 sla-categories-container-title">
+        {{ 'servicesDashboard.servicesCatSla' | translate }}
+      </h5>
+    </div>
+    <div class="row sla-categories-content mt-2" >
+      <!-- <div class="col-lg-1 sla-categories-content-header">
+        <h5 class="sla-categories-content-header-title">services</h5>
+      </div> -->
+      <div class="col-lg-12">
+        <div class="row align-items-center" *ngFor="let sector of data">
+          <div class="slaChart">
+            <div class="sla-categories-content-distribution mb-2">
+              <div class="slaChart row">
+                <div class="col-lg-5">
+                  <span class="sla-categories-content-distribution-name">
+                    {{
+                    lang == 'en' ? sector.categoryName : sector.categoryNameAr
+                    }}
+                    ({{ sector.totalCount }})
+                  </span>
+                </div>
+
+                <div class="col-lg-7 sla-categories-content-distribution-spans">
+                  <span *ngIf="sector.meetSlaCount" class="sla-categories-content-distribution-spans-meet-sla"
+                    [style.width]="
+                      (sector.meetSlaCount / sector.totalCount) * 100 + '%'
+                    ">
+                    {{ sector.meetSlaCount }}
+                  </span>
+                  <span *ngIf="sector.outOfSlaCount" class="sla-categories-content-distribution-spans-out-sla"
+                    [style.width]="
+                      (sector.outOfSlaCount / sector.totalCount) * 100 + '%'
+                    ">
+                    {{ sector.outOfSlaCount }}
+                  </span>
+                  <!-- <span
+                    *ngIf="sector.notStartedCount"
+                    class="sla-categories-content-distribution-spans-not-started"
+                    [style.width]="
+                      (sector.notStartedCount / sector.totalCount) * 100 + '%'
+                    "
+                  >
+                    {{ sector.notStartedCount }}
+                  </span> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="labels mt-4 col-lg-12 d-flex gap-4">
+        <!-- <div class="label d-flex align-items-center gap-1">
+          <span class="dotNotStarted"></span>
+          <span>{{ 'shared.notStarted' | translate }}</span>
+        </div> -->
+        <div class="label d-flex align-items-center gap-1">
+          <span class="dotMeetSla"></span>
+          <span>{{ 'servicesDashboard.meetsla' | translate }}</span>
+        </div>
+        <div class="label align-items-center d-flex gap-1">
+          <span class="outSla"></span>
+          <span>{{ 'servicesDashboard.outofsla' | translate }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="meeting-details">
+  <tabs [tabs]="tabs" (activeTabChanged)="activeTabIndex = $event">
+    <!-- First Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 1 ? 'block' : 'none' }"
+    >
+      <mins-of-metting
+        class="m-4"
+        [ComponentMode]="3"
+        [Data]="minOfMeetingData"
+      ></mins-of-metting>
+    </div>
+
+    <!-- Second Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 2 ? 'block' : 'none' }"
+    >
+      <attendees-list
+        class="m-4"
+        [Items]="data?.attendees"
+        [ComponentMode]="3"
+        [AttendeesPoitions]="attendeesPoitions"
+        (refreshAttendees)="refreshAttendees($event)"
+      ></attendees-list>
+    </div>
+
+    <!-- Third Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 3 ? 'block' : 'none' }"
+    >
+      <discussion-item-list
+        class="m-4"
+        [Items]="data?.discussionItems"
+        [ComponentMode]="3"
+      ></discussion-item-list>
+    </div>
+
+    <!-- Fourth Tab -->
+    <div
+      class="step"
+      [ngStyle]="{ display: activeTabIndex === 4 ? 'block' : 'none' }"
+    >
+      <action-item-list
+        class="m-4"
+        [actionItemsCompletionRate]="data?.actionItemsCompletionRate"
+        [Items]="data?.actionItems"
+        [ComponentMode]="3"
+        [TaskTypes]="taskTypes"
+      ></action-item-list>
+    </div>
+  </tabs>
+</div>

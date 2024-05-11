@@ -1,0 +1,86 @@
+.table {
+  --index-width: 50px;
+  --actions-width: 70px;
+
+  .goal-index {
+    width: var(--index-width);
+  }
+
+  .goal-actions {
+    width: var(--actions-width);
+  }
+}
+
+.w-8 {
+  width: 8% !important;
+}
+
+p {
+  margin: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border: 0;
+  font-size: 22px;
+  background-color: transparent;
+  color: grey;
+  border-bottom: none;
+}
+
+button {
+  background-color: none;
+}
+
+.bx {
+  border-bottom: none;
+}
+
+.page-data {
+  min-height: 500px;
+  position: relative;
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.Arabic-font {
+  font-family: "Janna LT Regular", sans-serif !important;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .edit-icons {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    border: 0;
+    font-size: 22px;
+    background-color: #00db99;
+    color: #fff;
+  }
+
+  .delete-icons {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    border: 0;
+    font-size: 22px;
+    background-color: #ed719c;
+    color: #fff;
+  }
+}
+
+.desc-span {
+  display: inline-block;
+  max-width: 340px;
+}

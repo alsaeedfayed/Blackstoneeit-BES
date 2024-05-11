@@ -1,0 +1,84 @@
+<div *ngIf="readOnly">
+  <div class="strategic-impact">
+    <label for="" class="form-label p-0">
+      {{ "shared.strategicKPIs" | translate }}
+    </label>
+    <div class="form-custom-checkbox disabled-checked" *ngFor="let item of [1]">
+      <input id="custom-checkbox" type="checkbox" />
+      <label for="custom-checkbox" class="form-custom-checkbox-box">
+        <i class="bx bx-check"></i>
+      </label>
+      <label class="form-custom-checkbox-label" for="custom-checkbox">
+        {{ "Placeholder KPI" }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!readOnly">
+  <div class="strategic-impact">
+    <div class="form-group">
+      <label for="" class="form-label">
+        {{ "shared.RelatedStrategicObjectives" | translate }}
+      </label>
+      <input
+        id="filter"
+        class="form-control mt-1 mb-3"
+        #filter
+        placeholder="{{ 'shared.search' | translate }}"
+        (keyup)="tree.treeModel.filterNodes(filter.value)"
+        [(ngModel)]="filterValue"
+      />
+      <!-- (keyup)="getData($event)" -->
+
+      <tree-root
+        #tree
+        *ngIf="treeData?.length !== 0; else emptyState"
+        [nodes]="treeData"
+        [options]="options"
+        [(state)]="state"
+      >
+        <ng-template #treeNodeTemplate let-node="node" let-index="index">
+          <div class="tree-badge">
+            <input
+              (change)="check(node, !node.data.checked)"
+              type="checkbox"
+              [id]="node.data.id"
+              [disabled]="
+                node.data?.children?.length === 0 &&
+                node.data?.goalType?.name !== 'KPI'
+                  ? true
+                  : null
+              "
+              [indeterminate]="node.data.indeterminate"
+              [checked]="node.data.checked"
+            />
+
+            <label [for]="node.data.id">
+              <span
+                [class.disabled]="
+                  node.data?.children?.length === 0 &&
+                  node.data?.goalType?.name !== 'KPI'
+                "
+                [class]="'badge ' + node.data.goalType?.name?.toLowerCase()"
+              >
+                <label [for]="node.data.id" class="custom-checkbox-box">
+                  <i class="bx bx-check"></i>
+                </label>
+                {{
+                  lang == "en"
+                    ? node.data?.goalType?.name
+                    : node.data?.goalType?.arabicName
+                }}
+              </span>
+            </label>
+            <span class="name">
+              {{ lang == "en" ? node.data?.title : node.data?.titleAr }}
+            </span>
+          </div>
+        </ng-template>
+      </tree-root>
+    </div>
+  </div>
+
+</div>

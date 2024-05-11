@@ -1,0 +1,13 @@
+.search-bar-container {
+  width: 384px;
+  height: 52px;
+  input {
+    background-color: #f1f2f7;
+  }
+}
+
+@media only screen and (max-width: 740px) {
+  .search-bar-container {
+    width: 200px;
+  }
+}

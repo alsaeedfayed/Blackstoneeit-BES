@@ -1,0 +1,179 @@
+<div class="actions mt-2">
+  <div>
+    <div class="filter-btnn">
+      <button (click)="toggleFilterContainers()" class="filter-bttn">
+        <img src="assets/icons/filter-2.svg" alt="filter" />
+        {{ "shared.filter" | translate }}
+        <span *ngIf="filterCount > 0" class="number">{{ filterCount }}</span>
+        <i class="bx bx-chevron-down ng-star-inserted"></i>
+      </button>
+    </div>
+  </div>
+  <div>
+    <button
+      class="btn btn-info"
+      style="cursor: pointer"
+      (click)="export()"
+      [disabled]="exportLoading"
+    >
+    <i class='bx bxs-download' *ngIf="!exportLoading"></i>
+    <i class="bx bx-loader-alt bx-spin" *ngIf="exportLoading"></i>
+    {{ "shared.export" | translate }}
+    </button>
+  </div>
+</div>
+
+<div class="cont">
+  <div id="filters-cont" class="filters-container">
+    <app-requests-filters
+      *ngIf="activeFilterContainer"
+      (onFilterEmitter)="handleFilter($event)"
+      (onCancelEmitter)="handleCancelFilter()"
+    ></app-requests-filters>
+  </div>
+</div>
+
+<div
+  [style.display]="
+    requestsStatics &&
+    requestsClosureRateData &&
+    categoriesSLA &&
+    trackingUpData &&
+    !isStaticsLoading &&
+    !isCategoriesSLALoading &&
+    !isTrackingLoading &&
+    !isClosureRateLoading
+      ? 'block'
+      : 'none'
+  "
+>
+  <div class="row">
+    <ng-container *ngIf="isStaticsLoading; else cards">
+      <div class="my-4">
+        <ng-container [ngTemplateOutlet]="cardsSkeleton"></ng-container>
+      </div>
+    </ng-container>
+
+    <ng-template #cards>
+      <div class="card-items">
+        <div class="item analytics-widget">
+          <app-stats-widget [count]="requestsStatics?.totalRequests"
+                            [title]="'servicesDashboard.allRequests' | translate" [icon]="'bx bx-file'"
+                            [type]="'warning'"></app-stats-widget>
+        </div>
+        <div class="item analytics-widget">
+          <app-stats-widget [count]="requestsStatics?.started"
+                            [title]="'servicesDashboard.started' | translate " [icon]="'bx bx-minus-circle'"
+                            [type]="'success'"></app-stats-widget>
+        </div>
+        <div class="item analytics-widget">
+          <app-stats-widget [count]="requestsStatics?.cancelled"
+                            [title]="'servicesDashboard.cancelled' | translate"     [icon]="'bx bx-block'"
+                            [type]="'danger'" ></app-stats-widget>
+        </div>
+        <div class="item analytics-widget cancel-color">
+          <app-stats-widget [count]="requestsStatics?.rejected"
+                            [title]="'servicesDashboard.rejected' | translate" [icon]="'bx bx-block'"
+                            [type]="'danger'"></app-stats-widget>
+        </div>
+        <div class="item analytics-widget">
+          <app-stats-widget [count]="requestsStatics?.closed" [title]="'servicesDashboard.closed' | translate"
+                            [icon]="'bx bx-check-circle'"
+                            [type]="'default'"></app-stats-widget>
+        </div>
+      </div>
+      </ng-template>
+<!--<ng-template #cards>-->
+<!--  <div class="card-items">-->
+<!--    <div class="item analytics-widget">-->
+<!--      <div class="analytics-widget-wrapper all">-->
+<!--        <h4>{{ requestsStatics?.totalRequests }}</h4>-->
+<!--        <p>{{ "servicesDashboard.allRequests" | translate }}</p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="item analytics-widget">-->
+<!--      <div class="analytics-widget-wrapper opened">-->
+<!--        <h4>{{ requestsStatics?.started }}</h4>-->
+<!--        <p>{{ "servicesDashboard.started" | translate }}</p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="item analytics-widget">-->
+<!--      <div class="analytics-widget-wrapper onTrack">-->
+<!--        <h4>{{  requestsStatics?.cancelled }}</h4>-->
+<!--        <p>{{ "servicesDashboard.cancelled" | translate }}</p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="item analytics-widget">-->
+<!--      <div class="analytics-widget-wrapper delayed">-->
+<!--        <h4>{{  requestsStatics?.rejected }}</h4>-->
+<!--        <p>{{ "servicesDashboard.rejected" | translate }}</p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="item analytics-widget">-->
+<!--      <div class="analytics-widget-wrapper closed">-->
+<!--        <h4>{{ requestsStatics?.closed }}</h4>-->
+<!--        <p>{{ "servicesDashboard.closed" | translate }}</p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</ng-template>-->
+
+<ng-template #cardsSkeleton>
+  <div class="overflow">
+   <div class="d-flex justify-content-center ml-2 mr-2 mb-16 w-12 float"
+   *ngFor="let i of [1, 2, 3, 4, 5]">
+   <app-skeleton-loader class="w-100" [mode]="'userCard'"></app-skeleton-loader>
+   </div>
+  </div>
+ </ng-template>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-12  col-lg-6 mt-2 ">
+      <!-- <app-services-dashboard-requests
+        [data]="requestsStatics"
+      ></app-services-dashboard-requests> -->
+      <app-req-up-track-pie-chart
+      [data]="trackingDataPieChart"
+    ></app-req-up-track-pie-chart>
+
+    </div>
+    <div class="col-12 col-md-12  col-lg-6 mt-2">
+      <app-services-dashboard-closure-rate
+        [data]="requestsClosureRateData"
+      ></app-services-dashboard-closure-rate>
+    </div>
+  </div>
+  <div class="row distribution-sla">
+    <div class="col-12">
+
+    </div>
+    <div class="col-12 col-md-12  col-lg-12 col-xl-6 mt-2">
+      <app-services-dashboard-sla
+        [data]="categoriesSLA"
+      ></app-services-dashboard-sla>
+    </div>
+    <div class="col-12 col-md-12  col-lg-12 col-xl-6 mt-2">
+      <app-services-dashboard-distributions
+        [data]="servicesDistributionsData"
+      ></app-services-dashboard-distributions>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-12 col-lg-12 col-xl-8">
+      <app-services-dashboard-req-up-track-chart
+        [data]="trackingUpData"
+      ></app-services-dashboard-req-up-track-chart>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="
+    isStaticsLoading ||
+    isClosureRateLoading ||
+    isCategoriesSLALoading ||
+    isTrackingLoading
+  "
+>
+  <app-skeleton-loader mode="dashboard"></app-skeleton-loader>
+</div>

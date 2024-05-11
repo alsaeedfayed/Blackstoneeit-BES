@@ -1,0 +1,96 @@
+<app-header-page
+  [title]="'scoreSubmission.title' | translate"
+  [totalItems]="list?.length"
+  [backButton]="true"
+></app-header-page>
+
+<div class="score-submission">
+  <app-header-score-submission
+    class="d-block mb-4"
+    (scorecard)="scorecard = $event"
+    [expiredAfter]="expiredAfter"
+    (changeGroup)="groupId = $event"
+    (changePeriod)="periodId = $event"
+    [CanPublish]="canPublish"
+    [Published]="published"
+    (doneData)="getSubmissionPeriod()"
+    [canSubmit]="canSubmit"
+    [PeriodOpened]="periodOpened"
+    [Submitted]="submitted"
+    [CanClose]="canClose"
+    [CanExtend]="canExtend"
+    [ScorecardSubmissionId]="scorecardSubmissionId"
+    (onSubmit)="getSubmissionPeriod()"
+    (onExtend)="getSubmissionPeriod()"
+    (onClose)="getSubmissionPeriod()"
+    (onOpenStatusDetailsModal)="openStatusDetailsModal()"
+    [Extended]="extended"
+    [ExtendReason]="extendReason"
+  ></app-header-score-submission>
+
+  <ng-container *ngIf="loading && currentScorecard; else tables">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #tables>
+  <div *ngIf="currentScorecard">
+    <scorecard-submittion-analysis
+      [actualScore]="actualScore"
+      [targetScore]="targetScore"
+      [performanceScore]="performanceScore"
+      [notReportedCount]="notReportedCount"
+      [onTrackCount]="onTrackCount"
+      [offTrackCount]="offTrackCount"
+      [overachievedCount]="overachievedCount"
+      [totalKPIs]="totalKPIs"
+      [notDueCount]="notDueCount"
+    ></scorecard-submittion-analysis>
+
+    <!-- [list]="filterList || list" -->
+    <app-tabel-score-submission
+      *ngIf="list?.length > 0"
+      [list]="list"
+      [scorecardSubmissionId]="scorecardSubmissionId"
+    ></app-tabel-score-submission>
+
+    <div class="no-data" *ngIf="list?.length == 0">
+      <app-no-data [msg]="'scoreSubmission.noDataMsg' | translate"></app-no-data>
+    </div>
+  </div>
+</ng-template>
+
+<div class="no-data" *ngIf="!currentScorecard">
+  <app-no-data [msg]="'scoreSubmission.noCurrentScorardMsg' | translate"></app-no-data>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'scorecardPeriodDetails'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeStatusDetailsModal()"
+>
+  <div modal-header class="score-status-model-header w-100">
+    <label class="modal-title">
+      {{ 'shared.scorecardStatusDetails' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="score-status-model-content border-top">
+    <submit-score-submittion-status
+      *ngIf="isShowDetailsPopup"
+    ></submit-score-submittion-status>
+  </div>
+</app-model>

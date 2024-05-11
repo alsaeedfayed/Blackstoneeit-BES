@@ -1,0 +1,123 @@
+<div class="table-wrapper mt-4 committeeTasksKpis">
+  <app-tabs class="d-block mt-1">
+    <!-- kpis items tab -->
+    <app-tab [title]="'committeeDetails.kpis' | translate" [count]="kpisCount">
+      <app-committee-kpis-rows
+        [isEditAble]="false"
+        [showDetails]="showKPIDetails"
+        [importedGoals]="goaltreeData"
+        [language]="language"
+      ></app-committee-kpis-rows>
+
+      <div class="no-data" *ngIf="!kpisCount || kpisCount == 0">
+        <app-no-data
+          [msg]="'committeeDetails.noKPIs' | translate"
+        ></app-no-data>
+      </div>
+    </app-tab>
+
+    <!-- tasks tab -->
+    <app-tab
+      [title]="'committeeDetails.mainttasks' | translate"
+      [count]="mainTasks?.length"
+    >
+      <div class="members-table" *ngIf="mainTasks && mainTasks.length > 0">
+        <div class="table">
+          <div class="table-wrapper">
+            <table *ngIf="mainTasks?.length > 0" class="table">
+              <thead>
+                <tr>
+                  <th class="MainTask-title">
+                    {{ "committeesNewRequest.mainTasksRows.title" | translate }}
+                  </th>
+                  <th class="MainTask-priority">
+                    {{ "committeeTasks.priority" | translate }}
+                  </th>
+                  <th class="task-assigned-to">
+                    {{ "committeeTasks.assignedTo" | translate }}
+                  </th>
+                  <th class="task-due-date">
+                    {{
+                      "committeesNewRequest.mainTasksRows.dueDate" | translate
+                    }}
+                  </th>
+                  <th *ngIf="isUpdating" class="MainTask-actions"></th>
+
+                  <th *ngIf="!hideDisplayDetails" scope="col" class="actions" >
+                    {{ "committeeDetails.actions" | translate }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let mainTask of mainTasks"
+                  [ngClass]="{ disabledRow: mainTask?.isDisabled }"
+                >
+                  <td class="MainTask-title">
+                    {{
+                      language === "en" ? mainTask?.title : mainTask?.titleAr
+                    }}
+                  </td>
+                  <td class="task-status">
+                    <app-badge
+                      [className]="
+                        importanceLevels[mainTask?.importanceLevel]['className']
+                      "
+                      [label]="
+                        language === 'en'
+                          ? importanceLevels[mainTask?.importanceLevel]['name']
+                          : importanceLevels[mainTask?.importanceLevel][
+                              'nameAr'
+                            ]
+                      "
+                    ></app-badge>
+                  </td>
+                  <td
+                    class="task-assigned-to"
+                    [ngClass]="{
+                      invalidMember: !committeeMembersIds?.includes(
+                        mainTask?.assignedToInfo?.id
+                      )
+                    }"
+                  >
+                    <person-item
+                      [requesterItem]="mainTask?.assignedToInfo"
+                      [noCursor]="true"
+                      [isUserCardFixed]="true"
+                    ></person-item>
+                  </td>
+                  <td>
+                    <span>
+                      {{
+                        language === "en"
+                          ? ((
+                              mainTask?.dueDate | uTCToLocalDate
+                            ).toLocaleString() | date : "d MMM y")
+                          : ((
+                              mainTask?.dueDate | uTCToLocalDate
+                            ).toLocaleString() | localizeDate : "d MMM y")
+                      }}
+                    </span>
+                  </td>
+
+                  <td *ngIf="!hideDisplayDetails" class="text-center">
+                    <a (click)="openTasksModal(mainTask)" class="viewDetails">
+                      <!-- {{ "committeeDetails.viewDetails" | translate }} -->
+                      <i class='bx bxs-show eyeIcon'></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-data" *ngIf="!mainTasks.length">
+        <app-no-data
+          [msg]="'committeeDetails.noTasks' | translate"
+        ></app-no-data>
+      </div>
+    </app-tab>
+  </app-tabs>
+</div>

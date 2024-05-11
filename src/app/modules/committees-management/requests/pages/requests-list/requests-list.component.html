@@ -1,0 +1,108 @@
+<div class="page">
+  <app-header-page
+    [title]="'committeesRequests.requests' | translate"
+    [totalItems]="totalItems"
+    [isAddBtn]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <app-button [permission]="createCommitteePermission">
+        <button class="btn btn-main" (click)="goToAddCommittee()">
+          <i class="bx bx-plus"></i>
+          {{ "committeesRequests.add" | translate }}
+        </button>
+      </app-button>
+    </div>
+  </app-header-page>
+
+  <!-- analytics widgets -->
+  <div class="analytics-widgets mb-4">
+    <div class="analytics-widgets-items">
+      <app-stats-widget
+        [id]="'total_requests'"
+        [count]="totalRequests"
+        [title]="'committeesRequests.analytics.totalRequests' | translate"
+        [icon]="'bx bx-file'"
+        [type]="'primary'"
+      ></app-stats-widget>
+      <app-stats-widget
+        [id]="'pending_requests'"
+        [count]="pendingRequests"
+        [title]="'committeesRequests.analytics.pendingRequests' | translate"
+        [icon]="'bx bx-error-circle'"
+        [type]="'default'"
+      ></app-stats-widget>
+      <app-stats-widget
+        [id]="'rejected_requests'"
+        [count]="rejectedRequests"
+        [title]="'committeesRequests.analytics.rejectedRequests' | translate"
+        [icon]="'bx bx-x-circle'"
+        [type]="'warning'"
+      ></app-stats-widget>
+      <app-stats-widget
+        [id]="'approved_requests'"
+        [count]="approvedRequests"
+        [title]="'committeesRequests.analytics.approvedRequests' | translate"
+        [icon]="'bx bx-check-circle'"
+        [type]="'success'"
+      ></app-stats-widget>
+    </div>
+  </div>
+
+  <!-- page filters -->
+  <app-page-filters
+    [searchPlaceHolder]="'committeesRequests.searchPlaceholder' | translate"
+    [appliedFiltersCount]="appliedFiltersCount"
+    [hasAssignedSwitch]="true"
+    [assignedSwitchId]="'onlyMe'"
+    [assignedSwitchLabel]="'committeesRequests.onlyMe' | translate"
+    [hasAdvancedFilter]="true"
+    (onClear)="clearFilter()"
+    (onSwitch)="getMyCommittees($event)"
+    (search)="onSearch($event)"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+  >
+    <app-requests-filters
+      [isFiltersEmpty]="emptyFIlters"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-requests-filters>
+  </app-page-filters>
+
+  <!-- table -->
+  <ng-container *ngIf="loading; else table_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- requests items table -->
+<ng-template #table_data>
+  <requests-table
+    *ngIf="list?.length > 0"
+    [SortedCol]="sortedCol"
+    [SortDirection]="sortDirection"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (sortFilter)="handleSortFilter($event)"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></requests-table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeesRequests.noDataMsg' | translate"
+    ></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

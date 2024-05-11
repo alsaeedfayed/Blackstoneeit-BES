@@ -1,0 +1,61 @@
+<!-- Planning Page -->
+<div class="planning">
+
+  <!-- Planning Header -->
+  <div class="header mb-4">
+    <planning-header
+      [Status]="Status"
+      [StatusValue]="StatusValue"
+      [currentLevel]="currentLevel"
+      [LevelToShow]="currentLevel"
+      [submissionTotalWeight]="data.submissionTotalWeight"
+      [selectedGroupId]="selectedGroupId"
+      [Submitable]="data.submitable"
+      [CanChangeRequest]="data.canChangeRequest"
+      [CloseScorecard]="closeScorecard"
+      [CanEditScorecard]="data.canEditScorecard"
+      (onSelect)="chnageSelectedScorecard($event)"
+      (onSubmit)="loadData()"
+    ></planning-header>
+  </div>
+
+  <!-- Group Select -->
+  <div class="group-select mb-4">
+    <sector-department-function
+      (onSelect)="handleGroupSelection($event)"
+    ></sector-department-function>
+  </div>
+
+  <!-- action buttons -->
+  <!-- [task]="task" -->
+  <workflow-action-options
+    *ngIf="!!options && !data.submitable"
+    class="d-block mb-4"
+    [title]="''"
+    [options]="options"
+    [instanceId]="instanceId"
+    (onSaveAction)="actionTakenHandler($event)"
+  ></workflow-action-options>
+
+  <!-- Planning Status -->
+  <planning-status
+    class="d-block mb-4"
+    [currentStatus]="Status"
+    [ScorecardStatusResult]="scorecardStatusResult"
+    [loadingstatus]="loadingStatus || loading"
+    (startingInstanceEvent)="startingInstanceHandler()"
+  ></planning-status>
+
+  <!-- Planning Goals List -->
+  <div class="goals-list" *ngIf="!loadingStatus && scorecardStatusResult.planningInstance">
+    <scoreCard-tree
+      [lang]="lang"
+      [Loading]="loading"
+      [id]="selectedScorecardId"
+      [goalItems]="goalsList"
+      [isAllowedToAdd]="data.canAddGeneralGoal"
+      (updateListEvent)="loadData()"
+      (deleteGoalEvent)="deleteGoal($event)"
+    ></scoreCard-tree>
+  </div>
+</div>

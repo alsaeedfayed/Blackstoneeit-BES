@@ -1,0 +1,67 @@
+{
+  "challenges": {
+    "title": "Challenges",
+    "searchPlaceholder": "Search Challenge Name...",
+    "notData": "Hmm.. looks like you don't have any Challenges",
+    "card": {
+      "organizer": "Organizer",
+      "focusArea": "Focus Area",
+      "endDate": "End Date",
+      "idea": "Idea",
+      "viewMore": "View Details",
+      "openDetails": "Open Details",
+      "label": "New"
+    },
+    "analytics": {
+      "totalChallenges": "Total Challenges",
+      "totalIdeas": "Total Ideas",
+      "newChallenges": "New Challenges",
+      "resolvedChallenges": "Resolved Challenges"
+    },
+    "details": {
+      "drag": "Drag or drop to upload",
+      "choose": " to choose a file",
+      "browse": "browse"
+    },
+    "add": "New Challenge",
+    "success": {
+      "header": "success message",
+      "message": "Your challenge has been created successfully."
+    },
+    "draft": {
+      "header": "success message",
+      "message": "Your challenge has been drafted successfully."
+    }
+  },
+  "addChallenges": {
+    "title": "Create a new Challenge",
+    "cancel": "Cancel",
+    "publish": "Publish",
+    "draft": "Save as draft",
+    "form": {
+      "picture": "Challenge picture",
+      "title": "Challenge title",
+      "content": "Description",
+      "focusArea": "Focus Area",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "relatedPoints": "Related Points",
+      "rewardType": "Reward Type",
+      "amount": "Amount",
+      "awardCertification": "Award Certification",
+      "attachment": "Attachment",
+      "uploadAttachment": "Upload attachment"
+    }
+  },
+  "filterForm": {
+    "organizerName": "Organizer",
+    "status": "status",
+    "focusArea": "Focus Area"
+  },
+  "statuses": {
+    "New": "New",
+    "Draft": "Draft",
+    "Closed": "Closed",
+    "Resolved": "Resolved"
+  }
+}

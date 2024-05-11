@@ -1,0 +1,70 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.history-list-container {
+}
+
+.history-list {
+  overflow-x: auto;
+  background-color: #ffffff;
+  border: 0.0625rem solid #efefef;
+  border-radius: 0.625rem;
+  box-shadow: 0rem 0px 8px #d9d9d9;
+  margin: 20px 10px;
+  table {
+    width: 100%;
+
+    tr {
+      border-bottom: 0.0625rem solid #efefef;
+
+      th {
+        color: $info_color;
+        font-size: 0.75rem;
+      }
+
+      th,
+      td {
+        font-weight: 500;
+        padding: 0.75rem 1.25rem;
+      }
+
+      .history-message {
+        color: #96a6bd;
+      }
+
+      .history-created-on {
+        min-width: 150px;
+      }
+
+      .history-creator {
+        width: 180px;
+
+        ::ng-deep person-item {
+          .personItem {
+            > .avatar {
+              .letters,
+              img {
+                height: 1.5rem !important;
+                width: 1.5rem !important;
+              }
+
+              .letters {
+                font-size: 0.75rem;
+              }
+            }
+
+            > .info {
+              .name {
+                font-size: 0.875rem;
+              }
+
+              .job {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

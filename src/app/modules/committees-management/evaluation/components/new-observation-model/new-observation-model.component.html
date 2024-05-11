@@ -1,0 +1,114 @@
+<ng-container
+  *ngIf="lookupsLoading  else create_data"
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #create_data>
+  <div class="new-model-dialog-body">
+    <div [ngClass]="'observationTitles' + language" class="new-attendee-form pb-2" [formGroup]="form">
+      <!-- title en,ar -->
+      <div class="row observaitonTitlesContainer">
+        <!-- kpi title -->
+        <div class="col-md-6 mt-4 enNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block"
+            formControlName="title"
+            [control]="form | getControl : 'title'"
+            [title]="
+              'committeesEvaluations.newObservationModel.title' | translate
+            "
+            [placeholder]="
+              'committeesEvaluations.newObservationModel.title' | translate
+            "
+          ></app-filed>
+        </div>
+
+        <!-- kpi title ar -->
+        <div class="col-md-6 mt-4 arNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block rtl-text"
+            formControlName="titleAr"
+            [control]="form | getControl : 'titleAr'"
+            [title]="
+              'committeesEvaluations.newObservationModel.titleAr' | translate
+            "
+            [placeholder]="
+              'committeesEvaluations.newObservationModel.titleAr' | translate
+            "
+          ></app-filed>
+        </div>
+      </div>
+
+      <!-- Observation type  -->
+      <div class="row mt-4">
+        <label class="form-label">
+          {{
+            'committeesEvaluations.newObservationModel.type' | translate
+          }}
+          <span class="astrix-red">*</span>
+        </label>
+        <app-radio-group
+          class="d-flex flex-wrap gap-3"
+          formControlName="type"
+          bindValue="id"
+        >
+          <app-radio-box
+            *ngFor="let observationType of observationTypes"
+            [value]="observationType.code"
+          >
+            {{ language == "ar" ? observationType.nameAr : observationType.nameEn }}
+          </app-radio-box>
+        </app-radio-group>
+
+      </div>
+
+      <!-- Description as long text -->
+      <div class="mt-4">
+        <app-filed
+        class="d-block"
+        formControlName="description"
+        [control]="form | getControl : 'description'"
+        [title]="'committeesEvaluations.newObservationModel.description' | translate"
+        [placeholder]="'committeesEvaluations.newObservationModel.description' | translate"
+        [isLongText]="true"
+      ></app-filed>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- cancel button -->
+    <button class="btn btn-info flex-grow-1" (click)="closePopup()">
+      {{ "shared.cancel" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form.invalid || isBtnLoading"
+      (click)="save()"
+    >
+      <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,8 @@
+@import "src/assets/css/utils/variables.scss";
+
+.title-entity {
+  font-weight: 500;
+  font-size: 24px;
+  color: $tertiary-color;
+  text-transform: capitalize;
+}

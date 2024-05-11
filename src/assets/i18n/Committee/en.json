@@ -1,0 +1,32 @@
+{
+  "committee": {
+    "pageTitle": "Committees",
+    "new":"Add New Committee",
+    "update":"Update Committee",
+    "name": "Name",
+    "nameAr": "Arabic Name",
+    "chairman": "Chairman",
+    "members": "Members",
+    "creationDate": "Creation Date",
+    "lastUpdate": "Last Update",
+    "status": "Status",
+    "active": "Active",
+    "isInactive": "Deactive",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "noDataMsg": "Hmm.. looks like you don't have any committees",
+    "createForm": "Create Committee",
+    "action": "Actions",
+    "deactivateSuccessMsg": "Item has been deactivated successfully",
+    "activateSuccessMsg": "Item has been activated successfully",
+    "deleteSuccessMsg": "Item has been deleted successfully",
+    "deactivateMsg": "Are you sure you want to deactivate this item?",
+    "deleteMsg": "Are you sure you want to delete this item?",
+    "activateMsg": "Are you sure you want to activate this item?",
+    "searchMembers": "Search Members",
+    "enterArabicName": "Enter committee arabic name",
+    "enterEnglishName": "Enter committee english name",
+    "added": "Committee is added successfully",
+    "updated": "Committee is updated successfully"
+  }
+}

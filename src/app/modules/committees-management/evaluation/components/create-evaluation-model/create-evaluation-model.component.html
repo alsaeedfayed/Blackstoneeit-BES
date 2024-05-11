@@ -1,0 +1,204 @@
+<ng-container
+  *ngIf="loadingCommittees || lookupsLoading else create_data"
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #create_data>
+  <div class="new-model-dialog-body">
+    <div class="new-task-form pb-2" [formGroup]="createEvaluationForm">
+      <div class="row">
+        <!-- committee names -->
+        <div class="ant-col-md-order-12 mt-4">
+          <label class="form-label">
+            {{ "committeesEvaluations.modal.comitteName" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+
+          <ng-select
+            class="input-select attendees-select"
+            formControlName="committeeId"
+            [ngClass]="{
+              valid: (createEvaluationForm | getControl : 'committeeId')?.valid
+            }"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="
+              'committeesEvaluations.modal.comitteName' | translate
+            "
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [closeOnSelect]="true"
+          >
+            <ng-option
+              *ngFor="let committee of Committees; let i = index"
+              [value]="committee.id"
+            >
+              {{ language == "en" ? committee.name : committee.nameAr }}
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- audit types -->
+        <div class="ant-col-md-order-12 mt-4">
+          <label class="form-label">
+            {{ "committeesEvaluations.modal.type" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+
+          <ng-select
+            class="input-select attendees-select"
+            formControlName="typeId"
+            [ngClass]="{
+              valid: (createEvaluationForm | getControl : 'typeId')?.valid
+            }"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="'committeesEvaluations.modal.type' | translate"
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [closeOnSelect]="true"
+            (change)="onSelectType($event)"
+          >
+            <ng-option
+              *ngFor="let type of auditTypes; let i = index"
+              [value]="type.code"
+            >
+              {{ language == "en" ? type.nameEn : type.nameAr }}
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="showDates">
+        <!-- Date From  -->
+        <div class="col-md-6 mt-4">
+          <app-nz-date-picker
+            class="d-block"
+            formControlName="fromDate"
+            [control]="createEvaluationForm | getControl : 'fromDate'"
+            [title]="'committeesEvaluations.modal.from' | translate"
+            [placeholder]="'committeesEvaluations.modal.from' | translate"
+            (ngModelChange)="checkDateRange($event)"
+          ></app-nz-date-picker>
+        </div>
+
+        <div class="col-md-6 mt-4">
+          <!-- Date To -->
+          <app-nz-date-picker
+            class="d-block"
+            formControlName="toDate"
+            [control]="createEvaluationForm | getControl : 'toDate'"
+            [title]="'committeesEvaluations.modal.to' | translate"
+            [placeholder]="'committeesEvaluations.modal.to' | translate"
+            (ngModelChange)="checkDateRange($event)"
+          ></app-nz-date-picker>
+        </div>
+      </div>
+
+      <span *ngIf="validateDateRang" class="mt-2" style="color: red">
+        {{ "committeesEvaluations.modal.notice" | translate }}
+      </span>
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeeTasks.addModal.description" | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+
+        <angular-editor
+          formControlName="description"
+          [config]="editorConfig"
+        ></angular-editor>
+
+        <label for="" class="form-label mt-3">
+          {{ "shared.attachments" | translate }}
+        </label>
+
+        <div
+          class="drop-zone"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <p class="fw-bold text-black">
+            {{ "committeeKPIs.details.drag" | translate }}
+          </p>
+          <div>
+            <span class="text-secondary">{{ "shared.or" | translate }}</span>
+            <a (click)="attachments.click()" class="text-primary">
+              {{ "committeeKPIs.details.browse" | translate }}
+            </a>
+            <span class="text-secondary">
+              {{ "committeeKPIs.details.choose" | translate }}
+            </span>
+          </div>
+        </div>
+
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+         <!-- uploaded files  -->
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="
+            'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="
+        createEvaluationForm.invalid ||
+        isBtnLoading ||
+        uploadingFile ||
+        validateDateRang
+      "
+      (click)="saveNewAudit()"
+    >
+      <i
+        *ngIf="isBtnLoading || uploadingFile"
+        class="bx bx-loader-alt bx-spin ml-1"
+      ></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

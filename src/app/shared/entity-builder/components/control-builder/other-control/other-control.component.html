@@ -1,0 +1,68 @@
+<div [ngSwitch]="other.type">
+
+    <div *ngSwitchCase="controlTypeEnum.Text">
+        <app-filed class="d-block my-3" [(ngModel)]="other.value" [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="changeValue($event)" name="other" [title]="'shared.other' | translate"></app-filed>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.Number">
+        <app-filed class="d-block my-3" [(ngModel)]="other.value" [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="changeValue($event)" name="other" [title]="'shared.other' | translate"
+            [onlyNumber]="true"></app-filed>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.Textarea">
+        <app-textarea-filed other class="d-block my-3" [(ngModel)]="other.value" [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="changeValue($event)" name="other" [title]="'shared.other' | translate"></app-textarea-filed>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.Date" class="mb-2">
+        <app-nz-date-picker class="d-block" [(ngModel)]="other.value" (ngModelChange)="changeValue($event)"
+            [ngModelOptions]="{ standalone: true }" [title]="'shared.other' | translate"></app-nz-date-picker>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.DateRange">
+        <app-date-range-picker (ngModelChange)="changeValue($event)" [(ngModel)]="other.value"
+            [ngModelOptions]="{ standalone: true }" [title]="'shared.other' | translate"></app-date-range-picker>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.RadioButton">
+        <app-radio-group class="d-block" bindValue="id" (ngModelChange)="changeValue($event)"
+            [ngModelOptions]="{ standalone: true }" [title]="'shared.other' | translate" [(ngModel)]="other.value">
+            <app-radio-box [disabled]="isDisabled" class="mt-3 d-block" *ngFor="let option of other?.values"
+                [value]="option.id">{{translateService.currentLang == "ar" ? option?.textAr :
+                option?.text}}</app-radio-box>
+        </app-radio-group>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.Checkbox">
+        <checkbox-group class="d-block" (ngModelChange)="changeValue($event)" [ngModelOptions]="{ standalone: true }"
+            [title]="'shared.other' | translate" [(ngModel)]="other.value">
+            <app-checkbox *ngFor="let option of other?.values" class="d-block" [identity]="option.id" [title]="
+            translateService.currentLang == 'ar' ? option?.textAr : option?.text">
+            </app-checkbox>
+        </checkbox-group>
+    </div>
+
+
+    <div *ngSwitchCase="controlTypeEnum.SingleSelect">
+        <app-select (change)="changeValue($event)" [ngModelOptions]="{ standalone: true }"
+            [bindLabel]="translateService.currentLang == 'ar' ?  'textAr' :'text'" [(ngModel)]="other.value"
+            class="d-block" [title]="'shared.other' | translate" [items]="other?.values">
+        </app-select>
+    </div>
+
+    <div *ngSwitchCase="controlTypeEnum.MultipleSelect">
+        <app-select (change)="changeValue($event)"
+            [bindLabel]="translateService.currentLang == 'ar' ?  'textAr' :'text'" [multiple]="true"
+            [ngModelOptions]="{ standalone: true }" [(ngModel)]="other.value" class="d-block"
+            [title]="'shared.other' | translate" [items]="other?.values">
+        </app-select>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<!-- Horizontal Stepper -->
+<div class="horizontalStepper">
+    
+    <!-- Horizontal Steps -->
+    <horizontal-steps [steps]="model.steps"></horizontal-steps>
+
+    <!-- Content -->
+    <ng-content></ng-content>
+
+    <!-- Actions -->
+    <div class="actions">
+        <button (click)="model.toBack()">Previous</button>
+        <button (click)="model.toNext()">Next</button>
+    </div>
+
+</div>

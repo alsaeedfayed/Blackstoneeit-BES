@@ -1,0 +1,53 @@
+<div
+  class="stats-widget"
+  *ngIf="WidgetColorType == 'normal'"
+  (click)="emitStatId()"
+  [ngStyle]="
+    hasBorder
+      ? { 'border': '2px solid '+ borderColor }
+      : { }
+  "
+>
+  <!--  statistics icon  -->
+  <div class="stats-icon" [class]="type">
+    <i [class]="icon"></i>
+  </div>
+
+  <!--  statistics details  -->
+  <div class="stats-details">
+    <strong class="stats-count">{{ count }}{{hasPercentage ? '%':''}}</strong>
+    <h3 class="stats-title">{{ title }}</h3>
+  </div>
+</div>
+
+<div
+  *ngIf="WidgetColorType == 'colorFul'"
+  class="stats-widget"
+  (click)="emitStatId()"
+  [ngStyle]="{ 'background-color': widgetColor }"
+>
+  <!--  statistics icon container  -->
+  <div
+    class="stats-icon"
+    [ngStyle]="{
+      'background-color': iconContainerColor
+    }"
+  >
+    <!--  statistics icon  -->
+    <i
+      [class]="icon"
+      [ngStyle]="{
+        color: iconColor,
+        'background-color': iconBGColor
+      }"
+    ></i>
+  </div>
+
+  <!--  statistics details  -->
+  <div class="stats-details">
+    <strong class="stats-count" [ngStyle]="{ color: textColor }">
+      {{ count }}{{hasPercentage ? ' %':''}}
+    </strong>
+    <h3 class="stats-title" [ngStyle]="{ color: textColor }">{{ title }}</h3>
+  </div>
+</div>

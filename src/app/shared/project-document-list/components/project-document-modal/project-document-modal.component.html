@@ -1,0 +1,85 @@
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'project'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onPopupClose()"
+>
+  <div modal-header class="project-model-header w-100">
+    <label class="modal-title">
+      {{ popupConfig?.title[lang] }}
+    </label>
+  </div>
+
+  <div modal-content class="project-model-content border-top">
+    <div class="new-model-dialog-body">
+      <div class="form-group my-4">
+        <label for="" class="form-label">
+          {{ "shared.description" | translate }}:
+        </label>
+        <textarea [formControl]="description" class="form-textarea"></textarea>
+        <small
+          class="form-error"
+          *ngIf="description.errors?.required && isFormSubmitted"
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.thisFieldIsRequired" | translate }}
+        </small>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="" class="form-label">
+          {{ "shared.document" | translate }}:
+        </label>
+        <div class="file-input-container mb-2 w-100 mr-2">
+          <label for="file-input" class="file-input">
+            <i class="bx bx-upload"></i>
+            <span class="cta-text">
+              {{ "shared.clickToSelectFile" | translate }}
+            </span>
+            <!-- <span class="supported-files-text">{{"shared.supportedFormats" | translate}}</span> -->
+            <input
+              type="file"
+              (change)="onFileChange($event)"
+              id="file-input"
+            />
+          </label>
+          <div *ngIf="uploadedfile" class="selected-files">
+            <div class="file mb-1">
+              <i class="bx bx-paperclip"></i>
+              <span class="file-name">{{ uploadedfile.title }}</span>
+              <button (click)="onDeleteFile(i)">
+                {{ "shared.delete" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <small class="form-error" *ngIf="!uploadedfile && isFormSubmitted">
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.thisFieldIsRequired" | translate }}
+        </small>
+      </div>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+
+      <!-- back button -->
+      <button
+        class="btn btn-dark flex-grow-1"
+        (click)="onPopupClose()"
+      >
+        {{ 'shared.back' | translate }}
+      </button>
+
+      <!-- save button -->
+      <button
+        class="btn btn-main flex-grow-1"
+        (click)="onSaveFile()"
+      >
+        {{ 'shared.save' | translate }}
+      </button>
+    </div>
+  </div>
+</app-model>

@@ -1,0 +1,120 @@
+<div class="mt-4">
+  <ul class="horizontal-cards">
+    <li
+      class="horizontal-cards-item"
+      *ngFor="
+        let item of list
+          | paginate
+            : {
+                itemsPerPage: paginationModel?.pageSize,
+                currentPage: paginationModel?.pageIndex,
+                totalItems
+              };
+        let i = index
+      "
+    >
+      <div class="card-container">
+        <div class="card-content">
+          <div class="horizontal-cards-item-cell kpi-id">
+            <div class="cell-title"></div>
+            <div class="cell-content">
+              {{
+                i
+                  | tableItemIndex
+                    : paginationModel?.pageSize
+                    : paginationModel?.pageIndex
+              }}
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell kpi-name">
+            <div class="cell-title">
+              {{ "committeeKPIs.list.name" | translate }}
+            </div>
+            <div
+              class="cell-content"
+              style="
+                width: 25rem;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              "
+            >
+              <a class="hoverableLink" (click)="goToKpiDetails(item?.id)">
+                <span class="name" [title]="item?.name">
+                  {{ language == "ar" ? item?.nameAr : item?.name }}
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell kpi-progress">
+            <div class="cell-title">
+              {{ "committeeKPIs.list.progress" | translate }}
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <div class="progress-bar flex-grow-1">
+                <span
+                  class="fill {{ item?.progress | progressColor }}"
+                  [ngStyle]="{ width: item?.progress + '%' }"
+                ></span>
+              </div>
+              <span class="percentage">{{ item.progress | number }}%</span>
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell kpi-weight">
+            <div class="cell-title">
+              {{ "committeeKPIs.list.weight" | translate }}
+            </div>
+            <div class="cell-content">{{ item.weight }}%</div>
+          </div>
+          <div class="horizontal-cards-item-cell kpi-frequency">
+            <div class="cell-title">
+              {{ "committeeKPIs.list.frequency" | translate }}
+            </div>
+            <div class="cell-content">
+              {{ measurementRecurrences[item.frequency].title[language] }}
+            </div>
+          </div>
+
+          <div class="horizontal-cards-item-cell kpi-frequency">
+            <div class="cell-title">
+              {{ "committeeKPIs.list.type" | translate }}
+            </div>
+            <div class="cell-content">
+              {{ measurementTypes[item.measurementType].title[language] }}
+            </div>
+          </div>
+
+          <div class="horizontal-cards-item-cell kpi-target">
+            <div class="cell-title">
+              {{ "committeeKPIs.list.target" | translate }}
+            </div>
+            <div class="cell-content">
+              {{ item.target }}
+              <span *ngIf="item.measurementType == 2">%</span>
+              <span *ngIf="item.measurementType == 3">
+                {{ "shared.AED" | translate }}
+              </span>
+              <span *ngIf="item.measurementType == 1">#</span>
+            </div>
+          </div>
+          <div class="horizontal-cards-item-cell kpi-actions">
+            <button (click)="goToKpiDetails(item?.id)">
+              {{ "committeesList.list.details" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

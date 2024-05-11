@@ -1,0 +1,113 @@
+@import "src/assets/css/utils/variables.scss";
+
+.see-more-btn {
+  display: inline-block;
+  color: $info_color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.block {
+  &-title {
+    color: $info_color;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  &-subtitle {
+    color: $info_color;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem !important;
+  }
+
+  &-length {
+    color: $main-color;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem !important;
+  }
+}
+
+.chairman {
+  ::ng-deep person-item {
+    .personItem {
+      &.header-person {
+        width: fit-content;
+      }
+
+      > .avatar {
+        .letters,
+        img {
+          height: 2rem !important;
+          width: 2rem !important;
+        }
+      }
+    }
+  }
+}
+
+.related-committee {
+  &-link {
+    color: $main-color;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.poll {
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+  }
+
+  &-item {
+    padding: 0.75rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    filter: drop-shadow(0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01));
+
+    &-title {
+      font-weight: 600;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    &-time {
+      color: $info_color;
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.25rem;
+      white-space: nowrap;
+    }
+
+    &-details {
+      color: $main-color;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.horizontal-line {
+  height: 1px;
+  background-color: #efefef;
+  margin: 40px 0;
+}

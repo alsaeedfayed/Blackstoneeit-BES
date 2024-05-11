@@ -1,0 +1,18 @@
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  background-color: #fff;
+  button {
+    width: 154px;
+    font-weight: 500;
+    font-size: 18px;
+    &:first-child {
+      margin-inline-end: 11px;
+    }
+  }
+}

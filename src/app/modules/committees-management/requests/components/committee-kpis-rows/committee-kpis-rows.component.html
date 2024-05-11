@@ -1,0 +1,233 @@
+<!-- <label class="form-label">
+  {{ "committeesNewRequest.committeeForm.committeeKPIs" | translate }}
+  <span *ngIf="isRequired" class="astrix-red">*</span>
+</label> -->
+<ng-container
+  *ngIf="KPIs?.length > 0 || importedGoals?.length > 0; else noData"
+>
+  <div class="d-flex justify-content-end" *ngIf="isEditAble">
+    <button class="add-new-btn" (click)="openNewKPIModel()">
+      <i class="bx bx-plus"></i>
+      {{ "committeesNewRequest.committeeForm.createNewKPI" | translate }}
+    </button>
+  </div>
+
+  <app-goals-tree
+    [showColumns]="true"
+    [isEditAble]="isEditAble"
+    [otherWeight]="totalWeight"
+    [data]="importedGoals"
+    [_selectedGoalsIds]="selectedKPIsIds"
+    (ontoggleExpandAll)="toggleNestedList($event)"
+  ></app-goals-tree>
+
+  <div class="data-breakdown" *ngIf="KPIs?.length > 0">
+    <div class="data">
+      <div class="table-header" *ngIf="importedGoals?.length == 0">
+        <div class="columns">
+          <div class="column">
+            <span>{{ "committeesNewRequest.kPIRows.weight" | translate }}({{totalWeight}}) </span>
+          </div>
+          <div class="column">
+            <span>{{ "committeesNewRequest.kPIRows.target" | translate }}</span>
+          </div>
+         <!--  <div class="column">
+            <span>
+              {{ "committeesNewRequest.kPIRows.frequency" | translate }}
+            </span>
+          </div>
+          <div class="column">
+            <span>
+              {{ "committeesNewRequest.kPIRows.dueDate" | translate }}
+            </span>
+          </div>-->
+          <div class="column-status"></div>
+        </div>
+      </div>
+      <ul>
+        <li>
+          <div class="panel-header">
+            <div class="header">
+              <div class="icons">
+                <i
+                  [style.display]="
+                    !otherKPIs?.open && KPIs?.length > 0 ? 'block' : 'none'
+                  "
+                  [ngClass]="'bx bx-chevron-right'"
+                  (click)="toggleNestedList(goal)"
+                ></i>
+                <i
+                  [style.display]="
+                    otherKPIs?.open && KPIs?.length > 0 ? 'block' : 'none'
+                  "
+                  class="bx bx-chevron-down"
+                  (click)="toggleNestedList()"
+                ></i>
+              </div>
+              <div class="type" [style.background]="otherKPIs?.mainColor">
+                <span>{{ otherKPIs?.title[language] }}</span>
+              </div>
+            </div>
+          </div>
+          <ul
+            [style.display]="otherKPIs?.open ? 'block' : 'none'"
+            *ngIf="KPIs?.length > 0"
+          >
+            <li
+              *ngFor="let kpi of KPIs"
+              [ngClass]="{ disabledRow: kpi?.isDisabled && isEditAble }"
+            >
+              <div
+                class="panel-header"
+                [ngClass]="{ disabledRow: kpi?.isDisabled && isEditAble }"
+              >
+                <div class="header">
+                  <div
+                    class="type {{
+                      language == 'ar' ? 'marginAr' : 'marginEn'
+                    }}"
+                    [style.background]="otherKPIs?.kpiColor"
+                  >
+                    <span>{{ language == "ar" ? "مؤشر" : "KPI" }}</span>
+                  </div>
+                  <div class="hd-title">
+                    <strong>
+                      {{ language == "ar" ? kpi?.nameAr : kpi?.name }}
+                    </strong>
+                  </div>
+                </div>
+                <div class="columns">
+                  <div class="column">
+                    <span>{{ kpi?.weight + "%" }}</span>
+                  </div>
+                  <div class="column">
+                    <span>
+                      {{
+                        kpi?.target +
+                          "" +
+                          measurementTypes[kpi?.measurementType - 1].prefix[
+                            language
+                          ]
+                      }}
+                    </span>
+                  </div>
+                  <!-- <div class="column">
+                    <app-badge
+                      [className]="
+                        measurementRecurrences[kpi?.frequency]['className']
+                      "
+                      [label]="
+                        measurementRecurrences[kpi?.frequency].title[language]
+                      "
+                    ></app-badge>
+                  </div>
+                  <div class="column">
+                    <span *ngIf="kpi?.frequency == 4">
+                      {{
+                        language === "en"
+                          ? ((kpi?.dueDate | uTCToLocalDate).toLocaleString()
+                            | date : "d MMM y")
+                          : ((kpi?.dueDate | uTCToLocalDate).toLocaleString()
+                            | localizeDate : "d MMM y")
+                      }}
+                    </span>
+                    <span *ngIf="kpi?.frequency != 4">-</span>
+                  </div> -->
+                  <div class="column-status">
+                    <div class="d-flex gap-2">
+                      <button
+                        *ngIf="!kpi?.isDisabled && isEditAble"
+                        [title]="'shared.update' | translate"
+                        class="edit-grid-item-btn"
+                        (click)="openNewKPIModel(kpi)"
+                      >
+                        <i class="bx bx-edit-alt fs-5"></i>
+                      </button>
+                      <button
+                        *ngIf="!kpi?.isDisabled && isEditAble"
+                        [title]="'shared.delete' | translate"
+                        class="edit-grid-item-btn"
+                        (click)="deleteKpi(kpi.name)"
+                      >
+                        <i class="bx bx-trash text-danger fs-5"></i>
+                      </button>
+                      <button
+                        *ngIf="!isEditAble && showDetails"
+                        [title]="'shared.viewDetails' | translate"
+                        class="edit-grid-item-btn"
+                        (click)="openDetailsModel(kpi)"
+                      >
+                      <i class='bx bxs-show eyeIcon' ></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noData>
+  <div class="no-data" *ngIf="isEditAble">
+    <!-- <app-no-data [msg]="'committeesNewRequest.kPIRows.noDataMsg' | translate"></app-no-data> -->
+    <p class="text-secondary">
+      {{ "committeesNewRequest.kPIRows.noDataMsg" | translate }}
+    </p>
+    <button class="btn btn-main" (click)="openNewKPIModel()">
+      <i class="bx bx-plus"></i>
+      {{ "committeesNewRequest.committeeForm.createNewKPI" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- create/edit KPI model -->
+<app-model
+  [dimensions]="{ width: 900, height: 750 }"
+  [id]="'kpi-modal'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeNewKPIModel()"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{
+        (selectedKPI
+          ? isDetailsModalOpened
+            ? "changeRequests.details.kpiDetails"
+            : "committeesNewRequest.newKPIModel.updateItem"
+          : "committeesNewRequest.newKPIModel.createNewItem"
+        ) | translate
+      }}
+    </label>
+  </div>
+
+  <div modal-content class="border-top">
+    <app-new-kpi-model
+      *ngIf="isKPIModelOpened"
+      [language]="language"
+      [name]="selectedKPI?.name"
+    ></app-new-kpi-model>
+
+    <app-kpis-details
+      *ngIf="isDetailsModalOpened"
+      [language]="language"
+      [kpiDetails]="selectedKPI"
+      [isAddedKpi]="false"
+    ></app-kpis-details>
+  </div>
+</app-model>
+
+<!-- modal to confirm request sending -->
+<app-confirm-modal
+  *ngIf="isEditAble"
+  [id]="'delete-kpi'"
+  [content]="'committeesNewRequest.kPIRows.deleteConfirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deleteKpiConfirmed()"
+></app-confirm-modal>

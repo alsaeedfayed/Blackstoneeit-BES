@@ -1,0 +1,146 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.request-info {
+  container: request-info / inline-size;
+  position: relative;
+  z-index: 1;
+
+  &-title {
+    color: $info_color;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+  }
+
+  &-list {
+    display: grid;
+    margin: 0;
+
+    @container request-info (min-width: 700px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem 1rem;
+      }
+    }
+
+    @container request-info (max-width: 700px) {
+      & {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    &-item {
+      @container request-info (min-width: 700px) {
+        &:not(:nth-of-type(2n + 1)) {
+          padding-inline-start: 1rem;
+          border-inline-start: 0.0625rem solid #96a6bd36;
+        }
+      }
+
+      @container request-info (max-width: 700px) {
+        &:not(:last-of-type) {
+          padding-bottom: 1rem;
+          border-bottom: 0.0625rem solid #96a6bd36;
+        }
+      }
+
+      &-content {
+        color: $black-color;
+        font-weight: 400;
+        font-size: 0.875rem;
+        line-height: 1.25rem !important;
+      }
+    }
+  }
+}
+
+.closure-request-card {
+  min-width: 100%;
+  width: 300px;
+  background: $white-color;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+
+  .closure-request-card-header {
+    .details {
+      h3 {
+        color: $black-color;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 150%;
+      }
+
+      .date {
+        color: #a8a8a8;
+        font-size: 16px;
+        font-weight: 400;
+
+        span {
+          color: $black-color;
+        }
+      }
+    }
+  }
+
+  .change-request-card-body {
+    ::ng-deep {
+      workflow-states {
+        padding-block: 0.5rem 0.25rem;
+
+        .approval-timeline-item {
+          border-color: #ebebeb;
+          box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.04);
+        }
+      }
+
+      ngb-accordion {
+        .card {
+          border: 1px solid #ebebeb !important;
+          border-radius: 0.625rem;
+
+          &:last-of-type {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.closure-request-form {
+  .questions-category {
+    background: $white-color;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+  }
+
+  .astrix-red {
+    color: red;
+  }
+}
+
+.mb-50px {
+  margin-bottom: 50px;
+}
+
+p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 31px;
+  color: #3c557a;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+
+
+::ng-deep {
+  .request-info-list-item {
+    .no-astrix {
+      color:  red !important;
+    }
+  }
+}

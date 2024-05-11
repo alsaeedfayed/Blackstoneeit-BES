@@ -1,0 +1,761 @@
+@font-face {
+  font-family: "Janna LT Regular";
+  src: url("/assets/fonts/Janna LT Regular.ttf");
+}
+
+html[dir="rtl"] {
+  body,
+  p,
+  span:not(.fc-icon),
+  li,
+  a,
+  strong,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button,
+  div,
+  label {
+    font-family: "Janna LT Regular", sans-serif !important;
+  }
+  span {
+    &.astrix-red {
+      font-family: "Roboto", sans-serif !important;
+    }
+  }
+
+
+    .ar .votingBarYes .vote-progress .vote-progress-bar {
+      left : 0 !important
+    }
+
+  .sponsor-info {
+    &-list {
+      &-item {
+        text-align: right !important;
+      }
+    }
+  }
+
+  .bar-container {
+    li {
+      &.multiple-items {
+        &:first-child {
+          border-radius: 0px 10px 10px 0px !important;
+        }
+
+        &:last-child {
+          border-radius: 10px 0px 0px 10px !important;
+        }
+      }
+    }
+  }
+
+  .template-card {
+    &.active {
+      &::after {
+        transform: rotate(90deg) !important;
+      }
+    }
+  }
+
+  .form-select {
+    padding: 12px 12px 12px 44px !important;
+    height: 48px !important;
+  }
+
+  &.form-select .language-switch-nav-item {
+    font-family: "Roboto", sans-serif !important;
+  }
+
+  .project-details-side-container {
+    border-left: 2px solid #f2f4f9;
+    border-right: none;
+  }
+
+  .stepper-header {
+    border-right: none;
+    border-left: 2px solid #f2f4f9;
+  }
+
+  .dropdown-container {
+    button {
+      background-position: left 0.75rem center !important;
+    }
+  }
+
+  .switch {
+    label {
+      padding: 10px 16px 10px 57px !important;
+    }
+  }
+
+  .bx-chevron-right {
+    transform: rotate(180deg);
+  }
+
+  .team-selection-col {
+    &:not(:last-child) {
+      border-left: 1px solid #e5e5e5;
+      border-right: none !important;
+    }
+
+    .team-selection-col-header {
+      i {
+        left: 10px;
+        right: unset !important;
+      }
+    }
+
+    &.has-members {
+      .bx-x {
+        right: unset !important;
+        left: 0;
+      }
+    }
+  }
+
+  .comment-input-container {
+    .first-col {
+      &:after {
+        right: unset !important;
+        left: 0 !important;
+      }
+    }
+  }
+
+  .comment-submit-btn {
+    i {
+      transform: rotate(180deg);
+    }
+  }
+
+  .duration-label-container {
+    .duration-label-col {
+      &:not(:last-child) {
+        border-right: none !important;
+        border-left: 2px solid #cddcee;
+      }
+    }
+  }
+
+  .form-input {
+    height: 50px;
+    border-radius: 10px;
+    background: $gray-color;
+    border: none;
+    color: $black_color;
+    // padding: 8px 20px;
+    border: 0.8px solid transparent;
+
+    font: {
+      size: 16px;
+      weight: 400;
+    }
+
+    line-height: 20px;
+
+    &:focus {
+      border: 0.8px solid $main-color;
+      outline: none;
+      outline: 2.5px solid $light-main-color !important;
+    }
+  }
+
+  .select-chevron {
+    left: 20px;
+    right: initial;
+  }
+
+  .input-with-spinner {
+    i {
+      left: 20px;
+      right: initial;
+    }
+
+    &.citizens-typeahead i {
+      left: initial !important;
+      right: 20px !important;
+    }
+  }
+
+  .amount-input {
+    input {
+      padding: 8px 20px 8px 45px;
+    }
+  }
+
+  .search-bar-container {
+    input {
+      padding: 10px 16px 10px 36px;
+    }
+
+    i {
+      right: initial;
+      left: 16px;
+    }
+  }
+
+  .switch {
+    // Unchecked
+    &__label {
+      justify-content: end;
+
+      &:before {
+        right: unset;
+        left: 10px;
+      }
+
+      &:after {
+        right: unset;
+        left: 27px;
+      }
+    }
+
+    .input-state {
+      line-height: 0;
+
+      &::before {
+        color: $link_water_color;
+        content: "غير مفعل";
+      }
+    }
+
+    &__input:checked + .switch__label {
+      .input-state {
+        line-height: 0;
+
+        &::before {
+          color: $main-color;
+          content: "مفعل";
+        }
+      }
+    }
+
+    .switch__input:checked + .switch__label::after {
+      right: unset;
+      left: 10px;
+    }
+  }
+
+  .state-seperator-arrow {
+    transform: rotate(180deg);
+  }
+
+  .process-state-badge {
+    padding: 8px 28px 8px 16px;
+
+    span {
+      text-align: center;
+      //   width: 10px;
+      //   height: 10px;
+      //   border-radius: 50%;
+      //   position: absolute;
+      //   top:50%;
+      //   transform: translateY(-50%);
+      right: 10px;
+    }
+  }
+
+  .login-card .login-input-container {
+    .form-input {
+      padding: 8px 40px 8px 12px !important;
+    }
+
+    .bx-envelope {
+      right: 10px;
+    }
+
+    .bx-lock-alt {
+      left: initial;
+      right: 10px;
+    }
+
+    .bx-show-alt {
+      right: initial !important;
+      left: 20px !important;
+    }
+
+    .bx-lock-open-alt {
+      left: initial !important;
+      right: 10px !important;
+    }
+  }
+
+  .password-recovery-input-container {
+    .bx-envelope {
+      right: 10px;
+    }
+
+    .form-input {
+      padding: 8px 40px 8px 12px !important;
+    }
+  }
+
+  .password-reset-input-container {
+    .bx-envelope {
+      right: 10px;
+    }
+
+    .form-input {
+      padding: 8px 40px 8px 12px !important;
+    }
+
+    .bx-lock-alt {
+      left: initial;
+      right: 10px;
+    }
+
+    .bx-show-alt {
+      right: initial !important;
+      left: 20px;
+    }
+
+    .bx-hide {
+      right: initial !important;
+      left: 20px;
+    }
+
+    .bx-lock-open-alt {
+      left: initial;
+      right: 10px;
+    }
+  }
+
+  .modal-language-switch {
+    right: initial;
+    left: 0;
+  }
+
+  .process-state-card {
+    .card-id {
+      left: 15px;
+      right: initial !important;
+    }
+  }
+
+  .transition-card-dropdown {
+    right: initial;
+    left: 0;
+
+    .transition-dropdown-options {
+      left: 2px !important;
+      right: initial !important;
+    }
+  }
+
+  .profile-dropdown {
+    right: initial !important;
+    left: 0 !important;
+  }
+
+  .view-switch {
+    .switcher {
+      label {
+        &:before {
+          content: "عرض البطاقات" !important;
+        }
+
+        &:after {
+          content: "عرض مخطط" !important;
+        }
+      }
+    }
+  }
+
+  .custom-table {
+    // head
+    tbody {
+      td {
+        &:first-child {
+          border-left: none !important;
+          border-right: 1px solid $gainsboro_color;
+        }
+
+        &:last-child {
+          border-right: 0 !important;
+          border-left: 1px solid $gainsboro_color;
+          // min-width: 300px;
+        }
+      }
+    }
+
+    tbody {
+      tr:last-child {
+        td {
+          border-bottom: 1px solid $gainsboro_color;
+
+          &:first-child {
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 12px !important;
+          }
+
+          &:last-child {
+            border-bottom-right-radius: 0 !important;
+            border-bottom-left-radius: 12px !important;
+          }
+        }
+      }
+    }
+  }
+
+  .timepicker-toggle,
+  .datepicker-toggle {
+    right: unset !important;
+    left: 8px !important;
+  }
+
+  ngb-datepicker {
+    .custom-select {
+      background: #fff
+        url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e")
+        no-repeat left 0.75rem center/8px 10px;
+    }
+
+    .ngb-dp-arrow.right {
+      .ngb-dp-navigation-chevron {
+        transform: rotate(226deg) !important;
+      }
+    }
+
+    .ngb-dp-arrow {
+      .ngb-dp-navigation-chevron {
+        transform: rotate(45deg) !important;
+      }
+    }
+  }
+
+  .ngb-tp {
+    .ngb-tp-meridian {
+      order: 1;
+    }
+
+    .ngb-tp-spacer {
+      display: none;
+
+      &:nth-child(2) {
+        display: block;
+        order: 4;
+      }
+    }
+
+    .ngb-tp-minute {
+      order: 3;
+      margin-inline-start: 1em;
+    }
+
+    .ngb-tp-hour {
+      order: 5;
+    }
+  }
+
+  .input-language-switch {
+    right: unset;
+    left: 0;
+  }
+
+  //pagination
+  .pagination-next,
+  .pagination-previous {
+    padding: 10.5px 1.5px 3px !important;
+  }
+
+  .radio-button-label-with-input {
+    &:before {
+      right: unset !important;
+      left: 15px;
+    }
+  }
+
+  .dropdown-container {
+    right: initial;
+    left: 0;
+
+    .dropdown-options {
+      left: 2px !important;
+      right: initial !important;
+    }
+  }
+
+  .back-btn {
+    i {
+      transform: rotate(180deg);
+    }
+  }
+
+  .my-pagination .ngx-pagination {
+    .pagination-previous {
+      &::before {
+        transform: rotate(180deg);
+      }
+
+      a::before {
+        transform: rotate(180deg);
+      }
+    }
+
+    .pagination-next {
+      &::after {
+        transform: rotate(-180deg);
+      }
+
+      a::after {
+        transform: rotate(-180deg);
+      }
+    }
+
+    li {
+      line-height: 28.8px !important;
+
+      span {
+        line-height: 28.8px !important;
+      }
+    }
+  }
+
+  .table-chevron-btn {
+    transform: rotate(180deg);
+  }
+
+  .attachment-container {
+    padding: 4px 4px 4px 17px;
+  }
+
+  //for chart of accounts module
+  .account-id {
+    color: #b5b5b5;
+    position: relative;
+
+    &::after {
+      right: -27px;
+      top: -20px;
+      height: 33px;
+    }
+
+    &::before {
+      font-family: "boxicons" !important;
+      content: "\e9f9";
+      letter-spacing: 13px;
+      text-align: left;
+      right: -32px;
+      top: 7px;
+    }
+  }
+
+  .accounts-chart-controls {
+    ul {
+      padding: 2px !important;
+      margin-top: -4.5px !important;
+
+      li {
+        border-right: none !important;
+
+        &:not(:last-of-type) {
+          border-left: 1px solid $min_light_greay_color;
+        }
+      }
+    }
+  }
+
+  .tree-root .angular-tree-component-rtl .tree-children {
+    padding-right: 30px !important;
+  }
+
+  //Accordion rtl
+  .accordion-button::after {
+    margin-right: auto;
+    margin-left: 0;
+  }
+
+  //timeline rtl support
+  .timeline {
+    right: 27px;
+    left: unset;
+  }
+
+  .timeline-status {
+    right: 17px;
+    left: unset;
+  }
+
+  .timeline-table {
+    .custom-table {
+      thead {
+        th {
+          text-align: start;
+
+          &:first-child {
+            text-align: center;
+          }
+        }
+      }
+
+      tr td {
+        &:first-child {
+          border-right: none !important;
+          border-left: 0.5px solid #f0f0f0 !important;
+        }
+      }
+    }
+  }
+
+  .mobile-td {
+    text-align: end;
+  }
+
+  .tree-root .angular-tree-component-rtl .tree-children {
+    padding-right: 30px !important;
+  }
+
+  //for horizontal time line
+  .parent-time-line {
+    ul {
+      .item {
+        .icon-parent {
+          padding: 9px 15px !important;
+        }
+
+        .main-icon {
+          i {
+            color: $slate_white_color;
+          }
+        }
+
+        .line {
+          right: 0;
+          left: auto;
+        }
+      }
+    }
+  }
+
+  //Application Details confirmation modal
+  .application-confirm-modal {
+    .modal-dialog {
+      left: 0;
+      right: 0;
+    }
+
+    .btn-close {
+      margin: 0 !important;
+    }
+  }
+
+  //Supplier File input
+  .file-input {
+    .bx-upload {
+      right: unset !important;
+      left: 20px !important;
+    }
+  }
+
+  //Dots dropdown
+  .dots-dropdown {
+    right: unset !important;
+    left: 0 !important;
+  }
+
+  //Login show/display password
+  .login-input-container {
+    .bx-show-alt {
+      right: unset !important;
+      left: 20px !important;
+    }
+
+    .bx-hide {
+      right: unset !important;
+      left: 20px !important;
+    }
+  }
+
+  //Accordion header buttons
+  .accordion-options {
+    right: unset;
+    left: 80px;
+  }
+
+  //select dropdown
+  .form-select {
+    background-position: 15px;
+  }
+
+  //roles select dropdown
+  .multiselect-dropdown {
+    background-position: 5% 21px;
+
+    .dropdown-btn {
+      text-align: right !important;
+    }
+
+    .filter-textbox {
+      input {
+        padding: 0 26px 0 0px !important;
+      }
+    }
+
+    .item1 .multiselect-item-checkbox {
+      display: flex !important;
+    }
+  }
+
+  //popoup close btn
+  .modal-header .btn-close {
+    margin: -0.5rem auto -0.5rem -0.5rem;
+  }
+
+  .single-file-input {
+    .bx-upload {
+      right: unset !important;
+      left: 20px !important;
+    }
+  }
+
+  .toast-warning,
+  .toast-success,
+  .toast-error,
+  .toast-info {
+    direction: rtl;
+    padding: 15px 50px 15px 15px;
+    background-position-x: calc(100% - 15px);
+  }
+
+  .range-input-container {
+    flex-direction: row-reverse;
+  }
+
+  .chrtabs {
+     .tabs-items {
+      justify-content: right !important;
+    }
+  }
+
+  .bau-dashboard-statistic-card{
+    border-left: .5px solid #ededed !important;
+  }
+
+  .per-total-total{
+    position: absolute;
+    top: 42%;
+      left: 41%;
+      font-weight: 600;
+  }
+
+.history-model-content {
+
+  .items-timeline{
+    // .badge-status {
+    //   width: 110px !important;
+    // }
+  }
+  .personItem{
+    .letters {
+      background: rgb(82, 113, 255) !important;
+    }
+  }
+
+}
+
+}

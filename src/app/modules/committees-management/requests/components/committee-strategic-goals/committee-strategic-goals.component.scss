@@ -1,0 +1,80 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+.goals-container {
+}
+.goalsSelector{
+  width: 99.5%;
+}
+.goalsSelector:nth-child(1),
+.goalsSelector:nth-child(2) {
+  width: 49%;
+}
+// height: fit-content;
+// }
+.add-new-btn {
+  display: block;
+  background: none;
+  color: $main-color;
+  font-weight: 500;
+  padding-block: 0;
+  margin-inline-start: auto;
+  border: 0;
+  min-width: 110px !important;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.disabled {
+  color: #5272ff84 !important;
+  &:hover {
+    text-decoration: none !important;
+  }
+}
+.goal-type {
+  min-width: 100px !important;
+}
+// app-select {
+//   ::ng-deep {
+//     display: flex !important;
+//     align-items: center;
+//     margin-left: 10px;
+//     gap: 10px;
+//     flex-wrap: wrap;
+//     label {
+//       min-width: 10%;
+//     }
+//     ng-select {
+//       min-width: 80%;
+//     }
+//   }
+// }
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-block: 1rem 2rem;
+
+  ::ng-deep app-no-data {
+    .no-data {
+      position: static;
+      top: initial;
+      left: initial;
+      transform: none;
+    }
+
+    img {
+      display: block;
+      margin: auto;
+      width: 101px;
+      height: 83px;
+    }
+
+    p {
+      width: auto;
+      font-size: 0.875rem;
+      margin: 1.5rem 0 0;
+    }
+  }
+}

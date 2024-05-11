@@ -1,0 +1,169 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.items-timeline {
+  margin-top: 1.5rem;
+
+  .timeline-title {
+    color: $black-color;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  ::ng-deep workflow-person-item {
+    .personItem {
+      width: fit-content;
+
+      > div:not(.user-popup-card) {
+        > img,
+        > .letters {
+          height: 2.5rem;
+          width: 2.5rem;
+          border-radius: 50%;
+        }
+
+        > .name {
+          color: $black-color;
+          font-weight: 600;
+          font-size: 0.75rem;
+          line-height: 1.125rem;
+        }
+
+        > .job {
+          width: fit-content;
+          background-color: rgba(0, 102, 255, 0.06);
+          color: $main-color;
+          font-size: 0.625rem;
+          padding: 0.25rem 0.625rem;
+          margin-top: 0.375rem;
+          border-radius: 0.25rem;
+        }
+      }
+    }
+  }
+
+  ul {
+    list-style: none;
+    position: relative;
+    margin: 0;
+    padding-bottom: 1rem;
+
+    &:not(:last-child) {
+      .line {
+        position: absolute;
+        top: 0;
+        @include rtl_value(left, 0.375rem, auto);
+        @include rtl_value(right, auto, 0.375rem);
+        height: 100%;
+        width: 0.125rem;
+        background: rgba(150, 166, 189, 0.21);
+      }
+
+      li {
+        padding-bottom: 1.25rem;
+      }
+    }
+
+    li {
+      display: flex;
+      align-items: flex-start;
+
+      .datetime {
+        margin-top: -0.1875rem;
+
+        span {
+          color: $info_color;
+          font-weight: 500;
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+        }
+      }
+
+      .dot {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        z-index: 2;
+        height: 0.875rem;
+        width: 0.875rem;
+        font-size: 0.625rem;
+        margin-inline-end: 1rem;
+        border-radius: 50%;
+
+        &.completed {
+          background-color: #0fc161;
+          color: $white-color;
+        }
+
+        &.upcoming {
+          background-color: $info_color;
+          color: $white-color;
+        }
+      }
+
+      .item-content {
+        width: calc(100% - 1rem);
+      }
+
+      .task-details {
+        .details {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-top: 1rem;
+          margin-inline-start: 3.4375rem;
+
+          .action {
+            margin: 0 0 0.3125rem;
+          }
+        }
+
+        .paragraph {
+          color: #292d32;
+          font-weight: 400;
+          font-size: 0.75rem;
+          line-height: 1.25rem;
+          margin-bottom: 0;
+        }
+
+        .attachments-list {
+          list-style: none;
+          margin: 0.5rem 0 0;
+          padding: 0;
+
+          li {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            color: #3c557a;
+            word-break: break-all;
+            line-height: 1.25rem;
+            padding: 0;
+
+            &:not(:last-child) {
+              margin-bottom: 0.625rem;
+            }
+
+            i {
+              font-size: 1.625rem;
+            }
+
+            a {
+              text-decoration: none;
+              color: inherit;
+              // white-space: nowrap;
+              // overflow: hidden;
+              // text-overflow: ellipsis;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

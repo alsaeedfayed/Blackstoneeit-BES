@@ -1,0 +1,140 @@
+// Variables
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.performance-dashboard {
+  //background: rgb(249, 249, 249);
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media(max-width: 1000px) {
+      flex-direction: column;
+    }
+  }
+  .title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 21px;
+    color: #3c557a;
+    margin-bottom: 20px;
+  }
+  .filter {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+  .content {
+    margin-top: 20px;
+    min-height: 550px;
+    &.fixed {
+        margin-top: 85px;
+    }
+  }
+}
+
+.tabsmenu {
+  --tab-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+
+  &__item {
+    flex-grow: 1;
+
+    &:hover {
+      & ~ .tabsmenu__item {
+        .tabsmenu__link {
+          &:before {
+            @include rtl_value(left, 0, 100%);
+            @include rtl_value(right, 100%, 0);
+          }
+        }
+      }
+
+      & .tabsmenu__link {
+        color: $black-color;
+
+        &:before {
+          @include rtl_value(left, 0, 0);
+          @include rtl_value(right, 0, 0);
+        }
+      }
+    }
+  }
+
+  &:not(:hover) {
+    .tabsmenu__item.active {
+      & .tabsmenu__link {
+        color: $black-color;
+
+        &:before {
+          @include rtl_value(left, 0, 0);
+          @include rtl_value(right, 0, 0);
+        }
+      }
+    }
+  }
+
+  &__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    height: var(--tab-height);
+    line-height: var(--tab-height);
+    color: $info_color;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0 1rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      @include rtl_value(left, 100%, 0);
+      @include rtl_value(right, 0, 100%);
+      bottom: -1px;
+      border-bottom: 2px solid $main-color;
+      transition: 0.16s all 0.025s;
+    }
+
+    i {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.fixed {
+    position: fixed;
+    // left: 325px;
+    // right: 40px;
+    // @include rtl_key(null, left, right, 9% );
+    // @include rtl_key(null, right, left, 40px );
+    @include rtl_key(null, left, right, 142px );
+    @include rtl_key(null, right, left, 22px );
+    z-index: 99999999999999;
+    background: white;
+    // top: 74px;
+    top: 94px;
+    .title {
+      margin-top: 20px;
+    }
+    .header {
+      padding: 0 10px;
+    }
+    @media (max-width: 1000px) {
+        left: 120px !important;
+        right: 0 !important;
+    }
+    &.fixedOpenSidebar {
+      @include rtl_key(null, left, right, 390px );
+      @include rtl_key(null, right, left, 22px ); 
+      @media (max-width: 1000px) {
+        left: 365px !important;
+        right: 0 !important;
+      }
+    }
+}

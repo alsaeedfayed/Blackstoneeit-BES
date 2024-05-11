@@ -1,0 +1,98 @@
+<app-model
+  [dimensions]="popupConfig?.dimensions"
+  [id]="'request-create'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onPopupClose()"
+>
+  <div modal-header class="priority-model-header w-100">
+    <label class="modal-title">
+      {{ popupConfig?.title[lang] }}
+    </label>
+  </div>
+
+  <div modal-content class="priority-model-content border-top">
+    <div class="new-model-dialog-body">
+
+      <!-- Workflow Actions -->
+      <app-workflow-actions-confirmation
+        *ngIf="popupConfig?.mode === 'action'"
+        class="d-block mt-4"
+        [lang]="lang"
+        [isReassignOption]="popupConfig?.isReassignOption"
+        [action]="popupConfig?.action"
+        [isCommentRequired]="popupConfig?.action?.isCommentRequired"
+        [isFormSubmitted]="isFormSubmitted"
+      ></app-workflow-actions-confirmation>
+
+      <!-- Priority Setting -->
+      <app-priority-setting
+        *ngIf="popupConfig?.mode === 'priority'"
+        class="d-block mt-4"
+        [lang]="lang"
+        [requestData]="requestData"
+        [criterias]="popupConfig.criterias"
+      ></app-priority-setting>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+      <ng-container *ngIf="popupConfig?.mode === 'action'">
+        <!-- back button -->
+        <button
+          class="btn btn-dark flex-grow-1"
+          (click)="onPopupClose()"
+        >
+          {{ "shared.back" | translate }}
+        </button>
+
+        <!-- save button -->
+        <button
+          class="btn btn-main flex-grow-1"
+          (click)="onActionConfirmed($event)"
+        >
+          {{ popupConfig?.action?.label[lang] }}
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="popupConfig?.mode === 'translate-fields'">
+        <small class="form-hint" *ngIf="!isTranslationRequired">
+          <i class="bx bx-info-circle"></i>
+          <span>
+            {{
+              "Translation is optional and if you choose to continue without translating, the provided text will be visible in both interfaces Arabic and English"
+              | translate
+            }}
+          </span>
+        </small>
+
+        <!-- save button -->
+        <button
+          class="btn btn-main flex-grow-1"
+          (click)="submitTranslatedFields($event)"
+        >
+          {{ "shared.save" | translate }}
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="popupConfig?.mode === 'priority'">
+        <!-- back button -->
+        <button
+          class="btn btn-dark flex-grow-1"
+          (click)="onPopupClose()"
+        >
+          {{ "shared.back" | translate }}
+        </button>
+
+        <!-- save button -->
+        <button
+          class="btn btn-main flex-grow-1"
+          (click)="onSubmitPriority()"
+        >
+          {{ "shared.save" | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</app-model>

@@ -1,0 +1,99 @@
+@import "src/assets/css/utils/variables.scss";
+
+.new-group-form {
+  background-color: $white-color;
+  padding: 1.25rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 0.625rem;
+  box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+
+  .block-title {
+    color: $info_color;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+.astrix-red {
+  color: red;
+}
+
+::ng-deep {
+  .members-select,
+  .objectives-select {
+    .ng-select-container {
+      .ng-value {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 6px 4px 4px;
+        background-color: rgba(172, 181, 193, 0.15) !important;
+        border-radius: 2.5rem !important;
+
+        .ng-value-label {
+          padding: 0 !important;
+        }
+
+        .ng-value-icon {
+          height: 13px;
+          line-height: 13px;
+          font-size: 18px;
+          color: $tertiary-color;
+          background: none !important;
+          border: none !important;
+
+          &:hover {
+            color: $danger-color !important;
+          }
+        }
+      }
+
+      person-item {
+        .avatar {
+          .letters,
+          img {
+            margin-inline-end: 4px;
+          }
+        }
+
+        .name {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .members-select {
+    .ng-select-container {
+      height: auto !important;
+      min-height: 44px;
+    }
+
+    person-item {
+      .personItem {
+        > .avatar {
+          .letters,
+          img {
+            height: 2rem !important;
+            width: 2rem !important;
+          }
+
+          .letters {
+            font-size: 0.75rem;
+          }
+        }
+
+        > .info {
+          .name {
+            margin-bottom: 0;
+          }
+
+          .job {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

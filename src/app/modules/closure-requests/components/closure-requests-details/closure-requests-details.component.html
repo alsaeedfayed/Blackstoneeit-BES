@@ -1,0 +1,213 @@
+<div class="closure-request-container">
+  <app-header-page
+    [title]="('closureRequests.closureRequestOf' | translate) + ': ' + closureRequestData?.project?.name[lang]"
+    [showTotalItems]="false"
+    [backButton]="true"
+  >
+    <ng-container buttons>
+      <app-badge
+        *ngIf="closureRequestData?.status?.mappedStatusCode === 'Approved'"
+        [className]="'complete'"
+        [label]="closureRequestData?.status?.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="closureRequestData?.status?.mappedStatusCode === 'Rejected'"
+        [className]="'rejected'"
+        [label]="closureRequestData?.status?.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="closureRequestData?.status?.mappedStatusCode === 'ReturnedForCorrection'"
+        [className]="'closed'"
+        [label]="closureRequestData?.status?.title[lang]"
+      ></app-badge>
+      <app-badge
+        *ngIf="closureRequestData?.status?.mappedStatusCode === 'PendingForReview'"
+        [className]="'inProgress'"
+        [label]="closureRequestData?.status?.title[lang]"
+      ></app-badge>
+    </ng-container>
+  </app-header-page>
+
+  <div class="header-details d-flex align-items-center mb-4">
+    <div class="date mr-2">
+      {{ 'closureRequests.createdBy' | translate }}:
+      <span>{{ closureRequestData?.createdBy?.fullname }}</span>
+    </div>
+
+    <div class="date">
+      {{ 'closureRequests.createdAt' | translate}}:
+      <span>
+        {{
+          lang === "en" ?
+          (closureRequestData?.createdDate | date : "dd/MM/yyyy hh:mm a") :
+          (closureRequestData?.createdDate | localizeDate : "dd/MM/yyyy hh:mm a")
+        }}
+      </span>
+    </div>
+  </div>
+
+  <!-- action buttons -->
+  <workflow-action-options
+  *ngIf="!closureRequestData?.canEdit"
+    class="d-block mb-4"
+    [title]="''"
+    [task]="closureRequestData?.task"
+    [options]="closureRequestData?.task?.options"
+    [instanceId]="instanceId"
+    (onSaveAction)="onActionConfirmed($event)"
+  ></workflow-action-options>
+  <div class="d-flex flex-wrap gap-2 justify-content-end my-2" buttons *ngIf="closureRequestData?.canEdit">
+    <button class="btn btn-main" (click)="updateClosureRequest()">
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+  <!-- approval timeline -->
+  <workflow-states
+    class="d-block mb-4"
+    [steps]="closureRequestData?.states"
+  ></workflow-states>
+
+  <div class="d-flex flex-wrap gap-2 justify-content-end my-2" buttons *ngIf="closureRequestData?.canEdit">
+    <button class="btn btn-main"
+    (click)="updateClosureRequest()"
+    >
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+  <!-- request details -->
+  <!-- <div class="mb-4" *ngIf="closureRequestData?.status?.mappedStatusCode != 'ReturnedForCorrection' || !isRequester"> -->
+  <div class="mb-4" *ngIf="!closureRequestData?.canEdit || !isRequester">
+    <ngb-accordion #acc="ngbAccordion" [activeIds]="accordionActiveIds">
+      <ngb-panel
+        [title]="'closureRequests.general' | translate"
+        [id]="'ngb-panel-0'"
+      >
+        <ng-template ngbPanelContent>
+          <div class="request-info">
+            <ul class="request-info-list">
+              <li class="request-info-list-item">
+                <h4 class="request-info-title mb-2">{{ 'closureRequests.details' | translate }}</h4>
+
+                <div class="request-info-list-item-content">
+                  {{ closureRequestData?.details }}
+                </div>
+              </li>
+              <li class="request-info-list-item">
+                <h4 class="request-info-title mb-2">{{ 'shared.status' | translate }}</h4>
+
+                <div class="request-info-list-item-content">
+                  {{ closureRequestData?.closedStatus?.title[lang] }}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </ng-template>
+      </ngb-panel>
+
+      <ngb-panel
+        *ngFor="let answer of closureRequestData?.answers; let i = index"
+        [title]="answer?.category?.title[lang]"
+        [id]="'ngb-panel-' + (i + 1)"
+      >
+        <ng-template ngbPanelContent>
+          <div class="request-info">
+            <ul class="request-info-list">
+              <li class="request-info-list-item" *ngFor="let question of answer?.questions">
+                <h4 class="request-info-title mb-2">{{ question?.question?.title[lang] }}</h4>
+
+                <div class="request-info-list-item-content" *ngIf="!question?.question?.isTrueOrFalse">
+                  {{ question?.answer || ('shared.N/A' | translate) }}
+                </div>
+                <div class="request-info-list-item-content" *ngIf="question?.question?.isTrueOrFalse">
+                  {{ (question?.achieved ? 'closureRequests.achieved' : 'closureRequests.notAchieved') | translate }}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+
+  <!-- request form -->
+  <form
+    *ngIf="closureRequestData?.canEdit && isRequester"
+    class="request-form d-flex flex-column gap-4"
+    [formGroup]="form"
+  >
+    <div class="questions-category">
+      <h3 class="mb-0">{{ 'closureRequests.general' |translate }}</h3>
+
+      <div class="request-info mt-4">
+        <ul class="request-info-list">
+          <li class="request-info-list-item">
+            <div class="form-group">
+              <label for="" class="form-label">
+                {{ 'closureRequests.details' | translate }}
+                <span class="astrix-red">*</span>
+              </label>
+
+              <textarea
+                class="form-textarea"
+                formControlName="details"
+                [value]="form.get('details').value"
+              ></textarea>
+            </div>
+          </li>
+          <li class="request-info-list-item">
+            <div class="form-group">
+              <app-select
+                formControlName="status"
+                [control]="form | getControl: 'status'"
+                [title]="'shared.status' | translate"
+                [placeholder]="'closureRequests.selectStatus' | translate"
+                [items]="statusList"
+                [bindVlaue]="'id'"
+                [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+              ></app-select>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="questions-category"
+      *ngFor="let category of questions | keyvalue; let i = index"
+      [formArrayName]="category?.key"
+    >
+      <h3 class="mb-0">{{ category?.key }}</h3>
+
+      <div class="request-info mt-4">
+        <ul class="request-info-list">
+          <li
+            class="request-info-list-item"
+            *ngFor="let question of category?.value; let questionIndex = index"
+            [formGroupName]="questionIndex"
+          >
+            <p>{{ question?.title[lang] }}</p>
+
+            <div class="form-group">
+              <textarea
+                *ngIf="!question?.isTrueOrFalse"
+                class="form-textarea"
+                formControlName="question"
+              ></textarea>
+
+              <app-custom-radio-buttons-control
+                *ngIf="question?.isTrueOrFalse"
+                [items]="items"
+                [cardHeight]="44"
+                [selectedItem]="form.value[category.key][questionIndex].question"
+                (change)="toggle($event,form.controls[category.key].controls[questionIndex].controls.question)"
+              ></app-custom-radio-buttons-control>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Loading modal -->
+<app-loading-modal [displayModal]="displayLoadingModal"></app-loading-modal>

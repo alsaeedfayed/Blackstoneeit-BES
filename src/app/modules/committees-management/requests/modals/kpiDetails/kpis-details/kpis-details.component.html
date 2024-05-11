@@ -1,0 +1,133 @@
+<div class="new-model-dialog-body">
+  <!-- tabs -->
+  <div class="table-wrapper chrtabs">
+    <!-- full details  tab -->
+    <div class="full-container">
+      <div class="full-title mt-3 d-flex justify-content-between align-items-center  ">
+          <span class="kpi-title">{{ kpiDetails?.name }}</span>
+          <app-badge *ngIf="kpiDetails?.frequency != 4"
+          [className]="'draft'"
+          [label]=" language === 'en' ? MeasurementRecurrences[kpiDetails?.frequency]?.title.en : MeasurementRecurrences[kpiDetails?.frequency]?.title.ar"
+        ></app-badge>
+
+        <span *ngIf="kpiDetails?.frequency == 4">
+          {{
+            language === "en"
+              ? ((kpiDetails?.dueDate | uTCToLocalDate).toLocaleString()
+                | date : "d MMM y")
+              : ((takpiDetailssk?.dueDate | uTCToLocalDate).toLocaleString()
+                | localizeDate : "d MMM y")
+          }}
+        </span>
+
+      </div>
+      <span class="kpi-title kpi-ar-title mt-4 d-flex justify-content-end">{{ kpiDetails?.nameAr }}</span>
+      <div class="d-flex gap-5 my-4">
+        <div class="assignedTo-details" *ngIf="kpiDetails?.assignedToInfo">
+          <span class="weight-target-lable">
+            {{ "committeeTasks.assignedTo" | translate }}
+          </span>
+
+          <person-item class="mt-2"
+          [requesterItem]="kpiDetails?.assignedToInfo"
+          [noCursor]="true"
+          [isUserCardFixed]="true"
+        ></person-item>
+        </div>
+        <div>
+          <div class="measurment-wrapper" *ngIf="kpiDetails?.measurementType">
+            <span class="full-description-lable" >
+              {{ "changeRequests.details.measurementType" | translate }}
+            </span>
+            <div class="full-description-body mt-2">
+              <span>
+                {{ measurementTypes[kpiDetails?.measurementType - 1].title[language] }}
+              </span>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weight-target mt-2">
+        <div>
+          <span class="weight-target-lable">
+            {{ "changeRequests.details.weight" | translate }}
+          </span>
+          <span class="weight-target mt-2">{{ kpiDetails?.weight }}%</span>
+        </div>
+        <div>
+          <span class="weight-target-lable">
+            {{ "changeRequests.details.target" | translate }}
+          </span>
+          <span class="weight-target mt-2">{{ kpiDetails?.target }}%</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="full-description mt-3" *ngIf="kpiDetails?.description">
+          <span class="full-description-lable" >
+            {{ "changeRequests.details.description" | translate }}
+          </span>
+          <div
+            class="full-description-body mt-2"
+            [innerHTML]="kpiDetails?.description"
+          ></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="full-description mt-3"  *ngIf="kpiDetails?.formula">
+          <span class="full-description-lable">
+            {{ "changeRequests.details.formula" | translate }}
+          </span>
+          <div
+            class="full-description-body mt-2"
+            [innerHTML]="kpiDetails?.formula"
+          ></div>
+        </div>
+      </div>
+      <div>
+        <div class="full-description mt-3"  *ngIf="kpiDetails?.risk">
+          <span class="full-description-lable">
+            {{ "changeRequests.details.risks" | translate }}
+          </span>
+          <div
+            class="full-description-body mt-2"
+            [innerHTML]="kpiDetails?.risk"
+          ></div>
+        </div>
+      </div>
+      <div>
+        <div class="full-description mt-3" *ngIf="kpiDetails?.achievementRequirements">
+          <span class="full-description-lable" >
+            {{ "changeRequests.details.achievements" | translate }}
+          </span>
+          <div
+            class="full-description-body mt-2"
+            [innerHTML]="kpiDetails?.achievementRequirements"
+          ></div>
+        </div>
+      </div>
+
+      <div class="full-attatchments mt-3" *ngIf="attatchments?.length > 0">
+        <span class="full-attatchments-lable">
+          {{ "changeRequests.details.attatchmens" | translate }}
+        </span>
+        <div class="my-3">
+          <uploaded-attachments-files
+            class="d-block mt-3"
+            [files]="attatchments"
+            [canDeleted]="false"
+          ></uploaded-attachments-files>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- back button -->
+  <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+    {{ "shared.back" | translate }}
+  </button>
+</div>

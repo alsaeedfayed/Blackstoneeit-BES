@@ -1,0 +1,56 @@
+.page-data {
+  min-height: 500px;
+  position: relative;
+}
+
+app-filter-services {
+  display: block;
+}
+
+:host ::ng-deep .header {
+  padding-bottom: 0 !important;
+}
+
+.export-btn {
+  display: flex;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #3c557a;
+  .icon {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3c557a;
+    padding: 3px;
+    width: 29px;
+    height: 29px;
+    i {
+      color: #fff;
+      margin: 0;
+    }
+  }
+}
+
+.title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  color: #353535;
+  margin: 0;
+}
+
+::ng-deep {
+  .search-bar-container {
+    input {
+      background-color: #fff !important;
+      border: 1px solid #e1e1e1;
+      border-radius: 8px;
+    }
+  }
+}
+
+.btn-primary {
+  background: #5271ff;
+}

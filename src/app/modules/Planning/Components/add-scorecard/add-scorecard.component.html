@@ -1,0 +1,68 @@
+<div class="wrapper">
+  <form [formGroup]="model.form">
+  <!-- Title -->
+      <app-filed
+        class="d-block pt-3"
+        title="{{ 'shared.title' | translate }}"
+        formControlName="title"
+        [control]="model.form | getControl: 'title'"
+        [placeholder]="'Planning.scorecardTitlePlaceholder' | translate"
+        [isSubmitted]="model.isSubmitted"
+      ></app-filed>
+    <!-- Arabic Title -->
+      <app-filed
+        class="d-block pt-3"
+        title="{{ 'Planning.scorecardArabicTitle' | translate }}"
+        formControlName="titleAr"
+        [control]="model.form | getControl: 'titleAr'"
+        [placeholder]="'Planning.scorecardArabicTitlePlaceholder' | translate"
+        [isSubmitted]="model.isSubmitted"
+      ></app-filed>
+
+    <!-- description -->
+     <app-textarea-filed
+      class="d-block pt-3"
+      formControlName="description"
+      title="{{ 'Planning.description' | translate }}"
+      [control]="model.form | getControl: 'description'"
+      [placeholder]="'Planning.formulaPlaceholder' | translate"
+      [isSubmitted]="model.isSubmitted"
+    ></app-textarea-filed>
+
+    <div  class="d-block pt-3">
+    <label for="num">{{ "Planning.excutionYear" | translate }} <span class="astrix-red">*</span></label>
+    <input
+      type="number"
+      id="num"
+      class="form-control"
+      formControlName="excecutionYear"
+      [min]="model.currentYear"
+    />
+    <app-validation
+    *ngIf="model.isSubmitted && model.form.controls['excecutionYear'].invalid" [control]="model.form.controls['excecutionYear']"></app-validation>
+  </div>
+
+    <app-checkbox
+    class="d-block pt-3"
+          title="{{ 'Planning.currentScorecard' | translate }}"
+          formControlName="current"
+        ></app-checkbox>
+    </form>
+
+    <div class="actions">
+      <button
+          class="btn btn-dark mr-2"
+          (click)="model.onPopupCancel()"
+        >
+          {{ "shared.back" | translate }}
+        </button>
+        <button
+          class="btn btn-main"
+          [disabled]="model.isBtnLoading"
+          (click)="model.submit()"
+        >
+        <i *ngIf="model.isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+          {{ "shared.save" | translate }}
+        </button>
+    </div>
+</div>

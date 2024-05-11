@@ -1,0 +1,85 @@
+<!-- filters container -->
+<ng-container *ngIf="filtersLoading; else filters">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton_filters"></ng-container>
+  </div>
+</ng-container>
+
+<!-- table container-->
+<ng-container *ngIf="loading; else meetings_items">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<!-- filters  -->
+<ng-template #filters>
+  <app-page-filters
+    [lang]="language"
+    [searchPlaceHolder]="'committeeMeetings.searchPlaceholder' | translate"
+    [hasAssignedSwitch]="true"
+    [assignedSwitchId]="'MOMReview'"
+    [assignedSwitchLabel]="'committeeMeetings.underReview' | translate"
+    [hasListViewBtn]="true"
+    [hasCalendarViewBtn]="true"
+    [hasAddBtn]="true"
+    [addBtnLabel]="'committeeMeetings.add' | translate"
+    [hasAdvancedFilter]="true"
+    [appliedFiltersCount]="appliedFiltersCount"
+    (search)="onSearch($event)"
+    (onSwitch)="getUnderReviewMeetings($event)"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+    (onClear)="clearFilter()"
+    (onAddBtnCLicked)="goToCreateMeeting()"
+    (onViewModeChange)="changeViewMode($event)"
+    [assignedSwitchValue]="selectedStatus == 3"
+  >
+    <app-meetings-filters
+      [isFiltersEmpty]="emptyFIlters"
+      [selectedStatus]="selectedStatus"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-meetings-filters>
+  </app-page-filters>
+</ng-template>
+
+<!-- meetings items -->
+<ng-template #meetings_items>
+  <!-- list view -->
+  <meetings-rows
+    *ngIf="list?.length > 0 && meetingsViewMode == 'list'"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+  ></meetings-rows>
+
+  <!-- calendar view -->
+  <meetings-calendar
+    *ngIf="list?.length > 0 && meetingsViewMode == 'calendar'"
+    [list]="list"
+  ></meetings-calendar>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeeMeetings.noDataMsg' | translate"
+    ></app-no-data>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the filters -->
+<ng-template #skeleton_filters>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,16 @@
+.work-groups-filters-container {
+  position: relative;
+  z-index: 1;
+  container: work-groups-filters / inline-size;
+
+  .work-groups-filters {
+    display: grid;
+    gap: 1rem;
+
+    @container work-groups-filters (min-width: 700px) {
+      & {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+}

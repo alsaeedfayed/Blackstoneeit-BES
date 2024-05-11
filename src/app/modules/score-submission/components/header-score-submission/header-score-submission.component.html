@@ -1,0 +1,197 @@
+<div
+  *ngIf="extended && extendReason"
+  class="alert alert-warning alert-dismissible fade show"
+  role="alert"
+>
+  <div>
+    <strong>{{ "scoreSubmission.reopenWarningAlert" | translate }}</strong>
+    <p>{{ extendReason }}</p>
+  </div>
+
+  <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<ng-container *ngIf="loading; else header">
+  <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+</ng-container>
+
+<ng-template #header>
+  <div class="header-page" *ngIf="currentScorecard">
+    <div class="header-title">
+      <h2 class="title-page">
+        {{ language == "en" ? scorecardItem?.name : scorecardItem?.nameAr }}
+      </h2>
+
+      <div
+        class="status-details-btn"
+        (click)="openStatusDetailsPopup()"
+        *ngxPermissionsOnly="[permissionsViewStatusDetails]"
+      >
+        <i class="bx bx-info-circle"></i>
+      </div>
+    </div>
+
+    <div class="side-info">
+      <div class="Period">
+        <label>{{ "scoreSubmission.SubmissionPeriod" | translate }}</label>
+
+        <app-select
+          (ngModelChange)="handelChangePeriod($event)"
+          bindValue="id"
+          [(ngModel)]="selectedPeriod"
+          [bindLabel]="language == 'ar' ? 'nameAr' : 'name'"
+          [items]="period"
+          [dropdownPosition]="'bottom'"
+        ></app-select>
+      </div>
+
+      <div class="lbl-buttons">
+        <span *ngIf="!isPublished()" class="bg-time">
+          {{ "scoreSubmission.unPublishedText" | translate }}
+        </span>
+        <span *ngIf="isPublished()" class="bg-submitted">
+          {{ "scoreSubmission.publishedText" | translate }}
+        </span>
+      </div>
+
+      <div class="lbl-buttons">
+        <button
+          *ngIf="!!isSubmit"
+          class="btn btn-main"
+          [disabled]="isSubmitBtnLoading"
+          (click)="openSubmitScoreConfirmation()"
+        >
+          <i
+            *ngIf="isSubmitBtnLoading"
+            class="bx bx-loader-alt bx-spin ml-1"
+          ></i>
+          {{ "shared.submit" | translate }}
+        </button>
+
+        <button
+          *ngIf="canExtend"
+          [disabled]="isExtendBtnLoading"
+          class="btn btn-info"
+          (click)="openExtend()"
+        >
+          <i
+            *ngIf="isExtendBtnLoading"
+            class="bx bx-loader-alt bx-spin ml-1"
+          ></i>
+          {{ "scoreSubmission.extend" | translate }}
+        </button>
+
+        <button
+          *ngIf="canClose"
+          [disabled]="isCloseBtnLoading"
+          class="btn btn-danger"
+          (click)="openCloseConfirmation()"
+        >
+          <i
+            *ngIf="isCloseBtnLoading"
+            class="bx bx-loader-alt bx-spin ml-1"
+          ></i>
+          {{ "scoreSubmission.close" | translate }}
+        </button>
+
+        <button
+          *ngIf="canPublish"
+          [disabled]="isPublishBtnLoading"
+          class="btn btn-success"
+          (click)="openPublishConfirmation()"
+        >
+          <i
+            *ngIf="isPublishBtnLoading"
+            class="bx bx-loader-alt bx-spin ml-1"
+          ></i>
+          {{ "scoreSubmission.publish" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-expier-time" *ngIf="!loading && currentScorecard">
+    <sector-department-function
+      (onSelect)="onSelectedGroupChange($event)"
+    ></sector-department-function>
+
+    <div class="lbl-buttons">
+      <label *ngIf="periodOpened && !isPublished()" class="bg-time">
+        {{ "scoreSubmission.SubmitBefore" | translate }}:
+        {{ expiredAfterData?.days }} {{ "scoreSubmission.days" | translate }} ,
+        {{ expiredAfterData?.hours }}
+        {{ "scoreSubmission.hours" | translate }}
+      </label>
+
+      <label *ngIf="submitted" class="bg-submitted">
+        {{ "scoreSubmission.submitted" | translate }}
+      </label>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <div class="loader-skelton">
+    <app-skeleton-loader mode="table" count="1"></app-skeleton-loader>
+    <app-skeleton-loader mode="table" count="1"></app-skeleton-loader>
+  </div>
+
+  <div class="loader-skelton-2 flex-start">
+    <app-skeleton-loader mode="table" count="1"></app-skeleton-loader>
+  </div>
+</ng-template>
+
+<app-confirm-modal
+  [id]="'confrontation-msg-submit'"
+  [content]="'scoreSubmission.submitScoreConfirmationMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="submitScore()"
+></app-confirm-modal>
+
+<app-confirm-modal
+  [id]="'confrontation-msg-publish'"
+  [content]="'scoreSubmission.publishConfirmationMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="publish()"
+></app-confirm-modal>
+
+<!-- <app-confirm-modal
+  [id]="'confrontation-msg-extend'"
+  [content]="'scoreSubmission.extendConfirmationMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="extend()"
+></app-confirm-modal> -->
+
+<app-confirm-modal
+  [id]="'confrontation-msg-close'"
+  [content]="'scoreSubmission.closeConfirmationMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="close()"
+></app-confirm-modal>
+
+<!-- reopen submission model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'reopen-submittion'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeExtend()"
+>
+  <div modal-header class="reopen-submittion-model-header w-100">
+    <label class="modal-title">
+      {{ 'scoreSubmission.reopenSubmittion' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="reopen-submittion-model-content border-top">
+    <reopen-submittion-scorecard
+      *ngIf="isShowReopenPopup"
+      (save)="extend($event)"
+    ></reopen-submittion-scorecard>
+  </div>
+</app-model>

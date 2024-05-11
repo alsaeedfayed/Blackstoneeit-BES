@@ -1,0 +1,61 @@
+<div class="table-main-container" *ngIf="risks?.length">
+  <div class="header">
+    <span class="title">{{ "dashboard.highRisks" | translate }}</span>
+  </div>
+  <div class="content">
+    <div class="req-table">
+      <div class="req-table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">{{ "dashboard.title" | translate }}</th>
+              <th scope="col">{{ "dashboard.owner" | translate }}</th>
+              <th scope="col">{{ "dashboard.projectName" | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let item of risks
+                  | paginate
+                    : {
+                        itemsPerPage: searchModel?.pageSize,
+                        currentPage: searchModel?.page,
+                        totalItems: totalItems
+                      }
+              "
+            >
+              <td class="col-2">
+                <div class="risk-title">
+                  <div>
+                    <app-risk-rating rate="VeryHigh"></app-risk-rating>
+                  </div>
+                  <span>
+                    {{ item.title }}
+                  </span>
+                </div>
+              </td>
+              <td class="col-2">
+                <person-item
+                  [item]="item.personItem"
+                  [noCursor]="true"
+                ></person-item>
+              </td>
+              <td class="col-2">{{ item.projectName[lang] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <pagination-controls
+      *ngIf="totalItems > searchModel?.pageSize"
+      (pageChange)="onPaginate($event)"
+      class="my-pagination"
+      maxSize="5"
+      responsive="true"
+      [previousLabel]="'shared.prev' | translate"
+      [nextLabel]="'shared.next' | translate"
+    ></pagination-controls>
+  </div>
+</div>

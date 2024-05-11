@@ -1,0 +1,111 @@
+// variables
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.wrapper {
+  .list {
+    .meeting-filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+
+      .filter {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+
+        label {
+          color: #8b8b8b;
+          font-weight: bold;
+        }
+      }
+
+      .left-filters {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .meetings-table-wrapper {
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+
+  .table {
+    --actions-width: 70px;
+  
+    .meeting-actions {
+      width: var(--actions-width);
+    }
+
+    ::ng-deep {
+      person-item {
+        .personItem {
+          &.header-person {
+            width: fit-content;
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  app-search {
+    .search-bar-container {
+      --input-height: 38px;
+      height: var(--input-height);
+      min-height: var(--input-height);
+      width: 250px;
+
+      input {
+        height: var(--input-height);
+        min-height: var(--input-height);
+        line-height: var(--input-height);
+        background-color: #ffffff !important;
+        border: 1px solid #e1e1e1;
+        @include rtl_value(padding, 0 10px 0 33px, 0 33px 0 10px);
+      }
+
+      i {
+        font-size: 14px;
+        @include rtl_value(left, 10px, auto);
+        @include rtl_value(right, auto, 10px);
+      }
+    }
+  }
+
+  .ng-select-container {
+    min-width: 155px;
+
+    .ng-placeholder {
+      color: #25364f;
+      text-transform: capitalize;
+      margin-top: 3px;
+    }
+  }
+
+  .analytics-widget-wrapper {
+    h4 {
+      font-size: 18px !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.hoverableLink:hover {
+  text-decoration: underline;
+}

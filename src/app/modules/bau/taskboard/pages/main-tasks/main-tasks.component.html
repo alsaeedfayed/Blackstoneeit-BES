@@ -1,0 +1,78 @@
+<app-header-page
+  [title]="getRouteHeader(currentChildRoute)"
+  [backButton]="currentChildRoute != 'tasks-table'"
+  [showTotalItems]="false"
+  [showButtons]="false"
+></app-header-page>
+
+<app-filters
+  *ngIf="currentChildRoute == 'tasks-table' || currentChildRoute == null"
+  class="row m-0 p-0 my-3"
+  (searchEvent)="onSearch($event)"
+></app-filters>
+
+<div class="page-data">
+  <ng-container *ngIf="hasBoard; else has_no_Board">
+    <ng-container [ngTemplateOutlet]="page_data"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #page_data>
+  <div class="d-flex gap-3">
+    <div class="col">
+      <router-outlet></router-outlet>
+    </div>
+    <div>
+      <app-insights *ngIf="shouldReload"></app-insights>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #has_no_Board>
+  <div class="container">
+  <div class="content-container">
+    <div class="content-wrapper">
+      <img class="" src="assets/img/calendar.svg" alt="delete" />
+      <div [ngSwitch]="hasBoard">
+        <p *ngSwitchCase="false">
+          <span *ngIf="canCreateTaskBoard">
+            {{ "bau.createTaskBoard" | translate }}
+          </span>
+          <span *ngIf="!canCreateTaskBoard">
+            {{ "bau.contactyourAdminstrator" | translate }}
+          </span>
+        </p>
+        <p *ngSwitchCase="undefined">{{ "bau.initialMsg" | translate }}</p>
+        <p *ngSwitchCase="true">{{ "bau.emptyPlan" | translate }}</p>
+      </div>
+      <button
+        class="btn btn-primary"
+        *ngIf="canCreateTaskBoard"
+        (click)="handleCreateButtonClick()"
+      >
+        {{ "bau.createPlan" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+</ng-template>
+
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'plan-start'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onPopupClose()"
+>
+  <div modal-header class="plan-start-model-header w-100">
+    <label class="modal-title">
+      {{ "bau.popupTitle" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="plan-start-model-content border-top">
+    <app-taskboard-form-modal></app-taskboard-form-modal>
+  </div>
+</app-model>

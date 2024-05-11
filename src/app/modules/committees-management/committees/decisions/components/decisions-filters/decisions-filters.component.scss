@@ -1,0 +1,16 @@
+.decision-filters-container {
+  position: relative;
+  z-index: 1;
+  container: decision-filters / inline-size;
+
+  .decision-filters {
+    display: grid;
+    gap: 1rem;
+
+    @container decision-filters (min-width: 700px) {
+      & {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+}

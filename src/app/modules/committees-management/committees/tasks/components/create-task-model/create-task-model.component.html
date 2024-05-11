@@ -1,0 +1,226 @@
+<ng-container
+  *ngIf="
+    CommitteeDataLoading || loadingMainTasks || (isUpdating && isTask && taskDataLoading);
+    else create_data
+  "
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #create_data>
+  <div class="new-model-dialog-body">
+    <div [ngClass]="'taskTitle'+language" class="new-task-form pb-2" [formGroup]="form">
+      <div class="row titleTasksContainer d-flex">
+        <div class="col-md-12 mt-4 enNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block ltr-text"
+            formControlName="title"
+            [control]="form | getControl : 'title'"
+            [title]="(isTask ? 'committeeTasks.addModal.taskTitle' : 'committeeTasks.addModal.mainTaskTitle')  | translate "
+            [placeholder]="(isTask ? 'committeeTasks.addModal.taskTitle' : 'committeeTasks.addModal.mainTaskTitle')  | translate "
+          ></app-filed>
+        </div>
+        <div class="col-md-12 mt-2 arNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block rtl-text"
+            formControlName="titleAr"
+            [control]="form | getControl : 'titleAr'"
+            [title]=" (isTask ? 'committeeTasks.addModal.taskTitleAr' : 'committeeTasks.addModal.mainTaskTitleAr')  | translate "
+            [placeholder]="(isTask ? 'committeeTasks.addModal.taskTitleAr' : 'committeeTasks.addModal.mainTaskTitleAr')  | translate "
+          ></app-filed>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mt-4">
+          <app-nz-date-picker
+            class="d-block"
+            formControlName="dueDate"
+            [control]="form | getControl : 'dueDate'"
+            [title]="'committeeTasks.addModal.dueDate' | translate"
+            [placeholder]="'committeeTasks.addModal.dueDate' | translate"
+          ></app-nz-date-picker>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mt-4">
+          <label class="form-label">
+            {{ "committeeTasks.addModal.assignedTo" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+
+          <ng-select
+            class="input-select"
+            formControlName="assignedTo"
+            [ngClass]="{ valid: (form | getControl : 'assignedTo')?.valid }"
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="'committeeTasks.addModal.assignedTo' | translate"
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [multiple]="false"
+          >
+            <ng-option
+              *ngFor="let member of committeeMembers"
+              [value]="(isTask) ? member?.member?.id : member?.id"
+            >
+              <!-- <person-item
+                [requesterItem]="member"
+                [noCursor]="true"
+              ></person-item> -->
+
+              <span *ngIf="isTask">{{language == "en" ? member?.member?.fullName : member?.member?.fullArabicName}}</span>
+              <span *ngIf="!isTask">{{language == "en" ? member?.fullName : member?.fullArabicName}}</span>
+            </ng-option>
+          </ng-select>
+        </div>
+
+        <!-- priority -->
+        <div class="col-md-6 mt-4">
+
+          <!-- <app-badge
+          class="priority d-block "
+          [className]="importanceLevels[task?.importanceLevel]['className']"
+          [label]="
+            lang == 'en'
+              ? importanceLevels[task?.importanceLevel]['name']
+              : importanceLevels[task?.importanceLevel]['nameAr']
+          "
+        ></app-badge> -->
+        <label class="form-label">
+          {{ "committeeTasks.addModal.priority" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+
+      <ng-select
+      formControlName="importanceLevel"
+      class="input-select"
+      [ngClass]="{ valid: (form | getControl : 'importanceLevel')?.valid }"
+      [dir]="language === 'en' ? 'ltr' : 'rtl'"
+      [searchable]="true"
+      [clearable]="true"
+      [placeholder]="
+        'committeeTasks.addModal.priority' | translate
+      "
+      [notFoundText]="'shared.noItemsFound' | translate"
+
+    >
+      <ng-option *ngFor="let item of importanceLevels" [value]="item?.id">
+        <app-badge
+          [className]="item['className']"
+          [label]="language == 'ar' ? item['nameAr'] : item['name']"
+        ></app-badge>
+      </ng-option>
+    </ng-select>
+
+<!--
+          <app-select
+            class="d-block"
+            formControlName="importanceLevel"
+            [control]="form | getControl : 'importanceLevel'"
+            [title]="'committeeTasks.addModal.priority' | translate"
+            [placeholder]="'committeeTasks.addModal.priority' | translate"
+            [items]="priority"
+            [bindVlaue]="'id'"
+            [bindLabel]="language == 'en' ? 'name' : 'nameAr'"
+          >
+            >
+          </app-select> -->
+        </div>
+      </div>
+
+      <!-- main task select -->
+      <div class="row mt-3" *ngIf="isTask">
+        <app-select
+          class="d-block"
+          formControlName="parentId"
+          [control]="form | getControl : 'parentId'"
+          [title]="'committeeTasks.addModal.mainTask' | translate"
+          [placeholder]="'committeeTasks.addModal.mainTask' | translate"
+          [items]="mainTasks"
+          [clearable]="true"
+          [bindVlaue]="'id'"
+          [bindLabel]="language == 'en' ? 'title' : 'titleAr'"
+        >
+          >
+        </app-select>
+      </div>
+
+      <div class="mt-4">
+        <label class="form-label">
+          {{ "committeeTasks.addModal.description" | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+        <angular-editor formControlName="description" [config]="editorConfig">
+          <ng-template #customButtons>
+            <ae-toolbar-set>
+              <ae-button
+                iconClass="fa fa-paperclip fa-lg"
+                title="Attachment"
+                (buttonClick)="attachments.click()"
+              ></ae-button>
+            </ae-toolbar-set>
+          </ng-template>
+        </angular-editor>
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="
+            'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+          "
+          (deleteFile)="onDeleteFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form.invalid || isBtnLoading || uploadingFile"
+      (click)="saveNewTask()"
+    >
+      <i
+        *ngIf="isBtnLoading || uploadingFile"
+        class="bx bx-loader-alt bx-spin ml-1"
+      ></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

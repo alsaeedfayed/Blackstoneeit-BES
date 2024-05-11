@@ -1,0 +1,75 @@
+<div class="work-groups-filters-container">
+  <div class="work-groups-filters" [formGroup]="form">
+
+    <!-- committee objectives select -->
+    <!-- <app-select
+      class="d-block"
+      formControlName="objectiveId"
+      [control]="form | getControl: 'objectiveId'"
+      [title]="'committeeWorkGroups.filters.committeeObjective' | translate"
+      [placeholder]="'committeeWorkGroups.filters.selectCommitteeObjective' | translate"
+      [items]="Objectives"
+      [bindVlaue]="'id'"
+      [bindLabel]="'objective'"
+      [clearable]="true"
+      (change)="changeFilter()"
+    ></app-select> -->
+
+    <!-- status select -->
+    <div>
+      <label class="form-label">
+        {{ 'committeeWorkGroups.filters.status' | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="status"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl: 'status')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeeWorkGroups.filters.selectStatus' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setStatusValue($event)"
+      >
+        <ng-option *ngFor="let item of statuses" [value]="item?.id">
+          <app-badge
+            [className]="item['className']"
+            [label]="language == 'ar' ? item['nameAr'] : item['name']"
+          ></app-badge>
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- sorting filter -->
+    <div class="sorting-filter">
+      <app-select
+        class="d-block"
+        formControlName="sortKey"
+        [control]="form | getControl: 'sortKey'"
+        [title]="'committeeWorkGroups.filters.sortBy' | translate"
+        [placeholder]="'committeeWorkGroups.filters.selectSortBy' | translate"
+        [items]="sortKeys"
+        [bindVlaue]="'key'"
+        [bindLabel]="language == 'en' ? 'name' : 'nameAr'"
+        [clearable]="true"
+        (change)="changeFilter()"
+      ></app-select>
+
+      <button
+        class="sorting-filter-icon "
+        [ngClass]="{
+          'sort-up': ascMode,
+          'sort-down': descMode,
+          'disabled':sortDisabled
+        }"
+
+        (click)="sort()"
+      >
+        <i class='bx bxs-up-arrow'></i>
+        <i class='bx bxs-down-arrow'></i>
+      </button>
+    </div>
+  </div>
+</div>

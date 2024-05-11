@@ -1,0 +1,25 @@
+{
+    "delegations": {
+        "delegations" : "Delegations",
+        "delegationsList" : "Delegations List",
+        "delegator" : "Delegator",
+        "delegatedTo" : "Delegated To",
+        "from" : "From",
+        "to" : "To",
+        "period" : "Period",
+        "day" : "Day",
+        "days" : "Days",
+        "addDelegation" : "Add Delegation",
+        "editDelegation" : "Edit Delegation",
+        "cancelDelegation" : "Are you sure you want to cancel Delegation",
+        "addSuccessMsg" : "Delegation has been added successfully",
+        "editSuccessMsg" : "Delegation has been edited successfully",
+        "cancelSuccessMsg" : "Delegation has been cancelled successfully",
+        "noDataMsg" : "Hmm.. looks like you don't have any delegation",
+        "active" : "Active",
+        "completed" : "Completed",
+        "cancelled" : "Cancelled",
+        "questionMark" : "?",
+        "pleaseEnterData" : "Please enter all required data"
+    }
+}

@@ -1,0 +1,270 @@
+<div class="new-model-dialog-body">
+  <div class="new-attendee-form pb-2" [formGroup]="form">
+    <!-- new committee tabs -->
+    <ul class="tabsmenu border-bottom flex-column flex-{{ breakpoint }}-row">
+      <li
+        *ngFor="let tab of tabs"
+        class="tabsmenu__item {{ tab.active ? 'active' : '' }}"
+      >
+        <a class="tabsmenu__link" (click)="activeTab(tab)">
+          {{ language == "ar" ? tab?.labelAr : tab?.label }}
+          <i
+            *ngIf="tab.valid"
+            class="bx bx-check text-success fw-bold fs-3"
+          ></i>
+        </a>
+      </li>
+    </ul>
+    <!-- KPI Info -->
+    <section *ngIf="tabs[0].active" [ngClass]="'kpiModalLanguage'+language">
+      <!-- title en,ar -->
+      <div class="d-flex title-container">
+      <div class="row englishastrix">
+        <!-- kpi title -->
+        <div class="mt-4 enNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block ltr-text"
+            formControlName="name"
+            [control]="form | getControl : 'name'"
+            [title]="'committeesNewRequest.newKPIModel.title' | translate"
+            [placeholder]="'committeesNewRequest.newKPIModel.title' | translate"
+          ></app-filed>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- kpi title ar -->
+        <div class="mt-4 arNameLable">
+          <app-filed
+            [length]="100"
+            class="d-block rtl-text"
+            formControlName="nameAr"
+            [control]="form | getControl : 'nameAr'"
+            [title]="'committeesNewRequest.newKPIModel.arabicTitle' | translate"
+            [placeholder]="
+              'committeesNewRequest.newKPIModel.arabicTitle' | translate
+            "
+          ></app-filed>
+        </div>
+      </div>
+    </div>
+       <!-- owner -->
+       <div class="row">
+        <div class=" mt-4">
+          <label class="form-label">
+            {{ "committeesNewRequest.newKPIModel.assignedTo" | translate }}
+          </label>
+
+          <ng-select
+            class="input-select"
+            formControlName="ownerId"
+            [ngClass]="{ valid: (form | getControl : 'ownerId')?.valid }"
+            [searchable]="true"
+            [clearable]="true"
+            [placeholder]="'committeesNewRequest.newKPIModel.assignedTo' | translate"
+            [notFoundText]="'shared.noItemsFound' | translate"
+            [multiple]="false"
+          >
+            <ng-option
+              *ngFor="let member of committeeMembers"
+              [value]="member?.id"
+            >
+            {{language =='en' ? member.fullName : member.fullArabicName}}
+              <!-- <person-item
+                [requesterItem]="member"
+                [noCursor]="true"
+              ></person-item> -->
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+
+      <!-- formula -->
+      <app-textarea-filed
+        class="d-block mt-3"
+        formControlName="formula"
+        [title]="'committeesNewRequest.newKPIModel.formula' | translate"
+        [control]="form | getControl : 'formula'"
+        [placeholder]="'committeesNewRequest.newKPIModel.formula' | translate"
+      ></app-textarea-filed>
+      <!-- [isSubmitted]="isSubmitted"
+        [length]="120" -->
+
+      <!-- risk -->
+      <app-textarea-filed
+        class="d-block mt-3"
+        formControlName="risk"
+        [title]="'committeesNewRequest.newKPIModel.risk' | translate"
+        [control]="form | getControl : 'risk'"
+        [placeholder]="'committeesNewRequest.newKPIModel.risk' | translate"
+      ></app-textarea-filed>
+
+      <!-- Achievement Requirements -->
+      <app-textarea-filed
+        class="d-block mt-3"
+        formControlName="achievementRequirements"
+        [title]="
+          'committeesNewRequest.newKPIModel.achievementRequirements' | translate
+        "
+        [control]="form | getControl : 'achievementRequirements'"
+        [placeholder]="
+          'committeesNewRequest.newKPIModel.achievementRequirements' | translate
+        "
+      ></app-textarea-filed>
+
+      <!-- Attachments -->
+      <div class="mt-4">
+        <label for="" class="form-label mt-3">
+          {{ "shared.attachments" | translate }}
+        </label>
+        <div
+          class="drop-zone"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <p class="fw-bold text-black">
+            {{ "shared.drag" | translate }}
+          </p>
+          <div>
+            <span class="text-secondary">{{ "shared.or" | translate }}</span>
+            <a (click)="attachments.click()" class="text-primary">
+              {{ "shared.browse" | translate }}
+            </a>
+            <span class="text-secondary">
+              {{ "shared.choose" | translate }}
+            </span>
+          </div>
+        </div>
+
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="'shared.descriptionAttachmentsTypes' | translate"
+          (deleteFile)="onDeleteFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+
+    </section>
+
+    <!-- target & frequency -->
+    <section *ngIf="tabs[1].active">
+      <!-- weight -->
+      <div class="row mt-3">
+        <!-- 2 in item means it's a percentage value  for more info go to the component-->
+        <app-filed
+          class="d-block"
+          [title]="'committeesNewRequest.newKPIModel.weight' | translate"
+          [placeholder]="'committeesNewRequest.newKPIModel.weight' | translate"
+          [control]="form | getControl : 'weight'"
+          formControlName="weight"
+        ></app-filed>
+      </div>
+
+      <!-- Measurement Type -->
+      <div class="row mt-3">
+        <div class="measurment-type">
+          <label class="form-label">
+            {{ "committeesNewRequest.newKPIModel.measurementType" | translate }}
+          </label>
+          <div class="types">
+            <div class="type" *ngFor="let type of measurementTypes">
+              <button
+                class="btn"
+                [ngClass]="{ active: type.isActive }"
+                (click)="onSelectType(type.id)"
+              >
+                {{ type.title[language] }} {{ type.prefix[language] }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- target -->
+      <div class="row mt-3">
+        <app-filed
+          class="d-block"
+          [title]="'committeesNewRequest.newKPIModel.target' | translate"
+          [placeholder]="'committeesNewRequest.newKPIModel.target' | translate"
+          [control]="form | getControl : 'target'"
+          formControlName="target"
+        ></app-filed>
+
+        <!-- <app-frequency-input
+          [title]="'committeesNewRequest.newKPIModel.target' | translate"
+          [Item]="form.get('measurementType').value"
+          formControlName="target"
+          class="intial"
+        ></app-frequency-input> -->
+      </div>
+
+      <!-- Measurement Recurrences -->
+      <div class="freq-type row mt-3">
+        <label class="form-label">
+          {{ "committeesNewRequest.newKPIModel.frequencyUpdate" | translate }}
+        </label>
+        <div class="types">
+          <div class="type" *ngFor="let frequency of measurementFrequencies">
+            <button
+              class="btn"
+              [ngClass]="{ active: frequency.isActive }"
+              (click)="onSelectFrequency(frequency.id)"
+            >
+              <!-- [disabled]="(model.editedGoal?.isParentLinkedToChildren && model.editedGoal?.hasChildren) || model.showOnlyDetails" -->
+              {{ frequency.title[language] }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- dueDate -->
+      <div class="mt-4" *ngIf="form.get('frequency').value == 4">
+        <app-nz-date-picker
+          class="d-block"
+          formControlName="dueDate"
+          [control]="form | getControl : 'dueDate'"
+          [title]="'committeesNewRequest.newKPIModel.dueDate' | translate"
+          [placeholder]="'committeesNewRequest.newKPIModel.dueDate' | translate"
+        ></app-nz-date-picker>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+  <!-- cancel button -->
+  <button class="btn btn-info flex-grow-1" (click)="closePopup()">
+    {{ "shared.cancel" | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form.invalid || isBtnLoading || uploadingFile"
+    (click)="save()"
+  >
+    <i
+      *ngIf="isBtnLoading || uploadingFile"
+      class="bx bx-loader-alt bx-spin ml-1"
+    ></i>
+    {{ "shared.save" | translate }}
+  </button>
+</div>

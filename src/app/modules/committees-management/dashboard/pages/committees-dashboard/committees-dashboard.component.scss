@@ -1,0 +1,69 @@
+.committees-dashboard {
+  &-types-categories {
+    background-color: #fff;
+    padding: 2rem 10px;
+    &-title {
+      font-weight: 500;
+      font-size: 18px;
+    }
+  }
+  &-states {
+    flex-wrap: wrap;
+  }
+
+  &-performance {
+    background-color: #fff;
+    padding: 1rem 10px;
+    &-title {
+      font-weight: 500;
+      font-size: 18px;
+    }
+  }
+
+  &-filter {
+    background-color: #fff !important;
+    padding: 1rem 10px;
+  }
+}
+
+.committess-dashboard-filter {
+  background-color: #fff !important;
+  padding: 1rem 10px;
+}
+.committess-dashboard-types-categories {
+  background-color: #fff;
+  padding: 1rem 10px;
+  border-radius: 0.5rem;
+
+  &-title {
+    font-weight: 500;
+    font-size: 18px;
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media screen and (min-width : 1526px) {
+  .typeschart {
+    width: 22%;
+  }
+  .categeorychart{
+    width: 44%;
+  }
+
+  ::ng-deep{
+    .activechart {
+      .committee-dashboard-types{
+        padding: 1rem;
+      }
+    }
+  }
+
+}

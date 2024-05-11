@@ -1,0 +1,47 @@
+<div class="requestchart">
+  <!-- [hidden]="!shouldShowStatusChart" -->
+  <div class="requestchart-status">
+    <div class="title" style="width: 100%;">
+      <h5 class="reqHeader mb-4">
+        {{ 'shared.meetings' | translate }}
+      </h5>
+    </div>
+    <div  class="data" [hidden]="data?.total == 0">
+      <div class="row">
+        <div class="col-12 requestsPieChart">
+          <div *ngIf="data" class="total">
+            <p>{{ data.total }}</p>
+            <!-- <p>{{ 'shared.total' | translate }}</p> -->
+          </div>
+          <canvas class="my-chart" id="myChart" width="170" height="170" #myChart></canvas>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-6 requestchart-item" *ngFor="let item of reqStatus">
+          <div class="d-flex gap-2 mb-3">
+            <div class="d-flex align-items-center" style="width: 70%;">
+              <span class="requestchart-dot" [ngStyle]="{ 'background-color': item.color }"></span>
+              <span class="status">{{ item.status }}</span>
+            </div>
+  
+            <div>
+              <span class="percentage ml-4" [ngStyle]="{ color: item.color }">
+                {{ item.percentage + "%"}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- <div *ngIf="!shouldShowStatusChart" class="emptyDate" style="position: relative; width: 200px; height: 200px;border-radius: 50%; border: 15px solid rgb(251, 62, 122); display: flex; align-items: center; justify-content: center;">
+  <span >No Data</span>
+  </div> -->
+  <div *ngIf="data?.total == 0" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <img style="height: 10rem;" src="../../../../../../assets/img/no-data.png" alt="">
+    <div>{{lang == 'en' ? 'No Data' : 'لا توجد داتا'}}</div>
+  </div>
+
+</div>

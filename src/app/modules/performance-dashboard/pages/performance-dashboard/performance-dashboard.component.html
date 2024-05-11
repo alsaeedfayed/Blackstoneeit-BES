@@ -1,0 +1,49 @@
+<div class="performance-dashboard">
+
+    <!-- Tabs -->
+    <!-- <ul class="tabsmenu border-bottom flex-column flex-lg-row" [class.fixed]="isFixed">
+        <li *ngFor="let tab of tabs" class="tabsmenu__item" (click)="selectedTabId = tab?.id" [class.active]="selectedTabId == tab?.id">
+            <a class="tabsmenu__link"> <i *ngIf="tab?.icon" [class]="tab?.icon"></i> {{ language == 'ar' ? tab?.labelAr : tab?.label }} </a>
+        </li>
+    </ul>
+
+    <div class="content" [class.fixed]="isFixed">
+        <main-dashboard [selectedTabId]="selectedTabId"></main-dashboard>
+    </div> -->
+
+    <div [class.fixed]="isFixed" [class.fixedOpenSidebar]="!isSidebarCollapsed">
+      <app-header-page
+        [title]="'performanceDashboard.performanceDashboard' | translate"
+        [backButton]="true"
+        [showTotalItems]="false"
+        [isAddBtn]="false"
+      ></app-header-page>
+        <!-- Header -->
+        <div class="header">
+            <div class="filter">
+                <main-dashboard-filter (onFilter)="changeFilter($event)"></main-dashboard-filter>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <!-- <tabs-menu [tabs]="tabs" [breakpoint]="'lg'"></tabs-menu> -->
+
+        <!-- Tabs -->
+        <ul class="tabsmenu border-bottom flex-column flex-lg-row">
+            <li *ngFor="let tab of tabs" class="tabsmenu__item" (click)="selectedTabId = tab?.id" [class.active]="selectedTabId == tab?.id">
+                <a class="tabsmenu__link"> <i *ngIf="tab?.icon" [class]="tab?.icon"></i> {{ language == 'ar' ? tab?.labelAr : tab?.label }} </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="content">
+        <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+    </div> -->
+
+    <div class="content">
+        <main-dashboard *ngIf="selectedTabId == 'tab1'" [perTodateLoading]="perTodateLoading" [perEvaluationLoading]="perEvaluationLoading" [perTypesLoading]="perTypesLoading"></main-dashboard>
+        <overall-summary *ngIf="selectedTabId == 'tab2'" [perTypesLoading]="perTypesLoading"></overall-summary>
+        <group-performance *ngIf="selectedTabId == 'tab3'" [perSubGoalLoading]="perSubGoalLoading"></group-performance>
+    </div>
+
+</div>

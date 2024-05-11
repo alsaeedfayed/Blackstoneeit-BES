@@ -1,0 +1,108 @@
+<div class="agent-queue-filters" *ngIf="!loading">
+  <div class="agent-queue-filters-wrapper">
+    <!-- <div class="filter">
+      <label class="label-select"> {{ 'agentQueue.requester' | translate }} </label>
+      <ng-select
+        [searchable]="false"
+        class="input-select"
+        (change)="handleRequesterFilter($event)"
+        placeholder="all"
+      >
+        <ng-option
+          [value]="requester.id"
+          *ngFor="let requester of requesters.data"
+        >
+          {{ requester.fullName }}
+        </ng-option>
+      </ng-select>
+    </div> -->
+    <!-- <app-filed [(ngModel)]="requester" placeholder="{{ 'agentQueue.enterRequester' | translate }}"
+      (onKeyup)="handleRequesterFilter($event)"></app-filed> -->
+
+    <!-- <div class="filter">
+      <label class="label-select"> {{ 'shared.dateRange' | translate }} </label>
+      <app-date-range
+        (ngChange)="handleRangeDateFilter($event)"
+      ></app-date-range>
+    </div> -->
+
+    <div class="filter">
+      <label class="label-select">{{ "shared.status" | translate }}</label>
+      <ng-select
+        [searchable]="false"
+        (change)="handleStatusesFilter($event)"
+        class="input-select"
+        placeholder="{{ 'shared.all' | translate }}"
+        [(ngModel)]="selectedState.key"
+        bindLabel="value" 
+        bindVlaue="key" 
+        [dropdownPosition]="'bottom'"
+      >
+        <ng-option [value]="status.key" *ngFor="let status of states">
+          {{ status.value }}
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- <div class="filter">
+      <label class="label-select"> {{ 'agentQueue.service' | translate }} </label>
+      <ng-select
+        [searchable]="false"
+        (change)="handleServicesFilter($event)"
+        class="input-select"
+        placeholder="{{ 'shared.all' | translate }}"
+      >
+        <ng-option [value]="service.serviceId" *ngFor="let service of services">
+          {{ service.title }}</ng-option
+        >
+      </ng-select>
+    </div> -->
+    <!-- <app-filed [(ngModel)]="service" [placeholder]="'Enter Service'"
+      (onKeyup)="handleServicesFilter($event)"></app-filed> -->
+
+    <div class="filter">
+      <label class="label-select">
+        {{ "agentQueue.category" | translate }}
+      </label>
+      <ng-select
+        [searchable]="false"
+        class="input-select w-255px"
+        (change)="handleCategoryFilter($event)"
+        placeholder="{{ 'shared.all' | translate }}"
+        [(ngModel)]="selectedCategory.id"
+        bindLabel="language == 'ar' ? nameAr : nameEn" 
+        bindValue="id" 
+        [dropdownPosition]="'bottom'"
+      >
+        <ng-option [value]="category.id" *ngFor="let category of categories">
+          {{ language == "ar" ? category.nameAr : category.nameEn }}</ng-option
+        >
+      </ng-select>
+    </div>
+
+    <app-switch-btn
+      [id]="'assignedToMe'"
+      [label]="'agentQueue.assignedToMe' | translate"
+      [value]="filters.assignedToMe"
+      (onChange)="onAssignedToMeChange($event)"
+    ></app-switch-btn>
+
+    <app-switch-btn
+      [id]="'SLAOnly'"
+      [label]="'agentQueue.SLAOnly' | translate"
+      [value]="filters.HasSlaOn"
+      (onChange)="onSLAChange($event)"
+    ></app-switch-btn>
+
+    <!-- <div class="d-flex align-items-center mb-2">
+      <button class="btn btn-link p-0" (click)="onFilter()">
+        {{ "shared.advancedFilter" | translate }}
+      </button>
+    </div> -->
+  </div>
+</div>
+
+<!-- Advance Filter Modal -->
+<!-- <app-agent-advanced-filter
+  (onFilter)="onHandleFilter($event)"
+></app-agent-advanced-filter> -->

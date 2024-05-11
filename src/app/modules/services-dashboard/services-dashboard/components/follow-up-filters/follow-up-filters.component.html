@@ -1,0 +1,91 @@
+<div class="filters-container">
+  <div class="filters-container-filters">
+    <form [formGroup]="filterForm">
+      <div class="row" style="width: 100%;">
+        <div class="col-12 mt-2 col-md-6 col-xl-6 filters-container-filters-col">
+          <label for="" class="filters-container-filters-label">
+            {{ 'servicesDashboard.dateFrom' | translate }}
+          </label>
+          <!-- (getSelectedDate)="handleFromDateFilter($event)" [date]="fromDate" -->
+          <app-datepicker [allowPastDate]="true" [showClear]="showClear" formControlName="fromDate" (onReset)="resetFromDate()"></app-datepicker>
+        </div>
+        <div class="col-12 col-md-6  mt-2 col-xl-6 filters-container-filters-col">
+          <label for="" class="filters-container-filters-label">
+            {{ 'servicesDashboard.dateTo' | translate }}
+          </label>
+          <!-- (getSelectedDate)="handleToDateFilter($event)" [date]="toDate" -->
+          <app-datepicker [allowPastDate]="true" formControlName="toDate" [showClear]="showClearToDate" (onReset)="resetToDate()"></app-datepicker>
+        </div>
+
+        <div class="col-12  mt-2 col-md-6 col-xl-6 filters-container-filters-col">
+          <label for="" class="filters-container-filters-label">
+            {{ 'shared.sector' | translate }}
+          </label>
+          <!-- [(ngModel)]="selectedSector.id" -->
+          <ng-select [searchable]="false" class="input-select w-255px" placeholder="{{ 'shared.sector' | translate }}"
+              bindLabel="language == 'ar' ? nameAr : nameEn" bindValue="id"
+              formControlName="sector"
+            (change)="handleSectorFilter($event)">
+            <ng-option [value]="sector.id" *ngFor="let sector of sectors">
+              {{ language == 'ar' ? sector.title.ar : sector.title.en }}
+            </ng-option>
+          </ng-select>
+        </div>
+
+        <div class="col-12  mt-2 col-md-6 col-xl-6 filters-container-filters-col"  *ngIf="sectorId && departments?.length > 0" >
+          <label for="" class="filters-container-filters-label">
+            {{ 'shared.department' | translate }}
+          </label>
+          <!-- [disabled]="!sectorId || departments.length == 0" [(ngModel)]="selectedDepartment.id" -->
+          <ng-select [searchable]="false" class="input-select w-255px"
+            placeholder="{{ 'shared.department' | translate }}" 
+            bindLabel="language == 'ar' ? nameAr : nameEn" bindValue="id" 
+            formControlName="department" (change)="handleDepartmentFilter($event)">
+            <ng-option [value]="department.id" *ngFor="let department of departments">
+              {{ language == 'ar' ? department.title.ar : department.title.en }}
+            </ng-option>
+          </ng-select>
+        </div>
+
+        <div class="col-12 mt-2 col-md-6 col-xl-6 filters-container-filters-col" *ngIf="deptId && sectorId && sections?.length > 0">
+          <label for="" class="filters-container-filters-label">
+            {{ 'shared.section' | translate }}
+          </label>
+          <!-- [disabled]="!deptId || !sectorId || sections.length == 0" [(ngModel)]="selectedSection.id" -->
+          <ng-select [searchable]="false" class="input-select w-255px"
+            placeholder="{{ 'shared.section' | translate }}"
+            bindLabel="language == 'ar' ? nameAr : nameEn" bindValue="id" 
+            formControlName="section" (change)="handleSectionFilter($event)">
+            <ng-option [value]="section.id" *ngFor="let section of sections">
+              {{ language == 'ar' ? section.title.ar : section.title.en }}
+            </ng-option>
+          </ng-select>
+        </div>
+
+        <div class="col-12 mt-4 col-md-6 col-xl-6 buttons">
+          <button class="btn btn-main mr-2" (click)="filter()">{{language == 'ar' ? 'فلتر' : 'Filter'}}</button>
+          <button class="btn btn-outline-secondary mr-2" (click)="cancel()">{{language == 'ar' ? 'اغلاق' : 'Cancel'}}</button>
+        </div>
+
+        <!-- <div class="col-md-4 col-xl-4 filters-container-filters-col">
+          <label for="" class="filters-container-filters-label">
+            {{ 'servicesDashboard.category' | translate }}
+          </label>
+          <ng-select
+            [searchable]="false"
+            class="input-select w-255px"
+            placeholder="{{ 'shared.all' | translate }}"
+            [(ngModel)]="selectedCategory.id"
+            bindLabel="language == 'ar' ? nameAr : nameEn"
+            bindValue="id"
+            (change)="handleCategoryFilter($event)"
+          >
+            <ng-option [value]="category.id" *ngFor="let category of categories">
+              {{ language == 'ar' ? category.nameAr : category.nameEn }}
+            </ng-option>
+          </ng-select>
+        </div>-->
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+.profile-container {
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 32px;
+    height: 32.1px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    margin-inline-end: 15px;
+  }
+
+  .profile-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .name {
+      color: $black-color;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 100%;
+    }
+
+    .position {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 150%;
+      color: $dark-gray-color;
+    }
+  }
+}

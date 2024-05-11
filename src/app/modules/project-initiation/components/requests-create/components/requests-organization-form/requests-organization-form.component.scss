@@ -1,0 +1,316 @@
+@import "src/assets/css/utils/variables.scss";
+
+.step-content-container {
+  container: step-content / inline-size;
+
+  .step-content-grid {
+    display: grid;
+    gap: 1.5rem;
+
+    @container step-content (min-width: 700px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @container step-content (max-width: 700px) {
+      & {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  .project-details {
+    background: $white-color;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+
+    &-title {
+      color: $info_color;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0 0 0.5rem;
+    }
+
+    &-content {
+      color: $black-color;
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.25rem !important;
+    }
+  }
+}
+
+p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 31px;
+  color: $tertiary-color;
+  letter-spacing: 0.02em;
+}
+
+.team-selection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: $white-color;
+  padding: 1.25rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+
+  .team-selection-col {
+    display: flex;
+    justify-content: center;
+    min-height: 5rem;
+
+    &.readonly {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+
+      .stakeholder {
+        .initials {
+          margin-inline-end: 15px;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #8d29c4;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 22px;
+          letter-spacing: 0.04em;
+          border-radius: 50%;
+          color: white;
+        }
+      }
+    }
+
+    .team-members-container {
+      width: 100%;
+    }
+
+    .empty-state {
+      color: $tertiary-color;
+      width: 100%;
+    }
+
+    &.has-members {
+      align-items: flex-start;
+      justify-content: flex-start;
+      position: relative;
+
+      .team-selection-col-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 21px;
+
+        i {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 26px;
+          color: $main-color;
+          cursor: pointer;
+
+          &:hover {
+            color: $light-main-color;
+          }
+        }
+      }
+
+      ul {
+        list-style: none;
+        overflow-y: auto;
+        max-height: 140px;
+        scrollbar-color: $dark-gray-color #f1f2f7;
+        scrollbar-width: thin;
+        display: flex;
+        flex-direction: column;
+
+        .team-member {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          position: relative;
+
+          img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-inline-end: 15px;
+          }
+
+          .team-member-details {
+            display: flex;
+            flex-direction: column;
+
+            .team-member-name {
+              font-weight: 400;
+              font-size: 14px;
+              margin-bottom: 2px;
+              color: $tertiary-color;
+            }
+
+            .team-member-position {
+              font-weight: 400;
+              font-size: 12px;
+              color: $dark-gray-color;
+            }
+          }
+
+          &.stakeholder {
+            .initials {
+              margin-inline-end: 15px;
+              width: 32px;
+              height: 32px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background-color: #8d29c4;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 22px;
+              letter-spacing: 0.04em;
+              border-radius: 50%;
+              color: white;
+            }
+          }
+
+          .bx-x {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 26px;
+            color: #cbcbcb;
+            cursor: pointer;
+
+            &:hover {
+              color: #3c557a;
+            }
+          }
+        }
+      }
+    }
+
+    button {
+      width: 100%;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 100%;
+      color: #3c557a;
+      border: 1px solid #cbcbcb;
+
+      i {
+        font-size: 26px;
+        color: $main-color;
+      }
+
+      &:hover {
+        color: $main-color;
+        border-color: $main-color;
+      }
+    }
+
+    .form-title {
+      margin-bottom: 15px;
+    }
+
+    .team-members-container {
+      // height: 140px;
+      display: flex;
+      flex-direction: column;
+      // justify-content: center
+
+      &:not(.single-member) {
+        overflow-y: auto;
+        scrollbar-color: $dark-gray-color #f1f2f7;
+        scrollbar-width: thin;
+      }
+
+      .team-member {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        img {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-inline-end: 15px;
+        }
+
+        .team-member-details {
+          display: flex;
+          flex-direction: column;
+
+          .team-member-name {
+            font-weight: 400;
+            font-size: 14px;
+            margin-bottom: 2px;
+            color: $tertiary-color;
+          }
+
+          .team-member-position {
+            font-weight: 400;
+            font-size: 12px;
+            color: $dark-gray-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+.example-tree-node {
+  display: block;
+}
+
+.example-tree-node .example-tree-node {
+  padding-left: 40px;
+}
+
+.expand-icon {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+
+  i {
+    color: #3c557a;
+    font-size: 26px;
+    margin-inline-end: 10px;
+  }
+}
+
+.pl-20px {
+  padding-left: 30px;
+}
+
+.card-with-icon {
+  height: 67px;
+}
+
+.astrix-red {
+  color: red;
+}

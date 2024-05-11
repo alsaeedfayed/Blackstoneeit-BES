@@ -1,0 +1,30 @@
+@import "src/assets/css/utils/variables.scss";
+
+.project-card-progress-bar {
+  width: 100%;
+  border-radius: 75px;
+
+  .header {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+
+    .title,
+    .percentage {
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 15px;
+      color: $secondary-color;
+    }
+  }
+
+  .bg-bar {
+    background-color: #e8e8e8;
+    border-radius: 75px;
+  }
+
+  .progress-bar {
+    border-radius: 75px;
+    background-color: $main-color;
+  }
+}

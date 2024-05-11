@@ -1,0 +1,144 @@
+<!-- page filters -->
+<app-page-filters
+  [lang]="language"
+  [searchPlaceHolder]="'committeeTasks.searchPlaceholder' | translate"
+  [hasAssignedSwitch]="true"
+  [assignedSwitchId]="'assignedToMe'"
+  [assignedSwitchLabel]="'committeeTasks.assignedToMe' | translate"
+  [hasSwitchMainTasks]="true"
+  [SwitchMainTasksLabel]="(isMainTask ? 'committeeTasks.mainTasks' : 'committeeTasks.task')  | translate"
+  [hasListViewBtn]="true"
+  [hasCardsViewBtn]="true"
+  [viewMode]="tasksViewMode"
+  [hasAddBtn]="true"
+  [addBtnLabel]="'committeeTasks.add' | translate"
+  [hasExportBtn]="true"
+  [hasAdvancedFilter]="true"
+  [appliedFiltersCount]="appliedFiltersCount"
+  (search)="onSearch($event)"
+  (onSwitch)="getTasksAssignedToMe($event)"
+  (onSwitchMainTasksEmitter)="getMainTasks($event)"
+  (onSearchBtnCLicked)="onSearchBtnCLicked()"
+  (onClear)="clearFilter()"
+  (onAddBtnCLicked)="openCreateTaskModel()"
+  (onExportBtnClicked)="exportList()"
+  (onViewModeChange)="changeViewMode($event)"
+  [IsFiltersVisible]="hasFilters"
+>
+  <app-tasks-filter
+    [filteredWorkgroupId]="filteredWorkgroupId"
+    [isFiltersEmpty]="emptyFIlters"
+    (filtersNumber)="getFiltersCount($event)"
+    (filter)="handelFilter($event)"
+  ></app-tasks-filter>
+</app-page-filters>
+
+<!-- tasks items -->
+<ng-container *ngIf="loading; else tasks_items">
+  <div class="my-4">
+    <ng-container
+      *ngIf="tasksViewMode == 'cards'"
+      [ngTemplateOutlet]="cards_skeleton"
+    ></ng-container>
+    <ng-container
+      *ngIf="tasksViewMode == 'list'"
+      [ngTemplateOutlet]="list_skeleton"
+    ></ng-container>
+  </div>
+</ng-container>
+
+<!-- tasks items -->
+<ng-template #tasks_items>
+
+  <!-- board view -->
+  <board-tasks-cols
+    *ngIf="tasks?.length > 0 && tasksViewMode == 'cards'"
+    class="d-block mt-4"
+    [tasks]="tasks"
+    [committeeId]="committeeId"
+    (changeHappened)="getAllTasks()"
+  ></board-tasks-cols>
+
+  <!-- list view -->
+  <tasks-table
+    *ngIf="tasks?.length > 0 && tasksViewMode == 'list'"
+    class="d-block mt-4"
+    [language]="language"
+    [list]="tasks"
+    [totalItems]="totalItems"
+    [paginationModel]="paginationModel"
+    (onPaginateEvent)="handlePaginationChange($event)"
+    [SortedCol]="sortedCol"
+    [SortDirection]="sortDirection"
+    (sortFilter)="handleSortFilter($event)"
+    (changeHappened)="getAllTasks()"
+  ></tasks-table>
+
+  <div class="no-data" *ngIf="tasks?.length == 0 || !tasks">
+    <app-no-data [msg]="'committeeTasks.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 900, height: 750 }"
+  [id]="'create-task'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="create-task-model-header w-100">
+    <label class="modal-title">{{ 'committeeTasks.addModal.title' | translate }}</label>
+
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <create-task-model
+    *ngIf="openTask"
+      [isTask]="true"
+      [committeeId]="committeeId"
+      (taskAdded)="getAllTasks()"
+    ></create-task-model>
+  </div>
+</app-model>
+
+<!-- loader skeleton for the columns -->
+<ng-template #cards_skeleton>
+  <div class="row row-gap-3">
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+    <div class="col-md-3">
+      <app-skeleton-loader mode="userCard"></app-skeleton-loader>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #list_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

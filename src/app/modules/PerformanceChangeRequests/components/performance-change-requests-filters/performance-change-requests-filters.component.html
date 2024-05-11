@@ -1,0 +1,64 @@
+<div class="req-filters" *ngIf="!loading" >
+  <div class="req-filters-wrapper">
+    <div class="left">
+      <div class="filter">
+        <label class="label-select">{{"cr.catgory" | translate}} </label>
+        <ng-select
+          [searchable]="false"
+          class="input-select"
+          (change)="handleCatgoryFilter($event)"
+          placeholder="all"
+        >
+          <ng-option [value]="category.id" *ngFor="let category of categories">
+            {{
+              language == "ar" ? category.nameAr : category.nameEn
+            }}</ng-option
+          >
+        </ng-select>
+      </div>
+
+      <div class="filter">
+        <label class="label-select">  {{"cr.status" | translate}} </label>
+        <ng-select
+          [searchable]="false"
+          (change)="handleStatusesFilter($event)"
+          class="input-select"
+          placeholder="all"
+        >
+          <ng-option [value]="servicesStatusEnum.Active"> Active</ng-option>
+          <ng-option [value]="servicesStatusEnum.NotActive">
+            Not Active</ng-option
+          >
+        </ng-select>
+      </div>
+
+      <div class="filter">
+        <label class="label-select"> {{"cr.sortBy" | translate}} </label>
+        <ng-select
+          [searchable]="false"
+          (change)="handleServicesFilter($event)"
+          class="input-select"
+          placeholder="all"
+        >
+          <ng-option
+            [value]="service.serviceId"
+            *ngFor="let service of services"
+          >
+            {{ service.title }}</ng-option
+          >
+        </ng-select>
+      </div>
+
+    </div>
+    <div class="right">
+      <div class="switch-filter">
+        <div class="switch">
+          <input type="checkbox" (input)="handleOwnedTasksFilterEvent($event)" class="switch__input" id="customSwitch1" />
+          <label class="switch__label" for="customSwitch1">{{
+            "shared.assignedToMe" | translate
+          }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

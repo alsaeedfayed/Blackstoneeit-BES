@@ -1,0 +1,97 @@
+<div
+  class="goals-container d-flex flex-column justify-content-between gap-2"
+  *ngIf="formGoals[0]?.length > 0"
+>
+  <div [formGroup]="form" class="gap-5 d-flex align-items-end">
+    <div class="row flex-grow-1">
+      <!-- first Level -->
+      <div>
+        <!-- <label class="form-label">
+          {{
+            "committeesNewRequest.committeeForm.strategicGoals.mainGoal"
+              | translate
+          }}
+        </label> -->
+
+        <div class="d-flex flex-wrap gap-3" formArrayName="goals">
+          <div
+            class="mt-3 goalsSelector"
+            *ngFor="let goal of goals.controls; let i = index"
+          >
+            <!-- <label class="goal-type">
+              {{
+                language == "en"
+                  ? formGoals[i][0].goalType.name
+                  : formGoals[i][0].goalType.arabicName
+              }}
+            </label> -->
+            <ng-select
+              class="input-select flex-grow-1"
+              formControlName="{{ i }}"
+              [searchable]="true"
+              [clearable]="true"
+              [placeholder]="
+                language == 'en'
+                  ? formGoals[i][0].goalType.name
+                  : formGoals[i][0].goalType.arabicName
+              "
+              [notFoundText]="'shared.noItemsFound' | translate"
+              [multiple]="false"
+              (change)="addGoal($event, i)"
+            >
+              <ng-option *ngFor="let goal of this.formGoals[i]" [value]="goal">
+                {{ language == "en" ? goal.title : goal.titleAr }}
+              </ng-option>
+            </ng-select>
+            <!-- <app-select
+              class="d-block"
+              formControlName="{{ i }}"
+              [title]="language == 'en'
+              ? formGoals[i][0].goalType.name
+              : formGoals[i][0].goalType.arabicName"
+              [items]="this.formGoals[i]"
+              [bindVlaue]=""
+              [clearable]="true"
+              [bindLabel]="language == 'en' ? 'title' : 'titleAr'"
+              (change)="addGoal($event, i)"
+            ></app-select> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <button
+      (click)="addNewGoal()"
+      class="add-new-btn"
+      [class.disabled]="(this.goals.length == 1 && this.goals[0] == null) ||isGoalsLoading"
+      [disabled]="(this.goals.length == 1 && this.goals[0] == null) ||isGoalsLoading"
+    >
+      <i *ngIf="!isGoalsLoading" class="bx bx-plus"></i>
+      <i *ngIf="isGoalsLoading"  class="bx bx-loader-alt bx-spin"></i>
+      {{ "shared.add" | translate }}
+    </button>
+  </div>
+
+  <!-- <app-goals-list
+    [list]="selectedGoals"
+    [language]="language"
+    (onDelete)="deleteGoal($event)"
+  ></app-goals-list>
+   -->
+  <app-goals-tree
+  *ngIf="!isGoalsLoading ; else skeleton"
+    [showColumns]="false"
+    [isEditAble]="false"
+    [canDeleteNotMeasurableGoals]="true"
+    [data]="_mappedGoals"
+    (onDelete)="deleteGoal($event)"
+  ></app-goals-tree>
+</div>
+
+<!-- <div class="no-data" *ngIf="formGoals[0]?.length == 0 || !formGoals[0]">
+  <app-no-data [msg]="'committeeDetails.noGoalsThisYear' | translate"></app-no-data>
+</div> -->
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

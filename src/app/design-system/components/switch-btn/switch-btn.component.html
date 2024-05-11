@@ -1,0 +1,13 @@
+<div class="switch-container">
+  <label class="switch" [ngClass]="{ 'round': isRounded }">
+    <input
+      [id]="id"
+      type="checkbox"
+      [checked]="value"
+      class="checkboxx"
+      (change)="sendValue($event)"
+    >
+    <span class="slider"></span>
+  </label>
+  <label [for]="id" class="label">{{ label }}</label>
+</div>

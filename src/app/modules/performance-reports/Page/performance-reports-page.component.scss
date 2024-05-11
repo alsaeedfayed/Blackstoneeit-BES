@@ -1,0 +1,87 @@
+//variables
+@import "../../../../assets/css/utils/variables.scss";
+
+.side-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  > div:not(.custom) {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    label {
+      color: $black-color;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    app-select {
+      min-width: 140px;
+      font-size: 16px;
+    }
+  }
+}
+
+// .header {
+//   margin-top: 60px;
+// }
+
+.table {
+  margin-top: 10px;
+}
+
+:host ::ng-deep .side-info .ng-select-container {
+  border: none;
+  outline: none;
+}
+
+:host ::ng-deep .side-info .ng-select-container:hover {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+:host ::ng-deep .ng-select-focused {
+  outline: none;
+}
+
+:host ::ng-deep .side-info app-skeleton-loader {
+  min-width: 150px;
+  height: 40px;
+}
+
+// :host ::ng-deep .no-data {
+//   top: 70% !important;
+//   left: 55% !important;
+// }
+
+.bg-submitted {
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #10b759;
+  background: rgba(#10b759, 0.27);
+}
+
+.bg-not-submitted {
+  border-radius: 8px;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #e31b27;
+  background: rgba(#e31b27, 0.2);
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}

@@ -1,0 +1,134 @@
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'update-progress'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeModal()"
+>
+  <div modal-header class="update-progress-model-header w-100">
+    <label class="modal-title">
+      {{ "scoreSubmission.update" | translate }}
+      {{ lang === "ar" ? ("scoreSubmission.progress" | translate) : "" }}
+      {{ "scoreSubmission." + data?.title | translate }}
+      {{ lang === "en" ? ("scoreSubmission.progress" | translate) : "" }}
+    </label>
+  </div>
+
+  <div modal-content class="update-progress-model-content border-top">
+    <div class="new-model-dialog-body">
+      <form class="form pb-2" [formGroup]="form">
+        <div class="d-flex mt-3">
+          <div class="actual" *ngIf="!DateKPIType">
+            <label>
+              {{ "scoreSubmission.actual" | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+
+            <input
+              type="number"
+              class="form-control"
+              formControlName="actual"
+              required
+              [placeholder]="'scoreSubmission.actualPlaceholder' | translate"
+            />
+            <app-validation
+              *ngIf="form.controls['actual'].invalid"
+              [control]="form.controls['actual']"
+            ></app-validation>
+          </div>
+
+          <!-- [ngStyle]="{display: DateKPIType ? 'block': 'none'}" -->
+          <div class="actual actual-date" *ngIf="DateKPIType">
+            <app-nz-date-picker
+              [title]="'scoreSubmission.actualDate' | translate"
+              formControlName="actualDate"
+            ></app-nz-date-picker>
+            <app-validation
+              *ngIf="form.controls['actualDate'].invalid"
+              [control]="form.controls['actualDate']"
+            ></app-validation>
+          </div>
+
+          <div class="target" *ngIf="!DateKPIType">
+            <label>
+              {{ "scoreSubmission.target" | translate }}
+              <span class="astrix-red"></span>
+            </label>
+
+            <input
+              type="number"
+              class="form-control"
+              formControlName="target"
+              disabled
+            />
+          </div>
+
+          <!-- [ngStyle]="{display: DateKPIType ? 'block': 'none'}" -->
+          <div class="target actual-date" *ngIf="DateKPIType">
+            <app-nz-date-picker
+              [title]="'scoreSubmission.targetDate' | translate"
+              formControlName="targetDate"
+              disabled
+            ></app-nz-date-picker>
+            <app-validation
+              *ngIf="form.controls['targetDate'].invalid"
+              [control]="form.controls['targetDate']"
+            ></app-validation>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <app-description-input-with-attachments
+            [title]="'scoreSubmission.commentsTitle' | translate"
+            [uploadFilesTitle]="'scoreSubmission.supportingEvidence' | translate"
+            formControlName="comment"
+            [control]="form | getControl : 'comment'"
+            (attachmentUploadEvent)="uploadFile($event)"
+            [prevAttachment]="prevUploadedFiles"
+            (onDelete)="deleteAttachment($event)"
+          ></app-description-input-with-attachments>
+        </div>
+
+        <div class="mt-3" *ngIf="showCorrectiveActionInput">
+          <label>
+            {{ "scoreSubmission.correctiveAction" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+
+          <textarea
+            class="form-control text-area"
+            formControlName="correctiveAction"
+            [placeholder]="'scoreSubmission.correctiveActionPlaceholder' | translate"
+          ></textarea>
+          <app-validation
+            *ngIf="form.controls['correctiveAction']?.invalid"
+            [control]="form.controls['correctiveAction']"
+          ></app-validation>
+        </div>
+      </form>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+    
+      <!-- back button -->
+      <button
+        class="btn btn-dark flex-grow-1"
+        (click)="closeModal()"
+      >
+        {{ 'shared.back' | translate }}
+      </button>
+    
+      <!-- save button -->
+      <button
+        class="btn btn-main flex-grow-1"
+        [disabled]="!EnableSave"
+        (click)="save()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="loading"></i>
+        {{ 'shared.save' | translate }}
+      </button>
+    </div>
+  </div>
+</app-model>

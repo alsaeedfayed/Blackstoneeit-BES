@@ -1,0 +1,60 @@
+.progress-bar-container {
+  display: flex;
+  width: 100%;
+  height: 20px;
+  background-color: #dedede; /* Gray background when no zones are present */
+  border-radius: 0.625rem;
+  color: white;
+}
+
+.completed,
+.in-progress {
+  border-radius: 0.625rem;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.ar {
+    padding-top: 1px;
+  }
+
+}
+
+.completed {
+  background-color: #0fc161; /* Color for completed zone */
+  &.completed-split-border-radius {
+    &.ar {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 0.625rem;
+      border-bottom-right-radius: 0.625rem;
+    }
+
+    &.en {
+      border-top-left-radius: 0.625rem;
+      border-bottom-left-radius: 0.625rem;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}
+
+.in-progress {
+  background-color: #ff4848; /* Color for in-progress zone */
+  &.inProgress-split-border-radius {
+    &.ar {
+      border-top-left-radius: 0.625rem;
+      border-bottom-left-radius: 0.625rem;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &.en {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 0.625rem;
+      border-bottom-right-radius: 0.625rem;
+    }
+  }
+}

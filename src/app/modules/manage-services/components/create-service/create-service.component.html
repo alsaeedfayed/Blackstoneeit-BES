@@ -1,0 +1,178 @@
+<div class="new-model-dialog-body">
+  <div class="service-form pb-2" [formGroup]="form">
+    <ng-container *ngIf="loading || loadingRolesSlice; else formData">
+      <div class="py-4">
+        <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #formData>
+  <div [formGroup]="form">
+    <app-filed
+      class="d-block pt-3"
+      formControlName="title"
+      [control]="form | getControl: 'title'"
+      [title]="'manageServices.serviceTitle' | translate"
+      [placeholder]="'manageServices.enterServiceTitle' | translate"
+    ></app-filed>
+
+    <app-filed
+      class="d-block pt-3"
+      formControlName="titleAr"
+      [control]="form | getControl: 'titleAr'"
+      [title]="'manageServices.serviceArabicTitle' | translate"
+      [placeholder]="'manageServices.enterServiceArabicTitle' | translate"
+    ></app-filed>
+
+    <app-textarea-filed
+      class="d-block pt-3"
+      formControlName="description"
+      [control]="form | getControl: 'description'"
+      [title]="'manageServices.serviceDescription' | translate"
+      [placeholder]="'manageServices.enterServiceDescription' | translate"
+    ></app-textarea-filed>
+
+    <app-select
+      class="d-block pt-3"
+      formControlName="cateogryId"
+      [control]="form | getControl: 'cateogryId'"
+      [title]="'manageServices.serviceCategory' | translate"
+      [placeholder]="'manageServices.selectCategory' | translate"
+      [items]="categories"
+      bindValue="id"
+      [bindLabel]="language == 'ar' ? 'nameAr' : 'nameEn'"
+      autofocus
+    ></app-select>
+
+    <!-- <div class="pt-3">
+      <label class="form-label">Service Agent</label>
+      <app-select
+        bindValue="id"
+        formControlName="agentsIds"
+        placeholder="Service Agent"
+        [control]="form | getControl: 'agentsIds'"
+        bindLabel="fullname"
+        [multiple]="true"
+        [items]="agents"
+      >
+      </app-select>
+    </div> -->
+
+    <div class="pt-3">
+      <label class="form-label">
+        {{ 'manageServices.targetAudience' | translate }}
+      </label>
+
+      <app-radio-group
+        class="d-flex"
+        bindValue="id"
+        formControlName="targetAudienceId"
+      >
+        <app-radio-box *ngFor="let target of targetAudience" [hidden]="!target.status" [value]="target.id">
+          {{ language == "ar" ? target.nameAr : target.nameEn }}
+        </app-radio-box>
+      </app-radio-group>
+    </div>
+
+    <div class="pt-3" *ngIf="(form | getControl: 'targetAudienceId')?.value == targetAudience[1]?.id">
+      <app-select-tree
+        formControlName="groupIds"
+        [control]="form | getControl: 'groupIds'"
+        [title]="'manageServices.selectGroup' | translate"
+        [items]="groups"
+      ></app-select-tree>
+    </div>
+
+    <div class="pt-3" *ngIf="(form | getControl: 'targetAudienceId')?.value == targetAudience[2]?.id">
+        <label class="form-label">
+          {{ 'manageServices.selectRole' | translate }}
+          <!-- <span class="astrix-red">*</span> -->
+        </label>
+
+        <ng-select
+          class="input-select roles-select"
+          formControlName="roleIds"
+          [dir]="language === 'en' ? 'ltr' : 'rtl'"
+          [searchable]="true"
+          [clearable]="true"
+          [placeholder]="'manageServices.selectRole' | translate"
+          [notFoundText]="'shared.noItemsFound' | translate"
+          [closeOnSelect]="false"
+          [multiple]="true"
+          (scrollToEnd)="loadMoreRoles()"
+          (search)="searchRoles($event)"
+          [loading]="gettingRoles"
+          (focus)="onFocus()"
+        >
+          <ng-option
+            *ngFor="let role of roles"
+            [value]="role?.id"
+          >
+            {{ language =='en' ? role.name : role.nameAr }}
+          </ng-option>
+        </ng-select>
+    </div>
+
+    <div class="pt-3">
+      <app-select
+        class="input-select"
+        formControlName="formId"
+        [control]="form | getControl: 'formId'"
+        [title]="'manageServices.selectForm' | translate"
+        [placeholder]="'manageServices.selectForm' | translate"
+        [items]="forms"
+        [bindLabel]="'name'"
+        bindValue="id"
+      ></app-select>
+    </div>
+
+    <div class="pt-3">
+      <app-select
+        class="input-select"
+        formControlName="processId"
+        [control]="form | getControl: 'processId'"
+        [title]="'manageServices.selectProcess' | translate"
+        [placeholder]="'manageServices.selectProcess' | translate"
+        [items]="processes"
+        bindValue="id"
+        [bindLabel]="language == 'ar' ? 'title.ar' : 'title.en'"
+      ></app-select>
+    </div>
+
+    <div class="pt-3">
+      <label class="form-label">{{ 'manageServices.publishThisService' | translate }}</label>
+      <app-switch formControlName="published" [disabled]="service?.fixed"></app-switch>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form?.invalid || isBtnLoading"
+    (click)="createService()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

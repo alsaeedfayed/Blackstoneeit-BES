@@ -1,0 +1,126 @@
+<div class="agent-queue-page">
+  <!-- Header -->
+  <app-header-page
+    [title]="'agentQueue.agentQueue' | translate"
+    [totalItems]="totalItems"
+    [backButton]="true"
+  >
+    <div *ngIf="totalItems !== 0" buttons class="d-flex gap-2">
+      <!-- <a
+        class="btn btn-main"
+        download
+        href="/assets/pdf/Requests Presentation.pdf"
+      >
+        {{'agentQueue.downloadRequestsPresentations' | translate}}
+      </a> -->
+      <button
+        class="btn btn-info"
+        [disabled]="isDownloading"
+        (click)="exportDataHandler()"
+      >
+        <i class="bx bxs-download" *ngIf="!isDownloading"></i>
+        <i class="bx bx-loader-alt bx-spin" *ngIf="isDownloading"></i>
+        {{ "shared.export" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+
+  <div class="agent-queue-page-wrapper">
+    <!-- analytics widgets -->
+    <agent-queue-analytics
+      [agentQueueItems]="agentQueueItems"
+      [loading]="loading"
+    ></agent-queue-analytics>
+
+    <!-- page filters -->
+    <app-page-filters
+      class="d-block my-4"
+      [searchValue]="requestBody?.searchKey"
+      [hasAdvancedFilter]="true"
+      [popupAdvancedFilter]="true"
+      [appliedFiltersCount]="requestBody?.appliedFiltersCount"
+      (onOpenAdvancedFilterModel)="openAdvancedFilterModel()"
+      (search)="handleSearchFilter($event)"
+    ></app-page-filters>
+
+    <!-- filters -->
+    <div class="req-filters">
+      <!-- (onHandleAdvancedFilter)="handleAdvancedFilter($event)" -->
+      <agent-queue-filters
+        [filters]="resolve(requestBody)"
+        (onStatesFilter)="handleStatusesFilter($event)"
+        (onCategoriesFilter)="handleCategoriesFilter($event)"
+        (onAssignedToMeFilter)="handleAssignedToMeFilter($event)"
+        (onSLAFilter)="handleSLAFilter($event)"
+      ></agent-queue-filters>
+    </div>
+
+    <!-- table -->
+    <ng-container *ngIf="loading; else table_data">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #table_data>
+  <agent-queue-table
+    *ngIf="
+      agentQueueListFilter.length &&
+      (agentQueueListFilter | search : searchValue).length
+    "
+    [agentQueueList]="agentQueueListFilter | search : searchValue"
+    [totalItems]="totalItems"
+    [paginationModel]="{
+      pageIndex: requestBody.pageIndex,
+      pageSize: requestBody.pageSize
+    }"
+    [SortedCol]="requestBody.sortBy"
+    [SortDirection]="requestBody.sortDirection"
+    (onSort)="handleSortFilter($event)"
+    (onPaginate)="handlePagination($event)"
+    [sortedCol]="requestBody.sortBy"
+    [sortDirection]="requestBody.sortDirection"
+  ></agent-queue-table>
+
+  <div
+    class="no-data"
+    *ngIf="
+      agentQueueListFilter.length == 0 ||
+      (agentQueueListFilter | search : searchValue).length == 0
+    "
+  >
+    <app-no-data [msg]="'agentQueue.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- Advance Filter Modal -->
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'agent-filter'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="agent-filter-model-header w-100">
+    <label class="modal-title">
+      {{ "shared.advancedFilter" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="agent-filter-model-content border-top">
+    <app-agent-advanced-filter
+      [filters]="requestBody"
+      (onFilter)="handleAdvancedFilter($event)"
+    ></app-agent-advanced-filter>
+  </div>
+</app-model>

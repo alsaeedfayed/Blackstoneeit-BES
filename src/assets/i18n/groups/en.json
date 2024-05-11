@@ -1,0 +1,21 @@
+{
+  "groups": {
+    "groups": "Groups",
+    "createGroup": "Create Group",
+    "name": "Name",
+    "arabicName": "Arabic Name",
+    "groupCode": "Group Code",
+    "parentGroup": "Parent Group",
+    "level": "Level",
+    "lastUpdate": "Last Update",
+    "editGroup": "Edit Group",
+    "confirmDeleteMsg": "Are you sure you want to Delete the group '{{name}}' ?",
+    "groupWasSuccessfullyDeleted": "Group was successfully deleted",
+    "groupWasSuccessfullyCreated": "Group was successfully created",
+    "groupWasSuccessfullyUpdated": "Group was successfully updated",
+    "N/A": "N/A",
+    "noDataMsg": "Hmm.. looks like you don't have any groups",
+    "tree": "Tree",
+    "list": "List"
+  }
+}

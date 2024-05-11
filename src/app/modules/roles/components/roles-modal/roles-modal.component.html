@@ -1,0 +1,148 @@
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'role'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="onPopupClose()"
+>
+  <div modal-header class="role-model-header w-100">
+    <label class="modal-title">{{ title }}</label>
+  </div>
+
+  <div modal-content class="role-model-content border-top">
+    <div class="new-model-dialog-body">
+
+      <!-- create role -->
+      <div *ngIf="mode === 'create-role'">
+        <form [formGroup]="form">
+
+          <!-- english name -->
+          <app-filed
+            class="d-block mt-3"
+            id="name"
+            [formControl]="form.controls['name']"
+            [control]="form | getControl: 'name'"
+            [title]="'roles.roleName' | translate"
+            [placeholder]="'roles.roleName' | translate"
+          ></app-filed>
+
+          <!-- arabic name -->
+          <app-filed
+            class="d-block mt-3"
+            id="nameAr"
+            [formControl]="form.controls['nameAr']"
+            [control]="form | getControl: 'nameAr'"
+            [title]="'roles.roleArabicName' | translate"
+            [placeholder]="'roles.roleArabicName' | translate"
+          ></app-filed>
+        </form>
+      </div>
+
+      <!-- set permissions -->
+      <div *ngIf="mode === 'set-permissions'">
+        <!-- <div class="form-group">
+          <label for="" class="form-label">Permissions</label>
+          <input
+            id="typeahead-focus"
+            type="text"
+            class="form-control"
+            [inputFormatter]="formatter"
+            (selectItem)="onSelectPermissions($event)"
+            [resultFormatter]="formatter"
+            [ngbTypeahead]="searchPermissions"
+            (focus)="focus$.next($any($event).target.value)"
+            (click)="click$.next($any($event).target.value)"
+            #instance="ngbTypeahead"
+          />
+
+          <div class="mt-2 d-flex flex-wrap">
+            <span
+              class="rectangle-badge badge-primary mr-2 mb-2"
+              *ngFor="let permission of selectedPermissions; let i = index"
+            >
+              <span class="mr-2">{{ permission?.name }}</span>
+
+              <i (click)="onDeleteRole(i)" class="bx bx-x"></i>
+            </span>
+          </div>
+        </div> -->
+
+        <!-- <form [formGroup]="selectForm">
+          <app-select-tree
+            [items]="permissions"
+            formControlName="permissionsIds"
+            [control]="selectForm | getControl: 'permissionsIds'"
+          ></app-select-tree>
+        </form> -->
+
+        <form #permissionsForm="ngForm">
+
+          <!-- english permissions -->
+          <div class="permissions-container" *ngIf="lang === 'en'">
+            <div
+              class="permission-group mt-3"
+              *ngFor="let permission of permissions?.structure"
+            >
+              <h4 class="title">{{ permission.name }}</h4>
+              <div class="input" *ngFor="let child of permission.children">
+                <input
+                  type="checkbox"
+                  [id]="child.id"
+                  ngModel
+                  [name]="child.id"
+                  [checked]="child.isSelected ? true : false"
+                  [(ngModel)]="child.isSelected"
+                />
+                <label [for]="child.id">{{ child.name }}</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- arabic permissions -->
+          <div class="permissions-container" *ngIf="lang === 'ar'">
+            <div
+              class="permission-group mt-3"
+              *ngFor="let permission of permissions?.structureAr"
+            >
+              <h4 class="title">{{ permission.name }}</h4>
+              <div class="input" *ngFor="let child of permission.children">
+                <input
+                  type="checkbox"
+                  [id]="child.id"
+                  ngModel
+                  [name]="child.id"
+                  [checked]="child.isSelected ? true : false"
+                  [(ngModel)]="child.isSelected"
+                />
+                <label [for]="child.id">{{ child.name }}</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- footer buttons -->
+    <div class="new-model-dialog-footer">
+    
+      <!-- back button -->
+      <button
+        class="btn btn-dark flex-grow-1"
+        (click)="onPopupClose()"
+      >
+        {{ 'shared.back' | translate }}
+      </button>
+    
+      <!-- save button -->
+      <button
+        class="btn btn-main flex-grow-1"
+        [disabled]="(mode === 'create-role' && form?.invalid) || isLoading"
+        (click)="onSubmit()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isLoading"></i>
+        {{ 'shared.save' | translate }}
+      </button>
+    </div>
+  </div>
+</app-model>

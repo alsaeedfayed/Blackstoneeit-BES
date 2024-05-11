@@ -1,0 +1,52 @@
+@import "src/assets/css/utils/variables.scss";
+
+ul {
+  display: flex;
+  justify-content: space-around;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: $info_color;
+  text-align: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1rem;
+  padding-bottom: 8px;
+  border-bottom: 0.0625rem solid rgba(102, 102, 102, 0.2);
+  cursor: pointer;
+
+  i {
+    font-size: 1.625rem;
+    margin-inline-end: 0.3125rem;
+  }
+
+  .tab-count {
+    height: 1.25rem;
+    line-height: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $white-color;
+    padding: 0 0.625rem;
+    margin-inline-start: 0.75rem;
+    border-radius: 2.5rem;
+  }
+
+  &:not(.active) {
+    .tab-count {
+      background-color: $info_color;
+    }
+  }
+
+  &.active {
+    color: $main-color;
+    border-bottom: 0.125rem solid $main-color;
+
+    .tab-count {
+      background-color: $main-color;
+    }
+  }
+}

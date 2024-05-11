@@ -1,0 +1,21 @@
+app-page-filters {
+  position: relative;
+  z-index: 100;
+}
+::ng-deep app-header-page{
+.module-title{
+  max-width: 1000px !important; 
+}
+}
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.row-gap-3 {
+  row-gap: 1rem;
+}

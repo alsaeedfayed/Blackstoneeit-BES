@@ -1,0 +1,11 @@
+<div class="project-card-progress-bar"
+     [ngStyle]="{'height': height + 'px'}">
+  <div class="header">
+    <span class="title">{{data?.label | translate}}</span>
+    <span class="percentage">{{data?.progress | number:'1.0-0'}}%</span>
+  </div>
+  <div class="bg-bar">
+    <span class="progress-bar"
+          [ngStyle]="{'width': data?.progress + '%', 'height': height + 'px'}"></span>
+  </div>
+</div>

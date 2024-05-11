@@ -1,0 +1,296 @@
+<div class="page">
+  <ng-container *ngIf="isLoading || gettingTasks; else details">
+    <div>
+      <ng-container [ngTemplateOutlet]="header_skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- details  -->
+<ng-template #details>
+  <app-header-page
+    [backButton]="true"
+    [title]="workgroupResult?.name"
+    [showTotalItems]="false"
+    [backTo]="
+      '/committees-management/committee-details/' + committeeId + '/work-groups'
+    "
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <button
+        *ngIf="workgroupResult?.canEditWorkgroup"
+        class="btn btn-warning"
+        (click)="update()"
+      >
+        {{ "committeeGroupDetails.edit" | translate }}
+      </button>
+
+      <!-- change status -->
+      <button
+        *ngIf="workgroupResult?.canChangeStatus"
+        [disabled]="isChangeStatsClicked"
+        class="btn btn-{{
+          workgroupResult?.status == 0 ? 'main' : 'secondary'
+        }}"
+        (click)="toggleStatusBtn()"
+      >
+        <i
+          *ngIf="isChangeStatsClicked"
+          class="bx bx-loader-alt bx-spin ml-1"
+        ></i>
+        {{
+          (workgroupResult?.status == 0
+            ? "committeeGroupDetails.activate"
+            : "committeeGroupDetails.deactivate"
+          ) | translate
+        }}
+      </button>
+    </div>
+  </app-header-page>
+
+  <!-- group details -->
+  <div class="group-details">
+    <!-- group info -->
+    <div class="d-flex justify-content-between">
+      <ul class="info">
+        <li>
+          <strong class="block-title mb-2">
+            {{ "committeeGroupDetails.info.createdBy" | translate }}
+          </strong>
+          <h3 class="info-title">
+            {{ workgroupResult?.creatorInfo?.fullName }}
+          </h3>
+        </li>
+        <li>
+          <strong class="block-title mb-2">
+            {{ "committeeGroupDetails.info.relatedCommittee" | translate }}
+          </strong>
+          <h3 class="info-title">
+            {{
+              language == "ar"
+                ? workgroupResult?.committee?.nameAr
+                : workgroupResult?.committee?.name
+            }}
+          </h3>
+        </li>
+        <li>
+          <strong class="block-title mb-2">
+            {{ "committeeGroupDetails.info.createdOn" | translate }}
+          </strong>
+          <h3 class="info-title" *ngIf="workgroupResult?.creationDate">
+            {{
+              language === "en"
+                ? (convertUTCDateToLocalDate(
+                    workgroupResult?.creationDate
+                  ).toLocaleString() | date : "d MMM y")
+                : (convertUTCDateToLocalDate(
+                    workgroupResult?.creationDate
+                  ).toLocaleString() | localizeDate : "d MMM y")
+            }}
+          </h3>
+        </li>
+      </ul>
+      <app-badge
+        class=" "
+        [className]="statuses[workgroupResult?.status]['className']"
+        [label]="
+          language == 'en'
+            ? statuses[workgroupResult?.status]['name']
+            : statuses[workgroupResult?.status]['nameAr']
+        "
+      ></app-badge>
+    </div>
+    <!-- horizontal line -->
+    <div class="horizontal-line"></div>
+
+    <!-- members -->
+    <div class="members">
+      <strong class="block-title mb-3">
+        {{ "committeeGroupDetails.members" | translate }}
+      </strong>
+
+      <!-- members list -->
+      <ul class="members-list">
+        <li
+          class="members-list-item"
+          *ngFor="let member of workgroupResult?.members"
+        >
+          <person-item
+            [requesterItem]="member"
+            [noCursor]="true"
+            [isUserCardFixed]="true"
+          ></person-item>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Support members -->
+    <div class="members">
+      <strong class="block-title mb-3">
+        {{ "committeeNewGroup.groupForm.supportMembers" | translate }}
+      </strong>
+
+      <!-- Support members list -->
+      <ul class="members-list">
+        <li
+          class="members-list-item"
+          *ngFor="let member of workgroupResult?.supportMembers"
+        >
+          <person-item
+            [requesterItem]="member"
+            [noCursor]="true"
+            [isUserCardFixed]="true"
+          ></person-item>
+        </li>
+      </ul>
+    </div>
+
+    <!-- tasks -->
+    <div class="tasks">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <strong class="block-title">
+          {{ "committeeGroupDetails.inProgressTasks" | translate }}
+        </strong>
+        <div class="d-flex gap-2">
+          <button class="add-new-btn" (click)="openCreateTaskModel()">
+            <i class="bx bx-plus"></i>
+            {{ 'committeeTasks.add' | translate }}
+          </button>
+          <a class="view-all-link" (click)="showAllWorkgroupTasks()">
+            {{ "committeeGroupDetails.viewAllTasks" | translate }}
+          </a>
+        </div>
+      </div>
+
+      <!-- tasks items -->
+      <div class="tasks-list" *ngIf="tasks?.length > 0">
+        <table>
+          <tr>
+            <th class="task-title">
+              {{ "committeeGroupDetails.tasks.taskTitle" | translate }}
+            </th>
+            <th class="task-status">
+              {{ "committeeGroupDetails.tasks.priority" | translate }}
+            </th>
+            <th class="task-progress">
+              {{ "committeeGroupDetails.tasks.progress" | translate }}
+            </th>
+            <th class="task-created-on">
+              {{ "committeeGroupDetails.tasks.createdOn" | translate }}
+            </th>
+            <th class="task-assigned-to">
+              {{ "committeeGroupDetails.tasks.assignedTo" | translate }}
+            </th>
+          </tr>
+          <tr *ngFor="let task of tasks">
+            <td class="task-title">
+              <!-- <a class="hoverableLink" [routerLink]="'/committees-management/committee/'+committeeId+'/tasks/' + task?.id"> -->
+              {{ language == "en" ? task?.title : task?.titleAr }}
+              <!-- </a> -->
+            </td>
+            <td class="task-status">
+              <app-badge
+                [className]="
+                  importanceLevels[task?.importanceLevel]['className']
+                "
+                [label]="
+                  language == 'en'
+                    ? importanceLevels[task?.importanceLevel]['name']
+                    : importanceLevels[task?.importanceLevel]['nameAr']
+                "
+              ></app-badge>
+            </td>
+            <td class="task-progress">
+              <div class="d-flex align-items-center gap-2">
+                <div class="progress-bar flex-grow-1">
+                  <span
+                    class="fill {{ item?.progress | progressColor }}"
+                    [ngStyle]="{ width: task?.progress + '%' }"
+                  ></span>
+                </div>
+                <span class="percentage">{{ task?.progress }}%</span>
+              </div>
+            </td>
+            <td class="task-created-on">
+              <span *ngIf="task?.creationDate">
+                {{
+                  language === "en"
+                    ? ((task?.creationDate | uTCToLocalDate).toLocaleString()
+                      | date : "d MMM y")
+                    : ((task?.creationDate | uTCToLocalDate).toLocaleString()
+                      | localizeDate : "d MMM y")
+                }}
+              </span>
+            </td>
+            <td class="task-assigned-to">
+              <person-item
+                [requesterItem]="task?.assignedToInfo"
+                [noCursor]="true"
+                [isUserCardFixed]="true"
+              ></person-item>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="no-data" *ngIf="!tasks || tasks?.length == 0">
+        <app-no-data
+          [msg]="'committeeGroupDetails.tasks.noInProgressTasksMsg' | translate"
+        ></app-no-data>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loading skeleton -->
+<ng-template #header_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- no objectives  -->
+<ng-template #no_objectives>
+  <p class="mb-0">{{ "committeeGroupDetails.noObjectives" | translate }}</p>
+</ng-template>
+
+<!-- modal to confirm request sending -->
+<app-confirm-modal
+  [id]="'toggle-status'"
+  [content]="
+    'committeeGroupDetails.confirmMsg'
+      | translate
+        : {
+            action:
+              (workgroupResult?.status == 0
+                ? 'committeeGroupDetails.activate'
+                : 'committeeGroupDetails.deactivate'
+              ) | translate
+          }
+  "
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="toggleStatus()"
+></app-confirm-modal>
+
+<app-model
+  [dimensions]="{ width: 900, height: 750 }"
+  [id]="'create-task'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="create-task-model-header w-100">
+    <label class="modal-title">{{ 'committeeTasks.addModal.title' | translate }}</label>
+
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <create-task-model
+    *ngIf="openTask"
+      [isTask]="true"
+      [committeeId]="committeeId"
+    ></create-task-model>
+  </div>
+</app-model>

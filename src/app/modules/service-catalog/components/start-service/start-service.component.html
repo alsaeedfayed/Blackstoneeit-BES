@@ -1,0 +1,60 @@
+<app-header-page
+  [title]="lang == 'en' ? activatedRoute.snapshot.queryParams.title : activatedRoute.snapshot.queryParams.titleAr"
+  [showTotalItems]="false"
+  [backButton]="true"
+  [isSearch]="false"
+>
+  <ng-container buttons>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-transparent text-secondary" [routerLink]="['/service-catalog']">
+        {{ "shared.cancel" | translate }}
+      </button>
+
+      <button class="btn btn-main"
+              [disabled]="entity?.invalid || form?.invalid || loading || btnloading || hasError || errorDuplicate"
+              (click)="getSubmitRequest()"
+      >
+        <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="loading || btnloading"></i>
+        <ng-container *ngIf="!loading"> {{ "shared.submit" | translate }} </ng-container>
+      </button>
+    </div>
+  </ng-container>
+</app-header-page>
+
+<ng-container *ngIf="!loading" [formGroup]="form">
+  <div class="container-start-service" [ngClass]="{'hide-item': dataLoading}">
+    <p class="title-entity" *ngIf="service?.title">{{ service?.title }}</p>
+
+    <app-filed
+      class="d-block"
+      formControlName="requstTitle"
+      [title]="'serviceCatalog.requestTitle' | translate"
+      [control]="form | getControl: 'requstTitle'"
+      [placeholder]="'serviceCatalog.enterRequestTitle' | translate"
+    ></app-filed>
+
+    <app-entity-builder
+      [entity]="entity"
+      (updateHandler)="update($event)"
+      (dynamicRowsAndColumnsHandler)="getDynamicColumnsAndRows($event)"
+      [formDataDetails]="statusData?.formDataDetails"
+    ></app-entity-builder>
+
+    <!-- <div class="desc">
+      <app-description-input-with-attachments
+        class="d-block pt-3"
+        title="{{ 'serviceCatalog.requestAttachments' | translate }}"
+        [isTitle]="false"
+        (attachmentUploadEvent)="uploadFile($event)"
+      ></app-description-input-with-attachments>
+    </div> -->
+  </div>
+</ng-container>
+
+<ng-container *ngIf="loading || dataLoading">
+  <app-skeleton-loader
+    class="w-100"
+    *ngFor="let item of [1, 2, 3, 4, 5, 6, 8, 9, 10]"
+    [mode]="'table'"
+  ></app-skeleton-loader>
+</ng-container>

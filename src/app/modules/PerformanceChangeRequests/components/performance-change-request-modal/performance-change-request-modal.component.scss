@@ -1,0 +1,91 @@
+@import "src/assets/css/utils/variables.scss";
+
+.change-request-form {
+  .scorecard-details {
+    h5 {
+      color: $black-color;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .inf-parag {
+      color: $black-color;
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .cr-types {
+    margin: 25px 0;
+
+    h6 {
+      color: $black-color;
+      font-size: 16px;
+      margin: 15px 0;
+    }
+
+    .types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .type {
+        // width: 146px;
+
+        button {
+          width: 100%;
+          color: #cbcbcb;
+          border: 1px solid #cbcbcb;
+          border-radius: 4px;
+          // padding: 15px 30px;
+          font-size: 14px;
+          font-weight: 600;
+
+          &.active {
+            color: #fff;
+            border: none;
+          }
+        }
+      }
+    }
+  }
+
+  .cr-form {
+    margin: 5px 0;
+
+    .buttons {
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 490px) {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      justify-content: flex-end;
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      z-index: 999;
+      background-color: #fff;
+
+      button {
+        width: 154px;
+        font-weight: 500;
+        font-size: 18px;
+
+        &:first-child {
+          margin-inline-end: 11px;
+
+          @media (max-width: 490px) {
+            margin-inline-end: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 43px !important;
+}

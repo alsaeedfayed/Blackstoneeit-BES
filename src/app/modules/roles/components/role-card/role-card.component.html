@@ -1,0 +1,32 @@
+<!----------- role card ---------->
+<div class="role-card card-defaults">
+  <div class="header">
+    <span class="role"> {{ lang === 'en'? role?.name : role?.nameAr }} </span>
+    <span
+      class="permissions"
+      *ngIf="numberOfPermissions > 0"
+      (click)="onViewPermissions(role)"
+    >
+      {{ numberOfPermissions }} {{ 'roles.permissions' | translate }}
+    </span>
+    <!-- <app-actions-dropdown (firstBtnClickHandler)="onEdit()"
+                          (secondBtnClickHandler)="onDelete()"
+                          (thirdBtnClickHandler)="onView()"
+                          [firstBtnContent]="lang == 'en' ? 'Edit Role' : 'تحرير الدور'"
+                          [secondBtnText]="lang == 'en' ? 'Delete Role' : 'حذف الدور'"
+                          [thirdBtnText]=" lang == 'en' ? 'Members' : 'المستخدمون'"
+                          [showThirdBtn]="true"></app-actions-dropdown> -->
+  </div>
+
+  <div class="card-options">
+    <app-dropdown (select)="onOptionClick($event, role)" [items]="cardActions">
+    </app-dropdown>
+  </div>
+
+  <!-- <div *ngIf="role?.permissions?.length !== 0">
+    <div *ngFor='let permissions of role?.permissions; let i = index'
+         class="d-inline-block">
+      <span class="_badge _badge b-role mb-1 mr-1"> {{permissions?.name}} </span>
+    </div>
+  </div> -->
+</div>

@@ -1,0 +1,40 @@
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.history-card {
+  background: #fff;
+  box-shadow: 0px 3px 36px 12px rgba(80, 126, 169, 0.06);
+  @include bRadius(8px);
+  // padding: 75px 20px 35px 60px;
+  padding: 50px 20px 35px 55px;
+  
+  .wrapper {
+    max-height: 430px;
+    overflow: auto;
+    padding-inline-end: 35px;
+
+    .item:not(:last-child) {
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      border-bottom: 1px solid rgba(199, 199, 199, 0.45);
+    }
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+}
+
+.load-more {
+  display: block;
+  @include font(14px, 400);
+  line-height: 16px;
+  color: $main-color;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}

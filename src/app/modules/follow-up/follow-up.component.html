@@ -1,0 +1,238 @@
+<div class="follow-up-page">
+  <app-header-page
+    [title]="'followUp.followUp' | translate"
+    [totalItems]="totalItems"
+    [backButton]="true"
+  >
+    <div buttons>
+      <button
+        class="btn btn-info"
+        [disabled]="isDownloading"
+        (click)="export()"
+      >
+        <i class='bx bxs-download' *ngIf="!isDownloading"></i>
+        <i class="bx bx-loader-alt bx-spin" *ngIf="isDownloading"></i>
+        {{ "shared.export" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+
+  <ng-container *ngIf="cardsLoading; else cards">
+    <div class="my-4">
+      <div class="analytics-widgets">
+        <div class="analytics-widgets-items">
+          <ngx-skeleton-loader *ngFor="let item of [1, 2, 3, 4, 5, 6, 7]"
+            count="1"
+            [theme]="{
+              'height': '105px',
+              'background-color': '#fcfcfc',
+              'border-radius': '10px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #cards>
+    <div class="analytics-widgets">
+      <div class="analytics-widgets-items">
+        <div class="item">
+          <div class="card-item">
+            <div class="title-card">
+              <p>{{ "followUp.followUpClosureRate" | translate }}</p>
+            </div>
+            <nz-progress
+              [nzStrokeWidth]="5"
+              [nzWidth]="80"
+              [nzStrokeColor]="'#5271ff'"
+              [nzFormat]="progressFormat"
+              [nzPercent]="closureRate"
+              nzType="circle"
+              [title]="'followUp.closureRateHint' | translate"
+            ></nz-progress>
+          </div>
+        </div>
+        <div class="item">
+          <div class="card-item">
+            <div class="title-card">
+              <p>{{ "followUp.responseTimeRate" | translate }}</p>
+            </div>
+            <nz-progress
+              [nzStrokeWidth]="5"
+              [nzWidth]="80"
+              [nzFormat]="progressFormat"
+              [nzStrokeColor]="'#5271ff'"
+              [nzPercent]="responseRate"
+              nzType="circle"
+              [title]="'followUp.onTrackRateHint' | translate"
+            ></nz-progress>
+          </div>
+        </div>
+        <!-- <div class="item">
+          <div class="card-item">
+            <div class="title-card">
+              <p>{{ "followUp.delayedRate" | translate }}</p>
+            </div>
+            <nz-progress
+              [nzStrokeWidth]="5"
+              [nzWidth]="80"
+              [nzFormat]="progressFormat"
+              [nzStrokeColor]="'#5271ff'"
+              [nzPercent]="delayedRate"
+              nzType="circle"
+            ></nz-progress>
+          </div>
+        </div> -->
+        <app-stats-widget
+          [id]="'allTasks'"
+          [count]="totalCount"
+          [title]="'followUp.allTasks' | translate"
+          [icon]="'bx bx-file'"
+          [type]="'warning'"
+        ></app-stats-widget>
+        <app-stats-widget
+          [id]="'openedTasks'"
+          [count]="openedCount"
+          [title]="'followUp.openedTasks' | translate"
+          [icon]="'bx bx-minus-circle'"
+          [type]="'success'"
+        ></app-stats-widget>
+        <app-stats-widget
+          [id]="'onTrackTasks'"
+          [count]="onTrackCount"
+          [title]="'followUp.onTrack' | translate"
+          [icon]="'bx bx-trending-up'"
+          [type]="'primary'"
+        ></app-stats-widget>
+        <app-stats-widget
+          [id]="'delayedTasks'"
+          [count]="delayedCount"
+          [title]="'followUp.delayedTasks' | translate"
+          [icon]="'bx bx-time'"
+          [type]="'danger'"
+        ></app-stats-widget>
+        <app-stats-widget
+          [id]="'closedTasks'"
+          [count]="closedCount"
+          [title]="'followUp.closedTasks' | translate"
+          [icon]="'bx bx-check-circle'"
+          [type]="'default'"
+        ></app-stats-widget>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- <div class=" header-items">
+    <p>{{'followUp.followUpsList' | translate}}</p>
+
+    <button *ngIf="allowAdd" class="btn btn-main createService" (click)="openPopup()"><i class="bx bx-plus"></i>
+      {{'followUp.followUpItem' | translate}}
+    </button>
+  </div> -->
+
+  <!-- page filters skeleton -->
+  <ng-container *ngIf="loading; else page_filter">
+    <div class="my-4">
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+    </div>
+  </ng-container>
+
+  <!-- page filters -->
+  <ng-template #page_filter>
+    <app-page-filters
+      class="d-block my-4"
+      [searchValue]="search"
+      [hasAssignedSwitch]="true"
+      [assignedSwitchId]="'onlyMe'"
+      [assignedSwitchLabel]="'followUp.onlyMe' | translate"
+      [assignedSwitchValue]="filterData.assignedToMe"
+      [hasAddBtn]="true"
+      [addBtnLabel]="'shared.add' | translate"
+      [hasAdvancedFilter]="true"
+      [popupAdvancedFilter]="true"
+      [appliedFiltersCount]="appliedFiltersCount"
+      (onSwitch)="onAssignedToMeChange($event)"
+      (onAddBtnCLicked)="openPopup()"
+      (onOpenAdvancedFilterModel)="openAdvancedFilterPopup()"
+      (search)="handleSearchValueFilter($event)"
+    ></app-page-filters>
+  </ng-template>
+
+  <div class="req-filters">
+    <app-follow-up-filters
+      [isAdvancedFilterClicked]="isAdvancedFilterClicked"
+      (filter)="handelFilter($event)"
+    ></app-follow-up-filters>
+  </div>
+
+  <!-- table -->
+  <ng-container *ngIf="loading; else table_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"> </ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <followup-table
+    *ngIf="list?.length > 0"
+    [SortedCol]="sortedCol"
+    [SortDirection]="sortDirection"
+    [types]="types"
+    [totalCount]="totalCount"
+    [List]="list"
+    [paginationModel]="paginationModel"
+    (itemUpdatedHandler)="refreshData(true)"
+    (sortFilter)="handleSortFilter($event)"
+    (onPaginateEvent)="handlePaginationchange($event)"
+  ></followup-table> 
+
+  <div class="no-data" *ngIf="list?.length == 0">
+    <app-no-data [msg]="'followUp.noDataMsg' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<ng-template #cardsSkeleton>
+  <div class="analytics-widgets">
+    <div class="analytics-widgets-items">
+      <app-skeleton-loader
+        *ngFor="let i of [1, 2, 3, 4, 5, 6, 7]"
+        [mode]="'userCard'"
+      ></app-skeleton-loader>
+    </div>
+ </div>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'follow-up-item'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeFollowUpItemModel()"
+>
+  <div modal-header class="follow-up-item-model-header w-100">
+    <label class="modal-title">
+      {{ 'followUp.addFollowUpItem' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="follow-up-item-model-content border-top">
+    <app-follow-add-item
+      *ngIf="isAddClicked"
+      (types)="handelTypes($event)"
+      (itemAddedHandler)="refreshData(true)"
+    ></app-follow-add-item>
+  </div>
+</app-model>

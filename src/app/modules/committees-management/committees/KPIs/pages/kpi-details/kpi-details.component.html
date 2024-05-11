@@ -1,0 +1,228 @@
+<ng-container *ngIf="isLoading; else KPIdata">
+  <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+</ng-container>
+
+<!-- pageTitle?.length > 35 ? pageTitle.slice(0, 35).concat('...') : pageTitle -->
+<!-- KPIs info -->
+<ng-template #KPIdata>
+  <app-header-page
+    [backButton]="true"
+    [backTo]="
+      '/committees-management/committee-details/' + committeeId + '/KPIs'
+    "
+    [showTotalItems]="false"
+    [title]="pageTitle"
+  ></app-header-page>
+  <div class="block-content meeting-info mb-3">
+    <div
+      class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3"
+    ></div>
+    <ul class="meeting-info-list mt-4">
+      <li class="meeting-info-list-item">
+        <h4 class="block-subtitle mb-2">
+          {{ "committeeKPIs.details.weight" | translate }}
+        </h4>
+
+        <div class="meeting-info-list-item-content">
+          {{ data?.weight }}%
+        </div>
+      </li>
+      <li class="meeting-info-list-item">
+        <h4 class="block-subtitle mb-2">
+          {{ "committeeKPIs.details.target" | translate }}
+        </h4>
+
+        <div class="meeting-info-list-item-content">
+          {{ data?.target }}
+          <span *ngIf="data.measurementType == 2">%</span>
+          <span *ngIf="data.measurementType == 3">
+            {{ "shared.AED" | translate }}
+          </span>
+          <span *ngIf="data.measurementType == 1">#</span>
+        </div>
+      </li>
+      <li class="meeting-info-list-item">
+        <h4 class="block-subtitle mb-2">
+          {{ "committeeKPIs.details.measurementType" | translate }}
+        </h4>
+
+        <div class="meeting-info-list-item-content">
+          {{ measurementTypes[data?.measurementType]?.title[lang] }}
+        </div>
+      </li>
+
+      <li class="meeting-info-list-item">
+        <h4 class="block-subtitle mb-2">
+          {{ "committeeKPIs.details.progress" | translate }}
+        </h4>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="progress-bar flex-grow-1">
+            <span
+              class="fill {{ data?.overallProgress | progressColor }}"
+              [ngStyle]="{ width: data?.overallProgress + '%' }"
+            ></span>
+          </div>
+          <span class="percentage">{{ data?.overallProgress | number }}%</span>
+        </div>
+      </li>
+
+    </ul>
+
+    <!-- description -->
+    <div class="kpi-description" *ngIf="data?.description">
+      <span class="block-title">
+        {{ "committeeKPIs.details.description" | translate }}
+      </span>
+
+      <!-- description -->
+      <div class="row mt-1" *ngIf="data?.description?.length > 0; else noData">
+        <div class="">
+          <div
+            class="angular-editor-description"
+            [innerHTML]="data?.description | truncate : descTextLimit"
+          ></div>
+
+          <button
+            class="see-more-btn text-primary"
+            *ngIf="data?.description?.length > descTextInitialLimit"
+            (click)="toggleMoreText()"
+          >
+            <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+              {{ "committeesManagement.seeMore" | translate }}
+            </ng-container>
+            <ng-template #seeLess>
+              {{ "committeesManagement.seeLess" | translate }}
+            </ng-template>
+          </button>
+        </div>
+      </div>
+      <ng-template #noData>
+        <span class="row mt-3 px-3">
+          {{ "shared.noData" | translate }}
+        </span>
+      </ng-template>
+    </div>
+
+    <!-- horizontal line -->
+    <div class="horizontal-line"></div>
+
+    <div class="progress-table">
+      <span style="font-size: 1.3rem">
+        {{ "committeeKPIs.list.progress" | translate }}
+      </span>
+
+      <!-- Progress Table -->
+      <div class="tasks-list-container">
+        <div class="tasks-list">
+          <table>
+            <tr>
+              <th class="task-title">
+                {{ "committeeKPIs.details.period" | translate }}
+              </th>
+              <th class="task-progress">
+                {{ "committeeKPIs.details.target" | translate }}
+              </th>
+              <th class="task-status">
+                {{ "committeeKPIs.details.actual" | translate }}
+              </th>
+              <th class="task-status">
+                {{ "committeeKPIs.details.attachments" | translate }}
+              </th>
+              <th class="task-status"></th>
+            </tr>
+            <tr *ngFor="let kpi of data?.progress; let i = index">
+              <td class="task-title">
+                {{ lang == "en" ? kpi?.periodEn : kpi.periodAr }}
+              </td>
+              <!-- If measurementType is number -->
+              <ng-container *ngIf="data?.measurementType == 1">
+                <td class="task-progress">{{ kpi.target | number }}#</td>
+                <td class="task-created-on">{{ kpi.actual | number }}#</td>
+              </ng-container>
+
+              <!-- If measurementType is percentage -->
+              <ng-container *ngIf="data?.measurementType == 2">
+                <td class="task-progress">{{ kpi.target | number }}%</td>
+                <td class="task-created-on">{{ kpi.actual | number }}%</td>
+              </ng-container>
+
+              <!-- If measurementType is currency -->
+              <ng-container *ngIf="data?.measurementType == 3">
+                <td class="task-progress">{{ kpi.target | number }}AED</td>
+                <td class="task-created-on">{{ kpi.actual | number }}AED</td>
+              </ng-container>
+              <td>
+                <uploaded-attachments-files
+                  *ngIf="oldAttachments[i].length > 0"
+                  class="d-block mt-3"
+                  [files]="oldAttachments[i]"
+                  (viewFile)="onViewLocalFile(i, $event)"
+                  [supportedTypes]="
+                    'committeeTasks.addModal.descriptionAttachmentsTypes'
+                      | translate
+                  "
+                  [canDeleted]="false"
+                  [showHint]="false"
+                ></uploaded-attachments-files>
+                <span *ngIf="oldAttachments[i].length == 0">
+                  {{ "shared.noAttachmentsYet" | translate }}
+                </span>
+              </td>
+
+              <td>
+                <button class="add-new-btn" (click)="showProgress(kpi)">
+                  {{ "shared.editProgress" | translate }}
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+<ng-template #skeleton_rows>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- kpi highlight modal -->
+<app-model
+  [dimensions]="{ width: 480, height: 750 }"
+  [id]="'kpi-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{ "committeeKPIs.details.progressHeader" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <app-kpi-details-model
+      *ngIf="isProgressModalOpen"
+      [language]="lang"
+      [measurementRecurrences]="measurementRecurrences"
+      [progress]="selectedProgress"
+      [KPIId]="kpiId"
+      (refreshTable)="loadData()"
+      [commingMeasurmentType]="measurmentType"
+    ></app-kpi-details-model>
+  </div>
+</app-model>

@@ -1,0 +1,240 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.change-request-container {
+  padding-bottom: 70px;
+
+  .header-details {
+    margin-top: -1.5rem;
+
+    .date {
+      color: #a8a8a8;
+      font-size: 16px;
+      font-weight: 400;
+
+      span {
+        color: #3c557a;
+      }
+    }
+  }
+}
+
+p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 31px;
+  color: #3c557a;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: space-between;
+  min-height: 44px;
+  background-color: $white-color;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+
+  li {
+    width: 50%;
+    background-color: transparent;
+    border: none;
+    overflow: hidden;
+
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      color: $main-color;
+      font-size: 16px;
+      font-weight: 500;
+      border: none !important;
+      border-radius: 10px;
+
+      &.active {
+        color: $white-color;
+        background-color: $main-color;
+        transition: background-color 1s;
+      }
+    }
+  }
+}
+
+.highlight-changes-btn {
+  //  z-index: 99999;
+  // position: absolute;
+  // top: 20px;
+  // right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  // @include rtl_value(left, unset, 20px);
+  // @include rtl_value(right, 20px, unset);
+}
+
+.milestone-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  // min-height: 189px;
+  background: $white-color;
+  padding: 1.25rem;
+  margin-bottom: 19px;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+
+  .inner {
+    // .card-counter {
+    //     width: 10%;
+    // }
+
+    &:not(:only-child) {
+      margin-bottom: 20px;
+    }
+
+    .card-options {
+      top: 10px;
+      right: 5px;
+      position: absolute;
+      width: fit-content;
+      @include rtl_value(left, auto, 5px);
+      @include rtl_value(right, 5px, auto);
+    }
+
+    .card-details-col {
+      .col-title {
+        color: $black-color;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 150%;
+        margin-bottom: 12px;
+
+        &.grey-label {
+          color: #717986;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 19px;
+          letter-spacing: 0.02em;
+          margin-bottom: 8px;
+        }
+      }
+
+      .col-date {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 120%;
+        color: $dark-gray-color;
+
+        .old-data {
+          font-size: 12px;
+        }
+      }
+
+      ul {
+        list-style: none;
+        list-style-position: inside;
+
+        li {
+          margin-bottom: 8px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 150%;
+          color: #707070;
+
+          &::before {
+            content: "\2022";
+            color: #707070;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+          }
+        }
+      }
+    }
+
+    .old-data {
+      font-size: 14px;
+      font-weight: 400;
+      color: #ff285c;
+    }
+
+    .deliverable {
+      position: relative;
+    }
+  }
+}
+
+.name {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 100%;
+  color: #3c557a;
+}
+
+.position {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  color: #8b8b8b;
+}
+
+.top-right-options {
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  @include rtl_value(left, auto, 10px);
+  @include rtl_value(right, 10px, auto);
+}
+
+.separator {
+  width: 80%;
+  height: 2px;
+  background-color: #cbcbcb;
+  margin: 20px auto;
+}
+
+.attachment {
+  a {
+    color: $main-color;
+  }
+}
+
+:host ::ng-deep {
+  .accordion .card-body {
+    overflow: auto;
+  }
+
+  person-item {
+    .personItem {
+      &.header-person {
+        width: fit-content;
+      }
+
+      > .avatar {
+        .letters,
+        img {
+          height: 2.5rem !important;
+          width: 2.5rem !important;
+        }
+      }
+
+      .name {
+        font-size: 0.875rem;
+      }
+
+      .job {
+        &:empty {
+          display: none;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+<div class="managers-container">
+  <div class="header">
+    <span class="title">
+      {{ "dashboard.leaderboard" | translate }}
+    </span>
+
+    <app-select
+      [placeholder]="'dashboard.leaderboard' | translate"
+      [items]="options"
+      [bindVlaue]="'value'"
+      [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+      [value]="options[0].value"
+      (change)="onSelectOption($event)"
+    ></app-select>
+  </div>
+
+  <div class="content" *ngIf="managersData?.length && !isLoading">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ "dashboard.no" | translate }}</th>
+          <th>{{ "dashboard.name" | translate }}</th>
+          <th>
+            {{
+              showScore
+                ? ("dashboard.score" | translate)
+                : ("dashboard.projects" | translate)
+            }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of managersData; let i = index">
+          <td>
+            <span class="number">
+              {{ i + 1 }}
+              <!-- <i class="bx bxs-trophy" *ngIf="i === 0"></i> -->
+            </span>
+          </td>
+          <td>
+            <person-item
+              [item]="item.managerItem"
+              [noCursor]="true"
+              [isUserCardFixed]="true"
+            ></person-item>
+          </td>
+          <td>{{ showScore ? item.score + "%" : item.totalProjects }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!managersData?.length && !isLoading" class="mt-2">
+    <app-empty-state
+      title="{{ 'shared.noData' | translate }}"
+    ></app-empty-state>
+  </div>
+</div>

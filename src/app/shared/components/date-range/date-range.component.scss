@@ -1,0 +1,18 @@
+.ng-valid {
+  border-color: #cbcbcb !important;
+
+  // &.valid {
+  //   border-color: #00db99 !important;
+  // }
+}
+
+input:disabled {
+  background-color: #e9ecef !important;
+  &::placeholder {
+    color: #aaaaaa;
+  }
+}
+
+input[readonly] {
+  background-color: white !important;
+}

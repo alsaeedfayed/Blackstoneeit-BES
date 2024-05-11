@@ -1,0 +1,71 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: sticky;
+  @media (max-width: 490px) {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  background-color: #fff;
+  button {
+    width: 154px;
+    font-weight: 500;
+    font-size: 18px;
+    &:first-child {
+      margin-inline-end: 11px;
+      @media (max-width: 490px) {
+        margin-inline-end: 0;
+      }
+    }
+  }
+}
+app-radio-group {
+  @media (max-width: 576px) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+app-radio-box {
+  margin-inline-end: 45px;
+  text-transform: capitalize;
+}
+
+:host ::ng-deep {
+  .roles-select {
+    .ng-select-container {
+      .ng-value {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 6px 4px 4px;
+        background-color: rgba(172, 181, 193, 0.15) !important;
+        border-radius: 2.5rem !important;
+
+        .ng-value-label {
+          padding: 0 !important;
+        }
+
+        .ng-value-icon {
+          height: 13px;
+          line-height: 13px;
+          font-size: 18px;
+          color: $tertiary-color;
+          background: none !important;
+          border: none !important;
+
+          &:hover {
+            color: $danger-color !important;
+          }
+        }
+      }
+    }
+  }
+}

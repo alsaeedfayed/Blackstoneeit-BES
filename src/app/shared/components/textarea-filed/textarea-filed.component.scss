@@ -1,0 +1,19 @@
+.ng-valid {
+  border-color: #cbcbcb !important;
+
+  // &.valid:not(.ng-pristine) {
+  //   border-color: #00DB99 !important
+  // }
+}
+
+textarea:disabled {
+  background-color: #f9f9f9 !important;
+
+  &::placeholder {
+    color: #aaaaaa;
+  }
+}
+
+.astrix-red {
+  color: red;
+}

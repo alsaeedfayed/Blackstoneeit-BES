@@ -1,0 +1,185 @@
+@import "../../../assets/css/utils/variables.scss";
+
+.risk {
+    p {
+        text-transform: capitalize;
+        margin-bottom: 9px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 14px;
+        color: #0e101a;
+    }
+
+    &.form-view {
+        width: 100%;
+
+        span {
+            display: inline-block;
+            width: 25% !important;
+            margin-right: 5px;
+            border-radius: 6px;
+
+            &:first-of-type {
+                background: #46ffa6;
+                height: 8px !important;
+                box-shadow: 0 0 4px 1px #46ffa673;
+            }
+
+            &:nth-of-type(2) {
+                background: #f1f3f8;
+                height: 12px !important;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:nth-of-type(3) {
+                background: #f1f3f8;
+                height: 16px !important;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:last-of-type {
+                background: #f1f3f8;
+                height: 20px !important;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+        }
+    }
+
+    .Low,
+    .Medium,
+    .High,
+    .VeryHigh,
+    .UNKNOWN {
+        //styling for all
+        display: flex;
+        align-items: center;
+
+        span {
+            display: inline-block;
+            width: 26px;
+            margin-right: 5px;
+            border-radius: 6px;
+
+            &:first-of-type {
+                background: #46ffa6;
+                height: 4px;
+                box-shadow: 0 0 4px 1px #46ffa673;
+            }
+
+            &:nth-of-type(2) {
+                background: #f1f3f8;
+                height: 6px;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:nth-of-type(3) {
+                background: #f1f3f8;
+                height: 8px;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:last-of-type {
+                background: #f1f3f8;
+                height: 10px;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+        }
+    }
+
+    .low {}
+
+    .Medium {
+
+        //MEDIUM complexity
+        span {
+            &:first-of-type {
+                background: #46ffa6;
+                box-shadow: 0 0 4px 1px #46ffa673;
+            }
+
+            &:nth-of-type(2) {
+                background: #FBC103;
+                box-shadow: 0 0 4px 0px #FBC103;
+            }
+
+            &:last-of-type {
+                background: #f1f3f8;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+        }
+    }
+
+    .High {
+
+        //HIGH complexity
+        span {
+            &:first-of-type {
+                background: #46ffa6;
+                box-shadow: 0 0 4px 1px #46ffa673;
+            }
+
+            &:nth-of-type(2) {
+                background: #FBC103;
+                box-shadow: 0 0 4px 0px #FBC103;
+            }
+
+            &:nth-of-type(3) {
+                background: #ff9865;
+                box-shadow: 0 0 4px 0px #ff9865;
+            }
+        }
+    }
+
+    .VeryHigh {
+
+        //Very High complexity
+        span {
+            &:first-of-type {
+                background: #46ffa6;
+                box-shadow: 0 0 4px 1px #46ffa673;
+            }
+
+            &:nth-of-type(2) {
+                background: #FBC103;
+                box-shadow: 0 0 4px 0px #FBC103;
+            }
+
+            &:nth-of-type(3) {
+                background: #ff9865;
+                box-shadow: 0 0 4px 0px #ff9865;
+            }
+
+            &:last-of-type {
+                background: $danger-color;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+        }
+    }
+
+    .UNKNOWN {
+
+        //UNKNOWN complexity
+        span {
+            &:first-of-type {
+                background: #f1f3f8;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:nth-of-type(2) {
+                background: #f1f3f8;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:nth-of-type(3) {
+                background: #f1f3f8;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+
+            &:last-of-type {
+                background: #f1f3f8;
+                box-shadow: 0 0 4px 0px #f1f3f8;
+            }
+        }
+    }
+}

@@ -1,0 +1,68 @@
+{
+  "challenges": {
+    "title": "التحديات",
+    "notData": "لا توجد بيانات",
+    "searchPlaceholder": "ابحث باسم التحدي...",
+    "analytics": {
+      "totalChallenges": "كل التحديات",
+      "totalIdeas": "كل الأفكار",
+      "newChallenges": "التحديات الجديده",
+      "resolvedChallenges": "التحديات التي تم حلها"
+    },
+    "card": {
+      "organizer": "اسم المنظم",
+      "focusArea": "الموضوع الأساسي",
+      "endDate": "تاريخ الإنتهاء",
+      "idea": "فكره",
+      "viewMore": "رؤية المزيد",
+      "openDetails": "التفاصيل",
+      "label": "جديد"
+    },
+    "add": "إنشاء تحدي جديد",
+    "success": {
+      "header": "رسالة نجاح",
+      "message": "تم إنشاء التحدي بنجاح."
+    },
+    "draft": {
+      "header": "رسالة نجاح",
+      "message": "تم الحفظ كمسودة بنجاح."
+    },
+    "details": {
+      "edit": "تعديل ",
+      "drag": "قم بالسحب والاسقاط للرفع",
+      "choose": "لإختيار ملف",
+      "browse": "تصفح"
+    }
+  },
+  "addChallenges": {
+    "title": "تحدي جديد",
+    "cancel": "إلغاء",
+    "publish": "نشر",
+    "draft": "حفظ كمسودة",
+    "form": {
+      "picture": "صورة التحدي",
+      "title": "العنوان",
+      "content ": "المحتوى",
+      "focusArea": "الموضوع الرئيسي",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ الإنتهاء",
+      "relatedPoints": "نقاط ذات صلة",
+      "rewardType": "نوع المكافأة",
+      "amount": "الكمية",
+      "attachment": "المرفقات",
+      "awardCertification": "شهادة التقدير",
+      "uploadAttachment": "رفع ملف"
+    }
+  },
+  "filterForm": {
+    "organizerName": "تحدي جديد",
+    "status": "الحالة",
+    "focusArea": "الموضوع الرئيسي"
+  },
+  "statuses": {
+    "New": "جديد",
+    "Draft": "مسودة",
+    "Closed": "مغلق",
+    "Resolved": "تم حلها"
+  }
+}

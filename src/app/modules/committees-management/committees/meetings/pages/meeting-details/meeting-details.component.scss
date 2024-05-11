@@ -1,0 +1,474 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.attendees-status {
+  width: 250px !important;
+}
+.block {
+  &-content {
+    background-color: $white-color;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+  }
+
+  &-title {
+    color: $black-color;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.25rem !important;
+  }
+
+  &-subtitle {
+    color: $info_color;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem !important;
+  }
+}
+
+.meeting {
+  &-info {
+    container: meeting-info / inline-size;
+    position: relative;
+    z-index: 1;
+
+    &-list {
+      display: grid;
+
+      @container meeting-info (min-width: 700px) {
+        & {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+
+      @container meeting-info (min-width: 500px) and (max-width: 699px) {
+        & {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+        }
+      }
+
+      @container meeting-info (max-width: 500px) {
+        & {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+
+      &-item {
+        @container meeting-info (min-width: 700px) {
+          &:not(:first-of-type) {
+            padding-inline-start: 1rem;
+            border-inline-start: 0.0625rem solid #96a6bd36;
+          }
+        }
+
+        @container meeting-info (min-width: 500px) and (max-width: 699px) {
+          &:nth-of-type(-1n + 3) {
+            padding-bottom: 1rem;
+            border-bottom: 0.0625rem solid #96a6bd36;
+          }
+        }
+
+        @container meeting-info (max-width: 500px) {
+          &:not(:last-of-type) {
+            padding-bottom: 1rem;
+            border-bottom: 0.0625rem solid #96a6bd36;
+          }
+        }
+
+        &-content {
+          color: $black-color;
+          font-weight: 400;
+          font-size: 0.875rem;
+          line-height: 1.25rem !important;
+
+          ::ng-deep person-item {
+            .personItem {
+              > .avatar {
+                .letters,
+                img {
+                  height: 2rem !important;
+                  width: 2rem !important;
+                }
+
+                .letters {
+                  font-size: 0.75rem;
+                }
+              }
+
+              > .info {
+                .name {
+                  font-size: 0.875rem;
+                  margin-bottom: 0;
+                }
+
+                .job {
+                  //display: block;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &-details {
+    .agendaList-container {
+      container: agenda-list / inline-size;
+    }
+
+    &-agendaList {
+      display: grid;
+      gap: 1rem 2rem;
+      list-style: revert;
+      padding: revert;
+      margin: revert;
+
+      @container agenda-list (min-width: 700px) {
+        & {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @container agenda-list (max-width: 500px) {
+        & {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      &-item {
+      }
+    }
+
+    .attendees-list {
+      margin: 0 -1.25rem;
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+
+        tr {
+          &:not(:first-of-type):nth-of-type(odd) {
+            background-color: #fbfbfb;
+            border-bottom: 1px solid #efefef;
+          }
+
+          th {
+            color: $info_color;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0 1.25rem;
+          }
+
+          td {
+            font-weight: 400;
+            padding: 0.625rem 1.25rem;
+          }
+
+          .attendees-name {
+            ::ng-deep person-item {
+              .personItem {
+                &.header-person {
+                  width: fit-content;
+                }
+
+                > .avatar {
+                  .letters,
+                  img {
+                    height: 1.75rem !important;
+                    width: 1.75rem !important;
+                  }
+
+                  .letters {
+                    font-size: 0.625rem;
+                  }
+                }
+
+                > .info {
+                  .name {
+                    font-size: 0.875rem;
+                    margin-bottom: 0;
+                  }
+
+                  .job {
+                    //display: none;
+                  }
+                }
+              }
+            }
+
+            .initials {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              background-color: $main-color;
+              color: #ffffff;
+              padding: 5px;
+              border-radius: 50%;
+              width: 28px;
+              height: 28px;
+              font-size: 0.625rem;
+              margin-right: 6px;
+            }
+          }
+        }
+      }
+    }
+
+    .discussed-list {
+      margin: 0 -1.25rem;
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+
+        tr {
+          &:not(:first-of-type) {
+            border-bottom: 1px solid #efefef;
+          }
+
+          th {
+            color: $info_color;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0 1.25rem;
+          }
+
+          td {
+            font-weight: 400;
+            padding: 0.625rem 1.25rem;
+          }
+
+          .discussed-title {
+            min-width: 150px;
+          }
+
+          .see-more {
+            display: inline-block;
+            color: $main-color;
+            font-size: 0.875rem;
+            font-weight: 400;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+
+    .tasks-list {
+      margin: 0 -1.25rem;
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+
+        tr {
+          &:not(:first-of-type) {
+            border-bottom: 0.0625rem solid #efefef;
+          }
+
+          th {
+            color: $info_color;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0 1.25rem;
+          }
+
+          td {
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+          }
+
+          .task-title {
+            min-width: 150px;
+          }
+
+          .task-progress {
+            min-width: 200px;
+
+            .progress-bar {
+              position: relative;
+              height: 0.25rem;
+              background-color: #ebedef;
+              border-radius: 0.625rem;
+              overflow: hidden;
+
+              .fill {
+                display: block;
+                position: absolute;
+                top: 0;
+                @include rtl_value(left, 0, auto);
+                @include rtl_value(right, auto, 0);
+                height: 100%;
+                width: 0%;
+                background-color: #ffa800;
+              }
+            }
+
+            .percentage {
+              color: $black-color;
+              font-weight: 400;
+              font-size: 0.75rem;
+              line-height: 1.25rem;
+            }
+          }
+
+          .task-created-on {
+            min-width: 150px;
+          }
+
+          .task-assigned-to {
+            ::ng-deep person-item {
+              .avatar {
+                .letters,
+                img {
+                  height: 1.5rem !important;
+                  width: 1.5rem !important;
+                }
+
+                .letters {
+                  font-size: 0.625rem;
+                }
+              }
+
+              .name {
+                font-size: 0.875rem;
+                margin-bottom: 0;
+              }
+
+              .job {
+                //display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .decisions-list {
+      margin: 0 -1.25rem;
+      overflow-x: auto;
+
+      table {
+        width: 100%;
+
+        tr {
+          --actions-width: 70px;
+
+          &:not(:first-of-type) {
+            border-bottom: 1px solid #efefef;
+          }
+
+          th {
+            color: $info_color;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0 1.25rem;
+          }
+
+          td {
+            font-weight: 400;
+            padding: 0.625rem 1.25rem;
+          }
+
+          .decisions-title {
+            width: 200px;
+          }
+
+          .decisions-status {
+            width: 170px;
+          }
+
+          .decisions-poll {
+            // width: 300px;
+          }
+
+          .decisions-actions {
+            width: var(--actions-width);
+
+            button {
+              background: none;
+              color: $main-color;
+              padding: 0;
+              border: 0;
+              font-weight: 500;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .no-data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding-block: 1rem 2rem;
+
+      ::ng-deep app-no-data {
+        .no-data {
+          position: static;
+          top: initial;
+          left: initial;
+          transform: none;
+        }
+
+        img {
+          display: block;
+          margin: auto;
+          width: 101px;
+          height: 83px;
+        }
+
+        p {
+          width: auto;
+          font-size: 0.875rem;
+          margin: 1.5rem 0 0;
+        }
+      }
+    }
+  }
+
+  &-comments {
+    overflow: auto;
+  }
+}
+
+.badgeRate {
+  background: #48cf48;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem;
+  border-radius: 16px;
+  color: #fff;
+  padding: 6px 10px;
+}
+
+.see-more-btn {
+  display: inline-block;
+  color: $info_color;
+  font-size: 0.875rem;
+  font-weight: 400;
+  background: none;
+  padding: 0;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+.absence-justification{
+  width: 450px;
+}

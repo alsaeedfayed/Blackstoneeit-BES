@@ -1,0 +1,71 @@
+.tracking-chart {
+    width: 100%;
+    //border: 1px solid rgb(227, 231, 233);
+    border-radius: .5rem;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    //box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.1);
+    background: white;
+    margin: auto;
+    height: 100%;
+   // overflow-y: scroll;
+
+    &-title {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 21px;
+        color: #3c557a;
+
+    }
+
+    &-row {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        height: 100%;
+
+        &-leftTitle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+
+            &-title {
+                transform: rotate(-90deg);
+
+                &-text {
+                    font-weight: 400;
+                    font-size: 18px;
+                    line-height: 21px;
+                    color: #3c557a;
+                }
+            }
+        }
+    }
+
+
+}
+
+@media only screen and (max-width : 990px) {
+    .tracking-chart-row-leftTitle {
+        display: none;
+    }
+}
+
+#myChart{
+  height: 220px !important;
+  width: 220px !important;
+}
+
+@media screen and (max-width : 620px) {
+ .donutChart{
+  justify-content: center !important;
+ }
+}
+
+.status {
+  color: #717986;
+  font-size: 16px;
+  font-weight: 600;
+}

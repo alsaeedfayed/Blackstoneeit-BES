@@ -1,0 +1,55 @@
+
+  <div class="roles">
+    <div
+        class="row mt-3 justify-content-center roles-coverage | slice:0:10"
+      >
+        <div class="wrapper">
+          <div class="header-text">{{ "bau.rolesCoverage" | translate }}</div>
+          <div class="roles-wrapper">
+            <div class="roles" *ngFor="let role of rolesCoverage">
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [ngStyle]="{ width: role.percentage + '%' }"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [title]="language === 'ar' ? role.roleNameAr : role.roleNameEn"
+                ></div>
+                <!-- give ar and en class to give right and left postion basen on lang  -->
+                <span
+                  class="progress-bar-text"
+                  [ngClass]="{
+                    ar: language === 'ar',
+                    en: language !== 'ar',
+                    low: role.percentage < 40
+                  }"
+                >
+                  {{ language == "ar" ? role.roleNameAr : role.roleNameEn }}
+                </span>
+                <span
+                  class="tasks-count"
+                  [ngClass]="{ ar: language === 'ar', en: language === 'en' }"
+                >
+                  <span title="{{ 'bau.mainTasks' | translate }}">
+                    {{ role.mainTasksCount }}
+                  </span>
+                  (
+                  <span title="{{ 'bau.subTasks' | translate }}">
+                    {{ role.tasksCount }}
+                  </span>
+                  )
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="no-data" *ngIf="rolesCoverage?.length == 0 || !rolesCoverage">
+      <app-no-data
+        [msg]="'bau.dashboard.noDataMsg' | translate"
+      ></app-no-data>
+    </div>
+
+

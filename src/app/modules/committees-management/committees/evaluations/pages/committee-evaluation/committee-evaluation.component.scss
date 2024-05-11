@@ -1,0 +1,13 @@
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.filter-action-btn:disabled,
+.filter-action-btn[disabled] {
+  background-color: gainsboro !important;
+}

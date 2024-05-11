@@ -1,0 +1,781 @@
+<!------- for process card ------->
+<div *ngIf="mode == 'card'" class="card-skeleton bg-white p-2">
+  <div class="d-flex justify-content-between align-items-center w-100">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '50px',
+        width: '50px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '30px',
+        width: '92px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+
+  <div class="d-flex flex-column">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '20px',
+        width: '200px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '20px',
+        width: '150px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '20px',
+        width: '100px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+
+  <div>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '30px',
+        width: '92px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-right': '5px'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '30px',
+        width: '92px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-right': '5px'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '30px',
+        width: '92px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+</div>
+
+<!------- for role card ------->
+<div *ngIf="mode == 'roleCard'" class="card-skeleton bg-white p-2">
+  <div>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '23px',
+        width: '145px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+
+  <!-- <div class="d-flex">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '32px',
+        width: '138px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '32px',
+        width: '116px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+
+  <div>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '32px',
+        width: '130px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-right': '5px'
+      }"></ngx-skeleton-loader>
+  </div> -->
+</div>
+
+<!------- for user card ------->
+<div *ngIf="mode == 'userCard'" class="card-skeleton bg-white p-2">
+  <div>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '22px',
+        width: '115px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+
+  <div class="d-flex flex-column">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '23px',
+        width: '125px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-bottom': '24px'
+      }"></ngx-skeleton-loader>
+    <!-- <ngx-skeleton-loader count="1"
+                         [theme]="{ 
+      'border-radius': '8px',
+      height: '18px',
+      width: '100px',
+      'background-color': '#f5f6f9',
+      border: '1px solid white',
+      'margin-bottom': '24px'
+    }"></ngx-skeleton-loader> -->
+  </div>
+
+  <div class="d-flex flex-column">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '18px',
+        width: '160px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-bottom': '8px'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '18px',
+        width: '140px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+</div>
+
+<!------- for table ------->
+<div *ngIf="mode == 'table'">
+  <ngx-skeleton-loader count="1" [theme]="{
+      'border-radius': '8px',
+      height: '60px',
+      width: '100%',
+      'background-color': '#f5f6f9'
+    }"></ngx-skeleton-loader>
+</div>
+
+<!-- For initiative card -->
+<div *ngIf="mode == 'initiativeCard'">
+  <div class="card">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '15px',
+        height: '200px',
+        width: '100%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-inline-end': '20px'
+      }">
+    </ngx-skeleton-loader>
+
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '15px',
+        height: '20px',
+        width: '100%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-inline-end': '20px'
+      }">
+    </ngx-skeleton-loader>
+
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '15px',
+        height: '20px',
+        width: '70%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-inline-end': '20px'
+      }">
+    </ngx-skeleton-loader>
+
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '15px',
+        height: '20px',
+        width: '40%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-inline-end': '20px'
+      }">
+    </ngx-skeleton-loader>
+
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '10px',
+        height: '48px',
+        width: '120px',
+        'margin-top': '30px',
+        'background-color': '#f5f6f9',
+        border: '1px solid white',
+        'margin-inline-end': '20px'
+      }">
+    </ngx-skeleton-loader>
+  </div>
+</div>
+
+<div class="mb-32" *ngIf="mode === 'personalInfo'">
+  <div class="d-flex">
+    <div>
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '8px',
+          height: '45px',
+          width: '45px',
+          'background-color': '#f5f6f9',
+          'margin-right': '12px'
+        }">
+      </ngx-skeleton-loader>
+    </div>
+    <div>
+      <div>
+        <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '10px',
+            height: '18px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            'margin-bottom': '0px'
+          }">
+        </ngx-skeleton-loader>
+      </div>
+      <div>
+        <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '10px',
+            height: '18px',
+            width: '160px',
+            'background-color': '#f5f6f9',
+            'margin-bottom': '0px'
+          }">
+        </ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  start for citizen profile data -->
+<div *ngIf="mode == 'citizen-profile'">
+  <div class="d-flex">
+    <div>
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '68px',
+          width: '65px',
+          'margin-top': '0',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+      </ngx-skeleton-loader>
+    </div>
+    <div>
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '15px',
+          width: '120px',
+          'margin-top': '10px',
+          'margin-bottom': '5px',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+      </ngx-skeleton-loader>
+
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '15px',
+          display: 'block',
+          width: '150px',
+          'margin-top': '0',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+      </ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+<!--  end for citizen profile data -->
+
+<!-- start personal information -->
+<div *ngIf="mode == 'personal-info'">
+  <ngx-skeleton-loader count="1" [theme]="{
+      'border-radius': '10px',
+      height: '17px',
+      width: '200px',
+      'margin-top': '8px',
+      'background-color': '#f5f6f9',
+      border: '1px solid white',
+      'margin-inline-end': '20px'
+    }">
+  </ngx-skeleton-loader>
+</div>
+<!-- start personal information -->
+
+<!-- start incomes obligations -->
+<div *ngIf="mode == 'incomes-obligations'">
+  <ngx-skeleton-loader count="4" [theme]="{
+      'border-radius': '10px',
+      height: '70px',
+      width: '95%',
+      margin: '9px 12px',
+      'background-color': '#f5f6f9',
+      border: '1px solid white',
+      'margin-inline-end': '20px'
+    }">
+  </ngx-skeleton-loader>
+</div>
+<!-- end incomes obligations -->
+
+<!-- start text skeleton loader -->
+<div *ngIf="mode == 'text'">
+  <ngx-skeleton-loader [theme]="{
+            'border-radius': '5px',
+            height: '12px',
+            width: '100%',
+            'background-color': '#f5f6f9',
+            border: '1px solid white'
+        }">
+  </ngx-skeleton-loader>
+</div>
+<!-- end text skeleton loader -->
+
+
+<div *ngIf="mode == 'applicationDetailShadow'">
+  <div class="card-skeleton d-flex pl-4 pr-4 mb-2">
+    <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '68px',
+          width: '65px',
+          'margin-top': '0',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+    </ngx-skeleton-loader>
+    <div>
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '15px',
+          width: '120px',
+          'margin-top': '10px',
+          'margin-bottom': '5px',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+      </ngx-skeleton-loader>
+
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '15px',
+          display: 'block',
+          width: '150px',
+          'margin-top': '0',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+      </ngx-skeleton-loader>
+    </div>
+  </div>
+
+  <div class="card-skeleton d-flex flex-column pl-4 pr-4">
+    <div class="d-flex">
+      <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '68px',
+          width: '65px',
+          'margin-top': '0',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+      </ngx-skeleton-loader>
+      <div>
+        <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '15px',
+          width: '120px',
+          'margin-top': '10px',
+          'margin-bottom': '5px',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+        </ngx-skeleton-loader>
+
+        <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '10px',
+          height: '15px',
+          display: 'block',
+          width: '150px',
+          'margin-top': '0',
+          'background-color': '#f5f6f9',
+          border: '1px solid white',
+          'margin-inline-end': '20px'
+        }">
+        </ngx-skeleton-loader>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column">
+      <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '10px',
+            height: '40px',
+            width: '100%',
+            margin: '10px 0px',
+            'background-color': '#f5f6f9',
+            border: '1px solid white'    }">
+      </ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '10px',
+            height: '40px',
+            width: '75%',
+            margin: '10px 0px',
+            'background-color': '#f5f6f9',
+            border: '1px solid white'    }">
+      </ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '10px',
+            height: '40px',
+            width: '50%',
+            margin: '10px 0px',
+            'background-color': '#f5f6f9',
+            border: '1px solid white'    }">
+      </ngx-skeleton-loader>
+      <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '10px',
+            height: '40px',
+            width: '25%',
+            margin: '10px 0px',
+            'background-color': '#f5f6f9',
+            border: '1px solid white'    }">
+      </ngx-skeleton-loader>
+    </div>
+
+
+  </div>
+</div>
+
+<!------- for approved project card ------->
+<div *ngIf="mode == 'project-card'" class="card-skeleton bg-white p-2">
+  <div class="d-flex flex-column">
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '40px',
+        width: '100%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '40px',
+        width: '50%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+    <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '40px',
+        width: '25%',
+        'background-color': '#f5f6f9',
+        border: '1px solid white'
+      }"></ngx-skeleton-loader>
+  </div>
+</div>
+
+<!------- for request history ------->
+<div *ngIf="mode == 'request_history'" class="bg-white p-2">
+  <div class="d-flex align-items-center justify-content-between flex-wrap">
+    <div class="d-flex flex-wrap">
+      <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '50%',
+        height: '50px',
+        width: '50px',
+        'background-color': '#f5f6f9',
+        'margin-right':'10px'
+      }"></ngx-skeleton-loader>
+      <div>
+        <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '8px',
+          height: '20px',
+          width: '100px',
+          'background-color': '#f5f6f9',
+          display:'block'
+        }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{
+          'border-radius': '8px',
+          height: '20px',
+          width: '100px',
+          'background-color': '#f5f6f9',
+          display:'block'
+        }"></ngx-skeleton-loader>
+      </div>
+    </div>
+    <div>
+      <ngx-skeleton-loader count="1" [theme]="{
+        'border-radius': '8px',
+        height: '30px',
+        width: '100px',
+        'background-color': '#f5f6f9'
+      }"></ngx-skeleton-loader>
+    </div>
+  </div>
+  <ngx-skeleton-loader count="1" [theme]="{
+    'border-radius': '8px',
+    height: '70px',
+    width: '90%',
+    'background-color': '#f5f6f9'
+  }"></ngx-skeleton-loader>
+  <ngx-skeleton-loader count="1" [theme]="{
+    'border-radius': '8px',
+    height: '20px',
+    width: '120px',
+    'background-color': '#f5f6f9'
+  }"></ngx-skeleton-loader>
+</div>
+
+<!------- for dashboard ------->
+<div *ngIf="mode == 'dashboard'" class="bg-white p-2">
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <div class="d-flex flex-wrap gap-13px">
+        <div class="dashboard-card" *ngFor="let i of [1,2,3,4]">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '100px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '150px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '170px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '200px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '200px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '250px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '100px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '150px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '100px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '150px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '100px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '150px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '100px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '150px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '200px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '250px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="d-flex">
+        <div class="dashboard-card h-200px">
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '100px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '120px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+          <ngx-skeleton-loader count="1" [theme]="{
+            'border-radius': '8px',
+            height: '20px',
+            width: '150px',
+            'background-color': '#f5f6f9',
+            display:'block'
+          }"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div >
+    <ng-container *ngFor="let part of parts">
+        <person-item class="inline-divs mx-1"   *ngIf="part?.id else text" [requesterItem]="part" [CompMode]="3" [noCursor]="true"></person-item>
+        <ng-template #text>
+            <div class="inline-divs" [innerHtml]="part">
+            </div>
+        </ng-template>
+    </ng-container>  
+   
+</div>
+
+

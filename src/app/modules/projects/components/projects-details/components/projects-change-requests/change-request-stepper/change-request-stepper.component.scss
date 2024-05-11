@@ -1,0 +1,28 @@
+@import "src/assets/css/utils/variables.scss";
+
+header {
+  display: flex;
+  justify-content: space-between;
+  min-height: 44px;
+  background-color: $white-color;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+
+  button {
+    width: 50%;
+    background-color: transparent;
+    color: $main-color;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    pointer-events: none;
+
+    &.active {
+      color: $white-color;
+      background-color: $main-color;
+      transition: background-color 1s;
+    }
+  }
+}

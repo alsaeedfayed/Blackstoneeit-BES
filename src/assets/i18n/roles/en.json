@@ -1,0 +1,21 @@
+{
+  "roles": {
+    "permissions": "Permissions",
+    "roles": "Roles",
+    "searchForRole": "Search for role",
+    "addNewRole": "Add new role",
+    "noRolesFound": "No roles found with this query",
+    "confirmDeleteMsg": "Are you sure you want to Delete the role '{{name}}' ?",
+    "roleWasSuccessfullyDeleted":"Role was successfully deleted",
+    "updateRole": "Update Role",
+    "setPermissions": "Set Permissions",
+    "roleName": "Role name",
+    "roleWasSuccessfullyCreated": "Role was successfully created",
+    "roleWasSuccessfullyUpdated": "Role was successfully updated",
+    "permissionsWereSuccessfullySet": "Permissions were successfully set",
+    "role": "Role",
+    "roleArabicName": "Role Arabic name",
+    "creationDate": "Created On",
+    "noDataMsg": "Hmm.. looks like you don't have any roles"
+  }
+}

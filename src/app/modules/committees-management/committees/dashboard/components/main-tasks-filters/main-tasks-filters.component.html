@@ -1,0 +1,18 @@
+<div class="tasks-filters-container">
+  <div class="tasks-filters" [formGroup]="form">
+
+    <!-- committee workGroups select -->
+    <app-select
+      class="d-block"
+      formControlName="workgroupId"
+      [control]="form | getControl: 'workgroupId'"
+      [title]="'committeeTasks.filters.workgroup'| translate"
+      [placeholder]="'committeeTasks.filters.selectWorkgroup' | translate"
+      [items]="workGroups"
+      [bindVlaue]="'id'"
+      [bindLabel]="'name'"
+      [clearable]="true"
+      (change)="changeFilter()"
+    ></app-select>
+  </div>
+</div>

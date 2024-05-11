@@ -1,0 +1,100 @@
+<h3 class="form-title mb-3">{{ "initiationForm.strategicImpact" | translate }}</h3>
+
+<div *ngIf="readOnly">
+  <div class="strategic-impact">
+    <label for="" class="form-label p-0">
+      {{ "initiationForm.strategicKPIs" | translate }}
+    </label>
+
+    <div
+      class="form-custom-checkbox disabled-checked"
+      *ngFor="let item of [1]"
+    >
+      <input id="custom-checkbox" type="checkbox" />
+      <label for="custom-checkbox" class="form-custom-checkbox-box">
+        <i class="bx bx-check"></i>
+      </label>
+      <label class="form-custom-checkbox-label" for="custom-checkbox">
+        {{ "Placeholder KPI" }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!readOnly">
+  <form class="strategic-impact" [formGroup]="strategicImpactForm">
+    <div class="form-group">
+      <label for="" class="form-label">
+        {{ "initiationForm.strategicKPIs" | translate }}:
+      </label>
+
+      <div class="search-bar-container mb-4 position-relative">
+        <input
+          id="filter"
+          #filter
+          placeholder="{{ 'shared.search' | translate }}"
+          (keyup)="tree.treeModel.filterNodes(filter.value)"
+        />
+        <i class="bx bx-search"></i>
+      </div>
+
+      <div class="tree-badge">
+        <input type="checkbox" formControlName="projectStrategicKPI" id="11" />
+        <label [for]="'11'">
+          <span [class]="'badge ' + 'kpi'">
+            <label [for]="'11'" class="custom-checkbox-box">
+              <i class="bx bx-check"></i>
+            </label>
+            {{ "KPI" }}
+          </span>
+        </label>
+        <span class="name">
+          {{ "initiationForm.kpiPlaceholder" | translate }}
+        </span>
+      </div>
+
+      <!-- <tree-root #tree
+                                *ngIf="treeData?.length !== 0 else emptyState"
+                                [nodes]="treeData"
+                                [options]="options">
+
+                            <ng-template #treeNodeTemplate
+                                         let-node="node"
+                                         let-index="index">
+                                   <div class="tree-badge">
+                                          <input (change)="check(node, !node.data.checked)"
+                                                 type="checkbox"
+                                                 [id]="node.data.id"
+                                                 [disabled]="node.data?.children?.length === 0 && node.data?.goalType?.name !== 'KPI' ? true : null"
+                                                 [indeterminate]="node.data.indeterminate"
+                                                 [checked]="node.data.checked">
+                                          <label [for]="node.data.id">
+                                                 <span [class.disabled]="node.data?.children?.length === 0 && node.data?.goalType?.name !== 'KPI'"
+                                                       [class]="'badge ' + node.data.goalType?.name?.toLowerCase()">
+                                                        <label [for]="node.data.id"
+                                                               class="custom-checkbox-box">
+                                                               <i class="bx bx-check"></i>
+                                                        </label>{{node.data?.goalType?.name}}</span>
+                                          </label>
+                                          <span class="name">{{ node.data?.title }}</span>
+                                   </div>
+
+                            </ng-template>
+                     </tree-root>
+
+                     <ng-template #emptyState>
+                            <p class="empty-state">The selected department doesn't have approved KPIs</p>
+                     </ng-template> -->
+    </div>
+    <small
+      class="form-error mb-2"
+      *ngIf="
+        getStrategicImpactForm.projectStrategicKPI?.errors?.required &&
+        isFormSubmitted
+      "
+    >
+      <i class="bx bx-error-circle mr-2"></i>
+      {{ "At least one KPI must me selected" | translate }}
+    </small>
+  </form>
+</div>

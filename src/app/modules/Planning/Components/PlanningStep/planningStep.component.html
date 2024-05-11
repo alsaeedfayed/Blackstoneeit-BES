@@ -1,0 +1,112 @@
+<!-- Planning Step -->
+
+<!--  -->
+<ng-container *ngIf="isApproval; else Planning">
+  <ng-container [ngTemplateOutlet]="Approval"></ng-container>
+</ng-container>
+
+<ng-template #Approval>
+  <div class="planningStep" *ngIf="items">
+    <div class="planning-item" [ngClass]="{isActive:  IsActive}">
+      <div class="step-name" *ngIf="!!stepName">
+        <p>
+          {{ stepName }}
+        </p>
+      </div>
+      <div class="steps">
+        <app-workflow-states [steps]="items" [modalID]="'timeline-popup'" [emptyMsg]="statusMsg"></app-workflow-states>
+        <!-- <div class="step"
+          [ngClass]="{isActive,'notLast':stepsCount > 1}" *ngFor="let item of items; let i = index;">
+        </div> -->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #Planning>
+  <div class="planningStep">
+    <div class="planning-item" [class.isActive]="IsActive">
+      <div class="step-name" *ngIf="!!stepName">
+        <p> {{ stepName }} </p>
+      </div>
+      <div class="steps">
+
+       <app-workflow-states [steps]="planning" [modalID]="'planning-modal'"></app-workflow-states>
+
+        <!-- <div class="step" [ngClass]="{ notLast: stepsCount > 1 && !IsActive}">
+          <div class="planning">
+            <div class="stepBlock">
+
+
+            <div class="info">
+                <span style="margin-bottom: 0;">{{ planning.totalCount }}/{{ planning.submitedCount }}</span>
+                <span class="stuts" style="margin-bottom: 0; color: #00db99" *ngIf="planning.isSubmitted">Submitted</span>
+              </div>
+              <label>{{user}}</label>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- <app-popup [dimensions]="{height: 800, width: 800}"
+           [id]="'timeline-popup'">
+  <div modal-content
+       class="h-100">
+    <div class="popup-header">
+      <button class="back-btn">
+        <div class="arrow"><i class="bx bx-left-arrow-alt"></i></div>
+        <span>Tasks</span>
+      </button>
+    </div>
+    <div class="popup-body">
+      <div class="h-100 d-flex align-items-center">
+        <div class="timeline-container">
+          <div class="line"></div>
+          <div class="timeline-items">
+            <div class="timeline-item"
+                 *ngFor="let item of tasks; let i=index"
+                 [attr.data-before-content]="item?.action?.createdDate | date: 'M/d/yy, h:mm a'"
+                 [class.performed]="item?.code === 'Completed'">
+              <div class="timeline-item-header">
+                <div class="profile-container flex-row">
+                  <img [src]="item?.assignedTo?.profileImage"
+                       alt="">
+                  <div class="profile-details">
+                    <span class="name">{{item?.assignedTo?.name?.en}}</span>
+                    <span class="position">{{item?.assignedTo?.position}}</span>
+                  </div>
+                </div>
+                <span class="status"
+                      [ngClass]="{'primary': item?.code === 'Completed', 'secondary': item?.code === 'Unperformed'}">{{item?.code}}</span>
+              </div>
+              <div class="timeline-item-body">
+                <p class="paragraph mb-3">{{item?.action?.comments}}</p>
+                <ul class="attachments-list">
+                  <li *ngFor="let attachment of item?.action?.attachments">
+                    <i class="bx bxs-file"></i>
+                    <a [href]="attachment?.url"
+                       target="_blank">{{attachment?.title}}</a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end popup-footer">
+      <div class="col-6 d-flex align-items-end justify-content-end">
+        <button (click)="onClosePopup()"
+                class="btn btn-outline-secondary mr-2">{{'Cancel' |
+          translate}}</button>
+      </div>
+    </div>
+
+  </div>
+</app-popup> -->

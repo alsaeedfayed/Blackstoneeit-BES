@@ -1,0 +1,87 @@
+<div class="new-model-dialog-body">
+  <div class="create-goal-form pb-2" [formGroup]="GoalForm">
+
+    <!-- Title -->
+    <app-filed
+      class="d-block mt-3"
+      [title]="'shared.name' | translate"
+      formControlName="name"
+      [control]="GoalForm | getControl : 'name'"
+      [placeholder]="'configuration.goalTypesObj.GoalTypeTitlePlaceholder' | translate"
+      [length]="15"
+      [isSubmitted]="isSubmitted"
+    ></app-filed>
+
+    <!-- Arabic Title -->
+    <app-filed
+      class="d-block mt-3"
+      [title]="'configuration.goalTypesObj.arabicName' | translate"
+      formControlName="arabicName"
+      [control]="GoalForm | getControl : 'arabicName'"
+      [placeholder]="'configuration.goalTypesObj.GoalTypeArabicTitlePlaceholder' | translate"
+      [length]="15"
+      [isSubmitted]="isSubmitted"
+    ></app-filed>
+
+    <!-- description -->
+    <app-textarea-filed
+      class="d-block mt-3"
+      formControlName="description"
+      [title]="'shared.description' | translate"
+      [control]="GoalForm | getControl : 'description'"
+      [placeholder]="'shared.typeDescription' | translate"
+      [length]="120"
+      [isSubmitted]="isSubmitted"
+    ></app-textarea-filed>
+
+    <!-- Category -->
+    <div class="mt-3">
+      <label class="form-label">
+        {{ "configuration.goalTypesObj.category" | translate }}
+      </label>
+
+      <app-radio-group
+        class="d-flex"
+        bindValue="id"
+        formControlName="category"
+      >
+        <app-radio-box *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </app-radio-box>
+      </app-radio-group>
+    </div>
+
+    <!-- Color -->
+    <div class="mt-4">
+      <color-picker
+        formControlName="color"
+        [control]="GoalForm | getControl : 'color'"
+        [title]="'configuration.goalTypesObj.chooceColor' | translate"
+        [SuggestedColors]="suggestedColors"
+        [isSubmitted]="isSubmitted"
+      ></color-picker>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onPopupCancel()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="isBtnLoading"
+    (click)="submit()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

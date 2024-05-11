@@ -1,0 +1,53 @@
+
+
+<section>
+
+  <label *ngIf="label" class="form-label">{{ label }}
+    <span *ngIf="isRequired" class="astrix-red">*</span>
+  </label>
+  
+  <!-- drag Zone -->
+  <div 
+  class="drop-zone" 
+  (drop)="onDrop($event)"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)">
+    <p class="fw-bold text-black">{{'committeeKPIs.details.drag'|translate}}</p>
+    <div> 
+      <span class=" text-secondary"> {{'shared.or'|translate}}</span>
+      <a (click)="attachments.click()" class="text-primary">
+        {{'committeeKPIs.details.browse'|translate}}
+      </a> 
+      <span class=" text-secondary">{{'committeeKPIs.details.choose'|translate}}</span>
+    </div>
+  </div>
+  
+  <input
+  hidden
+  #attachments
+  type="file"
+  [accept]="supportedAttachmentTypes.join(',')"
+  (change)="onUploadFile($event)"
+  />
+
+  <!-- <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="uploadedFiles"
+        [supportedTypes]="
+          'committeeTasks.addModal.descriptionAttachmentsTypes' | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'new')"
+        (viewFile)="onViewLocalFile($event, 'new')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAttachments"
+        (deleteFile)="onDeleteFile($event, 'old')"
+        (viewFile)="onViewLocalFile($event, 'old')"
+        [old]="true"
+      ></uploaded-attachments-files> -->
+</section>
+
+     

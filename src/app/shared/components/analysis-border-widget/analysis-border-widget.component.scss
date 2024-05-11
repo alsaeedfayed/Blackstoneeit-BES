@@ -1,0 +1,23 @@
+@import"../../../../assets/css/utils/mixins.scss";
+
+.widget {
+    background: white;
+    box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.04);
+    @include rtl_key(border-, right, left, 0);
+    @include rtl_key(border-, left, right, 9px);
+    border-right-style: solid;
+    border-left-style: solid;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    //width: 370px;
+    padding: 15px;
+    @include rtl_key(margin-, right, left, 13px);
+    @include rtl_key(margin-, left, right, 0);
+    //@include rtl_value(float, left, right);
+    strong {
+        font-size: 18px;
+        font-weight: 900;
+    }
+}

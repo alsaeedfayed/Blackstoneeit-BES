@@ -1,0 +1,302 @@
+<!-- page header position -->
+<ng-container *ngIf="loadingData; else data">
+<!-- <ng-container *ngIf="true; else data"> -->
+  <ng-template [ngTemplateOutlet]="skeleton"></ng-template>
+</ng-container>
+
+<ng-template  #data>
+  <div  class="process-details-main">
+
+    <app-header-page 
+    [backButton]="true" 
+    [title]="processData?.title[language]"
+    [showTotalItems]="false"
+    [backTo]="'/process'"
+    > 
+    
+      <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      
+        <button class="btn btn-outline-dark border-0" (click)="DeleteBtnClicked()">
+          <i class="bx bxs-x-circle text-danger"></i>
+          {{ "shared.delete" | translate }}
+        </button>
+        <!-- update button -->
+        <button class="btn btn-warning" (click)="editProcess()">
+          {{'shared.edit' | translate}}
+        </button>
+    
+        <!-- change status -->
+        <button  [disabled]="isChangeStatsClicked"
+          class="btn btn-{{ !processData?.isEnabled ? 'main':'secondary'}}" (click)="toggleStatusBtn()">
+          <i *ngIf="isChangeStatsClicked" class="bx bx-loader-alt bx-spin ml-1"></i>
+          {{ ( !processData?.isEnabled ? 'processDetails.activate' : 'processDetails.deactivate' ) | translate }}
+        </button>
+  
+      </div>
+    </app-header-page>
+   
+    <div class="process-details">
+      <!-- process info -->
+      <div class="d-flex justify-content-between">
+        <ul class="info ">
+          <!-- creator name -->
+          <li>
+            <strong class="form-label mb-2">{{ 'processDetails.info.createdBy' | translate }}</strong>
+            <h3 class="info-title">{{ processData?.createdBy?.name[language] }}</h3>
+          </li>
+          <!-- creation date -->
+          <li *ngIf="processData?.createdDate">
+            <strong class="form-label mb-2">{{ 'processDetails.info.createdOn' | translate }}</strong>
+            <h3 class="info-title" >
+              {{
+                language === "en" ?
+                ((processData?.createdDate|uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+                ((processData?.createdDate|uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+              }}
+            </h3>
+          </li>
+            <!-- updating date -->
+          <li *ngIf="processData?.updatedDate">
+            <strong class="form-label mb-2">{{ 'processDetails.info.lastUpdate' | translate }}</strong>
+            <h3 class="info-title" >
+              {{
+                language === "en" ?
+                ((processData?.updatedDate|uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+                ((processData?.updatedDate|uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+              }}
+            </h3>
+          </li>
+        </ul>
+        <app-badge
+          [className]="statuses[processData?.isEnabled ? 1 : 0 ]['className']"
+          [label]="language == 'en'? 
+            statuses[processData?.isEnabled ? 1 : 0 ]['name']:
+            statuses[processData?.isEnabled ? 1 : 0 ]['nameAr']"
+        ></app-badge>
+      </div>
+      <!-- horizontal line -->
+      <div class="horizontal-line"></div>
+  
+      <!-- process Description -->
+      <div class="row" *ngIf="processData?.description[language]?.length > 0">
+        <label class="form-label">
+          {{'processDetails.description' | translate}}
+        </label>
+         <div class="mb-4" *ngIf="processData?.description[language]?.length > 0">
+          <div class="angular-editor-description" [innerHTML]="processData?.description[language] | truncate: descTextLimit"></div>
+    
+          <button 
+          class="see-more-btn text-primary"
+          *ngIf="processData?.description[language]?.length > descTextInitialLimit"
+            (click)="toggleMoreText()">
+            <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+              {{ 'processDetails.seeMore' | translate }}
+            </ng-container>
+            <ng-template #seeLess>
+              {{ 'processDetails.seeLess' | translate }}
+            </ng-template>
+          </button>
+        </div>
+      </div>
+      <!-- process main flow -->
+      <div class="row mt-3" *ngIf="coloredStates?.length > 0">
+  
+        <label class="form-label">
+          {{ 'processDetails.mainFlow' | translate }}
+        </label>
+      </div>
+      <app-process-main-flow [states]="coloredStates" [language]="language"></app-process-main-flow>
+
+         <!-- horizontal line -->
+      <div class="horizontal-line"></div>
+
+      <!-- process statuses -->
+      <div class="">
+
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <label class="form-label">
+            {{'processDetails.statesList.title' | translate}}
+          </label>
+        </div>
+
+        <!-- states -->
+        <div class="mb-5 d-flex flex-wrap gap-4 align-items-center" *ngIf="processData?.states?.length > 0 ">
+          <div class="state-container d-flex fw-bold w-25 justify-content-between cursor-pointer" *ngFor="let state of processData?.states">
+            <div (click)="openStateTransitions(state)" class="state-details w-100 d-flex">
+              {{state.title[language]}}
+              <!-- <span *ngIf="state.isInitial || state.isFinal"> {{state.isInitial ? 'first state':'final state'}}</span> -->
+              <app-badge
+               class="hide-point"
+               *ngIf="state.isInitial || state.isFinal"
+               [className]="state.isInitial ? 'active':'highLevel'"
+               [label]="(state.isInitial ? 'processDetails.statesList.firstState':'processDetails.statesList.finalState')| translate"
+              ></app-badge>
+            </div>
+            <div class="dropdown-btn">
+              <app-dropdown
+              [items]="stateCardActions"
+              (select)="onStateOptionsSelect($event, state)"
+            ></app-dropdown>
+            </div>
+          </div>
+          <button class="round-button"(click)="openNewStateModel()">
+            <i class='bx bx-plus'></i>
+          </button>
+        </div>
+
+        <div class="no-data" *ngIf="processData?.states?.length == 0">
+          <app-no-data [msg]="'processDetails.statesList.noStatesMsg' | translate"></app-no-data>
+          <button class="btn btn-main" (click)="openNewStateModel()">
+            <i class='bx bx-plus'></i>
+            {{ 'processDetails.statesList.newState' | translate }}
+          </button>
+        </div>
+    </div>
+
+    </div>
+  
+    <!-- <hr class="mt-4" />
+    <div class="process-details-body mt-5">
+      <div class="header d-flex justify-content-between align-items-center mb-5">
+        <h3>{{'Process States' | translate}} <span>({{'total' | translate}} {{processData?.states?.length}})</span></h3>
+        <div class="controls d-flex align-items-center">
+          <div class="view-switch">
+            <span class="switcher mode-switcher">
+              <input type="checkbox" [checked]="isViewSwitchChecked == 'card' ? false : true"
+                (change)="handleViewSwitch(isViewSwitchChecked == 'card' ? 'flow':'card')" id="mode-switcher">
+              <label for="mode-switcher"></label>
+            </span>
+          </div>
+          <button (click)="addState()" class="btn btn-primary">
+            {{'Add State' | translate}}
+            <i class="bx bxs-plus-circle mr-0 ml-2"></i>
+          </button>
+        </div>
+      </div>
+  
+      <div class="body">
+        <ng-container *ngIf="isViewSwitchChecked == 'card'">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center mb-16"
+              *ngFor="let item of processData?.states; let i = index">
+              <app-process-state-card class="w-100" (click)="viewState(item)" [data]="item" [id]="i +1">
+              </app-process-state-card>
+            </div>
+          </div>
+          <app-empty-state *ngIf="processData?.states?.length == 0"
+            [title]="lang == 'en' ? 'No states available for this process...' : 'لا توجد حالات متاحة لهذه العملية ...'">
+          </app-empty-state>
+  
+        </ng-container>
+  
+        <ng-container *ngIf="isViewSwitchChecked == 'flow'">
+          <app-process-flowchart (viewState)="viewFlowchartOperator($event)" [states]="processData?.states">
+          </app-process-flowchart>
+        </ng-container>
+  
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-process-modal [title]="sidepaneTitle" [modalState]="modalState" [processData]="processData"
+  [currentState]="getCurrentState(currentState?.id)" (refreshProcessDetail)="refreshProcessDetail()"
+  [processId]="processData?.id" (updateConfirmationState)="updateConfirmationState($event)">
+
+</app-process-modal>
+
+<app-confirm-modal (confirm)="confirmModalDeleteHandler()" [btnContent]="language == 'en' ? 'Delete' : 'حذف'"
+  [content]="language == 'en' ? 'Are you sure you want to proceed with this action?' : 'هل أنت متأكد أنك تريد متابعة هذا الإجراء؟  '">
+
+</app-confirm-modal> -->
+
+<!-- modal to confirm delete process -->
+
+
+  <!-- new state model -->
+  <app-model
+    [dimensions]="{ width: 620, height: 750 }"
+    [id]="'new-state'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+    (close)="closeNewStateModel()"
+    >
+    <div modal-header class="w-100">
+      <label class="modal-title">
+        <!-- {{ (selectedAttendee ?"":"newState.header") | translate }} -->
+        {{ "newState.header" | translate }}
+      </label>
+    </div>
+  
+    <div modal-content class=" border-top">
+      <app-new-state-model
+        *ngIf="isStateModelOpened"
+        [processId]="processId"
+        [language]="language"
+        [externalStates]="processData?.externalStates"
+        [hasSLA]="processData?.sla"
+        [processHasInitial]="processHasInitial"
+        (stateAdded)="getProcessById()"
+        
+      ></app-new-state-model>
+    </div>
+  </app-model>
+
+    <!-- state transitions model -->
+    <app-model
+    [dimensions]="{ width: isNewTransition ? 820 : 620, height: 750 }"
+    [id]="'state-transitions'"
+    [hasBackBtn]="!isNewTransition ? true : false"
+    [hasTitle]="true"
+    [isNewModel]="true"
+    [selectedState]="selectedState"
+    (close)="closeStateTransitions()"
+    >
+    <div modal-header class="w-100">
+      <label class="modal-title">
+        {{ !isNewTransition ? selectedState?.title[language] : 'stateTransitions.addTransition.addNewTransition' | translate}}
+      </label>
+    </div>
+  
+    <div modal-content class=" border-top">
+      <ng-container *ngIf="!isNewTransition">
+        <app-state-transitions
+        [language]="language"
+        [stateData]="selectedState"
+        (onProcessReload)="getProcessById(processId)"
+        (onAddNewTrans)="isNewTransition = true"
+        ></app-state-transitions>
+      </ng-container>
+
+      <ng-container *ngIf="isNewTransition">
+        <app-new-transition-model 
+        [language]="language"
+        (onCancelAddTrans)="isNewTransition = false"
+        [selectedState]="selectedState"
+        [processData]="processData"
+        (onProcessReload)="getProcessById(processId)"
+        >
+        </app-new-transition-model>
+      </ng-container>
+      
+    </div>
+  </app-model>
+
+
+<!-- loader skeleton  -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+
+<app-confirm-modal
+[id]="'process'"
+[content]="popupConfig?.text | translate"
+[btnContent]="popupConfig?.confirmationBtnText"
+[btnStyle]="'main'"
+(confirm)="popupConfig?.onConfirmEvent()"
+></app-confirm-modal>

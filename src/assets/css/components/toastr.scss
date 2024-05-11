@@ -1,0 +1,60 @@
+@import "../utils/variables.scss";
+
+.toast-warning {
+  background-color: $light_orange !important;
+  border: none !important;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 8px !important;
+  color: $white-color !important;
+  background-image: url("../../icons/warning-toastr-icon.svg") !important;
+  width: auto !important;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.toast-success {
+  background-color: $main-color !important;
+  border: none !important;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 8px !important;
+  color: $white_color !important;
+  background-image: url("../../icons/success-toastr-icon.svg") !important;
+  width: auto !important;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.toast-error {
+  background-color: #ff669d !important;
+  border: none !important;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 8px !important;
+  color: $white-color !important;
+  background-image: url("../../icons/error-toastr-icon.svg") !important;
+  width: auto !important;
+  white-space: nowrap !important;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+// .toast-info{
+//     background-color: $white_color !important;
+//     border: 1px solid #5AAAFF !important;
+//     box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.12) !important;
+//     border-radius: 8px !important;
+//     color: #5AAAFF !important;
+//     width: 378px !important;
+//     // background-image: url('../../img/icons/toastr-info-icon.svg') !important;
+// }
+
+.toast-message {
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  width: auto !important;
+  font-family: "Roboto";
+}
+
+.toast-bottom-center {
+  bottom: 0;
+  margin: 0 auto;
+  right: 0;
+  left: 0;
+  // width: 100%;
+}

@@ -1,0 +1,13 @@
+.wrapper {
+  border: 1px solid #00000033;
+  border-radius: 6px;
+  display: flex;
+  padding: 4px 12px;
+  justify-content: space-between;
+  gap: 34px;
+  .mode {
+    p {
+      font-size: 12px;
+    }
+  }
+}

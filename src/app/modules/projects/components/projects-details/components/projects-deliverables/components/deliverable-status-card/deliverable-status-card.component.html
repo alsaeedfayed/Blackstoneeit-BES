@@ -1,0 +1,7 @@
+<div [class]="'deliverable-status-card ' + theme">
+  <!-- <div class="status">
+    <span class="dot"></span>
+    <span class="status-text">{{theme | titlecase}}</span>
+  </div> -->
+  <div class="counter">{{data}} {{'projects.' + theme | translate | titlecase}}</div>
+</div>

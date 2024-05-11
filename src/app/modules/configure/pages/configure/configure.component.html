@@ -1,0 +1,49 @@
+<div class="configuration">
+  <app-header-page
+    [title]="'configuration.Settings' | translate"
+    [showTotalItems]="false"
+    [backButton]="true"
+  ></app-header-page>
+
+  <!-- tabs navigation menu -->
+  <div class="mb-4">
+    <tabs-menu [tabs]="tabs" [breakpoint]="'lg'"></tabs-menu>
+  </div>
+
+  <div class="page-data">
+    <ng-container *ngIf="loading; else table_data">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </ng-container>
+  </div>
+
+  <router-outlet></router-outlet>
+</div>
+
+<!--
+<ng-template #table_data>
+    <config-table
+      *ngIf="config.length > 0"
+      [configure]="config"
+    ></config-table>
+    <app-no-data *ngIf="config.length == 0"></app-no-data>
+  </ng-template>  -->
+
+<app-model
+  [dimensions]="{ width: 856, height: 750 }"
+  [id]="'new-service'"
+  title="New Service"
+>
+  <div modal-content class="new-service-popup px-4">
+    <app-edit-configure *ngIf="isShowForm"></app-edit-configure>
+  </div>
+</app-model>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

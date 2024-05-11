@@ -1,0 +1,97 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">{{ "#" | translate }}</th>
+          <th scope="col">{{ "shared.title" | translate }}</th>
+          <th scope="col">{{ "cr.Level-Group" | translate }}</th>
+          <th scope="col">{{ "cr.Date" | translate }}</th>
+          <th scope="col">{{ "cr.CreatedBy" | translate }}</th>
+          <th scope="col">{{ "cr.Status" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of Requests | paginate
+        : {
+            itemsPerPage: paginationModle?.pageSize,
+            currentPage: paginationModle?.pageIndex,
+            totalItems: Requests.length
+          }; let i = index">
+          <!-- Request Number -->
+          <td>
+            <a
+              class="details hoverableLink"
+              [routerLink]="'/performance-change-requests/details/' + request.id"
+            >
+              {{ request.requestNumber }}
+            </a>
+          </td>
+          <!-- Title -->
+          <td>
+            {{ lang == 'en' ? request.title : request.titleAr }}
+          </td>
+          <!-- Group -->
+          <td>
+            <span>{{ getGoalLevelText(request.level) }} -</span>
+            <span *ngIf="request?.group">
+              {{ lang == 'en' ? request.group.name : request.group.arabicName }}
+            </span>
+            <span *ngIf="!request?.group">
+              {{ 'shared.N/A' | translate }}
+            </span>
+          </td>
+          <!-- Date -->
+          <td>
+            {{
+              lang === "en" ?
+              ((request?.creationDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+              ((request?.creationDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <!-- Created By -->
+          <td>
+            <person-item
+              *ngIf="request?.owner"
+              [requesterItem]="request?.owner"
+            ></person-item>
+          </td>
+          <!-- Status -->
+          <td>
+            <app-badge
+              *ngIf="request?.status == servicesStatusEnum.Active"
+              [className]="'started'"
+              [label]="'cr.active' | translate"
+            ></app-badge>
+            <app-badge
+              *ngIf="request?.status == servicesStatusEnum.Approved"
+              [className]="'active'"
+              [label]="'cr.approved' | translate"
+            ></app-badge>
+            <app-badge
+              *ngIf="request?.status == servicesStatusEnum.Rejected"
+              [className]="'rejected'"
+              [label]="'shared.rejected' |translate"
+            ></app-badge>
+            <app-badge
+              *ngIf="request?.status == servicesStatusEnum.Closed"
+              [className]="'closed'"
+              [label]="'shared.closed' | translate"
+            ></app-badge>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<pagination-controls
+  *ngIf="Requests.length > paginationModle?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

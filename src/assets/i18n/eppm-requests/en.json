@@ -1,0 +1,64 @@
+{
+  "eppmRequests": {
+    "projectName": "Project Name",
+    "manager": "Manager",
+    "searchUsers": "Search Users",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "sector": "Sector",
+    "searchSectors": "Search sectors",
+    "clearFilter": "Clear Filter",
+    "filter": "Filter",
+    "requests": "Project Requests",
+    "createProject": "Create Project",
+    "assignedToMe": "Assigned to Me",
+    "advancedFilter": "Advanced Filter",
+    "noRequestsFound": "No requests found",
+    "type": "Type",
+    "projectType": "Project Type",
+    "deliveryType": "Delivery Type",
+    "category": "Category",
+    "origin": "Origin",
+    "department": "Department",
+    "priorityLevel": "Priority Level",
+    "selectType": "Select type",
+    "selectCategory": "Select category",
+    "selectOrigin": "Select origin",
+    "selectSector": "Select Sector",
+    "selectDepartment": "Select department",
+    "selectPriorityLevel": "Select priority level",
+    "deliverables": "Deliverables",
+    "milestones": "Milestones",
+    "days": "Days",
+    "months": "Months",
+    "years": "Years",
+    "seeMore": "Load more",
+    "totalScore": "Total Score",
+    "view": {
+      "card": "Card",
+      "tree": "Tree",
+      "list": "List"
+    },
+    "table": {
+      "head": {
+        "name": "Project Name",
+        "manager": "Project Manager",
+        "status": "Status",
+        "type": "Type",
+        "deliveryType": "deliveryType",
+        "start": "Start",
+        "end": "End",
+        "milestones": "Phases Number",
+        "deliverables": "Deliverables Number"
+      },
+      "body": {
+        "": ""
+      }
+    },
+    "": "",
+    "": "",
+    "": "",
+    "": "",
+    "": ""
+  }
+}

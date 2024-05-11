@@ -1,0 +1,415 @@
+<ng-container *ngIf="loading || loadingAttendees; else data">
+  <div class="mb-3">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #data>
+  <div class="page">
+    <app-header-page
+      [backButton]="true"
+      [showTotalItems]="false"
+      [title]="language == 'en' ? meeting?.name : meeting?.nameAr"
+      [backTo]="
+        '/committees-management/committee-details/' + committeeId + '/meetings'
+      "
+    >
+      <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+        <button
+          *ngIf="meeting.canEdit"
+          class="btn btn-warning"
+          (click)="goToUpdateMeeting()"
+        >
+          {{ "committeeMeetingDetails.edit" | translate }}
+        </button>
+      </div>
+    </app-header-page>
+
+    <!-- action buttons -->
+    <workflow-action-options
+      *ngIf="options?.length > 0 && meeting.status == 3"
+      class="d-block mb-3"
+      [task]="task"
+      [options]="options"
+      [instanceId]="instanceId"
+      (onSaveAction)="saveAction($event)"
+    ></workflow-action-options>
+
+    <!-- meeting timeline -->
+    <app-meeting-timeline
+      class="mb-3"
+      [status]="meeting.status"
+      [creator]="meeting?.creatorInfo"
+      [momRecordedBy]="meeting?.momRecordedByInfo"
+      [committeeChairman]="meeting?.committeeChairmanInfo"
+    ></app-meeting-timeline>
+
+    <!-- meeting info -->
+    <div class="block-content meeting-info mb-3">
+      <div
+        class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3"
+      >
+         <h3  *ngIf="meeting?.notes?.length > 0"  class="block-title mb-0">{{ 'committeeKPIs.details.description' | translate }}</h3>
+
+        <app-badge
+          [className]="statuses[meeting?.status]['className']"
+          [label]="
+            language == 'en'
+              ? statuses[meeting?.status]['name']
+              : statuses[meeting?.status]['nameAr']
+          "
+        ></app-badge>
+      </div>
+
+      <!-- description -->
+      <div class="row" *ngIf="meeting?.notes?.length > 0">
+        <div class="mb-4">
+          <div
+            class="angular-editor-description"
+            [innerHTML]="meeting?.notes | truncate : descTextLimit"
+          ></div>
+
+          <button
+            class="see-more-btn text-primary"
+            *ngIf="meeting?.notes?.length > descTextInitialLimit"
+            (click)="toggleMoreText()"
+          >
+            <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+              {{ "committeesManagement.seeMore" | translate }}
+            </ng-container>
+            <ng-template #seeLess>
+              {{ "committeesManagement.seeLess" | translate }}
+            </ng-template>
+          </button>
+        </div>
+      </div>
+
+      <ul class="meeting-info-list">
+        <li class="meeting-info-list-item">
+          <h4 class="block-subtitle mb-2">
+            {{ "committeeMeetingDetails.meetingInfo.location" | translate }}
+          </h4>
+
+          <container
+            class="meeting-info-list-item-content"
+            *ngIf="
+              meeting?.locationType == 0;
+              then meetingLocation;
+              else onlineLocation
+            "
+          ></container>
+          <ng-template #meetingLocation>
+            {{ meeting?.location ?  meeting?.location : ( "committeeNewMeeting.meetingForm.onsite" | translate) }}
+          </ng-template>
+
+          <ng-template #onlineLocation>
+            {{ "committeeNewMeeting.meetingForm.online" | translate }}
+          </ng-template>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-subtitle mb-2">
+            {{ "committeeMeetingDetails.meetingInfo.date" | translate }}
+          </h4>
+
+          <div class="meeting-info-list-item-content">
+            {{
+              language === "en"
+                ? ((meeting?.date | uTCToLocalDate).toLocaleString()
+                  | date : "d MMM y")
+                : ((meeting?.date | uTCToLocalDate).toLocaleString()
+                  | localizeDate : "d MMM y")
+            }}
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-subtitle mb-2">
+            {{ "committeeMeetingDetails.meetingInfo.time" | translate }}
+          </h4>
+
+          <div class="meeting-info-list-item-content">
+            {{
+              language === "en"
+                ? ((meeting?.timeFrom | uTCToLocalDate).toLocaleString()
+                  | date : "hh:mm a")
+                : ((meeting?.timeFrom | uTCToLocalDate).toLocaleString()
+                  | localizeDate : "hh:mm a")
+            }}
+            -
+            {{
+              language === "en"
+                ? ((meeting?.timeTo | uTCToLocalDate).toLocaleString()
+                  | date : "hh:mm a")
+                : ((meeting?.timeTo | uTCToLocalDate).toLocaleString()
+                  | localizeDate : "hh:mm a")
+            }}
+          </div>
+        </li>
+        <li class="meeting-info-list-item">
+          <h4 class="block-subtitle mb-2">
+            {{ "committeeMeetingDetails.meetingInfo.createdBy" | translate }}
+          </h4>
+
+          <div class="meeting-info-list-item-content">
+            <person-item
+              [requesterItem]="meeting?.creatorInfo"
+              [noCursor]="true"
+            ></person-item>
+          </div>
+        </li>
+        <li class="meeting-info-list-item" *ngIf="meeting?.momRecordedBy">
+          <h4 class="block-subtitle mb-2">
+            {{
+              "committeeMeetingDetails.meetingInfo.momRecordedBy" | translate
+            }}
+          </h4>
+
+          <div class="meeting-info-list-item-content">
+            <person-item
+              [requesterItem]="meeting?.momRecordedByInfo"
+              [noCursor]="true"
+            ></person-item>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- meeting agenda -->
+    <div class="block-content meeting-details mb-3" *ngIf="meeting?.agenda">
+      <ng-container *ngIf="meeting?.agenda">
+        <h3 class="block-title mb-3">
+          {{ "committeeMeetingDetails.agendaItems" | translate }}
+        </h3>
+
+        <div
+          class="agendaList-container mb-4"
+          [innerHTML]="meeting?.agenda"
+        ></div>
+      </ng-container>
+
+    </div>
+    <!-- meeting details -->
+    <div class="block-content meeting-details mb-3">
+      <!-- agenda items -->
+
+      <!-- attendees list -->
+      <h3 class="block-title mb-4">
+        {{ "committeeMeetingDetails.attendees.attendees" | translate }}
+        <span class="badgeRate ms-2" *ngIf="afterMom">
+          {{ "committeeMeetingDetails.rate" | translate }} :
+          {{ meeting?.attendanceRate | number }}%
+        </span>
+      </h3>
+      <div class="attendees-list mb-5" *ngIf="attendees?.length > 0">
+        <table>
+          <tr>
+            <th class="attendees-name">
+              {{ "committeeMeetingDetails.attendees.name" | translate }}
+            </th>
+            <!-- <th class="attendees-position">
+              {{ "committeeMeetingDetails.attendees.position" | translate }}
+            </th> -->
+            <th class="attendees-type">
+              {{ "committeeMeetingDetails.attendees.type" | translate }}
+            </th>
+            <!-- TODO WE MAY BACL TO AFTERMOM CONDITION -->
+            <!-- *ngIf="afterMom" -->
+            <th class="attendees-status" >
+              {{ "committeeMeetingDetails.attendees.status" | translate }}
+            </th>
+            <!-- *ngIf="afterMom" -->
+            <th class="absence-justification" >
+              {{ "committeeNewMeeting.newAttendeeModel.evidence" | translate }}
+            </th>
+
+            <!-- *ngIf="afterMom" -->
+            <th class="attendees-status" >
+              {{ "committeeNewMeeting.newAttendeeModel.attachments" | translate }}
+            </th>
+          </tr>
+          <tr *ngFor="let attendee of attendees">
+
+            <td class="attendees-name">
+              <!-- *ngIf="attendee?.attendeeType != 3" -->
+              <person-item
+
+                [requesterItem]="attendee?.userInfo"
+                [noCursor]="true"
+              ></person-item>
+              <!-- <span *ngIf="attendee?.attendeeType == 3" class="initials">
+                {{ attendee?.name | initials }}
+              </span>
+              <span *ngIf="attendee?.attendeeType == 3">
+                {{ attendee?.name | capitalizeFirstLetter }}
+              </span> -->
+            </td>
+
+            <!-- <td class="attendees-position">
+              <span *ngIf="attendee?.attendeeType == 3" class="initials">
+                {{ "committeeMeetingDetails.attendees.guest" | translate }}
+              </span>
+              <span *ngIf="attendee?.attendeeType != 3">
+                {{ attendee?.userInfo.position }}
+              </span>
+            </td> -->
+            <td class="attendees-type" >
+              {{
+                language == "en"
+                  ? attendeesType[attendee?.attendeeType]["name"]
+                  : attendeesType[attendee?.attendeeType]["nameAr"]
+              }}
+            </td>
+
+            <!-- TODO WE MAY BACL TO AFTERMOM CONDITION -->
+            <!-- *ngIf="afterMom" -->
+            <td class="attendees-status" >
+              <app-badge
+                [className]="
+                  attendeeStatuses[attendee?.attendeeStatus]['className']
+                "
+                [label]="
+                  language == 'en'
+                    ? attendeeStatuses[attendee?.attendeeStatus]['name']
+                    : attendeeStatuses[attendee?.attendeeStatus]['nameAr']
+                "
+              ></app-badge>
+            </td>
+
+            <!-- *ngIf="afterMom" -->
+            <td >
+              <div *ngIf="attendee?.attendeeStatus == 2" class="justification">
+                <!-- <span>
+                  {{attendee?.justificationReason}}
+                </span> -->
+
+                <div class="angular-editor-description">
+                  <ng-container *ngIf="!attendee?.showMore; else allDescription">
+                    {{ attendee?.justificationReason | richTextToText | truncate : 40 }}
+                    <a
+                      class="see-more"
+                      *ngIf="
+                        (attendee?.justificationReason | richTextToText).length > 40
+                      "
+                      (click)="attendee.showMore = true"
+                    >
+                      {{ "committeesManagement.seeMore" | translate }}
+                    </a>
+                  </ng-container>
+                  <ng-template #allDescription>
+                    {{ attendee?.justificationReason| richTextToText }}
+                    <a class="see-more" (click)="attendee.showMore = false">
+                      {{ "committeesManagement.seeLess" | translate }}
+                    </a>
+                  </ng-template>
+                </div>
+
+              </div>
+            </td>
+            <!-- *ngIf="afterMom" -->
+            <td >
+              <uploaded-attachments-files
+              class="d-block mt-3"
+              [files]="attendee?.justificationAttachments"
+              [canDeleted]="false"
+              [old]="true"
+            ></uploaded-attachments-files>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="no-data" *ngIf="attendees?.length == 0 || !attendees">
+        <app-no-data
+          [msg]="'committeeMeetingDetails.attendees.noAttendee' | translate"
+        ></app-no-data>
+      </div>
+
+
+    </div>
+
+     <!-- discussed items, tasks & decisions tabs -->
+    <div class="block-content">
+
+         <ng-container *ngIf="canSeeMom">
+          <div class="tabs-holder my-4">
+            <app-tabs class="d-block mt-1">
+              <!-- discussed items tab -->
+              <app-tab
+                [title]="
+                  'committeeMeetingDetails.discussedItems.discussedItems'
+                    | translate
+                "
+                [count]="discussedItemsCount"
+              >
+                <discussed-items-tab
+                  [isUpdating]="false"
+                  [meetingId]="meetingId"
+                  (count)="setTabsItemsCount($event, 'discussedItemsCount')"
+                ></discussed-items-tab>
+              </app-tab>
+
+              <!-- tasks tab -->
+              <app-tab
+                [title]="'committeeMeetingDetails.tasks.tasks' | translate"
+                [count]="tasksCount"
+              >
+                <tasks-tab
+                  [isUpdating]="false"
+                  [committeeId]="committeeId"
+                  [meetingId]="meetingId"
+                  (count)="setTabsItemsCount($event, 'tasksCount')"
+                ></tasks-tab>
+              </app-tab>
+
+              <!-- decisions tab -->
+              <app-tab
+                [title]="
+                  'committeeMeetingDetails.decisions.decisions' | translate
+                "
+                [count]="decisionsCount"
+              >
+                <decisions-tab
+                  [isUpdating]="false"
+                  [committeeId]="committeeId"
+                  [meetingId]="meetingId"
+                  (count)="setTabsItemsCount($event, 'decisionsCount')"
+                ></decisions-tab>
+              </app-tab>
+            </app-tabs>
+          </div>
+
+          <!-- general notes -->
+          <ng-container *ngIf="meeting?.generalNotes">
+            <h3 class="block-title mb-3">
+              {{ "committeeMeetingDetails.generalNotes" | translate }}
+            </h3>
+            <dev class="mb-0" [innerHTML]="meeting?.generalNotes"></dev>
+          </ng-container>
+        </ng-container>
+    </div>
+
+    <!-- meeting comments -->
+    <div class="block-content meeting-comments" *ngIf="afterMom">
+      <h3 class="block-title mb-4">
+        {{ "committeeMeetingDetails.comments.comments" | translate }}
+      </h3>
+
+      <div class="comments-area">
+        <app-meeting-comment
+          [meetingId]="meetingId"
+          [language]="language"
+          [canAddComment]="canComment"
+        ></app-meeting-comment>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

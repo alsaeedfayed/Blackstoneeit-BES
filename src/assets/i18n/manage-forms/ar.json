@@ -1,0 +1,16 @@
+{
+  "manageForms": {
+    "formName": "اسم النموذج",
+    "enterFormName": "ادخل اسم النموذج",
+    "formSavedSuccessfully": "تم حفظ النموذج بنجاح",
+    "creationDate": "تاريخ الانشاء",
+    "lastUpdate": "اخر تحديث",
+    "active": "مفعل",
+    "areYouSureYouWantToDeactivate": "هل أنت متأكد أنك تريد إلغاء تنشيط",
+    "areYouSureYouWantToActivate": "هل أنت متأكد أنك تريد تنشيط",
+    "manageForms":"إدارة النماذج",
+    "createForm": "إنشاء نموذج",
+    "noDataMsg": "حسنًا .. يبدو أنه ليس لديك أي نماذج",
+    "newForm": "نموذج جديد"
+  }
+}

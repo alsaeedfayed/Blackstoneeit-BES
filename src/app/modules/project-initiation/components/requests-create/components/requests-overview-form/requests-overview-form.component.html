@@ -1,0 +1,372 @@
+<div class="step-content-container">
+  <div *ngIf="readOnly">
+    <ng-container *ngIf="canSetPriotity">
+      <h3 class="form-title mb-3">
+        {{ "initiationForm.projectPriority" | translate }}
+      </h3>
+  
+      <div class="priority-card mb-4">
+        <span
+          *ngIf="data?.priorityLevel"
+          [class]="'priority-label ' + data?.priorityLevel?.title.en.toLowerCase()"
+        >
+          {{ data?.priorityLevel?.title[lang] }}
+        </span>
+  
+        <div class="priority-bar" *ngIf="data?.priorityLevel">
+          <app-priority
+            [lang]="lang"
+            [priority]="data?.priorityLevel?.title.en"
+          ></app-priority>
+        </div>
+  
+        <span class="priority-empty-state-label" *ngIf="!data?.priorityLevel">
+          {{ "initiationForm.priorityEmptyText" | translate }}
+        </span>
+  
+        <button class="btn btn-link w-auto" (click)="onSetPriority()">
+          <span>{{ "initiationForm.setPriority" | translate }}</span>
+        </button>
+      </div>
+    </ng-container>
+  
+    <h3 class="form-title mb-3">{{ "initiationForm.projectOverview" | translate }}</h3>
+
+    <div class="project-overview project-details">
+      <div class="step-content-grid gap-4 mb-4">
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.projectName' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.name[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.projectType' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            <ul>
+              <li *ngFor="let type of data?.types">{{ type?.title[lang] }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content-grid gap-4 mb-4">
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.projectDescription' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.description[lang] }}
+          </div>
+        </div>
+
+        <div *ngIf="data?.projectIdea">
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.projectIdea' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.projectIdea?.title }}
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content-grid gap-4 mb-4">
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.projectCategory' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            <ul>
+              <li *ngFor="let category of data?.categories">{{ category?.title[lang] }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.projectOrigin' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            <ul>
+              <li *ngFor="let origin of data?.origins">{{ origin?.title[lang] }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content-grid gap-4 mb-4">
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.expectedOutcomes' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.expectedOutcomes[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.expectedBenefits' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.expectedBenefits[lang] }}
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content-grid gap-4">
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.inScope' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.projectScope[lang] }}
+          </div>
+        </div>
+
+        <div>
+          <h4 class="project-details-title mb-2">
+            {{ 'initiationForm.outOfscope' | translate }}
+          </h4>
+
+          <div class="project-details-content">
+            {{ data?.outOfScope[lang] }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex clone-btn">
+      <button class="btn btn-primary" (click)="cloneRequest()" *ngIf="data?.status?.mappedStatusCode == 'Rejected'">{{ "initiationForm.clone" | translate }}</button>
+    </div>
+  </div>
+
+  <!-- create/edit request -->
+  <div *ngIf="!readOnly">
+    <h3 class="form-title mb-3">{{ "initiationForm.projectOverview" | translate }}</h3>
+  
+    <form class="project-overview project-form" [formGroup]="overviewFrom">
+  
+      <!-- project name -->
+      <div class="form-group">
+        <label for="projectName" class="form-label">
+          {{ "initiationForm.projectName" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+  
+        <input id="projectName" type="text" formControlName="projectName" class="form-control" />
+        <small
+          class="form-error"
+          *ngIf="
+            getOverviewForm.projectName?.errors?.required && isFormSubmitted
+          "
+        >
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.required" | translate }}
+        </small>
+      </div>
+  
+      <!-- project category -->
+      <div class="form-group">
+        <label for="" class="form-label">
+          {{ "initiationForm.projectCategory" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+  
+        <app-custom-checkboxes-control
+          formControlName="projectCategory"
+          [items]="projectCategories"
+          [cardHeight]="44"
+        ></app-custom-checkboxes-control>
+  
+        <small class="form-error" *ngIf="getOverviewForm.projectCategory?.errors?.required && isFormSubmitted">
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.required" | translate }}
+        </small>
+      </div>
+  
+      <!-- project type -->
+      <div class="form-group">
+        <label for="" class="form-label">
+          {{ "initiationForm.projectType" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+  
+        <app-custom-checkboxes-control
+          formControlName="projectType"
+          [items]="projectTypes"
+          [cardHeight]="44"
+          (ngModelChange)="onTypeChange($event)"
+        ></app-custom-checkboxes-control>
+  
+        <small class="form-error" *ngIf="getOverviewForm.projectType?.errors?.required && isFormSubmitted">
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.required" | translate }}
+        </small>
+      </div>
+  
+      <!-- project origin -->
+      <div class="form-group">
+        <label for="" class="form-label">
+          {{ "initiationForm.projectOrigin" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+  
+        <app-custom-checkboxes-control
+          formControlName="projectOrigin"
+          [items]="projectOrigins"
+          [cardHeight]="44"
+          (ngModelChange)="onOriginChange($event)"
+        ></app-custom-checkboxes-control>
+  
+        <small class="form-error" *ngIf="getOverviewForm.projectOrigin?.errors?.required && isFormSubmitted">
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.required" | translate }}
+        </small>
+      </div>
+  
+      <!-- project idea -->
+      <div class="form-group" *ngIf="isIdea">
+        <label for="projectIdea" class="form-label">
+          {{ "initiationForm.idea" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+  
+        <!-- <div class="position-relative">
+          <input type="text"
+            class="form-control"
+            formControlName="projectIdea"
+            #input
+            [ngbTypeahead]="searchIdeas"
+            [resultFormatter]="formatter"
+            [inputFormatter]="formatter"
+            placeholder="{{'shared.search' | translate}}" />
+        </div> -->
+        <input
+          type="text"
+          id="projectIdea"
+          class="form-control"
+          formControlName="projectIdea"
+          #input
+          [ngbTypeahead]="searchIdeas"
+          [resultFormatter]="formatter"
+          [inputFormatter]="formatter"
+          placeholder="{{ 'shared.search' | translate }}"
+        />
+        <small class="form-error" *ngIf="getOverviewForm.projectIdea?.errors?.required && isFormSubmitted">
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.required" | translate }}
+        </small>
+      </div>
+  
+      <!-- project description -->
+      <div class="form-group">
+        <label for="projectDescription" class="form-label">
+          {{ "initiationForm.projectDescription" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+  
+        <textarea
+          id="projectDescription"
+          class="form-textarea"
+          formControlName="projectDescription"
+        ></textarea>
+        <small class="form-error" *ngIf="getOverviewForm.projectDescription?.errors?.required && isFormSubmitted">
+          <i class="bx bx-error-circle mr-2"></i>
+          {{ "shared.validations.required" | translate }}
+        </small>
+      </div>
+  
+      <div class="step-content-grid">
+  
+        <!-- project scope -->
+        <div class="form-group">
+          <label for="projectScope" class="form-label">
+            {{ "initiationForm.inScope" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+  
+          <textarea
+            id="projectScope"
+            class="form-textarea"
+            formControlName="projectScope"
+          ></textarea>
+          <small class="form-error" *ngIf="getOverviewForm.projectScope?.errors?.required && isFormSubmitted">
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+  
+        <!-- out of scope -->
+        <div class="form-group">
+          <label for="projectOutOfScope" class="form-label">
+            {{ "initiationForm.outOfscope" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+  
+          <textarea
+            id="projectOutOfScope"
+            class="form-textarea"
+            formControlName="projectOutOfScope"
+          ></textarea>
+          <small class="form-error" *ngIf="getOverviewForm.projectOutOfScope?.errors?.required && isFormSubmitted">
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+      </div>
+  
+      <div class="step-content-grid">
+  
+        <!-- expected outcomes -->
+        <div class="form-group">
+          <label for="projectOutcomes" class="form-label">
+            {{ "initiationForm.expectedOutcomes" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+  
+          <textarea
+            id="projectOutcomes"
+            class="form-textarea"
+            formControlName="projectOutcomes"
+          ></textarea>
+          <small class="form-error" *ngIf="getOverviewForm.projectOutcomes?.errors?.required && isFormSubmitted">
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+  
+        <!-- expected benefits -->
+        <div class="form-group">
+          <label for="projectExpectedBenefits" class="form-label">
+            {{ "initiationForm.expectedBenefits" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+  
+          <textarea
+            id="projectExpectedBenefits"
+            class="form-textarea"
+            formControlName="projectExpectedBenefits"
+          ></textarea>
+          <small class="form-error" *ngIf="getOverviewForm.projectExpectedBenefits?.errors?.required && isFormSubmitted">
+            <i class="bx bx-error-circle mr-2"></i>
+            {{ "shared.validations.required" | translate }}
+          </small>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

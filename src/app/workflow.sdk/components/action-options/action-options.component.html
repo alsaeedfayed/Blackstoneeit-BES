@@ -1,0 +1,56 @@
+<div class="actions d-flex flex-column flex-md-row align-items-center justify-content-between flex-wrap gap-3">
+  <h3 class="title">{{ title }}</h3>
+
+  <div class="buttons d-flex flex-column flex-md-row flex-wrap gap-1" *ngIf="options?.length > 0">
+    <ng-container *ngFor="let option of options">
+
+      <!-- action button -->
+      <button
+        class="btn btn-{{ option?.buttonTag?.toLowerCase() }}"
+        [ngClass]="{
+          'btn-outline-light': option?.buttonTag == 'approve-icon' || option?.buttonTag == 'return-icon' || option?.buttonTag == 'reject-icon'
+        }"
+        [disabled]="loading"
+        (click)="openActionModel(option)"
+      >
+        <nt-container *ngIf="option?.buttonTag == 'approve-icon'">
+          <img class="action-icon" src="assets/icons/actions/tick-circle.svg" alt="tick">
+        </nt-container>
+        <nt-container *ngIf="option?.buttonTag == 'return-icon'">
+          <img class="action-icon" src="assets/icons/actions/repeat-circle.svg" alt="repeat">
+        </nt-container>
+        <nt-container *ngIf="option?.buttonTag == 'reject-icon'">
+          <img class="action-icon" src="assets/icons/actions/close-circle.svg" alt="close">
+        </nt-container>
+        {{ option?.label[lang] }}
+      </button>
+
+      <!-- model for adding action -->
+      <workflow-model
+        [dimensions]="{ width: 720, height: 750 }"
+        [id]="'workflow-action-model' + option?.id"
+        [hasBackBtn]="false"
+        [hasTitle]="false"
+        [isNewModel]="true"
+      >
+        <div modal-header class="action-model-header w-100">
+          <label class="modal-title">{{ lang == 'en' ? option?.title['en']:option?.title['ar'] }} </label>
+          <!-- <label class="modal-title">{{ 'manageWorkflow.addAction' | translate }}</label> -->
+        </div>
+
+        <div modal-content class="action-model-content border-top">
+          <workflow-action-model
+            *ngIf="isPopupOpen && selectedOpt?.id == option?.id"
+            [option]="option"
+            [instanceId]="instanceId"
+            [task]="task"
+            (onFormBuilderValuesChange)="getBuildedFormValues($event)"
+            (saveEvent)="actionSaveHandler()"
+          >
+            <ng-content></ng-content>
+          </workflow-action-model>
+        </div>
+      </workflow-model>
+    </ng-container>
+  </div>
+</div>

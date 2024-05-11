@@ -1,0 +1,59 @@
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+
+.filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    @media (max-width: 1000px) {
+        flex-direction: column;
+    }
+    .scorecard {
+        @include rtl_key(margin-, right, left, 10px);
+        @include rtl_key(margin-, left, right, 0);
+        label {
+            color: #3c557a;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+    }
+    .period {
+        @include rtl_key(margin-, right, left, 10px);
+        @include rtl_key(margin-, left, right, 0);
+    }
+    .buttons {
+       // margin-top: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        button {
+            @include rtl_key(margin-, right, left, 0);
+            @include rtl_key(margin-, left, right, 10px);
+            &.search {
+                min-width: 100px !important;
+                width: 100px !important;
+            }
+            &.export-btn {
+                display: flex;
+                gap: 6px;
+                font-size: 15px;
+                font-weight: bold;
+                color: $tertiary-color;
+                .icon {
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: $tertiary-color;
+                    padding: 3px;
+                    width: 29px;
+                    height: 29px;
+                    i {
+                        color: #fff;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}

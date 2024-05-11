@@ -1,0 +1,45 @@
+.block-license {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    .icon {
+        background: rgba(#FF6464, 0.07);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 40px;
+        text-align: center;
+        i {
+            font-size: 35px;
+            color: #FF6464;
+            line-height: 80px;
+        }
+    }
+    h4 {
+        color: #121824;
+        font-size: 22px;
+    }
+    p {
+        color: #292D32;
+        font-size: 16px;
+        width: 37%;
+    }
+    .buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+        button {
+            color: #96A6BD;
+            border: 0;
+            background: transparent;
+            padding: 6px 35px;
+            &.black {
+                background: black;
+                color: white;
+                border-radius: 6px;
+            }
+        }
+    }
+}

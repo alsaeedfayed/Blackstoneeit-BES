@@ -1,0 +1,6 @@
+<p [ngStyle]="{maxWidth: maxWidth?? 'unset'}">
+  {{ textContent ?? "-"
+  }}<strong (click)="isShowAllDesc = !isShowAllDesc" *ngIf="text && text.length > maxCharcters">{{
+    (isShowAllDesc ? "shared.seeLess" : "shared.seeMore") | translate
+  }}</strong>
+</p>

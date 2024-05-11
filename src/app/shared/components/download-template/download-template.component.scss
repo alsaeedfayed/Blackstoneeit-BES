@@ -1,0 +1,28 @@
+@import "../../../../assets/css/utils/mixins.scss";
+
+section {
+    background: #FFEAB4;
+    border-radius: 12px;
+    padding: 15px;
+    .file {
+        display: flex;
+        align-items: center;
+        img {
+            @include rtl_key(margin-, right, left, 10px);
+            @include rtl_key(margin-, left, right, 0);
+        }
+        strong {
+           // cursor: pointer;
+        }
+    }
+    i {
+        font-size: 30px;
+        margin-inline-end: 10px;
+        &.bxs-file-pdf {
+            color: #fb5757;
+        }
+        &.bxs-file {
+            color: #9494d8
+        }
+    }
+}

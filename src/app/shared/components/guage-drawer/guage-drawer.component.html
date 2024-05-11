@@ -1,0 +1,33 @@
+<div class="guage-containerr">
+  <ngx-gauge
+    [append]="'%'"
+    [type]="type"
+    [thick]="thick"
+    [value]="value"
+    [foregroundColor]="foregroundColor"
+    [backgroundColor]="backgroundColor"
+  ></ngx-gauge>
+  <span *ngIf="!multiText; else multiTexxt" class="guage-containerr-text">{{
+    text
+  }}</span>
+  <ng-template #multiTexxt>
+    <div class="guage-containerr-text">
+      <span
+        [ngStyle]="{ color: leftColor }"
+        class="guage-containerr-text-left"
+        >{{ leftText }}</span
+      >
+      /
+      <span
+        [ngStyle]="{ color: rightColor }"
+        class="guage-containerr-text-left"
+        >{{ rightText }}</span
+      >
+    </div>
+  </ng-template>
+  <i
+    [class]="icon"
+    class="guage-containerr-icon"
+    [ngStyle]="{ 'color': iconColor }"
+  ></i>
+</div>

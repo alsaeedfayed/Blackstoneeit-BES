@@ -1,0 +1,18 @@
+<div class="steps">
+  <div class="step" *ngFor="let item of tasks">
+    <label class="date" *ngIf="!!item.action">
+      {{ this.lang === "en" ? (item.action.createdDate | date : "dd/MM/yyyy hh:mm a") : (item.action.createdDate | localizeDate : "dd/MM/yyyy hh:mm a") }}
+    </label>
+    <div class="personal">
+      <person-item [ownerItem]="item?.assignedTo" [CompMode]="2"></person-item>
+      <div class="badge">
+        <app-badge *ngIf="!!item.action" [className]="'active'" [label]="item.action?.label.en"></app-badge>
+      </div>
+    </div>
+    <p class="comment">{{ item.action?.comments }}</p>
+    <div class="file-icon" *ngFor="let file of item.action?.attachments">
+      <i class="bx bx-file"></i>
+      <label>{{ file.uploadedFileName }}</label>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="modal custom-modal" data-backdrop="static" id="side-panel" role="dialog" aria-hidden="true">
+    <div [ngClass]="{'wide-modal': wideModal}" class="modal-dialog modal-dialog-scrollable animated fadeInRight fastest"
+        role="document">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" *ngIf="!displayHeader">
+                <h5 class="modal-title">{{title | translate}} {{name}}</h5>
+                <!-- <button class="close"
+                        data-dismiss="modal"
+                        (click)="onClose()">
+                    <img src="../../../../../assets/img/cancel.svg"
+                         alt="">
+                </button> -->
+            </div>
+
+            <!-- Dynamic Modal Content coming from parent component -->
+            <ng-content select="[modal-content]" class="h-100"></ng-content>
+        </div>
+    </div>
+</div>

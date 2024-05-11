@@ -1,0 +1,159 @@
+<div>
+  <div class="table-wrapper mt-4 chrtabs new-model-dialog-body">
+    <div class="row">
+      <ul class="decision-info-list">
+        <!-- Created by  -->
+        <li class="decision-info-list-item">
+          <h4 class="block-subtitle mb-2">
+            {{ "committeeDecisions.details.history.sentBy" | translate }}
+          </h4>
+          <div class="decision-info-list-item-content">
+            <person-item
+              [requesterItem]="message?.creatorInfo"
+              [noCursor]="true"
+            ></person-item>
+          </div>
+        </li>
+
+        <!-- Created On -->
+        <li class="decision-info-list-item">
+          <h4 class="block-subtitle mb-2">
+            {{ "committeeDecisions.details.history.sentDate" | translate }}
+          </h4>
+
+          <div class="decision-info-list-item-content">
+            <span *ngIf="message?.creationDate">
+              {{
+                language === "en"
+                  ? ((message?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((message?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- horizontal line -->
+    <div class="horizontal-line"></div>
+    <!-- to -->
+    <div class="row mt-2">
+      <h4 class="block-subtitle mb-3 d-flex gap-2">
+        {{ "committeeDecisions.details.history.to" | translate }}
+        <span class="px-2 bg-dark text-white rounded-pill">
+          {{ message.tosInfo?.length }}
+        </span>
+      </h4>
+
+      <div class="d-flex flex-wrap gap-3">
+        <person-item
+          *ngFor="let cc of message.tosInfo"
+          [requesterItem]="cc"
+          [noCursor]="true"
+        ></person-item>
+      </div>
+    </div>
+    <!-- horizontal line -->
+    <div class="horizontal-line" *ngIf="message?.ccsInfo?.length > 0"></div>
+    <!-- cc -->
+    <div class="row" *ngIf="message?.ccsInfo?.length > 0">
+      <h4 class="block-subtitle mb-3 d-flex gap-2">
+        {{ "committeeDecisions.details.history.cc" | translate }}
+        <span class="px-2 bg-dark text-white rounded-pill">
+          {{ message.ccsInfo?.length }}
+        </span>
+      </h4>
+
+      <div class="d-flex flex-wrap gap-3">
+        <person-item
+          *ngFor="let cc of message?.ccsInfo"
+          [requesterItem]="cc"
+          [noCursor]="true"
+        ></person-item>
+      </div>
+    </div>
+    <!-- horizontal line -->
+    <div class="horizontal-line" *ngIf="message?.externalTos?.length > 0"></div>
+    <!-- external to -->
+    <div class="row" *ngIf="message?.externalTos?.length > 0">
+      <h4 class="block-subtitle mb-3 d-flex gap-2">
+        {{ "committeeDecisions.details.SendModel.externalTos" | translate }}
+        <span class="px-2 bg-dark text-white rounded-pill">
+          {{ message?.externalTos?.length }}
+        </span>
+      </h4>
+
+      <div class="d-flex flex-wrap gap-3">
+        <span class="external-email" *ngFor="let external of message?.externalTos">
+          {{ external }}
+        </span>
+      </div>
+    </div>
+    <!-- horizontal line -->
+    <div class="horizontal-line" *ngIf="message?.externalCcs?.length > 0"></div>
+    <!-- external cc -->
+    <div class="row" *ngIf="message?.externalCcs?.length > 0">
+      <h4 class="block-subtitle mb-3 d-flex gap-2">
+        {{ "committeeDecisions.details.SendModel.externalCcs" | translate }}
+        <span class="px-2 bg-dark text-white rounded-pill">
+          {{ message?.externalCcs?.length }}
+        </span>
+      </h4>
+
+      <div class="d-flex flex-wrap gap-3">
+        <span class="external-email" *ngFor="let external of message?.externalCcs">
+          {{ external }}
+        </span>
+      </div>
+    </div>
+
+    <div class="horizontal-line" *ngIf="message?.message"></div>
+    <!-- message -->
+    <div class="row mb-30" *ngIf="message?.message">
+      <h4 class="block-subtitle mb-2 d-flex gap-2">
+        {{ "committeeDecisions.details.SendModel.message" | translate }}
+      </h4>
+      <div
+      class="angular-editor-message"
+      [innerHTML]="message?.message | truncate : descTextLimit"
+    ></div>
+
+    <a
+      class="see-more-btn {{ language =='en'?'ms-3':'me-3'}}"
+      *ngIf="message?.message?.length > descTextInitialLimit"
+      (click)="toggleMoreText()"
+    >
+      <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+        {{ "committeesManagement.seeMore" | translate }}
+      </ng-container>
+      <ng-template #seeLess>
+        {{ "committeesManagement.seeLess" | translate }}
+      </ng-template>
+    </a>
+    </div>
+
+    <!-- attachments -->
+    <div class="my-2" *ngIf="message?.attachments?.length > 0">
+      <h3 class="block-title">
+        {{ "shared.attachments" | translate }}
+      </h3>
+      <ng-container>
+        <uploaded-attachments-files
+          class="d-block mb-1"
+          [files]="message?.attachments"
+          [canDeleted]="false"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- back button -->
+    <button class="btn btn-dark flex-grow-1" (click)="closePopup()">
+      {{ "shared.back" | translate }}
+    </button>
+  </div>
+</div>

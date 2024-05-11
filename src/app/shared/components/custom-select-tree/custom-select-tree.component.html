@@ -1,0 +1,50 @@
+<div>
+    <label class="form-label" *ngIf="!!title">
+      {{ title }}
+      <span *ngIf="isRequired" class="astrix-red">*</span>
+    </label>
+
+    <div class="tree_main">
+        <ul id="bs_main" class="main_ul">
+            <li *ngFor="let item of itemsList" >
+                <span class="arrow" (click)="toggle(item)">
+                    <i *ngIf="!item.expand" class='bx bxs-right-arrow' ></i>
+                    <i *ngIf="item.expand" class='bx bxs-down-arrow' ></i>
+                </span>
+                <input type="checkbox" (click)="toggleCheck(item)" [checked]="check(item)" />
+                <span>{{lang == 'en' ? item?.name : item?.nameAr}}</span>
+                <ul class="sub_ul" *ngIf="item.expand">
+                    <li *ngFor="let subItem of item?.children">
+                        <span class="arrow" (click)="toggle(subItem)">
+                            <i *ngIf="!subItem.expand" class='bx bxs-right-arrow' ></i>
+                            <i *ngIf="subItem.expand" class='bx bxs-down-arrow' ></i>
+                        </span>
+                        <input type="checkbox" (click)="toggleCheck(subItem)" [checked]="check(subItem)"/>
+                        <span>{{lang == 'en' ? subItem?.name : subItem?.nameAr}} </span>
+                        <ul  class="inner_ul" *ngIf="subItem.expand">
+                            <li *ngFor="let subsubItem of subItem?.children">
+                                <span class="arrow" (click)="toggle(subsubItem)">
+                                    <i *ngIf="!subsubItem.expand" class='bx bxs-right-arrow' ></i>
+                                    <i *ngIf="subsubItem.expand" class='bx bxs-down-arrow' ></i>
+                                </span>
+                                <input type="checkbox" (click)="toggleCheck(subsubItem)" [checked]="check(subsubItem)"/>
+                                <span>{{lang == 'en' ? subsubItem?.name : subsubItem?.nameAr}} </span>
+                                <ul  class="inner_ul" *ngIf="subsubItem.expand">
+                                    <li *ngFor="let subsubsubItem of subsubItem?.children">
+                                        <input type="checkbox" (click)="toggleCheck(subsubsubItem)" [checked]="check(subsubsubItem)"/>
+                                        <span>{{lang == 'en' ? subsubsubItem?.name : subsubsubItem?.nameAr}} </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <app-validation
+    *ngIf="(control?.dirty || isSubmitted) && control?.invalid"
+    [control]="control"
+  ></app-validation>
+</div>

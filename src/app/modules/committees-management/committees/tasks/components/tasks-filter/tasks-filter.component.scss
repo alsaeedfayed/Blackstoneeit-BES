@@ -1,0 +1,17 @@
+.tasks-filters-container {
+    position: relative;
+    z-index: 1;
+    container: tasks-filters / inline-size;
+  
+    .tasks-filters {
+      display: grid;
+      gap: 1rem;
+  
+      @container tasks-filters (min-width: 700px) {
+        & {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    }
+  }
+  

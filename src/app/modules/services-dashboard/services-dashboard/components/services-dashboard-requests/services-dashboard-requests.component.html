@@ -1,0 +1,50 @@
+<div  class="requestchart">
+  <!-- [hidden]="!shouldShowStatusChart" -->
+  <div class="requestchart-status">
+    <div class="title">
+      <h5 class="reqHeader mb-4"> {{ 'servicesDashboard.requests' | translate }} </h5>
+    </div>
+    <div  class="data" [hidden]="data?.totalRequests == 0">
+      <div class="row" style="width: 100%;margin-top: 20px;">
+        <div class="col-6 requestsPieChart">
+          <div *ngIf="data" class="total">
+            <p>{{ data.totalRequests }}</p>
+            <!-- <p>{{ 'shared.total' | translate }}</p> -->
+          </div>
+  
+          <canvas
+            class="my-chart"
+            id="myChart"
+            width="170"
+            height="170"
+            #myChart
+          ></canvas>
+  
+        </div>
+        <div class="col-6 mt-4">
+          <div class="col-12 requestchart-item" *ngFor="let item of reqStatus">
+            <div class="d-flex  mb-3" style="flex-wrap: wrap; justify-content: space-between;">
+              <div class="d-flex align-items-center">
+                <span
+                  class="requestchart-dot"
+                  [ngStyle]="{ 'background-color': item.color }"
+                ></span>
+                <span class="status">{{ item.status }}</span>
+              </div>
+    
+              <div>
+                <span class="percentage ml-3" [ngStyle]="{ color: item.color }">
+                  {{ item.percentage }}%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="data?.totalRequests == 0" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <img style="height: 10rem;" src="../../../../../../assets/img/no-data.png" alt="">
+    <div>{{lang == 'en' ? 'No Data' : 'لا توجد داتا'}}</div>
+  </div>
+</div>

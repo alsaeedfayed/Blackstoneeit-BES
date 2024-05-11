@@ -1,0 +1,31 @@
+<div class="tracking-chart mt-2">
+  <div class="header">
+    <h5 class="mb-3 tracking-chart-title">
+      {{ 'servicesDashboard.trackingChartHeader' | translate }}
+    </h5>
+  </div>
+
+  <div class="row tracking-chart-row">
+    <!-- <div class="col-lg-1 tracking-chart-row-leftTitle">
+      <div class="col-lg-1 tracking-chart-row-leftTitle-title">
+        <h5 class="tracking-chart-row-leftTitle-title-text">
+          {{ 'servicesDashboard.services' | translate }}
+        </h5>
+      </div>
+    </div> -->
+    <div class="col-12">
+      <div class="tracking-chart-row-bar-chart" style="height: 370px;">
+        <canvas
+          style="height: 370px !important;"
+          id="myChart"
+          #myChart
+        ></canvas>
+      </div>
+    </div>
+    <!-- <div class="col-6">
+      <app-req-up-track-pie-chart
+        [data]="pieChartData"
+      ></app-req-up-track-pie-chart>
+    </div> -->
+  </div>
+</div>

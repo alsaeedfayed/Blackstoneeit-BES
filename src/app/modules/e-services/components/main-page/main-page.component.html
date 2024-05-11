@@ -1,0 +1,54 @@
+<app-header-page
+  [title]="'EServices.EServices' | translate"
+  [totalItems]="totalItems"
+  [backButton]="true"
+  [isSearch]="true"
+  [showButtons]="isShowCreateButton"
+  [titleBtn]="'EServices.createEServiceBtn' | translate"
+  (search)="handleSearchValueFilter($event)"
+  (btnClick)="openCreateEService()"
+>
+  <ng-container buttons>
+    <div class="d-flex gap-2">
+      <button
+        class="btn btn-info export-btn"
+        [disabled]="isExporting"
+        (click)="exportDataAsExcel()"
+      >
+        <i class="bx bxs-download" *ngIf="!isExporting"></i>
+        <i class="bx bx-loader-alt bx-spin" *ngIf="isExporting"></i>
+        {{ "shared.export" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</app-header-page>
+
+<div class="page-data mt-4">
+  <ng-container *ngIf="isLoading; else table_data">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #table_data>
+  <app-table
+    *ngIf="servicesFilter.length"
+    [services]="servicesFilter"
+    [paginationModle]="paginationModle"
+    [searchQuery]="query"
+    (sortFilter)="handleSortFilter($event)"
+  ></app-table>
+  <app-no-data
+    *ngIf="servicesFilter.length == 0"
+    msg="{{ 'EServices.noDataMsg' | translate }}"
+  ></app-no-data>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

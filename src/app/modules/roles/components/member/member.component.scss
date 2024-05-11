@@ -1,0 +1,52 @@
+@import "src/assets/css/utils/variables.scss";
+
+.member-container {
+  padding: 20px 48px;
+  border-top:  1px solid rgba(222, 222, 222, 0.2);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  &:hover{
+    background-color:$alice_blue;
+  }
+}
+
+.img-container{
+  width: 55px;
+  height: 55px;
+  margin-inline-end: 16px;
+  border-radius: 50%;
+  img{
+    height: 100%;
+  }
+}
+
+
+.name {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 23px;
+  color: $black-color;
+  text-transform: capitalize;
+  margin-bottom: 5px;
+}
+
+.position, .email {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: $aluminium_color;
+}
+
+.email{
+  display: flex;
+  align-items: center;
+  .icon{
+    font-size: 20px;
+    margin-inline-end: 8px;
+  }
+}
+
+.position{
+  text-transform: capitalize;
+  margin-bottom: 12px;  
+}

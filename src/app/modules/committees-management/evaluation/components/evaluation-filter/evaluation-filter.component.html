@@ -1,0 +1,110 @@
+<div class="requests-filters-container">
+  <div class="requests-filters" [formGroup]="form">
+    <!-- committee type select -->
+
+     <!-- committee select -->
+     <div *ngIf="showCommittee">
+      <label class="form-label">
+        {{ "committeesRequests.advancedFilterModal.committeeName" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="committeeId"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'committeeId')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeesRequests.advancedFilterModal.committeeName' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setCommitteeId($event)"
+      >
+        <ng-option *ngFor="let item of committeeNames" [value]="item?.id">
+         {{language === "en" ? item?.name : item?.nameAr}}
+        </ng-option>
+      </ng-select>
+    </div>
+
+     <!-- year select -->
+     <div>
+      <label class="form-label">
+        {{ "committeesRequests.advancedFilterModal.year" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="year"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'year')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeesRequests.advancedFilterModal.year' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setStatusValue($event)"
+      >
+      <ng-option *ngFor="let year of years" [value]="year">
+        {{year}}
+       </ng-option>
+      </ng-select>
+    </div>
+    <!-- status select -->
+    <div>
+      <label class="form-label">
+        {{ "committeesRequests.advancedFilterModal.status" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="status"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'status')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="
+          'committeesRequests.advancedFilterModal.selectStatus' | translate
+        "
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setStatusValue($event)"
+      >
+        <ng-option *ngFor="let item of statuses" [value]="item?.id">
+          <app-badge
+            [className]="item['className']"
+            [label]="language == 'ar' ? item['nameAr'] : item['name']"
+          ></app-badge>
+        </ng-option>
+      </ng-select>
+    </div>
+
+    <!-- <div style="margin-top: -1rem !important">
+      <app-nz-date-picker
+        [formControl]="form.controls['from']"
+        [control]="form | getControl : 'from'"
+        [title]="'committeesEvaluations.modal.updatedDate' | translate"
+        [placeholder]="'committeesEvaluations.modal.from' | translate"
+        (onInputChange)="setFromValue()"
+      ></app-nz-date-picker>
+      <span *ngIf="checkDateRange()" style="color: red">
+        {{ "committeesEvaluations.modal.notice" | translate }}
+      </span>
+    </div> -->
+
+    <!-- <div style="margin-top: 0.7rem !important"> -->
+      <!-- Date To -->
+<!--
+      <app-nz-date-picker
+        class="d-block"
+        [formControl]="form.controls['to']"
+        [control]="form | getControl : 'to'"
+        [placeholder]="'committeesEvaluations.modal.to' | translate"
+        (onInputChange)="setToValue()"
+      ></app-nz-date-picker> -->
+    <!-- </div> -->
+  </div>
+</div>

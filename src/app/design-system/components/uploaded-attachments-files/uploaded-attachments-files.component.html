@@ -1,0 +1,53 @@
+<p class="hint-text text-secondary" *ngIf="showHint && supportedTypes && !old">
+  {{ 'designSystem.attachments.hint' | translate : { size: maxSize, types: supportedTypes } }}
+  <span class="astrix-red" *ngIf="isRequired">*</span>
+</p>
+
+<ul class="uploaded-attachments-files" *ngIf="files?.length > 0">
+  <ng-container *ngFor="let file of files; let i = index">
+  <li *ngIf="(file?.name || file?.fileName) && file?.extension">
+    <div class="file-icon">
+      <i [class]="file?.extension | getIcon"></i>
+    </div>
+
+
+    <div class="file-content d-flex align-items-center justify-content-between flex-grow-1 gap-2">
+      <div class="file-details d-flex flex-column gap-1">
+        <div class="name" [title]="file?.name || file?.fileName">
+          {{ file?.name || file?.fileName }}
+        </div>
+
+        <span class="size" *ngIf="file?.size">{{ file?.size | fileSize }}</span>
+      </div>
+
+      <div class="file-actions d-flex gap-2">
+        <button
+
+          class="file-action-btn delete-btn"
+          *ngIf="canDeleted && !file?.isLoading"
+          [title]="'designSystem.attachments.delete' | translate"
+          [disabled]="deletingFileIndex == i"
+          (click)="onDeleteFile(file, i)"
+        >
+
+          <i class="bx bx-loader-alt bx-spin" *ngIf="deletingFileIndex == i"></i>
+          <i class="bx bx-trash" *ngIf="deletingFileIndex != i"></i>
+
+        </button>
+        <button
+          class="file-action-btn download-btn"
+          [title]="'designSystem.attachments.download' | translate"
+          [disabled]="deletingFileIndex == i"
+          (click)="onViewLocalFile(file, i)"
+        >
+          <i class="bx bx-loader-alt bx-spin" *ngIf="downloadingFileIndex == i"></i>
+          <i class="bx bxs-download" *ngIf="downloadingFileIndex != i"></i>
+        </button>
+        <div class="file-action-btn" *ngIf="file?.isLoading">
+          <i class="bx bx-loader-alt bx-spin"></i>
+        </div>
+      </div>
+    </div>
+  </li>
+  </ng-container>
+</ul>

@@ -1,0 +1,15 @@
+{
+  "oops": {
+    "youAreNotAuthorized": "You are not authorized!",
+    "youAreNotAuthorizedMsg": "You are not authorized to access this page",
+    "backHome": "Back Home",
+    "notFound": "Not Found",
+    "notFoundMsg": "It looks like you are trying to access a page that has been deleted or never even existed",
+    "license": {
+      "blockMessage": "Block Message",
+      "blockDescription": "Dear, <br /> Kindly be aware that your application license is expired. We encourage you to reach out to our support team to ensure a seamless license renewal process and prevent any interruptions.",
+      "warningMessage": "Warning Message",
+      "warningDescription": "License is Warning"
+    }
+  }
+}

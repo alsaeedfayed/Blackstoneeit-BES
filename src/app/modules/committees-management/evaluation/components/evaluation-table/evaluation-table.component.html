@@ -1,0 +1,219 @@
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="id">#</th>
+          <th scope="col" class="committee-name">
+            <div
+              class="sortable-row"
+              (click)="sort(sortKey.type)"
+            >
+              {{ "committeesEvaluations.table.evaluationTitle" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.type && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.type && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="status">
+            <div class="sortable-row" (click)="sort(sortKey.status)">
+              {{ "committeesEvaluations.table.status" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.status && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.status && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="created-by">
+            {{ "committeesEvaluations.table.committeeName" | translate }}
+          </th>
+
+          <th scope="col" class="assigned-to">
+            {{ "committeesEvaluations.table.observationCount" | translate }}
+          </th>
+
+          <th scope="col" class="created-on">
+            <div class="sortable-row" (click)="sort(sortKey.creationDate)">
+              {{ "committeesRequests.table.createdOn" | translate }}
+              <div
+                class="sort-icon"
+                [ngClass]="{
+                  'sort-up':
+                    sortedCol && sortedCol == sortKey.creationDate && ascMode,
+                  'sort-down':
+                    sortedCol && sortedCol == sortKey.creationDate && descMode
+                }"
+              >
+                <i class="bx bxs-up-arrow"></i>
+                <i class="bx bxs-down-arrow"></i>
+              </div>
+            </div>
+          </th>
+
+          <th scope="col" class="evaluations-actions">
+            {{ "committeesEvaluations.actions" | translate }}
+          </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <td class="id">
+            {{
+              i
+                | tableItemIndex
+                  : paginationModel?.pageSize
+                  : paginationModel?.pageIndex
+            }}
+          </td>
+          <td class="committee-name">
+            <a
+              class="hoverableLink"
+              [routerLink]="
+                '/committees-management/evaluation/details/' + item?.id
+              "
+            >
+              {{ language === "en" ? item?.typeName : item?.typeNameAr }}
+            </a>
+          </td>
+
+          <td class="status">
+            <app-badge
+              [className]="statuses[item?.status]['className']"
+              [label]="
+                language == 'ar'
+                  ? statuses[item?.status]['nameAr']
+                  : statuses[item?.status]['name']
+              "
+            ></app-badge>
+          </td>
+
+          <td class="created-by">
+            {{
+              language === "en" ? item?.committeeName : item?.committeeNameAr
+            }}
+          </td>
+          <td class="assigned-to">
+            <span style="color: rgb(114, 197, 121)">
+              {{ item?.openObservations }}
+              {{ "committeesEvaluations.table.open" | translate }}
+            </span>
+
+            <span style="color: #ff2929">
+              <span>/</span>
+
+              {{ item?.closedObservations }}
+              {{ "committeesEvaluations.table.close" | translate }}
+            </span>
+          </td>
+
+          <td class="created-on">
+            <span *ngIf="item?.creationDate">
+              {{
+                language === "en"
+                  ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </td>
+
+          <td class="evaluation-actions">
+
+            <!-- <a class="hoverableLink" (click)="openUpdateEvaluationModal(item)">
+              {{ "committeesEvaluations.edit" | translate }}
+            </a> -->
+            <app-button [permission]="editEvaluationPermission">
+              <a class="hoverableLink" (click)="openUpdateEvaluationModal(item)">
+                {{ "committeesEvaluations.edit" | translate }}
+              </a>
+            </app-button>
+
+            <!-- <ng-template #actions>
+              <app-button [permission]="editEvaluationPermission">
+                <a class="hoverableLink" (click)="openUpdateRoleModel(item)">
+                  {{ "bau.roles.table.edit" | translate }}
+                </a>
+              </app-button>
+              <app-button [permission]="deleteRolePermission">
+                <a class="hoverableLink text-danger" (click)="deleteRoleConfirmation(item?.id)">
+                  {{ "bau.roles.table.delete" | translate }}
+                </a>
+              </app-button>
+            </ng-template> -->
+            <!-- <ng-template #loadingIcon>
+              <i class="bx bx-loader-alt bx-spin ml-1"></i>
+            </ng-template> -->
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'edit-evaluation'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="create-task-model-header w-100">
+    <label class="modal-title">
+      {{ "shared.edit" | translate }} {{editTitle}}
+    </label>
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <!-- <create-task-model [committeeId]="125"></create-task-model> -->
+    <app-create-evaluation-model
+    [selectedEvaluation]="selectedEvaluation"
+    *ngIf="isUpdatingEValuation"
+    (evaluationAdded)="refreshe($event)"
+    ></app-create-evaluation-model>
+  </div>
+</app-model>
+
+<!-- numeric pagination controls -->
+<pagination-controls
+  *ngIf="totalItems > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

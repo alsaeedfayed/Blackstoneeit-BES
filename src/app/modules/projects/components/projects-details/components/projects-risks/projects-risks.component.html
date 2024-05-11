@@ -1,0 +1,99 @@
+<div>
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h3 class="cards-title mb-0">{{ "projects.risks" | translate }}</h3>
+
+    <button
+      *ngIf="(isPmo || data?.hasPMPrivilege) && !data?.isProjectClosed"
+      class="btn btn-main"
+      (click)="onAddRisk()"
+    >
+      <i class="bx bx-plus"></i>
+      {{ "projects.addNewRisk" | translate }}
+    </button>
+  </div>
+
+  <div class="risks-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">{{ "projects.title" | translate }}</th>
+          <th scope="col">{{ "projects.owner" | translate }}</th>
+          <th scope="col">{{ "projects.type" | translate }}</th>
+          <!-- <th scope="col">{{'projects.riskControlDescription' | translate}}</th> -->
+          <!-- <th scope="col">{{'projects.notes' | translate}}</th> -->
+          <th scope="col">{{ "projects.impact" | translate }}</th>
+          <th scope="col">{{ "projects.likelihood" | translate }}</th>
+          <th scope="col">{{ "projects.riskRate" | translate }}</th>
+          <th scope="col">{{ "projects.attachments" | translate }}</th>
+          <!-- <th scope="col">{{ "shared.actions" | translate }}</th> -->
+        </tr>
+      </thead>
+      <tbody *ngIf="data?.risks.length !== 0">
+        <tr *ngFor="let item of data?.risks; let i = index">
+          <td>
+            {{ item?.title }}
+            <!-- <p class="paragraph">{{item?.title}}</p> -->
+          </td>
+          <td>
+            <person-item
+              *ngIf="item?.owner"
+              [ownerItem]="item?.owner"
+              [CompMode]="2"
+              [noCursor]="true"
+              [isUserCardFixed]="true"
+            ></person-item>
+          </td>
+          <td>
+            {{ item?.type?.title[lang] }}
+          </td>
+          <!-- <td>
+            {{item?.riskControl}}
+          </td> -->
+          <!-- <td>
+            <p class="paragraph">{{item?.notes}}</p>
+          </td> -->
+          <td>
+            {{ item?.impact.title[lang] }}
+          </td>
+          <td>
+            {{ item?.likelihood.title[lang] }}
+          </td>
+          <td>
+            {{ item?.riskRate }}
+            <app-risk-rating [rate]="item?.riskRate"></app-risk-rating>
+          </td>
+          <td>
+            <div class="attachment" *ngFor="let doc of item?.attachments">
+              <i class="bx bx-file"></i>
+              <a class="hoverableLink" target="_blank" (click)="openFile(doc?.fileName)">
+                {{ doc?.fileName?.slice(0, 15) }}
+                <span *ngIf="doc?.fileName?.length > 15">...</span>
+              </a>
+            </div>
+            <span class="rectangle-badge badge-muted" *ngIf="item?.attachments?.length === 0">
+              {{ "shared.N/A" | translate }}
+            </span>
+          </td>
+          <td class="text-end">
+            <div
+              *ngIf="(isPmo || data?.hasPMPrivilege) && !data?.isProjectClosed"
+              class="d-flex justify-content-end align-items-center h-100"
+            >
+              <app-dropdown
+                (select)="onRiskOptionSelect($event, item)"
+                [items]="riskDropdownOptions"
+              ></app-dropdown>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <app-empty-state
+      *ngIf="data?.risks.length === 0"
+      [title]="'projects.riskEmptyState' | translate"
+    ></app-empty-state>
+  </div>
+</div>

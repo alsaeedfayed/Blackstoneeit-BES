@@ -1,0 +1,32 @@
+{
+  "agentQueue": {
+    "assignedToMe": "الموكلة لى",
+    "allOpenRequests": "جميع الطلبات المفتوحة",
+    "unassignedRequests": "الطلبات غير المعينة",
+    "closedRequests": "الطلبات المغلقة",
+    "requester": "مقدم الطلب",
+    "enterRequester": "ادخل مقدم الطلب",
+    "service": "خدمة",
+    "enterService": "ادخل الخدمة",
+    "requestTitle": "عنوان الطلب",
+    "assignee": "المسؤول",
+    "created": "تم إنشائها",
+    "agentQueue": "قائمة الطلبات",
+    "serviceName": "اسم الخدمة",
+    "noDataMsg": "يبدو أنه ليس لديك أي طلبات",
+    "category": "الفئة",
+    "allRequests": "كل الطلبات",
+    "requestNumber": "رقم الطلب",
+    "creationDate": "تاريخ الانشاء",
+    "lastUpdateDateRange": " تاريخ التعديل",
+    "inProgress": "قيد الانجاز",
+    "closed": "مغلقة",
+    "updatedDate": "اخر تحديث",
+    "rating": "التقييم",
+    "noSla" : "لا يوجد SLA",
+    "paused" : "متوقف",
+    "SLA" : "SLA",
+    "SLAOnly" : "SLA فقط",
+    "downloadRequestsPresentations": "تنزيل عروض الطلبات"
+  }
+}

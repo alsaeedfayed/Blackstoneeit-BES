@@ -1,0 +1,125 @@
+@import "src/assets/css/utils/variables.scss";
+
+.wrapper {
+  .stats {
+    .widgets {
+      display: flex;
+      gap: 20px;
+      // margin-top: 40px;
+
+      .widget {
+        display: flex;
+        flex-direction: column;
+        width: 210px;
+        gap: 15px;
+        padding: 15px 25px;
+        border-radius: 8px;
+        border-width: 1px;
+        border-style: solid;
+        .label {
+          font-weight: bold;
+          font-size: 17px;
+        }
+        .value {
+          display: flex;
+          align-items: center;
+          gap: 13px;
+          span {
+            font-size: 15px;
+            &:first-child {
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .list {
+    margin-top: 15px;
+
+    .delegation-filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+
+      .filter {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+
+        label {
+          color: #8b8b8b;
+          font-weight: bold;
+        }
+
+        .width-20 {
+          width: 20em;
+        }
+      }
+
+      .left-filters {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .delegations-table-wrapper {
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+
+  .table {
+    --index-width: 50px;
+    --actions-width: 70px;
+
+    .delegation-index {
+      width: var(--index-width);
+    }
+
+    .delegation-actions {
+      width: var(--actions-width);
+    }
+
+    ::ng-deep {
+      person-item {
+        .personItem {
+          &.header-person {
+            width: fit-content;
+          }
+        }
+      }
+    }
+  }
+
+  .no-data {
+    min-height: 450px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}
+
+::ng-deep {
+  .ng-select-container {
+    min-width: 155px;
+
+    .ng-placeholder {
+      color: #25364f;
+      text-transform: capitalize;
+      margin-top: 3px;
+    }
+  }
+}
+
+.hoverableLink:hover {
+  text-decoration: underline;
+}

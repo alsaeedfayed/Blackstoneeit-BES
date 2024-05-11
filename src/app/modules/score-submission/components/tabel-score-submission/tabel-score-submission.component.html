@@ -1,0 +1,184 @@
+<div class="goals-table">
+  <div class="goals-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="scoreSubmission-index">#</th>
+          <th scope="col">{{ "shared.level" | translate }}</th>
+          <th scope="col" class="scoreSubmission-title">{{ "shared.title" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.KPI-Weight" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.measurementMethod" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.yearlyTarget" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.DuePeriod" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.PeriodTarget" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.PeriodActual" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.TargetTD" | translate }}</th>
+          <th scope="col">{{ "scoreSubmission.ActualTD" | translate }}</th>
+          <!-- <th scope="col">{{ "scoreSubmission.by" | translate }}</th> -->
+          <th scope="col">{{ "scoreSubmission.Score" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody class="details">
+        <ng-container *ngFor="let item of list">
+          <tr style="position: relative">
+
+            <!-- Index -->
+            <td class="scoreSubmission-index">
+              {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+            </td>
+
+            <!-- Level -->
+            <td>
+              <div class="level-col">
+                <div class="level" [style.gap]="item.group?.code ? '5px' : '0'">
+                  <span class="current">
+                    {{ GoalLevelText(item.level) }}
+                  </span>
+                  <!-- *ngIf="goal.group" -->
+                  <span>
+                    <!-- *ngIf="goal.group.code"  -->
+                    <span class="meta-level" *ngIf="item.group?.code">
+                      {{ item.group?.code }}
+                    </span>
+                  </span>
+                </div>
+                <div class="type id-type">
+                  <span class="type id">{{ item.id }}</span>
+                </div>
+                <div class="type" [style.background]="item.goalType.color">
+                  <span>
+                    {{ lang == "en" ? item.goalType.name : item.goalType.arabicName }}
+                  </span>
+                </div>
+              </div>
+            </td>
+
+            <!-- Title -->
+            <td class="scoreSubmission-title">
+              <a (click)="toRoute(item.id)">{{ lang == "en" ? item.title : item.titleAr }}</a>
+            </td>
+
+            <!-- Weight -->
+            <td>{{ item.internalWeight ?? "-" }}%</td>
+
+            <!-- Measurement Method -->
+            <td>{{ getMeasurementMethodText(item.measurementMethod) }}</td>
+
+            <!-- yearly Target -->
+            <td>
+              <ng-container *ngIf="item.measurementMethod != 5">
+                {{ item.totalTarget }} {{ addittion(item.measurementMethod) }}
+              </ng-container>
+              <ng-container *ngIf="!item.automaticCalculation && item.measurementMethod == 5">
+                {{
+                  lang === "en" ?
+                  ((item?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                  ((item?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                }}
+              </ng-container>
+            </td>
+
+            <!-- due Period -->
+            <td>{{ lang === "en" ? item?.duePeriod : item?.duePeriodAr }}</td>
+
+            <!-- period Target -->
+            <td>
+              <ng-container *ngIf="!item.automaticCalculation && item.measurementMethod != 5">
+                {{ item.periodTarget }} {{ addittion(item.measurementMethod) }}
+              </ng-container>
+              <ng-container *ngIf="!item.automaticCalculation && item.measurementMethod == 5">
+                {{
+                  lang === "en" ?
+                  ((item?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a") :
+                  ((item?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | localizeDate : "dd/MM/yyyy hh:mm a")
+                }}
+              </ng-container>
+            </td>
+
+            <!-- Period Actual -->
+            <td>
+              <ng-container *ngIf="!item.automaticCalculation">
+                <span *ngIf="item.periodActual != null && item.measurementMethod != 5">
+                  {{ item.periodActual }} {{ addittion(item.measurementMethod) }}
+                </span>
+                <span class="notReported" *ngIf="item.periodActual == null && item.measurementMethod != 5">
+                  {{ "scoreSubmission.notReported" | translate }}
+                </span>
+                <span *ngIf="item.periodActual != null && item.measurementMethod == 5">
+                  {{ item.periodActual }}%
+                </span>
+                <span *ngIf="item.periodActual != null && item.measurementMethod == 5">
+                  -
+                </span>
+              </ng-container>
+            </td>
+
+            <!-- Target TD -->
+            <td>
+              <ng-container *ngIf="!item.automaticCalculation && item.measurementMethod != 5">
+                {{ item.targetTD }} {{ addittion(item.measurementMethod) }}
+              </ng-container>
+              <ng-container *ngIf="!item.automaticCalculation && item.measurementMethod == 5">
+                {{ (item?.dateGoalTarget?.kpiDate2 | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a" }}
+              </ng-container>
+            </td>
+
+            <!-- Actual TD -->
+            <td>
+              <ng-container *ngIf="!item.automaticCalculation && item.measurementMethod != 5">
+                {{ item.actualTD }} {{ addittion(item.measurementMethod) }}
+              </ng-container>
+              <ng-container *ngIf="item.automaticCalculation && item.measurementMethod != 5">
+                <span class="automaticCalculation">
+                  {{ "scoreSubmission.automaticCalculation" | translate }}
+                </span>
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  !item.automaticCalculation &&
+                  item.measurementMethod == 5 &&
+                  item?.dateGoalTarget?.submission &&
+                  item?.dateGoalTarget?.submission?.submitted
+                "
+              >
+                {{ (item?.dateGoalTarget?.submission?.updatedDate | uTCToLocalDate) | date : "dd/MM/yyyy hh:mm a" }}
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  !item.automaticCalculation &&
+                  item.measurementMethod == 5 &&
+                  ((item?.dateGoalTarget?.submission &&
+                    !item?.dateGoalTarget?.submission?.submitted) ||
+                    !item?.dateGoalTarget?.submission)
+                "
+              >
+                <span>-</span>
+              </ng-container>
+            </td>
+
+            <!-- By -->
+            <!-- <td>
+              <person-item [requesterItem]="item.owner" [noCursor]="true"></person-item>
+            </td> -->
+
+            <!-- Score -->
+            <td>
+              {{ item.score | number : "1.2-2" }}%
+              <!-- <img *ngIf="item.automaticCalculation" src="assets/icons/refresh.svg" (click)="refresh(item)" />  -->
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- <pagination-controls
+  *ngIf="list.length > paginationModle?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  previousLabel=""
+  nextLabel=""
+>
+</pagination-controls> -->

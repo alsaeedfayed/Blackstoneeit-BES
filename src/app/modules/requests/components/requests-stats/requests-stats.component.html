@@ -1,0 +1,44 @@
+<div class="req-stats">
+  <div class="req-stats-wrapper">
+    <div *ngIf="!loading && reqStats">
+      <div class="analytics-widgets">
+        <div class="analytics-widgets-items">
+          <app-stats-widget
+            [id]="1"
+            [count]="reqStats[0]?.count"
+            [title]="reqStats[0]?.title"
+            [icon]="'bx bx-file'"
+            [type]="'primary'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="3"
+            [count]="reqStats[1]?.count"
+            [title]="reqStats[1]?.title"
+            [icon]="'bx bx-minus-circle'"
+            [type]="'success'"
+          ></app-stats-widget>
+          <app-stats-widget
+            [id]="4"
+            [count]="reqStats[2]?.count"
+            [title]="reqStats[2]?.title"
+            [icon]="'bx bx-check-circle'"
+            [type]="'default'"
+          ></app-stats-widget>
+        </div>
+      </div>
+    </div>
+
+    <div class="analytics-widgets" *ngIf="loading">
+      <div class="analytics-widgets-items">
+        <ngx-skeleton-loader *ngFor="let item of [1, 2, 3]"
+          count="1"
+          [theme]="{
+            'height': '105px',
+            'background-color': '#fcfcfc',
+            'border-radius': '10px'
+          }"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>

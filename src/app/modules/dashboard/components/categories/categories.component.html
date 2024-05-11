@@ -1,0 +1,36 @@
+<div class="categories-container">
+  <div class="header">
+    <span class="title">{{ "dashboard.categories" | translate }}</span>
+  </div>
+
+  <div class="chart" [hidden]="!shouldShowCategoriesChart">
+    <canvas
+      class="my-chart"
+      id="myChart"
+      width="181"
+      height="181"
+      #myChart
+    ></canvas>
+  </div>
+
+  <div class="no-data-message" *ngIf="!shouldShowCategoriesChart">{{ "dashboard.noDataAvailable" | translate }}</div>
+
+  <div class="categories">
+    <ul>
+      <li *ngFor="let category of categoriesData; let i = index">
+        <div class="first-col">
+          <span
+            class="dot"
+            [ngStyle]="{ 'background-color': colors[i] }"
+          ></span>
+          <span class="status">{{ category.category.title[lang] }}</span>
+        </div>
+        <div class="second-col">
+          <span class="count" [ngStyle]="{ color: colors[i] }">
+            {{ category.count }}
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

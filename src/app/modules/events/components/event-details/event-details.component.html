@@ -1,0 +1,253 @@
+<app-header-page
+  [title]="'events.details.eventDetails' | translate"
+  [showTotalItems]="false"
+  [backButton]="true"
+>
+  <div class="d-flex flex-wrap gap-2" buttons>
+
+    <!-- share button -->
+    <button class="btn btn-outline-main" (click)="openQRCodePopup()" *ngIf="event?.status === 'Open'">
+      <i class="bx bx-barcode"></i>
+      {{ "events.details.shareEvent" | translate }}
+    </button>
+
+    <!-- update button -->
+    <button class="btn btn-main" (click)="onUpdateEvent()" *ngIf="CanUpdate">
+      {{ "events.details.updateEvent" | translate }}
+    </button>
+
+    <!-- cancel button -->
+    <button class="btn btn-warning" (click)="onCancelEvent(event?.id)" *ngIf="event?.canCancel">
+      {{ "events.details.cancelEvent" | translate }}
+    </button>
+
+    <!-- delete button -->
+    <button class="btn btn-danger" (click)="onDeleteEvent(event?.id)" *ngIf="event?.canDelete">
+      {{ "events.details.deleteEvent" | translate }}
+    </button>
+  </div>
+</app-header-page>
+
+<div class="event-details">
+
+  <!-- event details card -->
+  <div class="event-details-card mb-35">
+
+    <!-- cover photo -->
+    <img [src]="event?.coverPhoto?.url" onerror="this.src='assets/img/placeholder.png'" alt="">
+
+    <!-- date and state -->
+    <div class="date-and-state d-flex align-items-center justify-content-between gap-3 mb-2">
+      <div class="d-flex align-items-center gap-2">
+        <label class="info-label">
+          {{ "events.details.creationDate" | translate }}:
+        </label>
+        <span class="info-content">
+          {{ (event?.createdDate | uTCToLocalDate) | date: 'dd/MM/yyyy' }}
+        </span>
+      </div>
+
+      <app-badge
+        *ngIf="event?.status === 'Open'"
+        [className]="'active'"
+        [label]="'shared.open' | translate"
+      ></app-badge>
+      <app-badge
+        *ngIf="event?.status === 'Closed'"
+        [className]="'rejected'"
+        [label]="'shared.closed' | translate"
+      ></app-badge>
+      <app-badge
+        *ngIf="event?.status === 'Cancelled'"
+        [className]="'inProgress'"
+        [label]="'shared.cancelled' | translate"
+      ></app-badge>
+    </div>
+
+    <!-- location -->
+    <p class="event-location">
+      <span>{{ lang == 'en' ? event?.location : event?.locationAr }}</span>
+    </p>
+
+    <div class="d-flex align-items-center justify-content-between gap-3">
+      <h1 class="mb-0">{{ lang == 'en' ? event?.title : event?.titleAr }}</h1>
+
+      <button class="see-more-btn" (click)="isShowMore = !isShowMore">
+        {{ (isShowMore ? 'events.details.seeLess' : 'events.details.seeMore') | translate }}
+        <i [ngClass]="isShowMore ? 'bx bxs-up-arrow' : 'bx bxs-down-arrow'"></i>
+      </button>
+    </div>
+  
+    <div class="mt-3" *ngIf="isShowMore">
+      <p class="angular-editor-description mb-4" [innerHTML]="event?.description"></p>
+
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="info-label mr-2">{{ "events.details.startDate" | translate }}:</label>
+          <span class="info-content">
+            {{ (event?.startDate | uTCToLocalDate) | date: 'dd/MM/yyyy'}} {{ getTime(event?.startDate) }}
+          </span>
+        </div>
+      
+        <div class="col-6 mb-3">
+          <label class="info-label mr-2">{{ "events.details.endDate" | translate }}:</label>
+          <span class="info-content">
+            {{ (event?.endDate | uTCToLocalDate) | date: 'dd/MM/yyyy'}} {{ getTime(event?.endDate) }}
+          </span>
+        </div>
+
+        <div class="col-6 mb-3">
+          <label class="info-label mr-2">{{ "events.details.registrationDeadline" | translate }}:</label>
+          <span class="info-content">
+            {{ (event?.registrationDeadline | uTCToLocalDate) | date: 'dd/MM/yyyy' }}
+          </span>
+        </div>
+
+        <div class="col-6 mb-3">
+          <label class="info-label mr-2">{{ "events.details.pin" | translate }}:</label>
+          <span class="info-content">
+            {{ event?.pin }}
+          </span>
+        </div>
+      </div>
+
+      <!-- <div class="d-flex">
+        <div class="mr-2">
+          <label class="info-label mr-2">Start Time:</label>
+          <span>{{ (event?.startTime | uTCToLocalDate) | date : "h:mm a" }}</span>
+        </div>
+        <div class="mr-2">
+          <label class="info-label mr-2">End Time:</label>
+          <span>{{ (event?.endTime | uTCToLocalDate) | date : "h:mm a" }}</span>
+        </div>
+        <div class="mr-2">
+          <label class="info-label mr-2">Registration Deadline Time:</label>
+          <span>{{ (event?.registrationDeadlineTime | uTCToLocalDate) | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div> -->
+
+      <div class="mt-4" *ngIf="event?.agenda?.length > 0">
+        <label class="info-label mb-3">
+          {{ "events.details.agendaItems" | translate }}:
+        </label>
+
+        <ul class="d-flex flex-column gap-2">
+          <li *ngFor="let item of event?.agenda">
+            - {{ item[lang] }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="mt-4" *ngIf="event?.attachments?.length > 0">
+        <label class="info-label mb-3">
+          {{ "events.details.attachments" | translate }}:
+        </label>
+
+        <ul class="d-flex flex-column gap-2">
+          <li *ngFor="let item of event?.attachments">
+            - <a [href]="item.url" [download]="item.title">{{ item.title }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- event charts -->
+  <div class="charts" *ngIf="pieChartData?.datasets[0]?.data.toString() != [0,0].toString() && barChartData">
+
+    <div class="pie-chart" *ngIf="pieChartData?.datasets[0]?.data.toString() != [0,0].toString()">
+      <canvas
+        #pieChart baseChart
+        [data]="pieChartData"
+        [labels]="pieChartLabels"
+        [type]="pieChartType"
+      ></canvas>
+    </div>
+
+    <div class="bar-chart" *ngIf="barChartData">
+      <rating-chart [data]="barChartData"></rating-chart>
+    </div>
+  </div>
+</div>
+
+<!-- attendees table header -->
+<app-header-page
+  [title]="'events.details.listOfAttendees' | translate"
+  [totalItems]="event?.attendees.length"
+  [backButton]="false"
+  [isSearch]="true"
+  (search)="onSearchAttendees($event)"
+>
+  <app-export-dropdown
+    buttons
+    (select)="onExport($event)"
+  ></app-export-dropdown>
+</app-header-page>
+
+<!-- attendees table -->
+<div class="table mt-4" *ngIf="(event?.attendees | search : query)?.length > 0">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">{{ "events.details.name" | translate }}</th>
+          <th scope="col">{{ "events.details.position" | translate }}</th>
+          <th scope="col">{{ "events.details.registrationDate" | translate }}</th>
+          <th scope="col">{{ "events.details.email" | translate }}</th>
+          <th scope="col">{{ "events.details.mobile" | translate }}</th>
+          <th scope="col">{{ "events.details.status" | translate }}</th>
+          <th scope="col" class="attendee-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of event?.attendees | search : query">
+          <td>
+            <div class="profile-info">
+              <img [src]="item?.picture?.url || 'assets/img/user.png'" alt="" />
+              <span>{{ item?.fullName }}</span>
+            </div>
+          </td>
+          <td>{{ item?.title }}</td>
+          <td>{{ (item?.createdDate | uTCToLocalDate) | date : "dd/MM/yyyy" }}</td>
+          <td>{{ item?.email }}</td>
+          <td>{{ item?.phoneNumber }}</td>
+          <td>
+            <app-badge
+              *ngIf="item?.isCheckedIn"
+              [className]="'active'"
+              [label]="'events.details.checkedIn' | translate"
+            ></app-badge>
+            <app-badge
+              *ngIf="!item?.isCheckedIn"
+              [className]="'inProgress'"
+              [label]="'events.details.pending' | translate"
+            ></app-badge>
+          </td>
+          <td class="attendee-actions">
+            <app-dropdown *ngIf="!item?.isCheckedIn"
+              [items]="getItems(item)"
+              (select)="onAttendeeDropdownSelect($event, item?.id)"
+            ></app-dropdown>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- no attendees msg -->
+<div class="no-data" *ngIf="(event?.attendees | search : query)?.length == 0">
+  <app-no-data [msg]="'events.details.noDataMsg' | translate"></app-no-data>
+</div>
+
+<app-confirm-modal
+  [content]="confirmationPopupText"
+  [btnContent]="btnContent"
+  [btnStyle]="'main'"
+  (confirm)="onConfirmation()"
+></app-confirm-modal>
+
+<events-qrcode-confirm-modal
+  [content]="confirmationPopupText"
+  [link]="event?.formQRCode"
+></events-qrcode-confirm-modal>

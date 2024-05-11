@@ -1,0 +1,106 @@
+@import "src/assets/css/utils/variables.scss";
+
+.filter-dropdown-box {
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+
+    .dropdown-btn {
+        min-width: 207px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        line-height: 22px;
+        font: {
+            size: 18px;
+            weight: 400;
+        };
+        padding: 10px 22px 10px 16px;
+        background-color: $white-color;
+        color: $link_water_color;
+        transition: 0.2s;
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.04);
+        border: 1px solid $gainsboro_color;
+        border-radius: 12px;
+
+        i {
+            font-size: 25px;
+        }
+        .chevron-icon {
+            margin-inline-start: 10px;
+            vertical-align: bottom;
+            transition: 0.2s;
+        }
+        &.show {       
+            background-color: $main-color;
+            color: $white-color;
+        }
+    }
+
+    .filter-dropdown-list {
+        position: absolute;
+        top: 45px;
+        left: 0;
+        width: 100%;
+        list-style-type: none;
+        margin: 0;
+        padding: 0 10px;
+        background-color: $white-color;
+        border-radius: 10px;
+        line-height: 16px;
+        font: {
+            size: 12px;
+        };
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.04);
+        height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        z-index: 200;
+        .item {
+            padding: 0 5px;
+            border-radius: 7px;
+            font-size: 13px;
+            cursor: pointer;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.1s ease;
+            white-space: nowrap;
+            &:hover {
+                background-color: $alice_blue_color;
+            }
+        }
+
+        .clear{
+            font-weight: bold;
+            a{
+                text-decoration: none;
+                color:$navy_blue_color;
+            }
+        }
+
+        &.show {
+            height: auto;
+            padding: 5px;
+            box-shadow: 1px 1px 15px 0px #0000002b;
+            .item {
+                height: 35px;
+                padding:20px 15px;
+                display: flex;
+                align-items: center;
+               // border-top:1px solid $dark_gray_color;
+                border-radius: none;
+            }
+        }
+    }
+}
+
+
+
+.Verified{
+    color: $pigment_green_color;
+}
+.unVerified{
+    color:$light_orange
+}

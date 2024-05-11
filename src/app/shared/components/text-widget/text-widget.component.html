@@ -1,0 +1,16 @@
+<div class="wrapper" *ngIf="data && !loading">
+  <div class="widgets-wrapper">
+    <div class="left">
+      <div class="card-container" [style.background]= "data.color"></div>
+      <strong class="label">{{data.title}}</strong>
+    </div>
+    <span class="value">{{data.number}}</span>
+  </div>
+</div>
+
+<div class="wrapper" *ngIf="loading">
+  <div class="statistics">
+    <!-- <app-actual-target-statistics></app-actual-target-statistics> -->
+    <app-skeleton-loader class="w-100" [mode]="'card'"></app-skeleton-loader>
+  </div>
+</div>

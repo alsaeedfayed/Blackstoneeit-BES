@@ -1,0 +1,140 @@
+<div class="req-table">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="service-index">#</th>
+          <th scope="col">{{ "manageServices.serviceTitle" | translate }}</th>
+          <th scope="col">{{ "manageServices.category" | translate }}</th>
+          <th scope="col">{{ "manageServices.form" | translate }}</th>
+          <th scope="col">{{ "manageServices.process" | translate }}</th>
+          <th scope="col">{{ "manageServices.lastUpdate" | translate }}</th>
+          <!-- <th scope="col">{{ "Status" | translate }}</th> -->
+          <th
+            scope="col"
+            *ngxPermissionsOnly="[permissionsManageServiceEnum.publish]"
+          >
+            {{ "manageServices.published" | translate }}
+          </th>
+          <th scope="col" class="service-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let service of services
+              | paginate
+                : {
+                    itemsPerPage: paginationModle?.pageSize,
+                    currentPage: paginationModle?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          "
+        >
+          <td class="service-index">
+            {{ i | tableItemIndex : paginationModle?.pageSize : paginationModle?.pageIndex }}
+          </td>
+          <td *ngIf="language === 'en'">
+            {{ service.title}}
+          </td>
+          <td *ngIf="language === 'ar'">
+            {{ service.titleAr}}
+          </td>
+          <td *ngIf="language === 'en'">
+            {{ service.cateogryName }}
+          </td>
+          <td *ngIf="language === 'ar'">
+            {{ service.categoryNameAr }}
+          </td>
+          <td>
+            {{ service.formName }}
+          </td>
+          <td *ngIf="language === 'en'">
+            {{ service.processName}}
+          </td>
+          <td *ngIf="language === 'ar'">
+            {{ service.processNameAr}}
+          </td>
+          <!-- <td>
+            {{service.formName}}
+            <div *ngIf="service.formLinked">
+              <img src="/assets/icons/perpar.svg" />
+              <a> Linked  {{ service.formName }}  </a>
+            </div>
+            <p *ngIf="!service.formLinked">Not Linked</p>
+          </td> -->
+          <!-- <td>
+            {{service.processName}}
+          <div *ngIf="service.processLinked">
+               <img src="/assets/icons/Framenot.svg" />
+              <a>
+                 {{ service.processName }}
+                Linked
+              </a>
+            </div>
+            <div *ngIf="!service.processLinked">
+              <img src="/assets/icons/Frame.svg" />
+
+              <p>Not Linked</p>
+            </div>
+          </td> -->
+          <td>
+            {{
+              language === "en" ?
+              ((service?.updatedDate | uTCToLocalDate) | date : "dd/MM/yyyy") :
+              ((service?.updatedDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <td *ngxPermissionsOnly="[permissionsManageServiceEnum.publish]">
+            <app-switch
+              [disabled]="true"
+              [(ngModel)]="service.published"
+              (click)="openModel(service)"
+              [isFixed]="service?.fixed"
+            ></app-switch>
+
+            <app-confirm-modal
+              [id]="'confrontation-msg' + service.serviceId"
+              [content]="msgText(service)"
+              [btnContent]="'shared.confirm' | translate"
+              [btnStyle]="'main'"
+              (confirm)="toggleActive(service)"
+            ></app-confirm-modal>
+          </td>
+          <td class="service-actions">
+            <!-- <button class="edit-icons" (click)="openPopup(service)">
+              <i class="bx bxs-edit-alt"></i>
+            </button> -->
+            <div>
+              <app-dropdown (select)="onOptionSelect($event, service)" [items]="options"></app-dropdown>
+            </div>
+
+            <app-model
+              [dimensions]="{ width: 620, height: 750 }"
+              [id]="'new-service' + service.serviceId"
+              [hasBackBtn]="false"
+              [hasTitle]="false"
+              [isNewModel]="true"
+              (close)="closeServiceModel(service)"
+            >
+              <div modal-header class="service-model-header w-100">
+                <label class="modal-title">
+                  {{ 'manageServices.editService' | translate }}
+                </label>
+              </div>
+
+              <div modal-content class="service-model-content border-top">
+                <app-create-service
+                  *ngIf="service.edit"
+                  [service]="service"
+                  (update)="update($event)"
+                ></app-create-service>
+              </div>
+            </app-model>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

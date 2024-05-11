@@ -1,0 +1,217 @@
+<div class="new-meeting-form" [formGroup]="form">
+  <!-- meeting global mode -->
+  <div class="block-content mb-3">
+    <h3 class="block-title mb-4">
+      {{ "committeeNewMeeting.meetingForm.meetingDetailsTitle" | translate }}
+    </h3>
+
+    <div class="row">
+      <!-- meeting title -->
+      <div class="col-md-12 mt-4">
+        <app-filed
+          [length]="100"
+          class="d-block"
+          formControlName="name"
+          [control]="form | getControl : 'name'"
+          [title]="'committeeNewMeeting.meetingForm.meetingTitle' | translate"
+          [placeholder]="
+            'committeeNewMeeting.meetingForm.meetingTitle' | translate
+          "
+        ></app-filed>
+      </div>
+    </div>
+
+    <div class="row">
+      <!--location type -->
+      <div class="col-md-4 mt-4">
+        <label class="form-label">
+          {{ "committeeNewMeeting.meetingForm.locationType" | translate }}
+          <span class="astrix-red">*</span>
+        </label>
+        <app-radio-group
+          class="d-flex"
+          bindValue="id"
+          formControlName="locationType"
+          (change)="onSelectLocationType()"
+        >
+          <app-radio-box class="mr-4 ml-4" [value]="0">
+            {{ "committeeNewMeeting.meetingForm.onsite" | translate }}
+          </app-radio-box>
+          <app-radio-box [value]="1">
+            {{ "committeeNewMeeting.meetingForm.online" | translate }}
+          </app-radio-box>
+        </app-radio-group>
+      </div>
+
+      <!-- meeting location -->
+      <div class="col-md-8 mt-4" *ngIf="locationType.value == 0">
+        <app-select
+          class="d-block"
+          formControlName="location"
+          [control]="form | getControl : 'location'"
+          [title]="'committeeNewMeeting.meetingForm.location' | translate"
+          [placeholder]="'committeeNewMeeting.meetingForm.location' | translate"
+          [items]="locations"
+          [bindVlaue]="'code'"
+          [bindLabel]="language == 'ar' ? 'nameAr' : 'nameEn'"
+          [clearable]="true"
+        ></app-select>
+      </div>
+    </div>
+    <div class="row">
+      <!-- meeting date -->
+      <div class="col-md-4 mt-4">
+        <div class="form-group">
+          <label class="form-label">
+            {{ "committeeNewMeeting.meetingForm.meetingDate" | translate }}
+            <span class="astrix-red">*</span>
+          </label>
+          <app-nz-date-picker
+            [dir]="'ltr'"
+            formControlName="date"
+            [control]="form | getControl : 'date'"
+            [placeholder]="'shared.selectDate' | translate"
+          ></app-nz-date-picker>
+          <!-- [isSubmitted]="isSubmitted" -->
+          <!-- <app-datepicker class="d-block" formControlName="date"></app-datepicker> -->
+        </div>
+      </div>
+
+      <div class="col-md-8 d-flex flex-column gap-1">
+        <div class="time-wrapper row">
+          <!-- time from -->
+          <div class="col-md-6 mt-4">
+            <label class="form-label">
+              {{ "committeeNewMeeting.meetingForm.timeFrom" | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+            <app-nz-time-picker
+              [dir]="'ltr'"
+              formControlName="timeFrom"
+              [control]="form | getControl : 'timeFrom'"
+              [placeholder]="'shared.selectTime' | translate"
+              [minuteStep]="15"
+            ></app-nz-time-picker>
+          </div>
+
+          <!-- time to -->
+          <div class="col-md-6 mt-4">
+            <label class="form-label">
+              {{ "committeeNewMeeting.meetingForm.timeTo" | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+            <app-nz-time-picker
+              [dir]="'ltr'"
+              formControlName="timeTo"
+              [control]="form | getControl : 'timeTo'"
+              [placeholder]="'shared.selectTime' | translate"
+              [minuteStep]="15"
+            ></app-nz-time-picker>
+          </div>
+        </div>
+
+        <!-- invalid time alert -->
+        <!-- <div class="validation" *ngIf="isInvalidTimeRange || isDateInPast"> -->
+        <div class="validation" *ngIf="isInvalidTimeRange">
+          <span>
+            {{ "shared.validations.invalidTimeRange" | translate }}
+          </span>
+          <!-- <span *ngIf="isDateInPast">
+            {{ "shared.validations.dateInPast" | translate }}
+          </span> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- meeting description -->
+    <div class="mt-4">
+      <label class="form-label">
+        {{ "committeeNewMeeting.meetingForm.description" | translate }}
+        <!-- <span class="astrix-red">*</span> -->
+      </label>
+      <angular-editor formControlName="notes" [config]="editorConfig">
+        <ng-template #customButtons>
+          <ae-toolbar-set>
+            <ae-button
+              iconClass="fa fa-paperclip fa-lg"
+              title="Attachment"
+              (buttonClick)="notesAttachments.click()"
+            ></ae-button>
+          </ae-toolbar-set>
+        </ng-template>
+      </angular-editor>
+      <input
+        hidden
+        #notesAttachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event, 'notes')"
+      />
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="notesUploadedFiles"
+        [supportedTypes]="
+          'committeeNewMeeting.meetingForm.descriptionAttachmentsTypes'
+            | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'notes')"
+        (viewFile)="onViewLocalFile($event, 'notes')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldNotesAttachments"
+        (deleteFile)="onDeleteFile($event, 'oldNotes')"
+        (viewFile)="onViewLocalFile($event, 'oldNotes')"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </div>
+
+    <!-- agenda items -->
+    <div class="agenda-items">
+      <label class="form-label">
+        {{ "committeeNewMeeting.meetingForm.agendaItems" | translate }}
+        <!-- <span class="astrix-red">*</span> -->
+      </label>
+      <angular-editor formControlName="agenda" [config]="editorConfig">
+        <ng-template #customButtons>
+          <ae-toolbar-set>
+            <ae-button
+              iconClass="fa fa-paperclip fa-lg"
+              title="Attachment"
+              (buttonClick)="agendaAttachments.click()"
+            ></ae-button>
+          </ae-toolbar-set>
+        </ng-template>
+      </angular-editor>
+      <input
+        hidden
+        #agendaAttachments
+        type="file"
+        [accept]="supportedAttachmentTypes.join(',')"
+        (change)="onUploadFile($event, 'agenda')"
+      />
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="agendaUploadedFiles"
+        [supportedTypes]="
+          'committeeNewMeeting.meetingForm.agendaAttachmentsTypes' | translate
+        "
+        (deleteFile)="onDeleteFile($event, 'agenda')"
+        (viewFile)="onViewLocalFile($event, 'agenda')"
+        [maxSize]="maxFileSizeInMB"
+      ></uploaded-attachments-files>
+
+      <uploaded-attachments-files
+        class="d-block mt-3"
+        [files]="oldAgendaAttachments"
+        (deleteFile)="onDeleteFile($event, 'oldAgenda')"
+        (viewFile)="onViewLocalFile($event, 'oldAgenda')"
+        [old]="true"
+      ></uploaded-attachments-files>
+    </div>
+  </div>
+</div>

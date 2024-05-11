@@ -1,0 +1,12 @@
+<div class="main-flow-container">
+    <div
+      *ngFor="let state of states ; let i = index"
+      class="main-flow-item completed ">
+      <div class="main-flow-card-header">
+        <span class="step-number">
+         {{ "shared.step" | translate }} {{i+1}}
+        </span>
+      </div>
+        <div >{{ state.title[language] }}</div>
+    </div>
+  </div>

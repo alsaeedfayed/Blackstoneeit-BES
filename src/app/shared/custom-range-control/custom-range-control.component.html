@@ -1,0 +1,7 @@
+<ul class="range-input-container mt-4" dir="ltr">
+  <li *ngFor="let item of values; let i = index" (click)="onSelect(i)" [class.highlighted]="item?.highlighted">
+    <span class="value" [ngClass]="{'visible': item.value === selectedItem || item.value === selectedItem?.value}">
+      {{item.value}} <span *ngIf="unit">%</span>
+    </span>
+  </li>
+</ul>

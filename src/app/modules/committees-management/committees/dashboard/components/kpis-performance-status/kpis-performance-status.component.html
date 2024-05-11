@@ -1,0 +1,80 @@
+<section class="kpis-status-container mb-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <h3 class="content-block-title">
+      {{ "committeeDashboard.kpisStatus.title" | translate }}
+    </h3>
+    <a class="see-more" (click)="goToKpis()">
+      {{ "committeeDashboard.kpisStatus.seeAllKPIs" | translate }}
+    </a>
+  </div>
+
+  <ng-container *ngIf="loadingNumbers || loadingList; else details_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #details_data>
+    <!-- analytics widgets -->
+    <div class="analytics-widgets my-4">
+      <div class="analytics-widgets-items">
+        <app-stats-widget
+          [id]="'total'"
+          [count]="totalTasks"
+          [title]="'committeeDashboard.kpisStatus.total' | translate"
+          [icon]="'bx bx-clipboard'"
+          [type]="'dark'"
+          [hasBorder]="true"
+          [borderColor]="'black'"
+        ></app-stats-widget>
+
+        <app-stats-widget
+          [id]="'offTrack'"
+          [count]="offTrack"
+          [title]="'committeeDashboard.kpisStatus.offTrack' | translate"
+          [icon]="'bx bxs-time-five'"
+          [type]="'danger'"
+          [hasBorder]="true"
+          [borderColor]="'#e72e2e'"
+        ></app-stats-widget>
+
+        <app-stats-widget
+          [id]="'onTrack'"
+          [count]="onTrack"
+          [title]="'committeeDashboard.kpisStatus.onTrack' | translate"
+          [icon]="'bx bxs-check-circle'"
+          [type]="'success'"
+          [hasBorder]="true"
+          [borderColor]="'#28a71c'"
+        ></app-stats-widget>
+
+        <app-stats-widget
+          [id]="'performance'"
+          [count]="performance"
+          [title]="'committeeDashboard.kpisStatus.performance' | translate"
+          [icon]="'bx bxs-chart'"
+          [type]="'purple'"
+          [hasBorder]="true"
+          [borderColor]="'#7D5E84'"
+          [hasPercentage]="true"
+        ></app-stats-widget>
+      </div>
+    </div>
+    <!-- switch button -->
+      <!-- <app-switch-btn
+      [onlyForDestroyedChart]="true"
+        [label]="'committeeDashboard.kpisStatus.trackRate' | translate"
+        (onChange)="onSwitchChange($event)"
+      ></app-switch-btn>
+
+      <div class="chart" #canvasContainer>
+        <canvas class="my-chart" id="mychart3" #mychart3></canvas>
+      </div> -->
+  </ng-template>
+</section>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

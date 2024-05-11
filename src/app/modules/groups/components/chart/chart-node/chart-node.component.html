@@ -1,0 +1,13 @@
+<div ngClass="ngx-org-connector-{{direction}}" class="ngx-org-border" *ngIf="hasParent"></div>
+
+<div [ngClass]="node?.cssClass" class="ngx-org-box ngx-org-border ngx-org-background" >
+  <!-- <span class="level">{{lang === 'en'? node?.Level.label : node?.Level.labelAr}}</span> -->
+  <span class="level">{{node?.Level.label}}</span>
+  <span class="code">{{node?.code}}</span>
+  <div class="ngx-org-name">{{lang === 'en'? node?.name : node?.arabicName}}</div>
+  <div class="options" *ngIf="node?.id">
+    <app-dropdown  [items]="node?.options" (select)="onSelect($event, node)"></app-dropdown>
+  </div>
+</div>
+
+<div ngClass="ngx-org-connector-{{direction}}" class="ngx-org-border" *ngIf="node?.children?.length"></div>

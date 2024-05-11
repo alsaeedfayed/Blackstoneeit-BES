@@ -1,0 +1,22 @@
+@import "../../../assets/css/utils/variables.scss";
+
+.cards-container {
+  display: flex;
+  gap: 0.625rem;
+
+  .card-with-icon {
+    width: fit-content;
+    min-width: 150px;
+  }
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-inline-end: 5px;
+
+  i {
+    font-size: 20px;
+  }
+}

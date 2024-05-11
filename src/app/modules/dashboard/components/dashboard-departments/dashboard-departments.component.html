@@ -1,0 +1,101 @@
+<!-- <div class="tasks-progress-container">
+  <div class="header">
+    <div class="first-col">
+      <span class="title">{{ "dashboard.departmentsChart" | translate }}</span>
+      <app-filter-dropdown
+        [isDepartmentsChart]="true"
+        title="{{ 'dashboard.selectdepartment' | translate }}"
+        [items]="departments"
+        (selectEvent)="onSelect($event)"
+      ></app-filter-dropdown>
+    </div>
+    <div class="second-col">
+      <div class="key">
+        <span class="dot"></span>
+        <span class="label">{{ "shared.totalProjects" | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bar-chart">
+    <canvas class="my-chart" id="myChart" #myChart></canvas>
+  </div>
+</div> -->
+
+<div class="tasks-progress-container">
+  <div class="header">
+    <span class="title">
+      {{ "dashboard.departmentsChart" | translate }}
+    </span>
+  </div>
+
+  <div class="content">
+    <div
+      class="row align-items-center"
+      *ngFor="let department of departmentsData"
+    >
+      <div class="col-4 text-end">
+        {{ department.groupName[lang] }} ({{ department.totalProjects }})
+      </div>
+      <div class="col-8">
+        <div class="distribution">
+          <span
+            *ngIf="department.totalClosed"
+            class="closed"
+            [style.width]="
+              (department.totalClosed / department.totalProjects) * 100 + '%'
+            "
+          >
+            {{ department.totalClosed }}
+          </span>
+          <span
+            *ngIf="department.totalOnTrack"
+            class="on-track"
+            [style.width]="
+              (department.totalOnTrack / department.totalProjects) * 100 + '%'
+            "
+          >
+            {{ department.totalOnTrack }}
+          </span>
+          <span
+            *ngIf="department.totalOffTrack"
+            class="off-track"
+            [style.width]="
+              (department.totalOffTrack / department.totalProjects) * 100 + '%'
+            "
+          >
+            {{ department.totalOffTrack }}
+          </span>
+          <span
+            *ngIf="department.totalNotStarted"
+            class="started"
+            [style.width]="
+              (department.totalNotStarted / department.totalProjects) * 100 + '%'
+            "
+          >
+            {{ department.totalNotStarted }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="labels">
+    <div class="label">
+      <span class="dot closed"></span>
+      <span>{{ "dashboard.closed" | translate }}</span>
+    </div>
+    <div class="label">
+      <span class="dot on-track"></span>
+      <span>{{ "dashboard.onTrack" | translate }}</span>
+    </div>
+    <div class="label">
+      <span class="dot off-track"></span>
+      <span>{{ "dashboard.offTrack" | translate }}</span>
+    </div>
+    <div class="label">
+      <span class="dot started"></span>
+      <span>{{ "dashboard.notStarted" | translate }}</span>
+    </div>
+  </div>
+</div>

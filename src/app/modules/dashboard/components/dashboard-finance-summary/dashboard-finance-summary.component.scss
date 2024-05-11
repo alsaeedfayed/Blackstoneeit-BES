@@ -1,0 +1,197 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.finance-card-container {
+  // min-height: 132px;
+  height: 100%;
+  background: #ffffff;
+  padding: 21px 20px;
+  box-shadow: 0px 0px 26px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    .title {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 21px;
+      color: $tertiary-color;
+    }
+
+    .projects {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 21px;
+      color: $tertiary-color;
+    }
+  }
+
+  .finance-progress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+
+    .finance-progress {
+      height: 13px;
+      border-radius: 24px;
+      background-color: #f6f6f6;
+
+      span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+      }
+    }
+  }
+
+  .finance-items {
+    ul {
+      list-style: none;
+      margin: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-bottom: 10px;
+        }
+
+        .first-col {
+          display: flex;
+          align-items: center;
+
+          .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-inline-end: 12px;
+            background: #00db99;
+            display: block;
+          }
+
+          .status {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 16px;
+            color: #8b8b8b;
+          }
+        }
+
+        .second-col {
+          display: flex;
+          align-items: center;
+
+          .count {
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 16px;
+            color: $tertiary-color;
+            margin-inline-end: 8px;
+          }
+
+          .percentage {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            color: #8b8b8b;
+          }
+        }
+      }
+    }
+  }
+
+  .labels {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .spent {
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 21px;
+      color: #eda25b;
+    }
+
+    .total {
+      position: relative;
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 21px;
+      color: #0075ff;
+
+      &::before {
+        content: "";
+        position: absolute;
+        @include rtl_value(right, 4%, auto);
+        @include rtl_value(left, auto, 4%);
+        bottom: -35px;
+        width: 2px;
+        height: 26px;
+        background-color: #0075ff;
+        z-index: 99;
+      }
+    }
+  }
+
+  // .finance-progress {
+  //   position: relative;
+  //   height: 13px;
+  //   border-radius: 75px;
+  //   background-color: #f6f6f6;
+  //   .spent-progress {
+  //     display: block;
+  //     height: 100%;
+  //     border-radius: 75px;
+  //     background-color: #eda25b;
+  //     width: 0;
+  //   }
+  // }
+
+  // .items {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   gap: 15px;
+  //   flex-wrap: wrap;
+  //   padding: 20px;
+
+  //   .item {
+  //     flex: 1;
+  //     display: flex;
+  //     flex-direction: column;
+  //     img {
+  //       width: 25px;
+  //       height: 25px;
+  //       margin-bottom: 12px;
+  //     }
+  //     .value {
+  //       font-weight: 700;
+  //       font-size: 18px;
+  //       line-height: 26px;
+  //       color: $tertiary-color;
+  //       margin-bottom: 10px;
+  //       span {
+  //         font-weight: normal;
+  //       }
+  //     }
+  //     .label {
+  //       font-weight: 400;
+  //       font-size: 14px;
+  //       line-height: 16px;
+  //       letter-spacing: 0.1px;
+  //       color: #00db99;
+  //     }
+  //   }
+  // }
+}

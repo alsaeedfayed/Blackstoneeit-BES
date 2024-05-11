@@ -1,0 +1,95 @@
+@import "src/assets/css/utils/variables.scss";
+
+.meeting-card {
+  background-color: #f8f9ff;
+  padding: 0.75rem;
+  border: 0.0625rem solid #efefef;
+  border-radius: 0.625rem;
+  box-shadow: 0px 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+
+  &-title {
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+
+    a {
+      color: $black-color;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &-time {
+    background-color: rgba(172, 181, 193, 0.15);
+    color: $info_color;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    padding: 0.25rem 0.5rem;
+    border-radius: 2.5rem;
+  }
+
+  &-status {
+    display: block;
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 50%;
+  }
+
+  &-duration {
+    color: $info_color;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+  }
+  .icon-0 {
+    background-color: #ff7373;
+  }
+  //teams icon color
+  .icon-1 {
+    background-color: #0066ff;
+  }
+  &-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    color: $white-color;
+    font-size: 0.875rem;
+    border-radius: 50%;
+  }
+  .bg-draft {
+    --color: 150, 166, 189;
+    background-color: rgb(var(--color));
+  }
+  .bg-notDueYet {
+    --color: 41, 45, 50;
+    background-color: rgb(var(--color));
+  }
+  .bg-pendingMom {
+    --color: 235, 148, 0;
+    background-color: rgb(var(--color));
+  }
+  .bg-needMOMReview {
+    --color: 60, 166, 189;
+    background-color: rgb(var(--color));
+  }
+  .bg-momReviewed {
+    --color: 196, 214, 0;
+    background-color: rgb(var(--color));
+  }
+  .bg-complete {
+    --color: 15, 193, 97;
+    background-color: rgb(var(--color));
+  }
+
+  
+  
+
+ 
+}

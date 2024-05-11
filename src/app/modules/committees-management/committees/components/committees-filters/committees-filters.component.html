@@ -1,0 +1,44 @@
+<div class="committees-filters-container">
+  <div class="committees-filters" [formGroup]="form">
+
+    <!-- committee type select -->
+    <app-select
+      class="d-block"
+      formControlName="committeeType"
+      [control]="form | getControl: 'committeeType'"
+      [title]="'committeesRequests.advancedFilterModal.committeeType' | translate"
+      [placeholder]="'committeesRequests.advancedFilterModal.selectCommitteeType' | translate"
+      [items]="committeeTypes"
+      [bindVlaue]="'code'"
+      [bindLabel]="language == 'ar' ? 'nameAr' : 'nameEn'"
+      [clearable]="true"
+      (change)="changeFilter()"
+    ></app-select>
+
+    <div>
+      <label class="form-label">
+        {{ 'committeesRequests.advancedFilterModal.committeeChairman' | translate}}
+      </label>
+
+      <ng-select
+        class="input-select"
+        formControlName="chairman"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'committeesRequests.advancedFilterModal.selectCommitteeChairman' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        [closeOnSelect]="true"
+        (scrollToEnd)="loadMoreEmployees()"
+        (search)="searchEmployees($event)"
+        [loading]="gettingEmployees"
+        (focus)="onFocus()"
+        (change)="changeFilter()"
+      >
+        <ng-option *ngFor="let committeeChairman of committeeChairmans" [value]="committeeChairman?.id">
+          {{committeeChairman?.fullName}}
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.closureRateContainer {
+    // width: 426px;
+   // border: 1px solid rgb(227, 231, 233);
+    border-radius: .5rem;
+    align-items: center;
+    padding: 1rem;
+    background: #fff;
+    //box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.1);
+    height: 100%;
+
+    &-header {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 21px;
+        color: #3c557a;
+
+    }
+
+
+}

@@ -1,0 +1,343 @@
+<div>
+  <!-- <app-kpis-performance-status></app-kpis-performance-status> -->
+  <!-- <iframe> <app-kpis-performance-status></app-kpis-performance-status></iframe> -->
+  <!-- <button (click)="exportPng()">export</button> -->
+</div>
+<ng-container
+  *ngIf="
+    gettingTasksStatuses ||
+      gettingStatistics ||
+      gettingMeetings ||
+      gettingTasks;
+    else data
+  "
+>
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #data>
+  <div class="dashboard-container">
+    <!-- main content -->
+    <main class="dashboard-main">
+      <!-- main tasks status -->
+      <app-main-tasks-status
+        [language]="language"
+        [committeeId]="committeeId"
+      ></app-main-tasks-status>
+
+      <!-- kpis status -->
+      <app-kpis-performance-status
+        (destroyedChart)="destroyedChartt($event)"
+        [committeeId]="committeeId"
+      ></app-kpis-performance-status>
+
+      <!-- confirmed decisions  -->
+      <app-confirmed-decision
+        [language]="language"
+        [committeeId]="committeeId"
+      ></app-confirmed-decision>
+    </main>
+
+    <!-- sidebar -->
+
+    <aside class="dashboard-sidebar">
+      <div class="dashboard-sidebar-attendance-percantage mb-3">
+        <app-meetings-attendance-percantage
+          [language]="language"
+          [committeeId]="committeeId"
+        ></app-meetings-attendance-percantage>
+      </div>
+      <div class="content-block">
+        <h3 class="content-block-title mb-4">
+          {{ "committeeDashboard.nextSteps" | translate }}
+        </h3>
+
+        <!-- meetings header -->
+        <div
+          class="d-flex align-items-center justify-content-between gap-3 mb-2"
+        >
+          <h4 class="content-block-subtitle mb-0">
+            {{ "committeeDashboard.meetings.title" | translate }}
+          </h4>
+
+          <div class="content-block-length" *ngIf="meetings?.length > 0">
+            {{ meetings?.length | meetingCount : language }}
+          </div>
+        </div>
+
+        <!-- meetings list -->
+        <div
+          class="meetings-list"
+          *ngIf="meetings?.length > 0; else no_meetings"
+        >
+          <ng-container>
+            <meeting-card
+              *ngFor="let meeting of meetings | slice : 0 : 2"
+              class="d-block mt-4 mb-2"
+              [lang]="language"
+              [meeting]="meeting"
+              [committeeId]="committeeId"
+            ></meeting-card>
+          </ng-container>
+        </div>
+        <ng-template #no_meetings>
+          <p>{{ "committeeDashboard.meetings.noMeetings" | translate }}</p>
+        </ng-template>
+
+        <!-- tasks header -->
+        <div
+          class="d-flex align-items-center justify-content-between gap-3 mb-2"
+        >
+          <h4 class="content-block-subtitle mb-0">
+            {{ "committeeDashboard.tasks.title" | translate }}
+          </h4>
+        </div>
+
+        <!-- tasks list -->
+        <ul class="tasks-list" *ngIf="tasks?.length > 0; else no_tasks">
+          <li class="tasks-item d-flex flex-column" *ngFor="let task of tasks">
+            <div
+              class="d-flex align-items-center {{
+                task?.relatedGroups.length > 0
+                  ? 'justify-content-between'
+                  : 'justify-content-end'
+              }} gap-3 mb-3"
+            >
+              <div
+                class="tasks-item-type"
+                *ngIf="task?.relatedGroups.length > 0"
+              >
+                <app-badge
+                  [className]="'draft'"
+                  [label]="
+                    task?.relatedGroups | relatedGroups : lang | truncate : 25
+                  "
+                  [title]="task?.relatedGroups | relatedGroups : lang"
+                ></app-badge>
+              </div>
+
+              <ul class="tasks-item-meta d-flex align-items-center gap-3 m-0">
+                <li class="tasks-item-meta-item">
+                  <i class="bx bx-folder-open"></i>
+                  <span class="tasks-item-meta-count">
+                    {{ task?.attachmentsCount }}
+                  </span>
+                </li>
+                <li class="tasks-item-meta-item">
+                  <i class="bx bx-comment-dots"></i>
+                  <span class="tasks-item-meta-count">
+                    {{ task?.commentsCount }}
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- <h5 class="tasks-item-title mb-1">Write blog post on industry trends</h5> -->
+            <a
+              class="hoverableLink tasks-item-title mb-1"
+              (click)="openTaskDetailsModel(task)"
+            >
+              {{ language === "en" ? task?.title : task?.titleAr }}
+            </a>
+            <!-- <span class="tasks-item-date">30 Aug 2023</span> -->
+            <span class="tasks-item-date" *ngIf="task?.creationDate">
+              {{
+                language === "en"
+                  ? ((task?.creationDate | uTCToLocalDate).toLocaleString()
+                    | date : "d MMM y")
+                  : ((task?.creationDate | uTCToLocalDate).toLocaleString()
+                    | localizeDate : "d MMM y")
+              }}
+            </span>
+          </li>
+        </ul>
+        <ng-template #no_tasks>
+          <p>{{ "committeeDashboard.tasks.noTasks" | translate }}</p>
+        </ng-template>
+
+        <!-- poll header -->
+        <div
+          class="d-flex align-items-center justify-content-between gap-3 mb-2"
+        >
+          <h4 class="content-block-subtitle mb-0">
+            {{ "committeeDashboard.poll.title" | translate }}
+          </h4>
+          <!-- <div class="content-block-length">2 Active Polls</div> -->
+        </div>
+
+        <!-- poll list -->
+        <ul class="poll-list" *ngIf="polls?.length > 0; else no_polls">
+          <li
+            class="poll-item"
+            *ngFor="let poll of polls | slice : 0 : 2; let i = index"
+          >
+            <div
+              class="d-flex align-items-start justify-content-between gap-3 mb-1"
+            >
+              <div>
+                <h5 class="poll-item-title mb-1">
+                  {{ language == "en" ? poll.name : poll.nameAr }}
+                </h5>
+
+                <!-- <span class="poll-item-date" *ngIf="poll?.closingDate">
+                  {{
+                    language === "en"
+                      ? ((poll?.closingDate | uTCToLocalDate).toLocaleString()
+                        | date : "d MMM y")
+                      : ((poll?.closingDate | uTCToLocalDate).toLocaleString()
+                        | localizeDate : "d MMM y")
+                  }}
+                </span> -->
+              </div>
+
+              <!-- <div class="poll-item-time">
+                {{
+                  poll?.closingDate
+                    | meetingTimeLeft
+                      : poll?.closingDate
+                      : poll?.closingDate
+                      : language
+                }}
+              </div> -->
+            </div>
+
+            <div class="cVoting">
+
+              <div class="votingBar noVoting"  *ngIf="poll?.votingStatus == 0">
+                <app-voting-bar
+                  [vote]="{
+                    title: { en: 'Abstain', ar: 'أمتنع' },
+                    votersCount: 0,
+                    voterPercentage: 0,
+                    color: 'secondary'
+                  }"
+                  [language]="language"
+                ></app-voting-bar>
+              </div>
+              <app-voting-bar
+              *ngIf="poll?.votingStatus== 1"
+                class="votingBar"
+                [vote]="{
+                  title: { en: 'Yes', ar: 'نعم' },
+                  votersCount: poll?.yesCount,
+                  voterPercentage: poll?.yesPercentage,
+                  color: 'success'
+                }"
+                [language]="language"
+              ></app-voting-bar>
+
+                <app-voting-bar
+                *ngIf="poll?.votingStatus== 2"
+                  class="votingBar"
+                  [vote]="{
+                    title: { en: 'No', ar: 'لا' },
+                    votersCount: poll?.noCount,
+                    voterPercentage: poll?.noPercentage,
+                    color: 'danger'
+                  }"
+                  [language]="language"
+                ></app-voting-bar>
+
+              <!-- <vote-progress
+                *ngIf="poll.yesCount + poll.noCount > 0; else noVotes"
+                [users]="votersInfo[i]"
+                [percent]="poll.yesPercentage"
+                [color]="'#E4E2FC'"
+              ></vote-progress> -->
+
+              <ng-template #noVotes>
+                <P>{{ "committeeDashboard.poll.noVotes" | translate }}</P>
+              </ng-template>
+            </div>
+
+            <a
+              class="hoverableLink poll-item-details"
+              [routerLink]="
+                '/committees-management/committee/' +
+                committeeId +
+                '/decisions/' +
+                poll?.id
+              "
+            >
+              {{ "committeeDashboard.poll.details" | translate }}
+            </a>
+          </li>
+        </ul>
+        <ng-template #no_polls>
+          <p>{{ "committeeDashboard.poll.noPolls" | translate }}</p>
+        </ng-template>
+      </div>
+    </aside>
+  </div>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- task details modal -->
+<app-model
+  [dimensions]="{ width: isDetailsModelOpened ? 900 : 900, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+    <label class="modal-title" *ngIf="isDetailsModelOpened">
+      {{ "committeeTasks.detailsModel.title" | translate }}
+    </label>
+
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">
+      {{ "committeeTasks.detailsModel.title" | translate }}
+    </label>
+    <!-- change title  -->
+    <label class="modal-title" *ngIf="isUpdatingTask">
+      {{ "committeeTasks.updateTask" | translate }}
+    </label>
+    <!-- <label class="modal-title">{{ ( isDetailsModelOpened ? 'committeeTasks.detailsModel.title' :'committeeTasks.updateProgress.title') | translate }}</label> -->
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+    <task-details-model
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdate)="updateTask($event)"
+      (onDelete)="deleteTask()"
+    ></task-details-model>
+
+    <app-update-progress-model
+      *ngIf="isUpdateProgressModelOpened"
+      [task]="openedTask"
+      [language]="language"
+      (onBack)="openTaskDetailsModel(openedTask)"
+    ></app-update-progress-model>
+
+    <!-- edit mode task -->
+    <create-task-model
+      [taskId]="task?.id"
+      *ngIf="isUpdatingTask"
+      [committeeId]="committeeId"
+      (taskAdded)="onChangeHappened()"
+    ></create-task-model>
+
+    <!-- modal to confirm task deletion -->
+    <app-confirm-modal
+      [id]="'delete-task'"
+      [content]="confirmMsg"
+      [btnContent]="'shared.confirm' | translate"
+      [btnStyle]="'main'"
+      (confirm)="onDeleteTaskConfirmed()"
+    ></app-confirm-modal>
+  </div>
+</app-model>

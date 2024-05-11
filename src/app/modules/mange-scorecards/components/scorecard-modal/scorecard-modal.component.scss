@@ -1,0 +1,22 @@
+.wrapper {
+  .actions {
+    display: flex;
+    margin: 30px 0;
+    @media (max-width: 490px) {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    button {
+      &:first-child {
+        @media (max-width: 490px) {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+}
+
+.astrix-red {
+  color: red;
+}

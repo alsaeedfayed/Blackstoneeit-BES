@@ -1,0 +1,175 @@
+<div class="page">
+  <ng-container *ngIf="isLoadingData; else form_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- new committee form -->
+<ng-template #form_data>
+  <app-header-page
+    *ngIf="!isChanging"
+    [title]="'changeRequests.createTitle' | translate"
+    [showTotalItems]="false"
+  >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+      <!-- cancel button -->
+      <button class="btn btn-transparent" (click)="backToLastPage()">
+        {{ "shared.cancel" | translate }}
+      </button>
+
+      <!-- save draft button -->
+      <button
+        class="btn btn-info"
+        [disabled]="
+          sendingLoading || !isNameValid || !isReasonValid || isFileUploading
+        "
+        (click)="saveDraft()"
+      >
+        <i
+          *ngIf="sendingLoading || isFileUploading"
+          class="bx bx-loader-alt bx-spin ml-1"
+        ></i>
+        {{ "committeesNewRequest.saveDraft" | translate }}
+      </button>
+
+      <!-- send request button -->
+      <button
+        class="btn btn-main"
+        *ngIf="isLastTab"
+        [disabled]="
+          !isBasicInfoValid || sendingLoading || !isReasonValid || isFileUploading
+        "
+        (click)="sendRequestBtn()"
+      >
+        <i
+          *ngIf="sendingLoading || isFileUploading"
+          class="bx bx-loader-alt bx-spin ml-1"
+        ></i>
+        {{ "committeesNewRequest.sendRequest" | translate }}
+      </button>
+
+      <!-- next button -->
+      <button
+        *ngIf="!isLastTab"
+        [disabled]="isFileUploading"
+        class="btn btn-dark d-flex justify-content-around"
+        (click)="activeNextTab()"
+      >
+        {{ "shared.next" | translate }}
+        <i
+          *ngIf="!isFileUploading"
+          class="bx bx-right-arrow-alt m-0 {{
+            language == 'ar' ? 'bx-rotate-180' : ''
+          }}"
+        ></i>
+        <i *ngIf="isFileUploading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      </button>
+    </div>
+  </app-header-page>
+
+  <div class="d-flex flex-column gap-2" [formGroup]="form">
+    <!-- modify reason and description -->
+    <div class="new-committee-form">
+      <!-- change request details block -->
+      <div class="change-request-details">
+        <div class="change-request-details-reason">
+          <div style="flex-grow: 1">
+            <label
+              style="
+                color: #717986;
+                font-weight: 300;
+                font-size: 16px;
+                line-height: 19px;
+                letter-spacing: 0.02em;
+                margin-bottom: 10px;
+              "
+              for="reason"
+            >
+              {{ "changeRequests.crReason" | translate }}
+              <span style="color: red">*</span>
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="reason"
+              formControlName="reason"
+            />
+          </div>
+
+          <div style="flex-grow: 1; margin-top: 1rem">
+            <label
+              style="
+                color: #717986;
+                font-weight: 300;
+                font-size: 16px;
+                line-height: 19px;
+                letter-spacing: 0.02em;
+                margin-bottom: 10px;
+              "
+              for="desc"
+            >
+              {{ "changeRequests.crDescription" | translate }}
+            </label>
+            <!-- <textarea rows="30" class="form-control" id="desc" type="text" formControlName="CRDescription" > -->
+            <textarea
+              style="height: 8rem !important"
+              class="form-control"
+              name="desc"
+              id="desc"
+              rows="5"
+              formControlName="description"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="change-request-details-msg-content my-2 mx-2">
+        {{ "committeeDetails.changeRequestMsg" | translate }}
+      </p>
+    </div>
+  </div>
+</ng-template>
+<!-- basic info -->
+<app-committee-creation-basic-info
+  class="mt-2"
+  [isCommitteeChangeRequest]="true"
+  [id]="requestId"
+  [nextTab]="toNextTabFlag"
+  [language]="language"
+  [isRequestUpdating]="isUpdating"
+  (isValid)="checkBasicInfoValidation($event)"
+  (currentTab)="checkTab($event)"
+  (isNameValid)="checkNameValidation($event)"
+  (isFileUploading)="checkFileUploading($event)"
+  (getBasicInfo)="getCommitteeBasicInfo($event)"
+  (isLoadingData)="checkLoadingData($event)"
+  (changeRequestReasonData)="getReasonData($event)"
+></app-committee-creation-basic-info>
+
+<!-- loader skeleton for the header -->
+<ng-template #headerSkeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- loader skeleton for the form -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- modal to confirm request sending -->
+<app-confirm-modal
+  [id]="'send-request'"
+  [content]="'committeesNewRequest.confirmMsg' | translate"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="sendRequest()"
+></app-confirm-modal>

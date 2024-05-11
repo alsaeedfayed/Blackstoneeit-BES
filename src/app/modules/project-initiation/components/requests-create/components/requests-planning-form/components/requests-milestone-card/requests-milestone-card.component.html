@@ -1,0 +1,174 @@
+<div
+  class="milestone-card mb-4"
+  [ngClass]="{ 'd-flex': mode === 'milestones-list' }"
+>
+  <div class="inner row">
+    <ng-container *ngIf="mode === 'milestones-list'">
+      <div class="card-options">
+        <app-dropdown
+          *ngIf="!readonly"
+          [items]="cardActions"
+          (select)="onDropDownSelect($event)"
+        ></app-dropdown>
+      </div>
+
+      <div class="card-details-col col-4 d-flex">
+        <div class="mr-2">
+          <circle-progress
+            [percent]="data?.weight"
+            [radius]="45"
+            [space]="-10"
+            [outerStrokeGradient]="false"
+            [outerStrokeWidth]="10"
+            [outerStrokeColor]="'#3c81fb'"
+            [innerStrokeColor]="'#d2daff'"
+            [innerStrokeWidth]="10"
+            [animateTitle]="false"
+            [animationDuration]="1000"
+            [showUnits]="true"
+            [showBackground]="false"
+            [clockwise]="false"
+            [startFromZero]="false"
+            [lazy]="false"
+            [showTitle]="true"
+            [showSubtitle]="false"
+            [unitsFontSize]="18"
+            [titleFontSize]="18"
+            [unitsFontWeight]="400"
+            [titleFontWeight]="400"
+            [title]="'auto'"
+            [titleColor]="'#353535'"
+            [unitsColor]="'#353535'"
+          ></circle-progress>
+        </div>
+
+        <div>
+          <h3 class="col-title">{{ data?.name[lang] || data?.name }}</h3>
+          <div>
+            <span class="col-date" *ngIf="data?.dueDate">
+              {{ "initiationForm.dueDate" | translate }} :
+              {{ data?.dueDate | date : "dd/MM/yyyy" }}
+            </span>
+            <span class="col-date" *ngIf="!data?.dueDate">
+              {{ "initiationForm.dueDate" | translate }} :
+              {{ "shared.N/A" | translate }}
+            </span>
+          </div>
+          <div>
+            <span class="col-date" *ngIf="data?.cost">
+              {{ "initiationForm.cost" | translate }} :
+              {{ "shared.AED" | translate }} {{ data?.cost | number}}
+            </span>
+            <span class="col-date" *ngIf="!data?.cost">
+              {{ "initiationForm.cost" | translate }} :
+              {{ "shared.AED" | translate }} 0
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-details-col col-4">
+        <h3 class="col-title">
+          {{ "initiationForm.deliverables" | translate }}
+        </h3>
+        <ul>
+          <li *ngFor="let deliverable of data?.deliverables">
+            {{ deliverable[lang] || deliverable?.title[lang] }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-details-col col-3">
+        <h3 class="col-title">{{ "initiationForm.tasks" | translate }}</h3>
+        <ul>
+          <li *ngFor="let task of data?.tasks">
+            {{ task[lang] || task?.name[lang] }}
+          </li>
+        </ul>
+        <p class="empty-state" *ngIf="data?.tasks?.length === 0">
+          {{ "initiationForm.tasksEmptyText" | translate }}
+        </p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="mode === 'template-list'">
+      <div class="row mb-4">
+        <div class="card-details-col col-6">
+          <h3 class="col-title mb-0">{{ data?.name[lang] }}</h3>
+          <div>
+            <span class="col-date" *ngIf="data?.dueDate">
+              {{ "initiationForm.dueDate" | translate }} :
+              {{ data?.dueDate | date : "dd/MM/yyyy" }}
+            </span>
+            <span class="col-date" *ngIf="!data?.dueDate">
+              {{ "initiationForm.dueDate" | translate }} :
+              {{ "shared.N/A" | translate }}
+            </span>
+          </div>
+          <div>
+            <span class="col-date" *ngIf="data?.cost">
+              {{ "initiationForm.cost" | translate }} :
+              {{ "shared.AED" | translate }} {{ data?.cost | number}}
+            </span>
+            <span class="col-date" *ngIf="!data?.cost">
+              {{ "initiationForm.cost" | translate }} :
+              {{ "shared.AED" | translate }} 0
+            </span>
+          </div>
+        </div>
+
+        <div class="card-details-col col-6">
+          <div class="d-flex h-100 w-100 align-items-center">
+            <div class="w-100">
+              <app-progress-bar
+                [data]="{
+                  progress: data?.weight ? data?.weight : 0,
+                  label: lang === 'en' ? 'Weight' : 'الوزن'
+                }"
+              ></app-progress-bar>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card-details-col col-6 template">
+          <h3 class="col-title grey-label">
+            {{ "initiationForm.deliverables" | translate }} ({{
+              data?.deliverables?.length
+            }})
+          </h3>
+          <ul>
+            <li *ngFor="let deliverable of data?.deliverables">
+              {{
+                deliverable?.title
+                  ? deliverable?.title[lang]
+                  : deliverable[lang]
+              }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-details-col col-6">
+          <h3 class="col-title grey-label">
+            {{ "initiationForm.tasks" | translate }} ({{ data?.tasks?.length }})
+          </h3>
+          <ul>
+            <li *ngFor="let task of data?.tasks">
+              {{ task?.name ? task?.name[lang] : task[lang] }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="d-flex flex-column" *ngIf="data?.description">
+    <label for="" class="form-label">
+      {{ "initiationForm.description" | translate }}
+    </label>
+    <p>
+      {{ data?.description[lang] ? data?.description[lang] : data.description }}
+    </p>
+  </div>
+</div>

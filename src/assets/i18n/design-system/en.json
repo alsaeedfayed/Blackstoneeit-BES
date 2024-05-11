@@ -1,0 +1,29 @@
+{
+  "designSystem": {
+    "weight":"Weight",
+    "target":"Target",
+    "filter": "Filter",
+    "clearAllFilter": "Clear All Filters",
+    "close": "Close",
+    "search": "Search",
+    "export": "Export",
+    "yes": "Yes",
+    "no": "No",
+    "views": {
+      "list": "List View",
+      "cards": "Cards View",
+      "tree": "Tree View",
+      "expandAll": "Expand All",
+      "collapseAll": "Collapse All",
+      "map": "Map View",
+      "calendar": "Calendar View"
+    },
+    "attachments": {
+      "change": "Change",
+      "delete": "Delete",
+      "download": "Download",
+      "overSize": "the max file size is {{size}} mb",
+      "hint": "Hint: Maximum allowed file size is {{size}} MB and supported types are {{types}}."
+    }
+  }
+}

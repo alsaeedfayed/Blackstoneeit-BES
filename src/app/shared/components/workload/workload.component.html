@@ -1,0 +1,25 @@
+<table class="table table-borderless">
+  <thead>
+    <tr>
+      <!-- <ng-container *ngFor="let col of colsData; let i = index">
+        <th scope="col" class="header-text">
+          {{ language === "en" ? col.header : col?.headerAr }}
+        </th>
+      </ng-container> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let record of workLoadData; let i = index">
+      <td *ngFor="let key of colsData; let j = index" class="tasks-count">
+        <span scope="row" class="d-flex" *ngIf="j == 0">
+          <person-item
+            *ngIf="record[key?.userField]"
+            [requesterItem]="record[key?.userField]"
+            [noCursor]="true"
+          ></person-item>
+        </span>
+        <span *ngIf="j != 0">{{ record[key.field1] }}</span>
+      </td>
+    </tr>
+  </tbody>
+</table>

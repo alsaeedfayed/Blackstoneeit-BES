@@ -1,0 +1,117 @@
+<div class="new-model-dialog-body">
+  <div class="addGoal-wrapper py-3">
+
+    <!-- Informative -->
+    <div class="wrapperInformative" *ngIf="model.getInformativeMode">
+      <goal-info
+        (setData)="model.setInfoData($event)"
+        (setGoalTypeEvent)="model.setMode($event)"
+        (setPrevAtachmentEvent)="model.setPrevAtachment($event)"
+        (chnageModeEvent)="model.setChnageMode($event)"
+        [selectedType]="model.selectedType"
+        [scorecardId]="model.scoreCardId"
+        [isChnageMode]="model.isChangeModeInfo"
+        [ShowParents]="model.showParents"
+        [Parents]="model.parents"
+      ></goal-info>
+    </div>
+
+    <!-- Measurable -->
+    <div class="wrapperMeasurable" *ngIf="model.getMeasurableMode">
+      <stepper [steps]="model.steps" [activeStep]="model.activeStep">
+        <div class="step" [ngStyle]="{ display: model.activeStep === 1 ? 'block' : 'none' }">
+          <goal-info
+            (setData)="model.setInfoData($event)"
+            (setPrevAtachmentEvent)="model.setPrevAtachment($event)"
+            (setGoalTypeEvent)="model.setMode($event)"
+            [selectedType]="model.selectedType"
+            [scorecardId]="model.scoreCardId"
+            [isChnageMode]="model.isChangeModeInfo"
+            [ShowParents]="model.showParents"
+            [Parents]="model.parents"
+            #goalInfo
+          ></goal-info>
+        </div>
+
+        <div class="step" [ngStyle]="{ display: model.activeStep === 2 ? 'block' : 'none' }">
+          <target-frequency (setFreqData)="model.setFreqData($event)"></target-frequency>
+        </div>
+      </stepper>
+    </div>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <ng-container *ngIf="!model.isShowOnlyDetails">
+
+    <!-- back button -->
+    <button
+      *ngIf="model.getMeasurableMode || model.getInformativeMode"
+      class="btn btn-dark flex-grow-1"
+      (click)="model.onPopupCancel()"
+    >
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- previous button -->
+    <button
+      *ngIf="model.getMeasurableMode && model.activeStep > 1"
+      class="btn btn-secondary flex-grow-1"
+      (click)="model.activeStep = model.activeStep - 1"
+    >
+      {{ "shared.previous" | translate }}
+    </button>
+
+    <!-- next button -->
+    <button
+      *ngIf="model.getMeasurableMode && model.activeStep == 1"
+      class="btn btn-main flex-grow-1"
+      (click)="model.onNextStep()"
+    >
+      {{ "shared.next" | translate }}
+    </button>
+
+    <!-- save button -->
+    <button
+      *ngIf="model.getInformativeMode || (model.getMeasurableMode && model.activeStep == 2)"
+      class="btn btn-main flex-grow-1"
+      [disabled]="model.isBtnLoading"
+      (click)="model.onPopupSave()"
+    >
+      <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="model.isBtnLoading"></i>
+      {{ "shared.save" | translate }}
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="model.isShowOnlyDetails">
+
+    <!-- back button -->
+    <button
+      *ngIf="model.getMeasurableMode || model.getInformativeMode"
+      class="btn btn-dark flex-grow-1"
+      (click)="model.onPopupCancel()"
+    >
+      {{ "shared.back" | translate }}
+    </button>
+
+    <!-- previous button -->
+    <button
+      *ngIf="model.getMeasurableMode && model.activeStep > 1"
+      class="btn btn-secondary flex-grow-1"
+      (click)="model.activeStep = model.activeStep - 1"
+    >
+      {{ "shared.previous" | translate }}
+    </button>
+
+    <!-- next button -->
+    <button
+      *ngIf="model.getMeasurableMode && model.activeStep == 1"
+      class="btn btn-main flex-grow-1"
+      (click)="model.onNextStep()"
+    >
+      {{ "shared.next" | translate }}
+    </button>
+  </ng-container>
+</div>

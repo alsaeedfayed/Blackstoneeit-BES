@@ -1,0 +1,52 @@
+.level {
+  min-height: 460px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding-top: 30px;
+
+  .blue {
+    background: #00A9FF;
+  }
+
+  .green {
+    background: #42D87E;
+  }
+
+  .yellow {
+    background: yellow;
+
+  }
+
+  .red {
+    background: #F45050;
+  }
+  .goal-title {
+    color: #121824;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    border-inline-start: 1px solid #EFEFEF;
+    display: flex;
+    align-items: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .group-status-badge {
+    margin-top: 14px;
+  }
+
+  hr {
+    height: 34px;
+    border-radius: 10px 0 0 10px;
+    opacity: 1;
+  }
+  ::ng-deep .badge-status{
+    min-width: 4rem !important;
+    margin-inline-end: 10px;
+  }
+}
+

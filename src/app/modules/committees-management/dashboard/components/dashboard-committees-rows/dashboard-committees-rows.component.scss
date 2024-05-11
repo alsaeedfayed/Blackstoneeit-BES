@@ -1,0 +1,139 @@
+@import "src/assets/css/utils/variables.scss";
+@import "src/assets/css/utils/mixins.scss";
+
+
+.assigned-to{
+  .progress-bar {
+    position: relative;
+    height: 0.25rem;
+    background-color: #ebedef;
+    border-radius: 0.625rem;
+    overflow: hidden;
+
+    .fill {
+      display: block;
+      position: absolute;
+      top: 0;
+      @include rtl_value(left, 0, auto);
+      @include rtl_value(right, auto, 0);
+      height: 100%;
+      width: 0%;
+      background-color: #ffa800;
+    }
+
+    .none {
+      background: linear-gradient(to right, #808080, #b6b6b6);
+    }
+
+    .half {
+      background: linear-gradient(to right, #FFA800, #FFCC6A);
+
+    }
+
+    .afterHalf {
+      background: linear-gradient(to right, #840AFF, #B75BD8);
+    }
+
+    .done {
+      background: linear-gradient(to right, #52AF31, #3ED126);
+    }
+  }
+
+  .percentage {
+    color: $black-color;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+  }
+}
+
+
+
+.table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    --id-width: 50px;
+    width: 100%;
+
+    .id {
+      width: var(--id-width);
+    }
+
+    .committee-name {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 40%);
+    }
+
+    .created-by {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 40%);
+    }
+
+    .assigned-to {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 20%);
+    }
+
+    .committee-type {
+      width: 200px;
+    }
+
+    .created-on {
+      width: 200px;
+    }
+
+    .committee-chairman {
+      // width: calc((100% - (var(--id-width) + var(--actions-width))) * 40%);
+    }
+
+    .status {
+      width: 190px;
+    }
+  }
+}
+
+.list-button {
+  font-size: 18px;
+  background: transparent;
+  border: 0;
+}
+
+.edit-icons {
+  height: 40px;
+  width: 40px;
+  border-radius: 5px;
+  border: 0;
+  font-size: 22px;
+  background-color: #00db99;
+  color: #fff;
+}
+
+::ng-deep app-badge {
+  .badge-status::before {
+    display: none;
+  }
+
+  .highActive {
+   // rgb(15, 193, 97)
+   --color: 15, 193, 97;
+   color: rgb(var(--color));
+   background-color: rgba(15, 193, 97, 0.078);
+  }
+
+  .lowActive {
+    // rgb(150, 166, 189)
+
+    color: orange;
+    background-color : #fdf2de
+  }
+
+  .NotActive {
+    // rgb(255, 115, 115)
+    --color: 255, 115, 115;
+    color: rgb(var(--color));
+    background-color: rgba(var(--color), 0.08);
+  }
+
+  padding: 0 27px;
+
+
+
+}

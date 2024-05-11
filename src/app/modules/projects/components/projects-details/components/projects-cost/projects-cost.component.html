@@ -1,0 +1,241 @@
+<h3 class="form-title mb-3">{{ "projects.summary" | translate }}</h3>
+
+<!-- analytics widgets -->
+<div class="analytics-widgets mb-4">
+  <div class="analytics-widgets-items">
+    <div class="stats-card">
+      <div class="card-label">
+        <img src="assets/icons/dollar-sign.svg" alt="" />
+        <span>{{ "projects.projectBudget" | translate }}</span>
+      </div>
+      <span class="card-value">
+        {{ "shared.AED" | translate }}
+        {{ costStats?.paidStatus?.projectBudget | number }}
+      </span>
+    </div>
+
+    <div class="stats-card">
+      <div class="card-label">
+        <img src="assets/icons/dollar-sign.svg" alt="" />
+        <span>{{ "projects.paidInvoicesTotal" | translate }}</span>
+      </div>
+      <span class="card-value">
+        {{ "shared.AED" | translate }}
+        {{ costStats?.paidStatus?.paidInvoices | number}}
+      </span>
+    </div>
+
+    <div class="stats-card">
+      <div>
+        <div class="card-label">
+          <img src="assets/icons/dollar-sign.svg" alt="" />
+          <span>{{ "projects.unpaidInvoicesTotal" | translate }}</span>
+        </div>
+        <div class="d-flex align-items-center justify-content-center gap-2">
+          <span class="card-value">
+            {{ "shared.AED" | translate }}
+            {{ costStats?.paidStatus?.unpaidInvoices | number }}
+          </span>
+          <img src="assets/icons/Graph.svg" alt="" />
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="stats-card">
+      <div class="amounts">
+        <span>
+          {{ "shared.AED" | translate }}
+          {{ costStats?.paidStatus?.unpaidOverdue | number }}
+        </span>
+        <span>
+          {{ "shared.AED" | translate }}
+          {{ costStats?.paidStatus?.unpaidNotDue | number }}
+        </span>
+      </div>
+      <div class="stats-card-progress">
+        <div class="labels">
+          <span>{{ "projects.overdue" | translate }}</span>
+          <span>{{ "projects.notDueYet" | translate }}</span>
+        </div>
+        <div class="bar">
+          <div
+            [ngStyle]="{
+              width:
+                (costStats?.paidStatus?.unpaidOverdue /
+                  projectData?.budget) *
+                  100 +
+                '%'
+            }"
+            class="highlighted"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- charts -->
+<div class="chart-container mb-4">
+  <div class="chart-header">
+    <span class="label">{{ "projects.cashBalance" | translate }}</span>
+    <div class="keys">
+      <div class="key">
+        <div class="dot"></div>
+        <span>{{ "projects.planned" | translate }}</span>
+      </div>
+      <div class="key">
+        <div class="dot"></div>
+        <span>{{ "projects.actual" | translate }}</span>
+      </div>
+    </div>
+  </div>
+  <canvas class="my-chart" id="myChart" #myChart></canvas>
+</div>
+
+<!-- filters -->
+<div class="filters d-flex align-items-center flex-wrap gap-3 mb-4" *ngIf="!isFilterDisplayed">
+  <app-select
+    [placeholder]="'shared.status' | translate"
+    [items]="invoiceStatusList"
+    [bindVlaue]="'name'"
+    [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+    [clearable]="true"
+    (change)="onStatusSelect($event)"
+  ></app-select>
+
+  <!-- <app-select
+    class="mr-auto"
+    [placeholder]="'shared.sortBy' | translate"
+    [items]="sortItems"
+    [bindVlaue]="'name'"
+    [bindLabel]="lang == 'ar' ? 'nameAr' : 'name'"
+    (change)="onSort($event)"
+  ></app-select> -->
+
+  <app-search
+    [searchKey]="searchModel.keyword"
+    [searchPlaceHolder]="'projects.searchInvoices' | translate"
+    (search)="onSearch($event)"
+  ></app-search>
+</div>
+
+<!-- table header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="form-title mb-0">{{ "projects.invoicesList" | translate }}</h3>
+
+  <button
+    *ngIf="(isPmo || projectData?.hasPMPrivilege) && !projectData?.isProjectClosed"
+    (click)="onCreateInvoice()"
+    class="btn btn-main"
+  >
+    <i class="bx bx-plus"></i>
+    {{ "projects.createInvoice" | translate }}
+  </button>
+</div>
+
+<!-- table of items -->
+<div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">{{ "projects.invoiceNumber" | translate }}</th>
+        <th scope="col">{{ "projects.dueDate" | translate }}</th>
+        <th scope="col">{{ "shared.createdBy" | translate }}</th>
+        <th scope="col">{{ "projects.amount" | translate }}</th>
+        <th scope="col">{{ "shared.status" | translate }}</th>
+        <th scope="col">{{ "projects.relatedTo" | translate }}</th>
+        <th scope="col">{{ "projects.attachments" | translate }}</th>
+        <!-- <th scope="col">{{'projects.lastUpdateDate' | translate}}</th> -->
+        <!-- <th scope="col">{{ "shared.actions" | translate }}</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="
+          let item of invoicesList
+            | paginate
+              : {
+                  itemsPerPage: searchModel?.pageSize,
+                  currentPage: searchModel?.page,
+                  totalItems: invoicesTotal
+                };
+          let i = index
+        "
+      >
+        <td>
+          {{ item?.number }}
+        </td>
+        <td>
+          {{
+            lang === "en" ?
+            ((item?.date | uTCToLocalDate) | date : "dd/MM/yyyy") :
+            ((item?.date | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+          }}
+        </td>
+        <td>
+          <person-item
+            *ngIf="item?.createdBy"
+            [ownerItem]="item?.createdBy"
+            [CompMode]="2"
+            [noCursor]="true"
+            [isUserCardFixed]="true"
+          ></person-item>
+        </td>
+        <td>{{ "shared.AED" | translate }} {{ item?.amount | number}}</td>
+        <td>
+          <span *ngIf="item?.isPaid" class="project-card-status-badge primary">
+            {{ "projects.paid" | translate }}
+          </span>
+          <span *ngIf="!item?.isPaid" class="project-card-status-badge warning">
+            {{ "projects.unpaid" | translate }}
+          </span>
+        </td>
+        <td>
+          <ul>
+            <li *ngFor="let deliverable of item?.deliverables">
+              - {{ deliverable?.title[lang] }}
+            </li>
+          </ul>
+        </td>
+        <td [attr.colspan]="!item?.isPaid && (isPmo || projectData?.hasPMPrivilege) ? '' : '2'">
+          <div class="attachment" *ngFor="let doc of item?.attachments">
+            <i class="bx bx-file"></i>
+            <a target="_blank" (click)="openFile(doc?.fileName)">
+              {{ doc?.fileName?.slice(0, 15) }}
+              <span *ngIf="doc?.fileName?.length > 15">...</span>
+            </a>
+          </div>
+
+          <span *ngIf="item?.attachments?.length === 0">
+            {{ "shared.N/A" | translate }}
+          </span>
+        </td>
+        <td class="text-end" *ngIf="!item?.isPaid && (isPmo || projectData?.hasPMPrivilege)">
+          <div class="d-flex justify-content-end align-items-center h-100">
+            <app-dropdown
+              [items]="invoiceOptions"
+              (select)="onOptionSelect($event, item)"
+            ></app-dropdown>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-empty-state
+  *ngIf="invoicesList?.length === 0"
+  class="d-block my-4"
+  [title]="'projects.noInvoicesYet' | translate"
+></app-empty-state>
+
+<pagination-controls
+  *ngIf="invoicesList?.length !== 0 && invoicesTotal > searchModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>

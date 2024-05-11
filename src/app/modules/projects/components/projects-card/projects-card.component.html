@@ -1,0 +1,86 @@
+<div class="card-defaults project-card" [routerLink]="'/projects/' + projectData?.id">
+  <div class="project-card-title-col">
+    <div>
+      <h3 class="project-title">
+        {{
+          projectData?.name[lang]?.length < 100 ?
+          projectData?.name[lang] :
+          projectData?.name[lang]?.slice(0, 100) + '...'
+        }}
+      </h3>
+      <div class="project-types">
+        <div class="type" *ngFor="let type of projectData?.types; let i = index; let last = last">
+          <span>{{ type?.title[lang] }}</span>
+          <div class="separator" *ngIf="!last"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="project-card-submitted-tag" *ngIf="projectData?.hasSubmittedDeliverables">{{ 'projects.submittedDeliverables' | translate }}</div> -->
+  </div>
+
+  <div class="project-card-col stat">
+    <span class="project-card-status-badge"
+      [ngClass]="{
+        primary: projectData?.status?.title?.en === 'On Track',
+        danger: projectData?.status?.title?.en === 'Off Track',
+        'closed': projectData?.status?.title?.en === 'Closed',
+        'started': projectData?.status?.title?.en === 'Not Started'
+      }"
+    >
+      {{ projectData?.status?.title[lang] }}
+    </span>
+    <div class="project-card-status-badge submitted" *ngIf="projectData?.hasSubmittedDeliverables">
+      {{ 'projects.submittedDeliverables' | translate }}
+    </div>
+  </div>
+
+  <div class="project-card-stats-col">
+    <div class="card-stats-box">
+      <div class="card-stats">
+        <span class="count">{{ projectData?.tasksCount }}</span>
+        <span class="count-label">{{ 'projects.tasks' | translate }}</span>
+      </div>
+      <div class="separator"></div>
+      <div class="card-stats">
+        <span class="count">{{ projectData?.deliverablesCount }}</span>
+        <span class="count-label">{{ 'projects.deliverables' | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-card-date-col min-width-10">
+    <span class="date-label">{{ 'projects.dueDate' | translate }}</span>
+    <span class="date">
+      {{
+        lang === "en" ?
+        (projectData?.endDate | date : "dd/MM/yyyy") :
+        (projectData?.endDate | localizeDate : "dd/MM/yyyy")
+      }}
+    </span>
+  </div>
+
+  <div class="project-card-col">
+    <div class="w-100">
+      <app-progress-bar [data]="{progress: projectData.progress, label: progressLabel}"></app-progress-bar>
+    </div>
+  </div>
+
+  <div class="project-card-user-col" *ngIf="projectData?.manager">
+    <person-item
+      [ownerItem]="projectData?.manager"
+      [CompMode]="2"
+      [noCursor]="true"
+      [hasUserCard]="false"
+    ></person-item>
+  </div>
+
+  <div class="sideline"
+    [ngClass]="{
+      primary: projectData?.status?.title?.en === 'On Track',
+      danger: projectData?.status?.title?.en === 'Off Track',
+      'closed': projectData?.status?.title?.en === 'Closed' ,
+      'started': projectData?.status?.title?.en === 'Not Started'
+    }"
+  ></div>
+</div>

@@ -1,0 +1,41 @@
+<div class="overall-summary">
+
+    <div class="noGroup" *ngIf="!selectedScoreCardId">
+        <img src="assets/img/no-data.png" />
+        <p>{{ 'performanceDashboard.noScorecards' | translate}}</p>
+    </div>
+
+    <div class="data" *ngIf="selectedScoreCardId">
+
+        <ng-container *ngIf="perTypesLoading; else data">
+            <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+        </ng-container>
+        
+        <ng-template #data>
+            <!-- Levels Performance -->
+            <!-- <div class="levels-performance">
+                <levels-performance [data]="goalTypesData"></levels-performance>
+            </div> -->
+
+            <!-- Analytics -->
+            <div class="analytics">
+                <dashboard-analytics [data]="analysisWidgetsData"></dashboard-analytics>
+            </div>
+
+            <!-- Data Breakdown -->
+            <div class="data-breakdown">
+                <data-breakdown [data]="performanceBreakdownData"></data-breakdown>
+            </div> 
+        </ng-template>
+    </div>
+</div>
+
+<ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,64 @@
+@import "src/assets/css/utils/variables.scss";
+
+.stage-label {
+    font-weight: normal;
+    font-size: 18px;
+    color: $black_color;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.display-contents ::ng-deep .dropdown-menu.show {
+    // transform: translate(0px, 90px) !important;
+    width: 100% !important;
+}
+
+.modal-seperator {
+    margin: 18px 0;
+    opacity: 1;
+    background-color: rgba(222, 222, 222, 0.2);
+    ;
+}
+
+.state-title {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.modal-language-switch {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    right: 0;
+    font-size: 16px;
+    font-weight: 500;
+
+    button {
+        background-color: transparent;
+        border: none;
+        color: $link_water_color;
+
+        &.active {
+            color: $primary-color;
+        }
+
+        &.error {
+            color: $danger-color;
+        }
+    }
+
+    .language-switch-seperator {
+        color: $link_water_color;
+    }
+}
+
+input[type="radio"] {
+    width: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

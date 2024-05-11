@@ -1,0 +1,34 @@
+<div class="tasks-filters-container">
+  <div class="tasks-filters" [formGroup]="form">
+
+    <!-- status select -->
+    <div>
+      <label class="form-label">
+        {{ "bau.bauTasks.filters.priority" | translate }}
+        <span class="opacity-0">*</span>
+      </label>
+
+      <ng-select
+        formControlName="importanceLevel"
+        class="input-select"
+        [ngClass]="{ valid: (form | getControl : 'importanceLevel')?.valid }"
+        [dir]="language === 'en' ? 'ltr' : 'rtl'"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="'bau.bauTasks.filters.selectPriority' | translate"
+        [notFoundText]="'shared.noItemsFound' | translate"
+        (change)="setImportanceLevelValue($event)"
+      >
+        <ng-option
+          *ngFor="let item of importanceLevel"
+          [value]="item?.id"
+        >
+          <app-badge
+            [className]="item?.className"
+            [label]="language == 'ar' ? item['nameAr'] : item['name']"
+          ></app-badge>
+        </ng-option>
+      </ng-select>
+    </div>
+  </div>
+</div>

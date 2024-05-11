@@ -1,0 +1,12 @@
+:host ::ng-deep .form-group{
+  margin-top: 0px !important;
+  input{
+    height: 54px !important;
+  }
+}
+::ng-deep{
+  .input-select.ng-select .ng-select-container {
+    height: 54px !important;
+  }
+
+}

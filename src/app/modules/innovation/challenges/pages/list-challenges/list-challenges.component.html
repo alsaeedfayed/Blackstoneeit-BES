@@ -1,0 +1,104 @@
+<app-header-page
+  [title]="'challenges.title' | translate"
+  [backButton]="true"
+  [showTotalItems]="false"
+  [showButtons]="true"
+  [isAddBtn]="true"
+  [titleBtn]="'challenges.add' | translate"
+  (btnClick)="navigateToAdd()"
+></app-header-page>
+<div class="widgets">
+  <div class="row">
+    <div class="col-lg-3 col-sm-6 col-12">
+      <app-stats-widget
+        [id]="'total_challenges'"
+        [count]="analytics.totalChallenges"
+        [title]="'challenges.analytics.totalChallenges' | translate"
+        [icon]="'bx bx-user'"
+        [type]="'default'"
+      ></app-stats-widget>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12">
+      <app-stats-widget
+        [id]="'total_ideas'"
+        [count]="analytics.totalIdeas"
+        [title]="'challenges.analytics.totalIdeas' | translate"
+        [icon]="'isax isax-task-square'"
+        [type]="'default'"
+      ></app-stats-widget>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12">
+      <app-stats-widget
+        [id]="'new_challenges'"
+        [count]="analytics.newChallenges"
+        [title]="'challenges.analytics.newChallenges' | translate"
+        [icon]="'isax isax-task-square'"
+        [type]="'default'"
+      ></app-stats-widget>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-12">
+      <app-stats-widget
+        [id]="'resolved_challenges'"
+        [count]="analytics.resolvedChallenges"
+        [title]="'challenges.analytics.resolvedChallenges' | translate"
+        [icon]="'isax isax-people'"
+        [type]="'default'"
+      ></app-stats-widget>
+    </div>
+  </div>
+</div>
+<!-- page filters -->
+<app-page-filters
+  [searchPlaceHolder]="'challenges.searchPlaceholder' | translate"
+  [hasAssignedSwitch]="false"
+  [assignedSwitchId]="'onlyMe'"
+  [assignedSwitchLabel]="'challenges.onlyMe' | translate"
+  [hasAdvancedFilter]="true"
+  (onClear)="clearFilter()"
+  (onSearchBtnCLicked)="filter()"
+  (search)="search($event)"
+>
+  <app-challenge-filter (formValue)="setFilterValues($event)" [emptyFilter]="emptyFilter"></app-challenge-filter>
+</app-page-filters>
+<!-- challenges cards -->
+<div class="challenges">
+  <ng-container *ngIf="loading; else challenge_cards">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+<ng-template #challenge_cards>
+  <div class="row">
+    <ng-container *ngFor="let challenge of challenges | paginate: config">
+      <div class="col-12">
+        <app-challenge-card [challenge]="challenge"></app-challenge-card>
+      </div>
+    </ng-container>
+    <!-- numeric pagination controls -->
+    <pagination-controls
+      *ngIf="config.totalItems > config.itemsPerPage"
+      (pageChange)="paginateChallenges($event)"
+      class="my-pagination"
+      maxSize="5"
+      id="advanced"
+      responsive="true"
+      [previousLabel]="'shared.prev' | translate"
+      [nextLabel]="'shared.next' | translate"
+    ></pagination-controls>
+    <div class="no-data" *ngIf="challenges?.length == 0 || !challenges">
+      <app-no-data [msg]="'challenges.notData' | translate"></app-no-data>
+    </div>
+  </div>
+</ng-template>
+<!--<app-ag-table [data]="data"></app-ag-table>-->
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader class="mt-2" mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+  <app-skeleton-loader mode="card"></app-skeleton-loader>
+</ng-template>

@@ -1,0 +1,81 @@
+<ul class="board-tasks-cols">
+  <li *ngFor="let taskStatusCol of allTasks ; let i=index "
+    class="board-tasks-col"
+    (dragover)="dropzoneDragOver($event)"
+    (dragleave)="dropzoneDragLeave($event)"
+    (drop)="dropzoneDropCards($event)"
+    [id]="'status-col-' + i"
+  >
+    <!-- column head -->
+    <div class="board-tasks-col-head">
+      <strong class="col-name">{{ language =='en' ? statuses[i]['name']: statuses[i]['nameAr'] }}</strong>
+      <span class="col-count">{{taskStatusCol.length}}</span>
+    </div>
+
+    <!-- column cards -->
+    <div
+      class="board-tasks-col-dropzone"
+      (dragover)="dropzoneDragOver($event)"
+      (dragleave)="dropzoneDragLeave($event)"
+      (drop)="dropzoneDropCards($event)"
+    ></div>
+
+    <!--  cards -->
+    <ng-container *ngFor="let task of taskStatusCol; let j=index ">
+      <app-board-task-card [id]="task?.id"
+        tabindex="0"
+        draggable="true"
+        [lang]="language"
+       [task]="task"
+        (dragstart)="cardDragStart($event,task?.id,j)"
+        (click)="openTaskDetailsModel(task)"
+        (keyup.enter)="openTaskDetailsModel(task)"
+      ></app-board-task-card>
+      <div
+        class="board-tasks-col-dropzone"
+        (dragover)="dropzoneDragOver($event)"
+        (dragleave)="dropzoneDragLeave($event)"
+        (drop)="dropzoneDropCards($event)"
+      ></div>
+    </ng-container>
+  </li>
+</ul>
+
+<!-- task details modal -->
+<app-model
+
+  [dimensions]="{ width: isDetailsModelOpened ? 900: 500, height: 750 }"
+  [id]="'task-models'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="task-details-model-header w-100">
+    <label class="modal-title" *ngIf="isDetailsModelOpened">{{'bau.bauTasks.detailsModel.title' | translate }}</label>
+
+    <label class="modal-title" *ngIf="isUpdateProgressModelOpened">{{'bau.bauTasks.detailsModel.title' | translate }}</label>
+
+
+  </div>
+
+  <div modal-content class="task-details-model-content border-top">
+
+    <app-task-details-modal
+      *ngIf="isDetailsModelOpened"
+      [taskId]="openedTask.id"
+      (onUpdateProgress)="updateTaskProgress($event)"
+      (onUpdateStatus)="updateTaskStatus($event)"
+    ></app-task-details-modal>
+
+    <app-update-task-progress-modal
+    *ngIf="isUpdateProgressModelOpened"
+    [task]="openedTask"
+    [language]="language"
+    (onBack)="openTaskDetailsModel(openedTask)"
+    (onUpdate)="onUpdateTaskProgress()"
+  ></app-update-task-progress-modal>
+
+
+  </div>
+</app-model>

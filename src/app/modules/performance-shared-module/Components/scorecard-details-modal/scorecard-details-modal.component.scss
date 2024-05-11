@@ -1,0 +1,19 @@
+@import "src/assets/css/utils/variables.scss";
+
+.basic-scorecard-information {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 15px 0;
+
+  .info {
+    min-width: 50%;
+    display: flex;
+    gap: 15px;
+
+    h5 {
+      color: $black-color;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+}

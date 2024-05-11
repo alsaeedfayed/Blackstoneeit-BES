@@ -1,0 +1,78 @@
+@import "src/assets/css/utils/variables.scss";
+
+.cards-grid-container {
+  container: cards-grid / inline-size;
+}
+
+.cards-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 0;
+
+  @container cards-grid (min-width: 750px) {
+    & {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &-item {
+    background-color: #ffffff;
+    padding: 1.25rem;
+    border: 0.0625rem solid #efefef;
+    border-radius: 0.625rem;
+    box-shadow: 0rem 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+    container: card-item / inline-size;
+
+    .group-details {
+      display: grid;
+      gap: 1.5rem 2rem;
+
+      @container card-item (min-width: 400px) {
+        & {
+          grid-template-columns: 2fr 1fr 1fr;
+        }
+      }
+
+      @container card-item (max-width: 399px) {
+        & {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+
+    &-title {
+      color: $info_color;
+      font-weight: 500;
+      font-size: 0.75rem;
+
+      + .cards-grid-item-content {
+        margin-top: 0.375rem;
+      }
+    }
+
+    &-content {
+      color: $black-color;
+      line-height: 1.25rem;
+      font-weight: 500;
+    }
+
+    .group-title {
+      color: $black-color;
+      line-height: 1.25rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .group-members {
+      .cards-grid-item-content {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+      }
+
+      .members-count {
+        white-space: nowrap;
+      }
+    }
+  }
+}

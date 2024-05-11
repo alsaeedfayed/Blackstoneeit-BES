@@ -1,0 +1,19 @@
+<div class="wrapper">
+  <h5 *ngIf="title">
+    {{ title }}
+
+    <span *ngIf="isRequired" class="astrix-red">*</span>
+  </h5>
+  <div class="checkboxes">
+    <div class="check">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
+
+<!-- <app-checkbox
+class="d-block"
+[title]="isArLang() ? opt.valueAr : opt.value | translate"
+[(ngModel)]="opt.selected"
+(change)="setData($event,opt)"
+></app-checkbox> -->

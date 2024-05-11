@@ -1,0 +1,55 @@
+<ng-container *ngIf="stateData?.transitions.length == 0">
+<div class="nodata-container">
+  <app-no-data [msg]="noDataMsg"></app-no-data>
+</div>
+
+</ng-container>
+
+<ul *ngIf="stateData?.transitions.length > 0">
+    <li *ngFor="let item of stateData?.transitions" class="d-flex">
+        <div class="transition-wrapper d-flex">
+          <span *ngIf="item?.roles" class="role-name">{{ item?.roles ? (language == 'en' ? item?.roles[0]?.name : item?.roles[0]?.nameAr) : '' }}</span>
+          <span class="title-name">{{item?.title[language]}}</span>
+          <span class="d-flex span-wrapper">
+            <!-- <div class="first-dot"></div> -->
+            <span class="title-name-small">{{item?.title[language]}}</span>
+            <svg width="17" height="8" viewBox="0 0 17 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 3.71796C0.723858 3.71796 0.5 3.94181 0.5 4.21796C0.5 4.4941 0.723858 4.71796 1 4.71796V3.71796ZM16.3536 4.57151C16.5488 4.37625 16.5488 4.05967 16.3536 3.8644L13.1716 0.682423C12.9763 0.48716 12.6597 0.48716 12.4645 0.682423C12.2692 0.877685 12.2692 1.19427 12.4645 1.38953L15.2929 4.21796L12.4645 7.04638C12.2692 7.24165 12.2692 7.55823 12.4645 7.75349C12.6597 7.94875 12.9763 7.94875 13.1716 7.75349L16.3536 4.57151ZM1.5 4.71796C1.77614 4.71796 2 4.4941 2 4.21796C2 3.94181 1.77614 3.71796 1.5 3.71796V4.71796ZM3.5 3.71796C3.22386 3.71796 3 3.94181 3 4.21796C3 4.4941 3.22386 4.71796 3.5 4.71796V3.71796ZM4.5 4.71796C4.77614 4.71796 5 4.4941 5 4.21796C5 3.94181 4.77614 3.71796 4.5 3.71796V4.71796ZM6.5 3.71796C6.22386 3.71796 6 3.94181 6 4.21796C6 4.4941 6.22386 4.71796 6.5 4.71796V3.71796ZM7.5 4.71796C7.77614 4.71796 8 4.4941 8 4.21796C8 3.94181 7.77614 3.71796 7.5 3.71796V4.71796ZM9.5 3.71796C9.22386 3.71796 9 3.94181 9 4.21796C9 4.4941 9.22386 4.71796 9.5 4.71796V3.71796ZM10.5 4.71796C10.7761 4.71796 11 4.4941 11 4.21796C11 3.94181 10.7761 3.71796 10.5 3.71796V4.71796ZM12.5 3.71796C12.2239 3.71796 12 3.94181 12 4.21796C12 4.4941 12.2239 4.71796 12.5 4.71796V3.71796ZM13.5 4.71796C13.7761 4.71796 14 4.4941 14 4.21796C14 3.94181 13.7761 3.71796 13.5 3.71796V4.71796ZM15.5 3.71796C15.2239 3.71796 15 3.94181 15 4.21796C15 4.4941 15.2239 4.71796 15.5 4.71796V3.71796ZM1 4.71796H1.5V3.71796H1V4.71796ZM3.5 4.71796H4.5V3.71796H3.5V4.71796ZM6.5 4.71796H7.5V3.71796H6.5V4.71796ZM9.5 4.71796H10.5V3.71796H9.5V4.71796ZM12.5 4.71796H13.5V3.71796H12.5V4.71796ZM15.5 4.71796H16V3.71796H15.5V4.71796Z" fill="#DEE2E7"/>
+              </svg>
+              <!-- <div class="second-dot"></div> -->
+              <span class="span-label">{{item?.label[language]}}</span>
+          </span>
+          <span class="option-code">{{item?.option?.code}}</span>
+
+            <!-- <span>option title: {{item?.option?.title[language]}}</span> -->
+            <!-- <span>authorizationType name:{{item?.authorizationType?.title[language]}} </span> -->
+        </div>
+       <div class="transition-setting-center">
+        <app-dropdown
+        [items]="cardActions"
+        (select)="onTransitionOptionsSelect($event, item)"
+      ></app-dropdown>
+       </div>
+    </li>
+</ul>
+
+
+  <!-- footer button -->
+  <div class="new-model-dialog-footer">
+    <button
+      class="btn btn-main flex-grow-1"
+      [disabled]="form.invalid"
+      (click)="addNewTrans()">
+      <!-- <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin ml-1"></i> -->
+      {{ "stateTransitions.form.addTransition" | translate }} {{'+'}}
+    </button>
+  </div>
+  
+
+  <app-confirm-modal
+  [id]="'delete-transition'"
+  [content]="deleteConfirmMsg"
+  [btnContent]="'shared.delete' | translate"
+  [btnStyle]="'main'"
+  (confirm)="delete()"
+ ></app-confirm-modal>

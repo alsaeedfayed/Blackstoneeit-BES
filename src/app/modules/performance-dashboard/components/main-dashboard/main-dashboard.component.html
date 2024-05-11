@@ -1,0 +1,52 @@
+<div class="main-dashboard">
+    
+    <div class="noGroup" *ngIf="!selectedScoreCardId">
+        <img src="assets/img/no-data.png" />
+        <p>{{ 'performanceDashboard.noScorecards' | translate}}</p>
+    </div>
+    
+    <div class="data" *ngIf="selectedScoreCardId">
+        <!-- Performance -->
+        <div class="performance">
+            <div class="to-date">
+                <ng-container *ngIf="perTodateLoading; else todateData">
+                    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+                </ng-container>
+                <ng-template #todateData>
+                    <performance-to-date [data]="performanceToDateData"></performance-to-date>
+                </ng-template>
+            </div>
+            <div class="evaluation">
+                <ng-container *ngIf="perEvaluationLoading; else evaluationData">
+                    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+                </ng-container>
+                <ng-template #evaluationData>
+                    <performance-evaluation [data]="performanceEvaluationData"></performance-evaluation>
+                </ng-template>
+            </div>
+        </div>   
+        <!-- Types -->
+        <div class="types">
+            <ng-container *ngIf="perTypesLoading; else typesData">
+                <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+            </ng-container>
+            <ng-template #typesData>
+                <!-- Analytics -->
+                <div class="analytics">
+                    <dashboard-analytics [data]="analysisWidgetsData"></dashboard-analytics>
+                </div>   
+                <!-- Levels Performance -->
+                <div class="levels-performance">
+                    <levels-performance [data]="goalTypesData"></levels-performance>
+                </div>  
+            </ng-template>
+        </div>    
+    </div>
+</div>
+
+<ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

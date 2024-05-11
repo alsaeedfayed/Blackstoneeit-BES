@@ -1,0 +1,44 @@
+.filters-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+   // justify-content: right;
+
+    &-filters {
+        // width: 70%;
+        // display: flex;
+        // justify-content: right;
+        // align-items: center;
+
+        &-label {
+            color: #8b8b8b;
+            font-weight: 400;
+            font-size: 14px;
+            margin-inline-end: 10px;
+        }
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+    .filters-container {
+        justify-content: center;
+    }
+
+    .filters-container-filters {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filters-container-filters-col {
+        margin-bottom: .5rem;
+    }
+}
+
+.buttons {
+    display: flex;
+    margin-top: 10px;
+    button {
+        width: 100px !important;
+        min-width: 100px !important;
+    }
+}

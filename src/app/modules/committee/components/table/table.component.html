@@ -1,0 +1,162 @@
+<div class="req-table mt-4">
+  <div class="req-table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="committee-index">#</th>
+          <th scope="col">
+            <div>
+              {{ "committee.name" | translate }}
+            </div>
+          </th>
+          <th scope="col">
+            <div>
+              {{ "committee.nameAr" | translate }}
+            </div>
+          </th>
+          <th scope="col">
+            <div>
+              {{ "committee.chairman" | translate }}
+            </div>
+          </th>
+          <th scope="col">
+            <div>
+              {{ "committee.members" | translate }}
+            </div>
+          </th>
+          <th scope="col">
+            <div>
+              {{ "committee.creationDate" | translate }}
+            </div>
+          </th>
+          <th scope="col">
+            <div>
+              {{ "committee.lastUpdate" | translate }}
+            </div>
+          </th>
+          <th scope="col">
+            <div>
+              {{ "committee.status" | translate }}
+            </div>
+          </th>
+          <th scope="col" class="committee-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems: totalCount ?? 10
+                  };
+            let i = index
+          ">
+          <td class="committee-index">
+            {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+          </td>
+          <td>{{ item?.name }}</td>
+          <td>{{ item?.nameAr }}</td>
+          <td>
+            <div *ngIf="item != null && item.chairmanInfo != null">
+              <person-item [requesterItem]="item.chairmanInfo"></person-item>
+            </div>
+          </td>
+          <td>{{ item?.membersCount }}</td>
+          <td>
+            {{
+              lang === "en" ?
+              ((item?.creationDate | uTCToLocalDate) | date: "dd/MM/yyyy") :
+              ((item?.creationDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <td>
+            {{
+              lang === "en" ?
+              ((item?.updatedDate | uTCToLocalDate) | date: "dd/MM/yyyy") :
+              ((item?.updatedDate | uTCToLocalDate) | localizeDate : "dd/MM/yyyy")
+            }}
+          </td>
+          <td>
+            <div class="action-status">
+              <app-badge
+                *ngIf="!item.isInactive"
+                [className]="'active'"
+                [label]="'committee.active' | translate"
+              ></app-badge>
+              <app-badge
+                *ngIf="item.isInactive"
+                [className]="'rejected'"
+                [label]="'committee.isInactive' | translate"
+              ></app-badge>
+            </div>
+          </td>
+          <td class="committee-actions">
+            <div *ngIf="getItems(item) && getItems(item).length > 0">
+              <app-dropdown (select)="onOptionSelect($event, item)" [items]="getItems(item)"></app-dropdown>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<pagination-controls
+  *ngIf="totalCount > paginationModel?.pageSize"
+  (pageChange)="onPaginate($event)"
+  class="my-pagination"
+  maxSize="5"
+  responsive="true"
+  [previousLabel]="'shared.prev' | translate"
+  [nextLabel]="'shared.next' | translate"
+></pagination-controls>
+
+<!-- update committee model -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'committee-item'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeCommitteeModel()"
+>
+  <div modal-header class="commitee-model-header w-100">
+    <label class="modal-title">
+      {{ 'committee.update' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="commitee-model-content border-top">
+    <commitee-modal
+      *ngIf="isShowForm"
+      [id]="id"
+      (submitted)="submitted()"
+    ></commitee-modal>
+  </div>
+</app-model>
+
+<app-confirm-modal
+  [id]="'deactivate-committee'"
+  [content]="deactivateConfirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="deactivate()"
+></app-confirm-modal>
+
+<app-confirm-modal
+  [id]="'activate-committee'"
+  [content]="activateConfirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="activate()"
+></app-confirm-modal>
+
+<app-confirm-modal
+  [id]="'delete-committee'"
+  [content]="deleteConfirmMsg"
+  [btnContent]="'shared.delete' | translate"
+  [btnStyle]="'main'"
+  (confirm)="delete()"
+></app-confirm-modal>

@@ -1,0 +1,67 @@
+::ng-deep .reading-block {
+  font-size: 26px !important;
+  transform: translateY(73px) !important;
+  font-weight: 500 !important;
+}
+
+.committee-performance {
+  &-attendance-rate {
+    display: flex;
+    flex-grow: 1;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+    background-color: #fff;
+    height: 207px;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    &-icon {
+      position: absolute;
+      right: 46%;
+      top: 3.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &-kpi-performance {
+    display: flex;
+    flex-grow: 1;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+    background-color: #fff;
+    height: 207px;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    &-icon {
+      position: absolute;
+      right: 46.5%;
+      top: 3.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &-task-progress {
+    display: flex;
+    flex-grow: 1;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+    background-color: #fff;
+    height: 207px;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    &-icon {
+      position: absolute;
+      right: 46.5%;
+      top: 3.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

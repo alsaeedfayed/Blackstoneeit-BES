@@ -1,0 +1,94 @@
+<div class="department-level-performance" *ngIf="_data.length > 0">
+  <div class="title">
+    <strong>{{'performanceDashboard.departmentLevelPerformance' | translate}}</strong>
+    <!-- <div class="data">
+        <div class="item">
+            <div class="rectangle first"></div>
+            <span>{{'performanceDashboard.Actual' | translate}}</span>
+        </div>
+        <div class="item">
+            <div class="rectangle second"></div>
+            <span>{{'performanceDashboard.Target' | translate}}</span>
+        </div>
+        <div class="item">
+            <div class="rectangle third"></div>
+            <span>{{'performanceDashboard.performance' | translate}}</span>
+        </div>
+    </div> -->
+  </div>
+  <div class="chart d-none">
+    <canvas id="myLevelChart" #myLevelChart></canvas>
+  </div>
+  <ng-container *ngFor="let goal of _data">
+    <div class="chart-item row w-100">
+        <span class="col-2 group-status-badge" *ngIf="goal?.status != null">
+<!--            <span class=" d-inline-block">-->
+          <!--                        <app-badge *ngIf="goal?.status != null && goal?.status == status.OffTrack"-->
+          <!--                                   [className]="'offTrack'"-->
+          <!--                                   [label]="getLabel('offTrack')"></app-badge>-->
+          <!--          <app-badge *ngIf="goal?.status != null && goal?.status == status.OnTrack" [className]="'onTrack'"-->
+          <!--                     [label]="getLabel('onTrack')"></app-badge>-->
+          <!--          <app-badge *ngIf="goal?.status != null && goal?.status == status.OverAcheived" [className]="'overAchived'"-->
+          <!--                     [label]="getLabel('overAchived')"></app-badge>-->
+          <!--          <app-badge *ngIf="goal?.status != null && goal?.status == status.BaseLine" [className]="'baseLine'"-->
+          <!--                     [label]="getLabel('baseLine')"></app-badge>-->
+          <!--          <app-badge *ngIf="goal?.status != null && goal?.status == status.NotDue" [className]="'notDue'"-->
+          <!--                     [label]="getLabel('notDue')"></app-badge>-->
+          <!--            </span>-->
+
+
+        </span>
+      <div class="item-progress-bar col-6 pt-2  d-flex justify-content-end align-items-center">
+        <span class="mx-4">{{goal._Performance | number:'1.0-0'}}%</span>
+        <hr [style.width]="goal._Performance * 4 + 'px'" [style.min-width]="goal._Performance * 4 + 'px'"
+            [ngClass]="setCssClass(goal._Performance)" align="right" [ngbTooltip]="tipContent"/>
+        <ng-template #tipContent>
+          <div class="">
+            <b>{{'performanceDashboard.performance' | translate}} :  {{goal._Performance | number:'1.1-1'}}</b>,
+            <b>{{'performanceDashboard.Actual' | translate}}:    {{goal._Actual | number:'1.1-1'}}</b>,
+            <b>{{'performanceDashboard.Target' | translate}}: {{   goal._Target | number:'1.1-1'}}</b>
+          </div>
+        </ng-template>
+      </div>
+      <span class=" pt-2 col goal-title">
+        <span class="d-inline-block goal-title">{{lang == 'en' ? goal.group.name : goal.group.arabicName}}</span>
+  </span>
+    </div>
+  </ng-container>
+
+
+</div>
+
+<div class="widgets row" *ngIf="_data.length > 0">
+  <div class="col-4 col-md-4 col-xs-12" *ngFor="let item of _data">
+    <div class="data">
+      <div class="widget-title">
+        {{lang == 'ar' ? item?.group?.arabicName : item?.group?.name }}
+      </div>
+      <div class="performace-percentage">
+        <p class="number">{{item.performance | number : "1.1-1"}} %</p>
+        <p class="title">{{'performanceDashboard.performance' | translate}}</p>
+      </div>
+
+      <div class="items">
+        <div class="item">
+          <span>{{"performanceDashboard.Actual" | translate}}</span>
+          <span class="percent">{{item.actual | number : "1.1-1"}} %</span>
+          <ngb-progressbar type="success" [value]="item.actual ?? 0"></ngb-progressbar>
+        </div>
+
+        <div class="item">
+          <span>{{"performanceDashboard.Target" | translate}}</span>
+          <span class="percent">{{item.target | number : "1.1-1"}} %</span>
+          <ngb-progressbar type="secondary" [value]="item.target ?? 0"></ngb-progressbar>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="noData" *ngIf="_data.length == 0">
+  <img src="assets/img/no-data.png"/>
+  <p>{{ 'shared.noData' | translate}}</p>
+</div>

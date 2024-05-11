@@ -1,0 +1,188 @@
+.container {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  height: auto;
+}
+
+.sector-performance-container {
+  width: 69%;
+  &-header {
+    &-mainTasks {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      color: #c1c1c1;
+    }
+    &-tasks {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      color: #0066ff;
+    }
+  }
+}
+
+
+
+
+.block-title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 30px;
+  color: #7a838f;
+}
+.block-title-inner{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 30px;
+  color: #7a838f;
+}
+
+.spent-inner{
+  font-weight: 500;
+  font-size: 14px;
+  color: rgb(237, 162, 91) ;
+
+}
+
+.total-inner{
+  font-weight: 500;
+  font-size: 14px;
+  color: #0066FF;
+}
+
+.tasks-table-btn{
+  outline: none;
+  background-color: #EBEDEF;
+  border: 1px solid #EBEDEF;
+  padding: 6px, 15px;
+  border-radius: 8px;
+  color: #292D32;
+  font-weight: 400;
+}
+
+.active{
+  color: #fff;
+  background-color: #000000;
+}
+
+.scrollable{
+  height: 27rem;
+  overflow-y: scroll;
+}
+::ng-deep {
+  .workload-section {
+    margin-top: unset !important;
+  }
+
+  .workload-section .table th {
+    font-weight: 600 !important;
+    font-size: 15px;
+
+  }
+
+   .table {
+    border-radius: 0px !important;
+    background-color: #fff;
+  }
+}
+
+.containerr {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  height: auto;
+}
+
+
+.no-data {
+  min-height: 230px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.no-dataunit{
+  min-height: 230px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-top: 20px;
+}
+.no-data-list{
+  min-height: 330px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-filters{
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.searchBtn {
+  background-color: #5271ff;
+  color: #fff;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12px;
+    min-width: 77px;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.15s ease-in-out;
+}
+
+.workloadbody{
+  margin-left: -1rem;
+}
+
+
+.unit-performance  {
+  max-height: 30rem;
+  min-height: 30rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.bestcont-container{
+  width: 30%;
+  max-height: 30rem;
+  min-height: 30rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.tasks-status-container {
+  width: 50%;
+}
+.rolescoverages-container{
+  max-height: 27rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 49%;
+}
+
+
+@media screen and (max-width: 1114px) {
+  .sector-performance-container{
+    width: 100%;
+  }
+  .bestcont-container{
+    width: 100%;
+  }
+
+  .tasks-status-container {
+    width: 100%;
+  }
+  .rolescoverages-container{
+    width: 100%;
+  }
+}

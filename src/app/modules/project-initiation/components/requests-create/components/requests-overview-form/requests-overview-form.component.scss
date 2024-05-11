@@ -1,0 +1,180 @@
+@import "src/assets/css/utils/variables.scss";
+
+.step-content-container {
+  container: step-content / inline-size;
+
+  .step-content-grid {
+    display: grid;
+    gap: 1.5rem;
+
+    @container step-content (min-width: 700px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @container step-content (max-width: 700px) {
+      & {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  .project-overview {
+    background: $white-color;
+    padding: 1.25rem;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+    border-radius: 0.625rem;
+  }
+
+  .project-details {
+    &-title {
+      color: $info_color;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0 0 0.5rem;
+    }
+
+    &-content {
+      color: $black-color;
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.25rem !important;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      list-style-type: disc;
+      padding-inline-start: 1rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .project-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 31px;
+  color: #3c557a;
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+
+.priority-card {
+  background: #ffffff;
+  border: 1px solid #cbcbcb;
+  border-radius: 8px;
+  padding: 11px 17px;
+  min-width: 218px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .btn-link {
+    padding: 0;
+    height: fit-content;
+    min-height: unset;
+  }
+
+  .priority-label {
+    font-weight: 500;
+    font-size: 12.8696px;
+    line-height: 15px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+
+    &.low {
+      color: #fbc103;
+    }
+
+    &.medium {
+      color: #ff6e5a;
+    }
+
+    &.high {
+      color: #ff285c;
+    }
+  }
+
+  .priority-bar {
+    margin-bottom: 10px;
+  }
+
+  .priority-empty-state-label {
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 11.6275px;
+    line-height: 14px;
+    letter-spacing: 0.02em;
+    color: #888fa7;
+  }
+}
+
+.priority-options-container {
+  .priority-option {
+    position: relative;
+
+    label {
+      height: 54px !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #cbcbcb;
+      box-shadow: 0px 2px 15px rgba(125, 125, 125, 0.05);
+      border-radius: 8px;
+      color: #717986;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    input {
+      width: 0;
+      top: 0;
+      left: 0;
+      position: absolute;
+      opacity: 0;
+
+      &:checked + label {
+        color: $main-color;
+        border-color: $main-color;
+      }
+    }
+  }
+}
+
+::ng-deep ngb-typeahead-window {
+  width: 100% !important;
+  max-height: 250px;
+  overflow-y: auto;
+
+  button:hover,
+  button.active {
+    background-color: $main-color !important;
+  }
+}
+
+.astrix-red {
+  color: red;
+}
+
+.clone-btn{
+  width: 100%;
+  justify-content: flex-end;
+  margin-top: 50px; 
+  button{
+background-color: #5271ff;    
+  }
+}

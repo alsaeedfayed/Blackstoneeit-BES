@@ -1,0 +1,67 @@
+<div class="milestone-progress-container">
+  <div class="header">
+    <span class="title">{{ "dashboard.weeklyMilestoneProgress" | translate }}</span>
+    <app-filter-dropdown>
+    </app-filter-dropdown>
+  </div>
+  <div class="days">
+    <ul>
+      <li class="active">{{ "dashboard.monday" | translate }}</li>
+      <li>{{ "dashboard.tuesday" | translate }}</li>
+      <li>{{ "dashboard.wednesday" | translate }}</li>
+      <li>{{ "dashboard.thursday" | translate }}</li>
+      <li>{{ "dashboard.friday" | translate }}</li>
+      <li>{{ "dashboard.saturday" | translate }}</li>
+      <li>{{ "dashboard.sunday" | translate }}</li>
+    </ul>
+  </div>
+  <div class="timeline">
+    <ul>
+      <li>
+        <div class="project-name">
+          <span>Ajman Citizens Portal</span>
+          <span class="project-card-status-badge secondary">Closed</span>
+        </div>
+        <div class="project-milestone">
+          <div class="box secondary" [ngStyle]="{'left': 30 + '%'}">
+            Milestone 3 name will be shown here
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="project-name">
+          <span>eSupply - The official supply portal</span>
+          <span class="project-card-status-badge primary">On Track</span>
+        </div>
+        <div class="project-milestone">
+          <div class="box primary" [ngStyle]="{'left': 20 + '%'}">
+            Milestone 3 name will be shown here
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="project-name active">
+          <span>Portal - University of Dubai</span>
+          <span class="project-card-status-badge danger">Delayed</span>
+        </div>
+        <div class="project-milestone">
+          <div class="box danger" [ngStyle]="{'left': 40 + '%'}">
+            Milestone 3 name will be shown here
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="project-name">
+          <span>Ajman Citizens Portal</span>
+          <span class="project-card-status-badge warning">In Progress</span>
+        </div>
+        <div class="project-milestone">
+          <div class="box warning" [ngStyle]="{'left':0 + '%'}">
+            Milestone 3 name will be shown here
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>

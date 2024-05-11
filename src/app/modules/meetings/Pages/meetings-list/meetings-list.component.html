@@ -1,0 +1,310 @@
+<div class="wrapper">
+  <app-header-page
+    [title]="'Meetings.mintsOfMeeting' | translate"
+    [totalItems]="totalCount"
+    [backButton]="true"
+    [titleBtn]="'Meetings.newMeeting' | translate"
+    (btnClick)="navigateToAddMeetingPage()"
+  ></app-header-page>
+
+  <!-- analytics widgets -->
+  <meetings-analytics
+    class="d-block mb-4"
+    [items]="structuredStatistics"
+    [loading]="loadingMeetings"
+  ></meetings-analytics>
+
+  <!-- page filters -->
+  <app-page-filters
+    [searchValue]="queryParams?.search"
+    [hasAssignedSwitch]="true"
+    [assignedSwitchId]="'onlyMe'"
+    [assignedSwitchLabel]="'Meetings.onlyMe' | translate"
+    [assignedSwitchValue]="queryParams?.onlyMe"
+    [hasAdvancedFilter]="true"
+    [popupAdvancedFilter]="true"
+    [appliedFiltersCount]="queryParams?.appliedFiltersCount"
+    [hasExportBtn]="true"
+    [isDownloading]="isDownloading"
+    (onSwitch)="handleOnlyMeFilter($event)"
+    (search)="handleSearchFilter($event)"
+    (onExportBtnClicked)="export()"
+    (onOpenAdvancedFilterModel)="openAdvancedFilterPopup()"
+  ></app-page-filters>
+
+  <!-- Meetings List -->
+  <div class="list mt-4">
+
+    <!-- Meetings Filter -->
+    <div class="meeting-filters">
+      <div class="left-filters">
+        <!-- Date Filer -->
+        <div class="filter">
+          <label for="data">{{ "shared.date" | translate }}</label>
+          <!-- <app-datepicker
+            [allowPastDate]="true"
+            (getSelectedDate)="handleDateFilter($event)"
+          ></app-datepicker> -->
+          <app-date-range
+            [dir]="language === 'en' ? 'ltr' : 'rtl'"
+            (ngChange)="handleDateFilter($event)"
+            [value]="dateRange.startDate ? dateRange : null"
+          ></app-date-range>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="filter">
+          <label class="label-select">{{ "shared.status" | translate }}</label>
+          <app-select
+            [placeholder]="'shared.all' | translate"
+            [bindLabel]="'label'"
+            [items]="status"
+            [multiple]="false"
+            [clearable]="true"
+            [dropdownPosition]="'bottom'"
+            (change)="handleStatusesFilter($event)"
+            [(ngModel)]="queryParams.status"
+          ></app-select>
+        </div>
+        <!-- CreatedBy Filter -->
+        <!-- <div class="filter">
+          <label class="label-select">{{
+            "Meetings.createdBy" | translate
+          }}</label>
+          <app-select
+            bindValue="id"
+            [search]="true"
+            [placeholder]="'shared.all' | translate"
+            [bindLabel]="'fullName'"
+            [items]="users"
+            [clearable]="true"
+            [multiple]="false"
+            (change)="handleCreatedByFilter($event)"
+          >
+          </app-select>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Meetings Table -->
+    <div class="meetings-table" *ngIf="!loadingMeetings && meetings && meetings.length > 0">
+      <div class="meetings-table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">
+                <div class="sortable-row" (click)="sort('number')">
+                  #
+                  <div class="sort-icon" [ngClass]="{
+                    'sort-up': queryParams?.sortedCol && queryParams?.sortedCol == 'number' && ascMode,
+                    'sort-down': queryParams?.sortedCol && queryParams?.sortedCol == 'number' && DescMode
+                  }">
+                    <i class='bx bxs-up-arrow'></i>
+                    <i class='bx bxs-down-arrow'></i>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="sortable-row" (click)="sort('title')">
+                  {{ "Meetings.meetingTitle" | translate }}
+                  <div class="sort-icon" [ngClass]="{
+                    'sort-up': queryParams?.sortedCol && queryParams?.sortedCol == 'title' && ascMode,
+                    'sort-down': queryParams?.sortedCol && queryParams?.sortedCol == 'title' && DescMode
+                  }">
+                    <i class='bx bxs-up-arrow'></i>
+                    <i class='bx bxs-down-arrow'></i>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="sortable-row" (click)="sort('date')">
+                  {{ "Meetings.date&time" | translate }}
+                  <div class="sort-icon" [ngClass]="{
+                    'sort-up': queryParams?.sortedCol && queryParams?.sortedCol == 'date' && ascMode,
+                    'sort-down': queryParams?.sortedCol && queryParams?.sortedCol == 'date' && DescMode
+                  }">
+                    <i class='bx bxs-up-arrow'></i>
+                    <i class='bx bxs-down-arrow'></i>
+                  </div>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="sortable-row" (click)="sort('status')">
+                  {{ "shared.status" | translate }}
+                  <div class="sort-icon" [ngClass]="{
+                    'sort-up': queryParams?.sortedCol && queryParams?.sortedCol == 'status' && ascMode,
+                    'sort-down': queryParams?.sortedCol && queryParams?.sortedCol == 'status' && DescMode
+                  }">
+                    <i class='bx bxs-up-arrow'></i>
+                    <i class='bx bxs-down-arrow'></i>
+                  </div>
+                </div>
+              </th>
+              <!-- <th scope="col">{{ "Meetings.progress" | translate }}</th> -->
+              <th scope="col">{{ "Meetings.createdBy" | translate }}</th>
+              <th scope="col">
+                <div class="sortable-row" (click)="sort('attendeesCount')">
+                  {{ "Meetings.attendees" | translate }}
+                  <div class="sort-icon" [ngClass]="{
+                    'sort-up': queryParams?.sortedCol && queryParams?.sortedCol == 'attendeesCount' && ascMode,
+                    'sort-down': queryParams?.sortedCol && queryParams?.sortedCol == 'attendeesCount' && DescMode
+                  }">
+                    <i class='bx bxs-up-arrow'></i>
+                    <i class='bx bxs-down-arrow'></i>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="meeting-actions">
+                {{ "Meetings.actions" | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="
+                let meeting of meetings
+                  | paginate
+                    : {
+                        itemsPerPage: paginationModle?.pageSize,
+                        currentPage: paginationModle?.pageIndex,
+                        totalItems: totalCount
+                      }
+              ">
+              <!-- Id -->
+              <td>
+                <a [routerLink]="'details/' + meeting.id" class="hoverableLink">{{ meeting.number }}</a>
+              </td>
+              <!-- Meeting Title -->
+              <td>
+                {{ meeting.title }}
+              </td>
+              <!-- Date & Time -->
+              <td>
+                {{
+                  language === "en" ?
+                  ((meeting.date | uTCToLocalDate) | date : "MMM d, y") :
+                  ((meeting.date | uTCToLocalDate) | localizeDate : "MMM d, y")
+                }},
+                {{
+                  language === "en" ?
+                  ((meeting.timeFrom | uTCToLocalDate) | date : "h:mm a") :
+                  ((meeting.timeFrom | uTCToLocalDate) | localizeDate : "h:mm a")
+                }}
+                 - 
+                {{
+                  language === "en" ?
+                  ((meeting.timeTo | uTCToLocalDate) | date : "h:mm a") :
+                  ((meeting.timeTo | uTCToLocalDate) | localizeDate : "h:mm a")
+                }}
+              </td>
+
+              <!-- Status-->
+              <td>
+                <app-badge [className]="getStatusClassName(meeting.status)"
+                  [label]="getStatusText(meeting.status)"></app-badge>
+              </td>
+
+              <!-- Progress -->
+              <!-- <td></td> -->
+
+              <!-- CreatedBy -->
+              <td>
+                <person-item *ngIf="meeting.creatorInfo" [requesterItem]="meeting.creatorInfo" [isUserCardFixed]="true"></person-item>
+                <span class="rectangle-badge badge-muted" *ngIf="!meeting.creatorInfo">
+                  {{ "shared.N/A" | translate }}
+                </span>
+              </td>
+
+              <!-- Attendees -->
+              <td>
+                {{ meeting.attendeesCount }}
+                {{ "Meetings.attendees" | translate }}
+              </td>
+
+              <!-- Actions -->
+              <td class="meeting-actions">
+                <!-- Edit Action -->
+                <!-- <div class="actions">
+                  <button
+                    class="edit-icons"
+                    (click)="navigateToEdit(meeting)"
+                    *ngIf="isDraftedMeeting(meeting.status)"
+                  >
+                    <i class="bx bxs-edit-alt"></i>
+                  </button>
+                  <button
+                    class="delete-icons"
+                    (click)="deleteMeeting(meeting)"
+                    *ngIf="isDraftedMeeting(meeting.status)"
+                  >
+                    <img src="assets/img/trash.svg" alt="delete" />
+                  </button>
+                </div> -->
+                <div *ngIf="isDraftedMeeting(meeting.status)">
+                  <app-dropdown (select)="onOptionSelect($event, meeting)" [items]="options"></app-dropdown>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <pagination-controls
+        *ngIf="totalCount > paginationModle?.pageSize"
+        (pageChange)="onPaginate($event)"
+        class="my-pagination"
+        maxSize="5"
+        responsive="true"
+        [previousLabel]="'shared.prev' | translate"
+        [nextLabel]="'shared.next' | translate"
+      ></pagination-controls>
+    </div>
+
+    <div *ngIf="loadingMeetings" class="meetings-table-wrapper">
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+      <app-skeleton-loader mode="table"></app-skeleton-loader>
+    </div>
+
+    <!-- no data msg -->
+    <div class="no-data" *ngIf="!loadingMeetings && meetings.length == 0">
+      <app-no-data [msg]="'Meetings.noDataMsg' | translate"></app-no-data>
+    </div>
+  </div>
+</div>
+
+<!-- delete confirmation modal -->
+<app-confirm-modal
+  [id]="'delete-meeting'"
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteMeetingConfirmed()"
+></app-confirm-modal>
+
+<!-- advanced filter model -->
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'filter-item'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closeModal()"
+>
+  <div modal-header class="meetings-model-header w-100">
+    <label class="modal-title">
+      {{ 'Meetings.advancedFilter' | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="meetings-model-content border-top">
+    <app-advanced-filter
+      [filters]="queryParams"
+      (filter)="advancedFilter($event)"
+      *ngIf="isAdvancedFilterModalOpen"
+    ></app-advanced-filter>
+  </div>
+</app-model>

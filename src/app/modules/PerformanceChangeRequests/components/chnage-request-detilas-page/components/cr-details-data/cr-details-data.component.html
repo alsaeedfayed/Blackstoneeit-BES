@@ -1,0 +1,173 @@
+<div class="req-date">
+  <div class="request-details">
+    <p class="address">{{ "cr.requestDetails" | translate }}</p>
+
+    <div class="data-details">
+      <div class="form-value">
+        <div class="item">{{ "cr.reqNumber" | translate }}</div>
+        <div class="item">
+          {{ data.requestNumber }}
+        </div>
+      </div>
+
+      <div class="form-value">
+        <div class="item">{{ "cr.requestTitle" | translate }}</div>
+        <div class="item">
+          {{ lang == "en" ? data.title : data.titleAr }}
+        </div>
+      </div>
+
+      <div class="form-value" *ngIf="RequestTypeText">
+        <div class="item">{{ "cr.changeRequestType" | translate }}</div>
+        <div class="item">
+          {{ RequestTypeText }}
+        </div>
+      </div>
+
+      <!-- <div class="form-value" *ngFor="let value of data?.formDataDetails">
+        <div class="item" *ngIf="this.lang != 'ar'">{{ value.name }}</div>
+        <div class="item" *ngIf="this.lang == 'ar'">{{ value.arName }}</div>
+        <div class="item" *ngIf="value.type != controlTypeMode.Date">{{ value.valueText }}</div>
+        <div class="item" *ngIf="value.type == controlTypeMode.Date">{{convertUTCDateToLocalDate(value.valueText) | date: 'dd/MM/yyyy' }}
+        </div>
+      </div> -->
+
+      <div class="form-value">
+        <div class="item">{{ "cr.Level-Group" | translate }}</div>
+        <div class="item">
+          {{ LevelText }} -
+          {{ lang == "en" ? data.group?.name : data.group?.arabicName }}
+        </div>
+      </div>
+
+      <div class="form-value" *ngIf="data.goalTitle">
+        <div class="item">{{ "cr.goal" | translate }}</div>
+        <div class="item">
+          {{ data.goalTitle }}
+        </div>
+      </div>
+
+      <div class="form-value" *ngIf="data.reason">
+        <div class="item">{{ "cr.reason" | translate }}</div>
+        <div class="item">
+          {{ data.reason }}
+        </div>
+      </div>
+
+      <div class="form-value" *ngIf="data?.relatedGoals?.length > 0">
+        <div class="item">{{ "cr.relatedGoals" | translate }}</div>
+        <div class="item">
+          <ul>
+            <li *ngFor="let goal of data?.relatedGoals">
+              {{ lang == "en" ? goal.title : goal.titleAr }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-value" *ngIf="data?.attachments.length > 0">
+        <div class="item">{{ "cr.attachments" | translate }}</div>
+        <div class="item">
+          <ul>
+            <li *ngFor="let attachment of data?.attachments">
+              <a (click)="getFileURL(attachment.fileName)">
+                {{ attachment.uploadedFileName }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="basic-info">
+    <p class="address">{{ "cr.basicInformation" | translate }}</p>
+
+    <div class="data-info">
+      <!-- <div class="info">
+        <div class="item-info">{{ 'cr.requestTitle' | translate }}</div>
+        <div class="item-info">
+          {{ data?.requestInformation?.requestTitle }}
+        </div>
+      </div> -->
+
+      <!-- <div class="info">
+        <div class="item-info">{{ 'cr.service' | translate }}</div>
+        <div class="item-info">
+          {{ lang === 'en'? data?.requestInformation?.serviceName : data?.requestInformation?.serviceNameAr }}
+        </div>
+      </div> -->
+
+      <!-- <div class="info">
+        <div class="item-info">{{ 'cr.requestID' | translate }}</div>
+        <div class="item-info">{{ data?.requestInformation.id }}</div>
+      </div> -->
+
+      <div class="info">
+        <div class="item-info">{{ "shared.status" | translate }}</div>
+        <div class="item-info">
+          <app-badge
+            *ngIf="data?.status == servicesStatusEnum.Active"
+            [className]="'started'"
+            [label]="'cr.active' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="data?.status == servicesStatusEnum.Approved"
+            [className]="'active'"
+            [label]="'cr.approved' | translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="data?.status == servicesStatusEnum.Rejected"
+            [className]="'rejected'"
+            [label]="'shared.rejected' |translate"
+          ></app-badge>
+          <app-badge
+            *ngIf="data?.status == servicesStatusEnum.Closed"
+            [className]="'closed'"
+            [label]="'shared.closed' | translate"
+          ></app-badge>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="item-info">{{ "cr.requestedBy" | translate }}</div>
+        <div class="item-info">
+          <person-item
+            *ngIf="data?.owner"
+            [requesterItem]="data?.owner"
+            [noCursor]="true"
+          ></person-item>
+        </div>
+      </div>
+
+      <!-- <div class="info">
+        <div class="item-info">{{ 'cr.requestedOn' | translate }}</div>
+        <div class="item-info">
+          {{ convertUTCDateToLocalDate(data?.requestInformation?.creationDate) | dateAgo }}
+        </div>
+      </div>  -->
+
+      <!-- <div class="info" *ngIf="data?.attachments?.length > 0">
+        <div class="item-info">{{ 'cr.attachments' | translate }}</div>
+        <div class="item-info">
+          <ul>
+            <li *ngFor="let attachment of data?.attachments">
+              <a [title]="attachment.fileName" (click)="getFileURL(attachment.fileName)">{{ attachment.fileName?.length
+                > 15 ? attachment.fileName.slice(0,15).concat("...") : attachment.fileName }}</a>
+            </li>
+          </ul>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

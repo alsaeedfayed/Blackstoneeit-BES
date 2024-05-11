@@ -1,0 +1,61 @@
+<div class="row" *ngIf="loading">
+
+    <app-header-page
+    [backButton]="true" 
+    [title]="'processMainPage.processes' | translate"
+    [totalItems]="totalProcesses"
+    [isAddBtn]="false"
+  
+    >
+    <div class="d-flex align-items-center flex-wrap gap-2" buttons>
+
+      <!-- add button -->
+      <button class="btn btn-main" (click)="goToAddProcess()">
+        <i class='bx bx-plus'></i>
+        {{'processMainPage.add' | translate}}
+      </button>
+    </div>
+  </app-header-page>
+
+  <!-- page filters -->
+  <div class="mb-3">
+    <app-page-filters
+    [searchPlaceHolder]="'shared.search' | translate"
+    [hasAssignedSwitch]="false"
+    [hasAdvancedFilter]="false"
+    (search)="search($event)"
+    ></app-page-filters>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center mb-16" *ngFor="let process of processes">
+    <app-process-card class="w-100" [routerLink]="'/process/'+ process?.id" [data]="process"></app-process-card>
+  </div>
+
+  <app-empty-state *ngIf="processes?.length == 0"
+    [title]=" 'processMainPage.noData' | translate ">
+  </app-empty-state>
+  <div *ngIf="(!processes || processes?.length != 0) && processes.length != totalProcesses"
+    class="d-flex justify-content-center align-items-center pb-5">
+    <button 
+      (click)="seeMore()" 
+      type="button" 
+      [disabled]="isPaginationLoading" 
+      class="see-more-btn"> 
+         {{'shared.seeMore' |translate}} ({{calculatePaginatedItems()}})
+      <i *ngIf="!isPaginationLoading" class='bx bx-chevron-down'></i>
+      <i *ngIf="isPaginationLoading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    </button>
+  </div>
+</div>
+
+
+<app-process-modal [title]="sidepanelTitle" [modalState]="'processForm'" (refreshProcessList)="refreshList()">
+</app-process-modal>
+
+<!-- Loading Skeleton -->
+
+<div class="row" *ngIf="!loading">
+  <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center mb-16" *ngFor="let i of [1, 2, 3, 4, 5, 6]">
+    <app-skeleton-loader class="w-100" [mode]="'card'">
+    </app-skeleton-loader>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="notification-item" (click)="readNotificationHandler()" [ngClass]="{hidedNotification: notification.isRead}">
+  <div class="header">
+    <person-item *ngIf="notification.from" [requesterItem]="notification.from" [noCursor]="true"></person-item>
+    <span class="date">{{ notification.date | date : "MMM d" }}</span>
+  </div>
+  <span class="description" *ngIf="notification.subject">{{notification.subject}}</span>
+</div>

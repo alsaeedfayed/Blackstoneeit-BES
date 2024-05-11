@@ -1,0 +1,124 @@
+@import "src/assets/css/utils/variables.scss";
+
+.wrapper {
+  background: $white-color;
+  padding: 20px;
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.01);
+}
+
+// Details Mode Styling
+.details-wrapper {
+  .block {
+    &-title {
+      color: $info_color;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0 0 0.5rem;
+    }
+
+    &-content {
+      background-color: $white-color;
+      padding: 1.25rem;
+      border: 0.0625rem solid #efefef;
+      border-radius: 1.25rem;
+      box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.01);
+
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+
+      .main-title {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .meeting {
+    &-info {
+      container: meeting-info / inline-size;
+
+      &-list {
+        display: grid;
+        margin: 0;
+
+        @container meeting-info (min-width: 500px) {
+          & {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem 1rem;
+          }
+        }
+
+        @container meeting-info (max-width: 500px) {
+          & {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+        }
+
+        &-item {
+          @container meeting-info (min-width: 500px) {
+            &:not(:nth-of-type(3n + 1)) {
+              padding-inline-start: 1rem;
+              border-inline-start: 0.0625rem solid #96a6bd36;
+            }
+          }
+
+          @container meeting-info (max-width: 500px) {
+            &:not(:last-of-type) {
+              padding-bottom: 1rem;
+              border-bottom: 0.0625rem solid #96a6bd36;
+            }
+          }
+
+          &-content {
+            color: $black-color;
+            font-weight: 400;
+            font-size: 0.875rem;
+            line-height: 1.25rem !important;
+          }
+
+          ::ng-deep {
+            person-item {
+              .personItem {
+                &.header-person {
+                  width: fit-content;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.form-label {
+  margin-bottom: 0;
+}
+
+.astrix-red {
+  color: red;
+}
+
+.time-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  > div:not(.validation) {
+    width: 48%;
+  }
+}
+
+.date-para {
+  direction: ltr !important;
+}
+
+.validation {
+  span {
+    color: red;
+    display: inline-block;
+    width: 100%;
+  }
+}

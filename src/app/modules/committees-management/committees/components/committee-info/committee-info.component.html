@@ -1,0 +1,250 @@
+<!-- request details -->
+
+<ng-container
+  *ngIf="
+    isLoading || (committeeInfo?.goalIds?.length > 0 && StrategicKpisLoading);
+    else details
+  "
+>
+  <div>
+    <ng-container [ngTemplateOutlet]="header_skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #details>
+  <div class="info-container">
+    <div class="info gap-3">
+      <div class="request-details">
+        <div class="form-label fw-bold">
+          {{ "committeeDetails.committeeDetails" | translate }}
+        </div>
+        <div class="top-badge my-1">
+          {{
+            (committeeInfo?.committeeDurationType == 1
+              ? "committeeDetails.permanent"
+              : "committeeDetails.temporary"
+            ) | translate
+          }}
+        </div>
+
+        <!-- Request Description -->
+        <div class="row" *ngIf="committeeInfo?.description?.length > 0">
+          <div>
+            <div
+              class="angular-editor-description"
+              [innerHTML]="
+                committeeInfo?.description | truncate : descTextLimit
+              "
+            ></div>
+
+            <button
+              class="see-more-btn text-primary"
+              *ngIf="committeeInfo?.description?.length > descTextInitialLimit"
+              (click)="toggleMoreText()"
+            >
+              <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+                {{ "committeesManagement.seeMore" | translate }}
+              </ng-container>
+              <ng-template #seeLess>
+                {{ "committeesManagement.seeLess" | translate }}
+              </ng-template>
+            </button>
+          </div>
+        </div>
+
+        <!-- tags items -->
+        <ng-container *ngIf="committeeInfo?.tags?.length">
+          <div class="block-title">{{ "committeeDetails.tags" | translate }}</div>
+          <ul class="tags-list">
+            <li class="tags-list-item" *ngFor="let item of committeeInfo?.tags">
+              {{ item.tag }}
+            </li>
+          </ul>
+        </ng-container>
+        <!-- sponsor section -->
+        <div class="block-content sponsor-info my-3">
+          <ul class="sponsor-info-list mb-0">
+            <li class="sponsor-info-list-item">
+              <h4 class="block-subtitle mb-2">
+                {{ "committeeDetails.sponsor" | translate }}
+              </h4>
+
+              <div class="sponsor-info-list-item-content">
+                <person-item
+                  *ngIf="committeeInfo?.sponsor"
+                  [requesterItem]="committeeInfo?.sponsorInfo"
+                  [noCursor]="true"
+                ></person-item>
+              </div>
+            </li>
+            <li class="sponsor-info-list-item">
+              <h4 class="block-subtitle mb-2">
+                {{ "committeeDetails.duration" | translate }}
+              </h4>
+              <div class="sponsor-info-list-item-content">
+                {{
+                  committeeInfo?.duration
+                    ? language == "en"
+                      ? committeeInfo?.durationName
+                      : committeeInfo?.durationNameAr
+                    : ("committeeDetails.permanent" | translate)
+                }}
+              </div>
+            </li>
+            <li class="sponsor-info-list-item">
+              <h4 class="block-subtitle mb-2">
+                {{ "committeeDetails.category" | translate }}
+              </h4>
+              <div class="sponsor-info-list-item-content">
+                {{
+                  (language == "en"
+                    ? committeeInfo?.committeeTypeName
+                    : committeeInfo?.committeeTypeNameAr
+                  ) | translate
+                }}
+              </div>
+            </li>
+            <li class="sponsor-info-list-item">
+              <h4 class="block-subtitle mb-2">
+                {{ "committeeDetails.creationDate" | translate }}
+              </h4>
+
+              <div class="sponsor-info-list-item-content">
+                {{
+                  language === "en"
+                    ? ((
+                        committeeInfo?.creationDate | uTCToLocalDate
+                      ).toLocaleString() | date : "d MMM y")
+                    : ((
+                        committeeInfo?.creationDate | uTCToLocalDate
+                      ).toLocaleString() | localizeDate : "d MMM y")
+                }}
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- <app-strategy-mapping-list
+          [list]="strategicKpis"
+          [language]="language"
+          [hasTitle]="true"
+        ></app-strategy-mapping-list> -->
+        
+        <!-- main tasks & kpis -->
+
+        <committee-tasks-kpis
+        [hideDisplayDetails]="true"
+        [mainTasks]="mainTasks"
+        [language]="language"
+        [kpisCount]="kpis?.length + importedKPIsCount "
+        [goaltreeData]="goaltreeData"
+         (openKpisM)="openKpisModal($event)"
+        (openTasksM)="openTasksModal($event)">
+      </committee-tasks-kpis>
+        <!-- <section class="row">
+          <div class="col-md-12 col-lg-6">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="block-title">
+                {{ "committeeDetails.mainTasks" | translate }}
+              </div>
+              <a class="see-more" (click)="goToTasks()">
+                {{ "committeesManagement.seeMore" | translate }}
+              </a>
+            </div>
+            <ul class="circle-dots">
+              <li class="gap-2 m-2" *ngFor="let mainTask of mainTasks">
+                <i class="bx bx-radio-circle-marked"></i>
+                <span class="">
+                  {{ language == "en" ? mainTask.title : mainTask.titleAr }}
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-12 col-lg-6">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="block-title">
+                {{ "committeeDetails.kpis" | translate }}
+              </div>
+              <a class="see-more" (click)="goToKpis()">
+                {{ "committeesManagement.seeMore" | translate }}
+              </a>
+            </div>
+            <ul class="circle-dots">
+              <li class="gap-2 m-2" *ngFor="let kpi of kpis">
+                <i class="bx bx-radio-circle-marked"></i>
+                <span class="">
+                  {{ language == "en" ? kpi.name : kpi.nameAr }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </section> -->
+      </div>
+
+      <app-committee-members-column
+        class="members-list"
+        [language]="language"
+        [members]="committeeInfo?.members"
+      ></app-committee-members-column>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #header_skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<!-- kpis details modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'kpis-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="changed-kpis-details w-100">
+    <label class="modal-title">
+      {{ "changeRequests.details.kpiDetails" | translate }}
+    </label>
+  </div>
+  <div modal-content class="changedKpis-model-content border-top">
+    <div class="my-4">
+      <app-kpis-details
+        *ngIf="kpisDetailsData"
+        [language]="language"
+        [kpiDetails]="kpisDetailsData"
+        [isAddedKpi]="false"
+      ></app-kpis-details>
+    </div>
+  </div>
+</app-model>
+
+<!-- tasks details modal -->
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'tasks-details'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+  (close)="closePopup()"
+>
+  <div modal-header class="changed-kpis-details w-100">
+    <label class="modal-title">
+      {{ "changeRequests.details.taskDetails" | translate }}
+    </label>
+  </div>
+  <div modal-content class="changedKpis-model-content border-top">
+    <div class="my-4">
+      <app-tasks-details
+        *ngIf="tasksDetailsData"
+        [language]="language"
+        [taskDetails]="tasksDetailsData"
+        [isAddedTask]="false"
+      ></app-tasks-details>
+    </div>
+  </div>
+</app-model>

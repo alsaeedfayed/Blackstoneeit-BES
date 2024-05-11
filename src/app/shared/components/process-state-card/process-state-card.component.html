@@ -1,0 +1,16 @@
+<div class="workflow-card process-state-card">
+  <span class="card-id">#{{data?.displayOrder}}</span>
+  <h4 class="card-title">{{data?.title[lang]}}</h4>
+  <span *ngIf="data?.updatedDate" class="card-date">{{'Last update' | translate}}:{{data?.updatedDate | date: 'dd/MM/yyyy'}}</span>
+  <span *ngIf="!data?.updatedDate" class="card-date">{{'Date created' | translate}}: {{data?.createdDate | date: 'dd/MM/yyyy'}}</span>
+  <div class="process-state-card-badges">
+    <span *ngIf="data?.isInitial" class="_badge b-first-state mr-1">{{'First State' | translate}}</span>
+    <span *ngIf="data?.isFinal" class="_badge b-final-state mr-1">{{'Final State' | translate}}</span>
+    <span *ngIf="data?.isDefaultFlow" class="_badge b-default-flow mr-2">
+      <img class="mr-1"
+           src="/assets/icons/flow-icon.svg"
+           alt="">
+           {{'Default Flow' | translate}}
+    </span>
+  </div>
+</div>

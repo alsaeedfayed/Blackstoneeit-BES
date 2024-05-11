@@ -1,0 +1,83 @@
+<div class="details-wrapper">
+  <app-header-page
+    class="details-header"
+    [title]="data?.title"
+    [showTotalItems]="false"
+    [backButton]="true"
+  >
+    <div class="d-flex gap-2" buttons>
+      <button
+        class="btn btn-info"
+        [disabled]="isDownloading"
+        (click)="exportDataAsPDF()"
+      >
+        <i class="bx bxs-download" *ngIf="!isDownloading"></i>
+        <i class="bx bx-loader-alt bx-spin" *ngIf="isDownloading"></i>
+        {{ "shared.export" | translate }}
+      </button>
+
+      <button
+        *ngIf="data.status == meetingStatus.Draft"
+        class="btn btn-main"
+        (click)="navigateToEdit(data.id)"
+      >
+        {{ "shared.edit" | translate }}
+      </button>
+
+      <button
+        *ngIf="data.status == meetingStatus.Draft"
+        class="btn btn-danger"
+        (click)="deleteMeeting(data)"
+      >
+        {{ "shared.delete" | translate }}
+      </button>
+    </div>
+  </app-header-page>
+
+  <ng-container *ngIf="isLoading; else meeting_data">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </ng-container>
+
+  <ng-template #meeting_data>
+    <div *ngIf="data">
+      <div class="status">
+        <!-- action buttons -->
+        <workflow-action-options
+          class="d-block mb-4"
+          [title]="''"
+          [task]="taskId"
+          [options]="options"
+          [instanceId]="instanceId"
+          (onSaveAction)="actionTakenHandler($event)"
+        ></workflow-action-options>
+
+        <!-- approval timeline -->
+        <workflow-states [steps]="steps"></workflow-states>
+      </div>
+
+      <div class="details mt-5">
+        <meetings-details-data [Data]="data"></meetings-details-data>
+      </div>
+    </div>
+
+    <div class="noData" *ngIf="!data">
+      <app-no-data-custom
+        [msg]="'Meetings.noData' | translate"
+      ></app-no-data-custom>
+    </div>
+  </ng-template>
+
+  <ng-template #skeleton>
+    <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+    <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+    <app-skeleton-loader class="d-block mt-3" mode="card"></app-skeleton-loader>
+  </ng-template>
+</div>
+
+<app-confirm-modal
+  [id]="'delete-meeting'"
+  [content]="confirmMsg"
+  [btnContent]="'shared.confirm' | translate"
+  [btnStyle]="'main'"
+  (confirm)="onDeleteMeetingConfirmed(data)"
+></app-confirm-modal>

@@ -1,0 +1,629 @@
+<div class="new-model-dialog-body">
+  <div class="entity-form pb-2" [formGroup]="form">
+    <app-tabs>
+      <app-tab [title]="'entityDesigner.Properties' | translate">
+
+        <app-filed *ngIf="!isLink"
+          class="d-block mt-3"
+          formControlName="label"
+          [control]="form | getControl: 'label'"
+          [title]="'entityDesigner.Label' | translate"
+          [placeholder]="'entityDesigner.typeLabel' | translate"
+        ></app-filed>
+
+        <app-filed *ngIf="!isLink"
+          class="d-block mt-3"
+          formControlName="labelAr"
+          [control]="form | getControl: 'labelAr'"
+          [title]="'entityDesigner.LabelArabic' | translate"
+          [placeholder]="'entityDesigner.typeArabicLabel' | translate"
+        ></app-filed>
+
+        <app-filed
+          *ngIf="!isDateRangeType && !isFileUpload && !isRadioButtonType && !isCheckbox && !isRepeater && !isLink"
+          class="d-block mt-3"
+          formControlName="placeholder"
+          [control]="form | getControl: 'placeholder'"
+          [title]="'entityDesigner.Placeholder' | translate"
+          [placeholder]="'entityDesigner.typePlaceHolder' | translate"
+        ></app-filed>
+
+        <app-filed
+          *ngIf="!isDateRangeType && !isFileUpload && !isRadioButtonType && !isCheckbox && !isRepeater && !isLink"
+          class="d-block mt-3"
+          formControlName="placeholderAr"
+          [control]="form | getControl: 'placeholderAr'"
+          [title]="'entityDesigner.PlaceholderArabic' | translate"
+          [placeholder]="'entityDesigner.typeArabicPlaceHolder' | translate"
+        ></app-filed>
+
+        <app-filed *ngIf="isLink"
+          class="d-block mt-3"
+          formControlName="title"
+          [control]="form | getControl: 'title'"
+          [title]="'entityDesigner.title' | translate"
+          [placeholder]="'entityDesigner.typeTitle' | translate"
+        ></app-filed>
+
+        <app-filed *ngIf="isLink"
+          class="d-block mt-3"
+          formControlName="titleAr"
+          [control]="form | getControl: 'titleAr'"
+          [title]="'entityDesigner.arabicTitle' | translate"
+          [placeholder]="'entityDesigner.typeArabicTitle' | translate"
+        ></app-filed>
+
+        <app-filed *ngIf="isLink"
+          class="d-block mt-3"
+          formControlName="text"
+          [control]="form | getControl: 'text'"
+          [title]="'entityDesigner.text' | translate"
+          [placeholder]="'entityDesigner.typeText' | translate"
+        ></app-filed>
+
+        <app-filed *ngIf="isLink"
+          class="d-block mt-3"
+          formControlName="textAr"
+          [control]="form | getControl: 'textAr'"
+          [title]="'entityDesigner.textAr' | translate"
+          [placeholder]="'entityDesigner.typeArabicText' | translate"
+        ></app-filed>
+
+        <div class="d-block mt-3">
+          <app-text-editor
+            [id]="'hint'"
+            formControlName="hint"
+            [control]="form | getControl: 'hint'"
+            [title]="'entityDesigner.noteHint' | translate"
+            [placeholder]="'entityDesigner.typeNote_hint' | translate"
+            [disable]="false"
+            [hasAttachments]="false"
+          ></app-text-editor>
+        </div>
+
+        <div class="d-block mt-3">
+          <app-text-editor
+            [id]="'hintAr'"
+            formControlName="hintAr"
+            [control]="form | getControl: 'hintAr'"
+            [title]="'entityDesigner.noteHintArabic' | translate"
+            [placeholder]="'entityDesigner.typeNote_arabic_hint' | translate"
+            [disable]="false"
+            [hasAttachments]="false"
+          ></app-text-editor>
+        </div>
+
+        <!-- <div class="d-flex justify-content-between mt-3">
+          <label class="form-label">{{'entityDesigner.allowComment' | translate}}</label>
+          <app-switch [(ngModel)]="allowComment" (ngModelChange)="handleAllowComment()" name="allowComment"
+            [ngModelOptions]="{standalone: true}"></app-switch>
+        </div> -->
+
+        <div class="d-flex justify-content-between mt-3">
+          <label class="form-label">{{'entityDesigner.show' | translate}}</label>
+          <app-switch [(ngModel)]="isShow" (ngModelChange)="handleShow()" name="show"
+            [ngModelOptions]="{standalone: true}" [disabled]="isConnected"></app-switch>
+        </div>
+
+        <!-- <div class="d-flex justify-content-between mt-3">
+          <label class="form-label">{{'entityDesigner.showInReport' | translate}}</label>
+          <app-switch [(ngModel)]="isShowInReport" (ngModelChange)="handleShowInReport()" name="showInReport"
+            [ngModelOptions]="{standalone: true}"></app-switch>
+        </div> -->
+
+        <app-radio-group *ngIf="isSingleSelectType || isMultipleSelectType" class="d-flex mt-4" formControlName="itemsType">
+          <app-radio-box  [value]="0">
+            {{ 'entityDesigner.staticOptions' | translate }}
+          </app-radio-box>
+          <app-radio-box class="mr-4 ml-4"  [value]="1">
+            {{ 'entityDesigner.lookupOptions' | translate }}
+          </app-radio-box>
+          <app-radio-box class="mr-4 ml-4"  [value]="2">
+            {{ 'entityDesigner.fromAPI' | translate }}
+          </app-radio-box>
+        </app-radio-group>
+
+        <div *ngIf="(isSelectType || isRadioButtonType || isCheckbox) && (form.get('itemsType').value == 0 && !controlApi?.value)">
+          <div class="add-items d-flex w-100">
+            <div class="fileds fileds2 w-100 mt-3">
+              <div class="feild-content w-100 h-5">
+                <app-filed
+                  name="item-text"
+                  [placeholder]="'entityDesigner.english' | translate"
+                  [(ngModel)]="item.text"
+                  [ngModelOptions]="{standalone: true}"
+                ></app-filed>
+                <p class="font-medium" *ngIf="item?.text && !isEnglishWithNumbersAndCommas(item?.text)">
+                  {{ 'shared.validations.allowEnglishLanguageOnly' | translate }}
+                </p>
+              </div>
+
+              <div class="feild-content w-100 h-5">
+                <app-filed
+                  name="item-textAr"
+                  [placeholder]="'entityDesigner.arabic' | translate"
+                  [(ngModel)]="item.textAr"
+                  [ngModelOptions]="{standalone: true}"
+                ></app-filed>
+                <!-- <p class="font-medium" *ngIf="item?.textAr && !isArabicWithNumbersAndCommas(item?.textAr)">
+                  {{ 'shared.validations.allowArabicLanguageOnly' | translate }}
+                </p> -->
+              </div>
+              <!-- || !isArabicWithNumbersAndCommas(item?.textAr) -->
+              <button
+                class="btn btn-main mb-1"
+                [disabled]="!item?.textAr || !item?.text || !isEnglishWithNumbersAndCommas(item?.text)"
+                (click)="addItem()"
+              >
+                {{'entityDesigner.addNewItem' | translate}}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <ng-container *ngFor="let item of items; let i = index;">
+              <div class="item-info mt-2">
+                <div class="w-100 item-added" [ngClass]="{'d-none':item.edit}">
+                  <div class="d-flex gap-3">
+                    <p>{{ 'entityDesigner.english' | translate }}: {{ item?.text }}</p>
+                    <p> - </p>
+                    <p>{{ 'entityDesigner.arabic' | translate }}: {{ item?.textAr }}</p>
+                  </div>
+                  <div class="item-edit">
+                    <button (click)="item.edit = true">
+                      <i class='bx bx-edit-alt'></i>
+                    </button>
+                    <button (click)="deleteItem(i)">
+                      <i class='bx bx-trash'></i>
+                    </button>
+                  </div>
+
+                </div>
+                <div class="d-flex w-100 item-added">
+                  <!-- <div class="d-flex IsOther" *ngIf="isSelectType || isRadioButtonType || isCheckbox">
+                    <label class="other">{{ 'entityDesigner.isOther' | translate }}</label>
+                    <app-switch
+                      [(ngModel)]="item.isOther"
+                      [ngModelOptions]="{standalone: true}"
+                      (click)="handelOther(item)"
+                    ></app-switch>
+                  </div> -->
+  
+                  <div class="d-flex IsOther" *ngIf="isSelectType || isRadioButtonType || isCheckbox">
+                    <label class="other">{{ 'entityDesigner.showConditionalControl' | translate }}</label>
+                    <app-switch
+                      [(ngModel)]="item.isConditional"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="handleConditional(item)"
+                    ></app-switch>
+                  </div>
+                </div>
+
+                <app-select
+                      *ngIf="item.isOther"
+                      class="d-block px-2 pb-3"
+                      [title]="'entityDesigner.selectOtherControlType' | translate"
+                      [bindVlaue]="'type'"
+                      [bindLabel]="selectValue"
+                      [items]="otherList"
+                      [ngModelOptions]="{standalone: true}"
+                      [(ngModel)]="item.other.type"
+                ></app-select>
+
+                <app-select
+                  *ngIf="item.isConditional"
+                  class="d-block px-2 pb-3"
+                  [title]="'entityDesigner.selectConditionalControl' | translate"
+                  [bindLabel]="language == 'en' ? 'enLabel' : 'arLabel'"
+                  [items]="availablecontrols"
+                  [(ngModel)]="item.conditional.control"
+                  [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="handleConditionalControl(item,item.conditional.control)"
+                  [dropdownPosition]="'top'"
+                ></app-select>
+
+                <ng-container *ngIf="item.isOther && (item?.other?.type | isSupportItems)">
+                  <div class="add-items d-flex w-100 px-2">
+                    <div class="fileds fileds2 w-100 mt-3">
+                      <div class="feild-content w-100 h-5">
+                        <app-filed
+                          class="w-100 m-0"
+                          name="item-text"
+                          [placeholder]="'entityDesigner.english' | translate"
+                          [(ngModel)]="item.other.label"
+                          [ngModelOptions]="{standalone: true}"
+                        ></app-filed>
+                        <p class="font-medium" *ngIf="item.other.label && !isEnglishWithNumbersAndCommas(item.other.label)">
+                          {{ 'shared.validations.allowEnglishLanguageOnly' | translate }}
+                        </p>
+                      </div>
+
+                      <div class="feild-content w-100 h-5">
+                        <app-filed
+                          class="w-100"
+                          name="item-textAr"
+                          [placeholder]="'entityDesigner.arabic' | translate"
+                          [(ngModel)]="item.other.labelAr"
+                          [ngModelOptions]="{standalone: true}"
+                        ></app-filed>
+                        <p class="font-medium" *ngIf="item.other.labelAr && !isArabicWithNumbersAndCommas(item.other.labelAr)">
+                          {{ 'shared.validations.allowArabicLanguageOnly' | translate }}
+                        </p>
+                      </div>
+
+                      <button
+                        class="btn btn-main mb-1"
+                        [disabled]="!item.other.labelAr || !item.other.label || !isEnglishWithNumbersAndCommas(item.other.label) || !isArabicWithNumbersAndCommas(item.other.labelAr)"
+                        (click)="addOtherItem(item)"
+                      >
+                        {{ 'entityDesigner.addNewItem' | translate }}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div *ngFor="let other of item?.other.values; let j = index">
+                    <div class="w-100 item-added" *ngIf="!other.edit">
+                      <div class="d-flex gap-3">
+                        <p>{{ 'entityDesigner.english' | translate }}: {{ other?.text }}</p>
+                        <p> - </p>
+                        <p>{{ 'entityDesigner.arabic' | translate }}: {{ other?.textAr }}</p>
+
+                        <div class="item-edit">
+                          <button (click)="other.edit = true">
+                            <i class='bx bx-edit-alt'></i>
+                          </button>
+                          <button (click)="deleteOther(j,item?.other.values)">
+                            <i class='bx bx-trash'></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="add-items d-flex w-100 px-2" *ngIf="other.edit">
+                      <div class="fileds fileds2 w-100 mt-3">
+                        <div class="feild-content w-100 h-5">
+                          <app-filed
+                            class="w-100 m-0"
+                            name="item-text"
+                            [placeholder]="'entityDesigner.english' | translate"
+                            [(ngModel)]="other.text"
+                            [ngModelOptions]="{standalone: true}"
+                          ></app-filed>
+                          <p class="font-medium" *ngIf="other.text && !isEnglishWithNumbersAndCommas(other.text)">
+                            {{ 'shared.validations.allowEnglishLanguageOnly' | translate }}
+                          </p>
+                        </div>
+
+                        <div class="feild-content w-100 h-5">
+                          <app-filed
+                            class="w-100"
+                            name="item-textAr"
+                            [placeholder]="'entityDesigner.arabic' | translate"
+                            [(ngModel)]="other.textAr"
+                            [ngModelOptions]="{standalone: true}"
+                          ></app-filed>
+                          <p class="font-medium" *ngIf="other.textAr && !isArabicWithNumbersAndCommas(other.textAr)">
+                            {{ 'shared.validations.allowArabicLanguageOnly' | translate }}
+                          </p>
+                        </div>
+
+                        <button
+                          class="btn btn-main mb-1"
+                          [disabled]="!other.textAr || !other.text || !isEnglishWithNumbersAndCommas(other.text) || !isArabicWithNumbersAndCommas(other.textAr)"
+                          (click)="other.edit = false"
+                        >
+                          {{ 'shared.save' | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="d-flex edit-item" *ngIf="item.edit">
+                <div class="fileds fileds2 w-100 gap-1 mt-3">
+                  <div class="feild-content w-100 h-5">
+                    <app-filed
+                      class="w-100"
+                      name="item-text"
+                      [placeholder]="'entityDesigner.english' | translate"
+                      [(ngModel)]="item.text"
+                      [ngModelOptions]="{standalone: true}"
+                    ></app-filed>
+                    <p class="font-medium" *ngIf="item?.text && !isEnglishWithNumbersAndCommas(item?.text)">
+                      {{ 'shared.validations.allowEnglishLanguageOnly' | translate }}
+                    </p>
+                  </div>
+
+                  <div class="feild-content w-100 h-5">
+                    <app-filed
+                      class="w-100"
+                      name="item-textAr"
+                      [placeholder]="'entityDesigner.arabic' | translate"
+                      [(ngModel)]="item.textAr"
+                      [ngModelOptions]="{standalone: true}"
+                    ></app-filed>
+                  </div>
+                </div>
+
+                <button
+                  class="btn btn-main align-self-start mt-4"
+                  [disabled]="!item?.textAr || !item?.text"
+                  (click)="item.edit = false;"
+                >
+                  {{ 'shared.save' | translate }}
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div *ngIf="(isSelectType || isRadioButtonType || isCheckbox)  && (form.get('itemsType').value == 1 || controlApi?.value)">
+          <div class="add-items d-flex w-100">
+            <div class="fileds fileds2 w-100 mt-3">
+              <div class="feild-content w-100 h-5 mt-1">
+
+                <!-- <label>{{ "entityDesigner.lokkupType" | translate }}</label> -->
+                <app-select
+                  [bindVlaue]="'code'"
+                  [items]="lookupTypes"
+                  [clearable]="true"
+                  formControlName="api"
+                  [control]="form | getControl: 'api'"
+                  [placeholder]="'entityDesigner.pleaseSelectLookupType' | translate"
+                  [bindLabel]="language === 'en' ? 'nameEn' : 'nameAr'"
+                ></app-select>
+
+                <!-- <app-filed
+                  name="item-text"
+                  [placeholder]="'entityDesigner.api' | translate"
+                  formControlName="api"
+                  [control]="form | getControl: 'api'"
+                ></app-filed>
+                <p class="font-medium" *ngIf="item.api && !isEnglishWithNumbersAndCommas(item.api)">
+                  {{ 'shared.validations.allowEnglishLanguageOnly' | translate }}
+                </p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="(isSelectType || isRadioButtonType || isCheckbox)  && (form.get('itemsType').value == 2 || controlDynamicApi?.value)">
+          <div class="add-items d-flex w-100">
+            <div class="fileds fileds2 w-100 mt-3">
+              <div class="feild-content w-100 h-5 mt-1">
+                <!-- <label>{{ "entityDesigner.lokkupType" | translate }}</label> [(ngModel)]="dynamicUtilitesItem" (change)="selectDynamicUtilityValue(dynamicUtilitesItem)" -->
+                <app-select
+                  [items]="dynamicUtilites"
+                  [clearable]="true"
+                  formControlName="dynamicAPI"
+                  [control]="form | getControl: 'dynamicAPI'"
+                  [placeholder]="'entityDesigner.pleaseSelectType' | translate"
+                  [dropdownPosition]="'top'"
+                  [bindLabel]="language === 'en' ? 'label' : 'arabicLabel'"
+                  [bindVlaue]="language === 'en' ? 'label' : 'arabicLabel'"
+                  (change)="selectDynamicUtilityValue($event)"
+                ></app-select>
+
+                <!-- <app-filed
+                  name="item-text"
+                  [placeholder]="'entityDesigner.api' | translate"
+                  formControlName="api"
+                  [control]="form | getControl: 'api'"
+                ></app-filed>
+                <p class="font-medium" *ngIf="item.api && !isEnglishWithNumbersAndCommas(item.api)">
+                  {{ 'shared.validations.allowEnglishLanguageOnly' | translate }}
+                </p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="isLink">
+          <app-attachments-files
+            [title]="'shared.fileSelect' | translate" [accept]="supportedLinkAttachmentTypes" [maxSize]="5"
+            [control]="form | getControl : 'attachmentFiles'"
+            [prevAttachment]="parsedControlLinkAttachmentFiles"
+            (attachmentUploadEvent)="uploadFile($event)"
+            [disabled]="(attachmentFiles?.length > 0) || (parsedControlLinkAttachmentFiles?.length > 0)"
+        ></app-attachments-files>
+        </div>
+
+      </app-tab>
+
+      <app-tab [title]="'entityDesigner.Validation' | translate">
+        <div class="group">
+          <div class="mt-3">
+            <div class="d-flex justify-content-between">
+              <label class="form-label">{{'entityDesigner.Required' | translate}}</label>
+              <app-switch [(ngModel)]="isRequired" (ngModelChange)="handelRequired()" name="required"
+                [ngModelOptions]="{standalone: true}"></app-switch>
+            </div>
+            <div *ngIf="isRequired">
+              <app-filed [(ngModel)]="required.message" formControlName="requiredMsg" name="requiredMsg"
+                [control]="form | getControl:'requiredMsg'"
+                [placeholder]="'entityDesigner.validationMessage' | translate"></app-filed>
+              <app-filed [(ngModel)]="required.messageAr" formControlName="requiredMsgAr"
+                [control]="form | getControl:'requiredMsgAr'"
+                [placeholder]="'entityDesigner.validationMessageAr' | translate"></app-filed>
+            </div>
+          </div>
+
+          <div class="mt-3" *ngIf="isSingleSelectType && form.get('itemsType').value == 1">
+            <div class="d-flex justify-content-between">
+              <label class="form-label">{{'entityDesigner.notEquall' | translate}}</label>
+              <app-switch [(ngModel)]="isNotEqualSelect" (change)="handelNotEqualSelect($event)" name="notEqual"
+                [ngModelOptions]="{standalone: true}"></app-switch>
+            </div>
+            <div *ngIf="isNotEqualSelect" class="mt-1">
+              <app-select [items]="signleSelectControls" [(ngModel)]="+selectNotEqualControl.value" (ngModelChange)="selectNotEqualControl.value = $event.toString()" [bindLabel]="'enLabel'"
+                formControlName="notEqualControl" (change)="handelNotEqualFromControl()">
+              </app-select>
+             </div>
+          </div>
+
+          <div class="mt-3" *ngIf="isUserSelectType">
+            <div class="d-flex justify-content-between">
+              <label class="form-label">{{'entityDesigner.multiple' | translate}}</label>
+              <app-switch [(ngModel)]="isMultiSelect" (ngModelChange)="handelMultiSelect()" name="multiSelect"
+                [ngModelOptions]="{standalone: true}"></app-switch>
+            </div>
+          </div>
+
+          <div class="row mt-3" *ngIf="isFiledType || isFiledTextArea">
+            <div class="col-md-12 ">
+              <div class="d-flex justify-content-between">
+                <label class="form-label">{{ "entityDesigner.minimumLength" | translate }}</label>
+                <app-switch [(ngModel)]="isMinimumLength" name="minimumLength" [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="handelMinimumLength()"></app-switch>
+              </div>
+              <div *ngIf="isMinimumLength">
+                <app-filed [(ngModel)]="minimumLength.value" formControlName="minimumLength"
+                  [control]="form | getControl:'minimumLength'"
+                  [placeholder]="'entityDesigner.typeMinimumLength' | translate" [onlyNumber]="true"></app-filed>
+                <app-filed [(ngModel)]="minimumLength.message" formControlName="minimumLengthMsg"
+                  [control]="form | getControl:'minimumLengthMsg'"
+                  [placeholder]="'entityDesigner.validationMessage' | translate"></app-filed>
+                <app-filed [(ngModel)]="minimumLength.messageAr" formControlName="minimumLengthMsgAr"
+                  [control]="form | getControl:'minimumLengthMsgAr'"
+                  [placeholder]="'entityDesigner.validationMessageAr' | translate"></app-filed>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3" *ngIf="isFiledType || isFiledTextArea">
+            <div class="col-md-12 ">
+              <div class="d-flex justify-content-between">
+                <label class="form-label">{{ "entityDesigner.maximumLength" | translate }}</label>
+                <app-switch [(ngModel)]="isMaximumLength" name="maximumLength" [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="handelMaximumLength()"></app-switch>
+              </div>
+              <div *ngIf="isMaximumLength">
+                <app-filed [(ngModel)]="maximumLength.value" formControlName="maximumLength"
+                  [control]="form | getControl:'maximumLength'"
+                  [placeholder]="'entityDesigner.typeMaximumLength' | translate" [onlyNumber]="true"></app-filed>
+                <app-filed [(ngModel)]="maximumLength.message" formControlName="maximumLengthMsg"
+                  [control]="form | getControl:'maximumLengthMsg'"
+                  [placeholder]="'entityDesigner.validationMessage' | translate"></app-filed>
+                <app-filed [(ngModel)]="maximumLength.messageAr" formControlName="maximumLengthMsgAr"
+                  [control]="form | getControl:'maximumLengthMsgAr'"
+                  [placeholder]="'entityDesigner.validationMessageAr' | translate"></app-filed>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3" *ngIf="isFiledType">
+            <div class="col-md-12 ">
+              <div class="d-flex justify-content-between">
+                <label class="form-label">{{ "entityDesigner.pattern" | translate }}</label>
+                <app-switch [(ngModel)]="isPattern" name="pattern" [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="handelPattern()"></app-switch>
+              </div>
+              <div *ngIf="isPattern">
+                <app-filed [(ngModel)]="pattern.value" formControlName="pattern" [control]="form | getControl:'pattern'"
+                  [placeholder]="'entityDesigner.typePattern' | translate"></app-filed>
+                <app-filed [(ngModel)]="pattern.message" formControlName="patternMsg"
+                  [control]="form | getControl:'patternMsg'"
+                  [placeholder]="'entityDesigner.validationMessage' | translate"></app-filed>
+                <app-filed [(ngModel)]="pattern.messageAr" formControlName="patternMsgAr"
+                  [control]="form | getControl:'patternMsgAr'"
+                  [placeholder]="'entityDesigner.validationMessageAr' | translate"></app-filed>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3" *ngIf="isDateType">
+            <div class="d-flex justify-content-between">
+              <label class="  form-label">{{'entityDesigner.maxDateToday' | translate}}</label>
+              <app-switch [(ngModel)]="isMaxDateToday" (ngModelChange)="handelMaxDateToday()" name="today"
+                [ngModelOptions]="{standalone: true}"></app-switch>
+            </div>
+          </div>
+          <div class="mt-3" *ngIf="isDateType">
+            <div class="d-flex justify-content-between">
+              <label class="form-label">{{'entityDesigner.dateControl' | translate}}</label>
+              <app-switch [(ngModel)]="isMinDateControl" (ngModelChange)="handelMinDateFromControl()"
+                name="minDateControl" [ngModelOptions]=" {standalone: true}"></app-switch>
+            </div>
+            <div class="mt-3" *ngIf="isMinDateControl">
+              <app-select
+                formControlName="minDateControl"
+                [items]="dateControls"
+                [bindLabel]="'enLabel'"
+                (ngModelChange)="selectDateControl.value = $event.toString()"
+                [(ngModel)]="selectDateControl.value"
+              ></app-select>
+            </div>
+          </div>
+          <div class="mt-3" *ngIf="isDateType">
+            <div class="d-flex justify-content-between">
+              <label class="  form-label">{{'entityDesigner.minimumDate' | translate}}</label>
+              <app-switch [(ngModel)]="isMinDate" (ngModelChange)="handelMinDate()" name="minDate"
+                [ngModelOptions]=" {standalone: true}"></app-switch>
+            </div>
+            <div *ngIf="isMinDate">
+              <app-nz-date-picker formControlName="minDate" name="minDate" [(ngModel)]="minDate.value"></app-nz-date-picker>
+            </div>
+          </div>
+
+          <div class="row mt-3" *ngIf="isFileUpload">
+            <div class="col-md-12 ">
+              <div class="d-flex justify-content-between">
+                <label class="form-label">{{ "entityDesigner.sizeFile" | translate }}</label>
+                <app-switch [(ngModel)]="isFileSize" name="sizeFile" [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="handelSizeFile()"></app-switch>
+              </div>
+              <div *ngIf="isFileSize">
+                <app-filed onlyNumber [(ngModel)]="sizeFile.value" formControlName="sizeFile"
+                  [control]="form | getControl:'sizeFile'" [onlyNumber]="true"
+                  [placeholder]="'entityDesigner.sizeFile' | translate"></app-filed>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-3" *ngIf="isFileUpload">
+            <div class="col-md-12 ">
+              <div class="d-flex justify-content-between">
+                <label class="form-label">{{ "entityDesigner.typeFile" | translate }}</label>
+                <app-switch [(ngModel)]="isFileType" name="fileType" [ngModelOptions]="{standalone: true}"
+                  (ngModelChange)="handelTypeFile()"></app-switch>
+              </div>
+
+              <div *ngIf="isFileType">
+                <app-select
+                  [(ngModel)]="fileType.value"
+                  formControlName="fileType"
+                  [title]="' '"
+                  [bindVlaue]="'item_text'"
+                  [bindLabel]="'item_text'"
+                  [placeholder]="'entityDesigner.typeFile' | translate"
+                  [items]="supportedFormats"
+                  [multiple]="true"
+                  [clearable]="true"
+                ></app-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-tab>
+    </app-tabs>
+  </div>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="onPopupClose()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="form?.invalid"
+    (click)="save()"
+  >
+    {{ 'shared.save' | translate }}
+  </button>
+</div>

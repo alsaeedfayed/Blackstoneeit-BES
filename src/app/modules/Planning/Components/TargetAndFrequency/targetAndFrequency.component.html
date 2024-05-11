@@ -1,0 +1,186 @@
+<!-- Add Goal -->
+<div class="target">
+  <!-- Internal weight & contribution -->
+  <form [formGroup]="model.weightForm">
+    <div class="weight-wrapper row">
+      <div class="internal-weight col-md-6 col-sm-12">
+        <div class="val">
+          <frequency-input
+            [title]="'Planning.internalWeight' | translate"
+            [Item]="1"
+            [disabled]="model.showOnlyDetails"
+            formControlName="internalWeight"
+            class="intial"
+          ></frequency-input>
+          <div
+            class="error"
+            *ngIf="model.internalWeightVal < 0 || model.internalWeightVal > 100"
+          >
+            <span>{{ "Planning.internalWeightMsg" | translate }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="contribution-weight col-md-6 col-sm-12">
+        <div class="val">
+          <frequency-input
+            [title]="'Planning.contributionWeight' | translate"
+            [Item]="1"
+            formControlName="contributionWeight"
+            [disabled]="model.showOnlyDetails"
+            class="intial"
+          ></frequency-input>
+          <div
+            class="error"
+            *ngIf="model.internalWeightVal < 0 || model.internalWeightVal > 100"
+          >
+            <span>{{ "Planning.internalWeightMsg" | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Measurement Type -->
+  <div class="measurment-type">
+    <label>{{ "Planning.measurementType" | translate }}</label>
+    <div class="types">
+      <div class="type" *ngFor="let type of model.filteredTypes">
+        <button
+          class="btn"
+          [ngClass]="{ active: type.isActive }"
+          [disabled]="model.showOnlyDetails"
+          (click)="model.toogleTypeActivations(type)"
+        >
+          {{ type.txt }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Defining Target -->
+  <div class="define-target">
+    <label>{{ "Planning.defineTheTarget" | translate }}</label>
+    <div class="target-wrap">
+      <form [formGroup]="model.targetForm">
+        <div
+          class="check"
+          [ngStyle]="{
+            display:
+              model.IsBaselineKBI || model.getDateMode || model.isParentSubGoal
+                ? 'none'
+                : 'block'
+          }"
+        >
+          <app-checkbox
+            title="{{ 'Planning.updateGoalProgressText' | translate }}"
+            formControlName="isParentLinkedToChildren"
+            [(ngModel)]="model.isParentLinkedToChildren"
+            [disabled]="model.showOnlyDetails"
+            (valueChnaged)="model.chnageTargetValidators($event)"
+          ></app-checkbox>
+        </div>
+        <div class="check">
+          <app-checkbox
+            title="{{ 'Planning.centeralizedKpi' | translate }}"
+            [disabled]="model.isParentLinkedToChildren"
+            [ngStyle]="{
+              display: model.isL0Goal ? 'none' : 'block'
+            }"
+            formControlName="isCentralizedKPI"
+          ></app-checkbox>
+        </div>
+        <div class="check">
+          <app-checkbox
+            title="{{ 'Planning.baselineKBI' | translate }}"
+            formControlName="isBaseline"
+            (valueChnaged)="model.chnageTargetValidators($event)"
+            [disabled]="model.showOnlyDetails"
+          ></app-checkbox>
+        </div>
+        <div
+          class="child"
+          [ngStyle]="{
+            display:
+              model.IsBaselineKBI || model.getSubGoalMode() ? 'none' : 'block'
+          }"
+        >
+          <frequency-input
+            title="{{ 'Planning.initial' | translate }}"
+            [Item]="model.selectedType"
+            [disabled]="model.IsBaselineKBI || model.showOnlyDetails"
+            class="intial col-md-6 pl-0"
+            formControlName="initial"
+            [control]="model.targetForm | getControl : 'initial'"
+            [isSubmitted]="model.isSubmitted"
+            [allowPastDate]="true"
+          ></frequency-input>
+        </div>
+        <div
+          class="child"
+          [ngStyle]="{
+            display:
+              model.IsBaselineKBI || model.getSubGoalMode() ? 'none' : 'block'
+          }"
+        >
+          <frequency-input
+            title="{{ 'Planning.totalTarget' | translate }}"
+            [Item]="model.selectedType"
+            class="intial col-md-6 pl-0"
+            [disabled]="model.IsBaselineKBI || model.showOnlyDetails"
+            formControlName="totalTarget"
+            [control]="model.targetForm | getControl : 'totalTarget'"
+            [isSubmitted]="model.isSubmitted"
+            (valueChanged)="model.setFrequencies($event)"
+            [allowPastDate]="true"
+          ></frequency-input>
+        </div>
+        <div class="child"></div>
+        <div class="child">
+             <div class="check">
+          <app-checkbox
+            title="{{ 'Planning.equalTargetAndFreqLabel' | translate }}"
+            [ngStyle]="{
+            display:
+              model.IsBaselineKBI || model.getSubGoalMode() ||  model.getDateMode || model.isYearlyFreq ? 'none' : 'block'
+          }"
+            formControlName="IsMaintainTargetForFrequency"
+            (valueChnaged)="model.setEqulFreqsCase($event)"
+            [disabled]="model.showOnlyDetails"
+          ></app-checkbox>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Frequency Type -->
+  <div [ngStyle]="{ display: model.IsBaselineKBI ? 'none' : 'block' }">
+    <div class="freq-type" *ngIf="!model.getDateMode">
+      <label>{{ "Planning.frequencyUpdate" | translate }}</label>
+      <div class="types">
+        <div class="type" *ngFor="let type of model.filteredFreq">
+          <button
+            class="btn"
+            [ngClass]="{ active: type.isActive }"
+            [disabled]="(model.editedGoal?.isParentLinkedToChildren && model.editedGoal?.hasChildren) || model.showOnlyDetails"
+            (click)="model.toogleFreqActivations(type)"
+          >
+            {{ type.txt }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="freq-container"
+      [ngStyle]="{ display: model.isParentLinkedToChildren ? 'none' : 'block' }"
+    >
+      <frequency
+        [selectedType]="model.selectedType"
+        [isDisableAllInputs]="model.isFreqEqulTarget || model.showOnlyDetails"
+        [selectedFreq]="model.selectedFreq"
+        (setFreqMeasurementEvt)="model.setAllData($event)"
+      ></frequency>
+    </div>
+  </div>
+</div>

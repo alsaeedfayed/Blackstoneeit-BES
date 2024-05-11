@@ -1,0 +1,119 @@
+<!--<app-ag-table [data]="data" [context]="context"></app-ag-table>-->
+<div class="table mt-4">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="user-index">#</th>
+          <th scope="col" class="user-name">
+            {{ "users.name" | translate }}
+          </th>
+          <th scope="col" class="user-email">
+            {{ "users.email" | translate }}
+          </th>
+          <th scope="col" class="user-mobile">
+            {{ "users.mobile" | translate }}
+          </th>
+          <th scope="col" class="user-groups">
+            {{ "users.groups" | translate }}
+          </th>
+          <th scope="col" class="user-roles">
+            {{ "users.roles" | translate }}
+          </th>
+          <th scope="col" class="user-status">
+            {{ "users.active" | translate }}
+          </th>
+          <th scope="col" class="user-actions">{{ "shared.actions" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="
+            let item of list
+              | paginate
+                : {
+                    itemsPerPage: paginationModel?.pageSize,
+                    currentPage: paginationModel?.pageIndex,
+                    totalItems
+                  };
+            let i = index
+          ">
+          <td class="user-index">
+            {{ i | tableItemIndex : paginationModel?.pageSize : paginationModel?.pageIndex }}
+          </td>
+          <td class="user-name">
+            <person-item
+              *ngIf="item?.fullName && language == 'en'"
+              [requesterItem]="item"
+              [noCursor]="true"
+            ></person-item>
+
+            <person-item
+              *ngIf="item?.fullArabicName && language == 'ar'"
+              [requesterItem]="item"
+              [noCursor]="true"
+            ></person-item>
+          </td>
+          <td class="user-email">
+            {{ item?.email }}
+          </td>
+          <td class="user-mobile">
+            <ng-container *ngIf="item?.phoneNumber">
+              +971 {{ item?.phoneNumber }}
+            </ng-container>
+            <span class="rectangle-badge badge-muted" *ngIf="!item?.phoneNumber">
+              {{ 'shared.N/A' | translate }}
+            </span>
+          </td>
+          <td class="user-groups">
+            <span
+              *ngIf="item?.usersGroups?.length"
+              class="hoverableLink"
+              (click)="onViewGroupsAndRoles(item)"
+            >
+              <ng-container *ngIf="item?.usersGroups?.length == 1">
+                {{ language == 'ar' ? item?.usersGroups[0]['arabicName'] : item?.usersGroups[0]['name'] }}
+              </ng-container>
+              <ng-container *ngIf="item?.usersGroups?.length > 1">
+                {{ item?.usersGroups?.length }} {{ 'users.groups' | translate }}
+              </ng-container>
+            </span>
+            <span class="rectangle-badge badge-muted" *ngIf="!item?.usersGroups?.length">
+              {{ 'shared.N/A' | translate }}
+            </span>
+          </td>
+          <td class="user-roles">
+            <span
+              *ngIf="item?.usersRoles?.length"
+              class="hoverableLink"
+              (click)="onViewGroupsAndRoles(item)"
+            >
+              <ng-container *ngIf="item?.usersRoles?.length == 1">
+                {{ language == 'ar' ? item?.usersRoles[0]['arabicName'] : item?.usersRoles[0]['name'] }}
+              </ng-container>
+              <ng-container *ngIf="item?.usersRoles?.length > 1">
+                {{ item?.usersRoles?.length }} {{ 'users.roles' | translate }}
+              </ng-container>
+            </span>
+            <span class="rectangle-badge badge-muted" *ngIf="!item?.usersRoles?.length">
+              {{ 'shared.N/A' | translate }}
+            </span>
+          </td>
+          <td class="user-status">
+            <app-switch
+              [disabled]="true"
+              [(ngModel)]="item.active"
+              (click)="confirmToggleActiveState(item)"
+            ></app-switch>
+          </td>
+          <td class="user-actions">
+            <app-dropdown
+              [items]="cardActions"
+              (select)="onOptionClick($event, item)"
+            ></app-dropdown>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

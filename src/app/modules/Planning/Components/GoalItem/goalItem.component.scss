@@ -1,0 +1,370 @@
+// Goal Item Style
+@import "../../../../../assets/css/utils/variables.scss";
+@import "../../../../../assets/css/utils/mixins.scss";
+@import "../../../../../assets/css/components/tooltip.scss";
+
+.goalItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // height: 52px;
+  min-height: 43px;
+  @include rtl_value(margin-left, 32px, unset);
+  @include rtl_value(margin-right, unset, 32px);
+  background: $white-color;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.04);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  border: 1px solid transparent;
+
+  @media (max-width: 650px) {
+    height: 100px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 400px) {
+    height: 125px;
+  }
+
+  .right-stuff {
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 650px) {
+      flex-wrap: wrap;
+      max-width: 56%;
+    }
+
+    @media (max-width: 400px) {
+      max-width: 100%;
+    }
+
+    gap: 5px;
+    padding-inline-start: 10px;
+
+    .level {
+      display: flex;
+      gap: 10px;
+
+      span {
+        border-radius: 5px;
+
+        &.current {
+          border: 1px solid #000;
+          display: inline-block;
+          min-width: 30px;
+          height: 30px;
+          padding: 0 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        &.meta-level {
+          background: #000;
+          color: #fff;
+          display: inline-block;
+          @include size(auto, 30px);
+          padding: 0 6px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    .type {
+      padding: 6px 12px;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      height: 30px;
+
+      &.id-type {
+        padding: 6px 0;
+      }
+
+      span {
+        @include font(12px, 500);
+        font-family: "Roboto";
+
+        &.id {
+          background: #ddd;
+          color: #000;
+          font-weight: 400;
+        }
+      }
+    }
+
+    h4 {
+      @include font(18px, 500);
+      margin: 0;
+
+      @media (max-width: 650px) {
+        width: 100%;
+        font-size: 16px;
+      }
+
+      line-height: 1 !important;
+      // text-transform: capitalize;
+      word-break: break-word;
+    }
+
+    .text {
+      p {
+      }
+    }
+  }
+
+  .left-stuff {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 15px;
+
+    @media (max-width: 650px) {
+      padding: 0 10px;
+      width: 40%;
+    }
+
+    @media (max-width: 400px) {
+      width: 100%;
+    }
+
+    .blocks {
+      display: flex;
+      gap: 20px;
+      width: calc(100% - 200px);
+
+      @media (max-width: 1000px) {
+        display: none;
+      }
+
+      .block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 90px;
+        font-size: 90%;
+
+        p {
+          margin-bottom: 0;
+          line-height: 1.5;
+          color: gray;
+        }
+
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .actions {
+      width: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      @media (max-width: 650px) {
+        justify-content: flex-start;
+      }
+
+      gap: 5px;
+
+      div {
+        margin-left: 2px;
+        margin-right: 2px;
+
+        @media (max-width: 650px) {
+          display: flex;
+
+          button {
+            display: block;
+            border: none;
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    .goalAction {
+      color: $white-color;
+      min-height: unset;
+      height: 30px;
+      font-size: 18px;
+      padding: 5px 8px;
+      margin-right: 6px;
+      border: 1px solid;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.4s;
+      display: none;
+
+      @media (max-width: 650px) {
+        height: 24px;
+        margin-bottom: 4px;
+        padding: 2px;
+      }
+
+      &.details-icon {
+        background-color: $main-color;
+      }
+
+      &.delete-icon {
+        background-color: #ed719c;
+      }
+    }
+
+    .addChild {
+      button {
+        display: none;
+        padding: 0;
+        //display: flex;
+        height: 35px;
+        min-width: unset !important;
+
+        @media (max-width: 650px) {
+          border: 1px solid;
+          padding: 5px 15px;
+          min-height: unset;
+          height: 30px;
+        }
+
+        // span, i {
+        //   color: #fff;
+        // }
+      }
+    }
+
+    .data {
+      display: flex;
+      gap: 50px;
+      padding-inline-end: 70px;
+      position: relative;
+
+      span {
+        display: inline-block;
+        color: $secondary-color;
+        font-weight: 400;
+        font-size: 14px;
+      }
+
+      span.state {
+        position: absolute;
+        height: 51px;
+        padding: 10px;
+        min-width: 15px;
+        @include rtl_value(right, 0, auto);
+        @include rtl_value(left, auto, 0);
+        top: -17px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+      }
+    }
+
+    .edit {
+      cursor: pointer;
+      display: none;
+
+      button {
+        min-width: unset !important;
+        padding: 0;
+        display: flex;
+        gap: 5px;
+        border: 1px solid;
+        padding: 5px 8px;
+        min-height: unset;
+        height: 30px;
+      }
+
+      i {
+        font-size: 20px;
+      }
+    }
+  }
+
+  &:hover {
+    .goalAction {
+      display: flex !important;
+    }
+
+    .left-stuff {
+      .addChild {
+        button {
+          display: flex;
+          border: 1px solid;
+          padding: 5px 15px;
+          min-height: unset;
+          height: 30px;
+        }
+      }
+
+      .edit {
+        display: block;
+      }
+    }
+  }
+
+  .info {
+    position: absolute;
+    @include rtl_value(left, -35px, auto);
+    @include rtl_value(right, auto, -35px);
+    display: flex;
+    justify-content: flex-end;
+
+    &:hover {
+      .toolTip {
+        display: block;
+        z-index: 99999999;
+        left: auto;
+        @include rtl_value(right, auto, 0);
+
+        @media (max-width: 1200px) {
+          @include rtl_value(right, -72px, auto);
+          @include rtl_value(left, auto, -36px);
+
+          &::before {
+            @include rtl_value(right, 79px, auto);
+            @include rtl_value(left, auto, 44px);
+          }
+        }
+
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+
+    i {
+      color: rgb(203, 40, 40);
+      font-size: 26px;
+    }
+  }
+
+  // &:not(:hover) {
+  //   border-color: "black";
+  // }
+}
+
+.btn i.bx {
+  margin-inline-end: 0 !important;
+}
+
+.img-style {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  transition: 0.4s;
+
+  &.flip {
+    transform: rotate(180deg);
+  }
+}

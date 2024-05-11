@@ -1,0 +1,167 @@
+<ng-container *ngIf="false; else table_data">
+  <div class="my-4">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #table_data>
+  <section class="history-info block-content my-1">
+    <!-- history Table -->
+    <div
+      class="history-list-container"
+      *ngIf="history && history?.length > 0; else no_data"
+    >
+      <div class="history-list">
+        <table>
+          <tr>
+            <th class="history-date">
+              {{ "committeeDecisions.details.history.sentDate" | translate }}
+            </th>
+            <th class="history-to">
+              {{ "committeeDecisions.details.history.to" | translate }}
+            </th>
+            <th class="history-cc">
+              {{ "committeeDecisions.details.history.cc" | translate }}
+            </th>
+            <th class="history-cc">
+              {{
+                "committeeDecisions.details.SendModel.externalTos" | translate
+              }}
+            </th>
+            <th class="history-cc">
+              {{
+                "committeeDecisions.details.SendModel.externalCcs" | translate
+              }}
+            </th>
+            <th class="history-by">
+              {{ "committeeDecisions.details.history.sentBy" | translate }}
+            </th>
+            <th class="history-action"></th>
+          </tr>
+          <tr *ngFor="let item of history">
+            <!-- history date -->
+            <td class="history-date">
+              <span *ngIf="item?.creationDate">
+                {{
+                  language === "en"
+                    ? ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                      | date : "d MMM y")
+                    : ((item?.creationDate | uTCToLocalDate).toLocaleString()
+                      | localizeDate : "d MMM y")
+                }}
+              </span>
+            </td>
+
+            <!-- history to -->
+            <td class="history-to">
+              <div
+                class="d-flex align-items-center gap-2"
+                *ngIf="item?.tos?.length > 1"
+              >
+                <avatar-stack [members]="item?.tosInfo"></avatar-stack>
+                <span class="members-count">
+                  {{ item?.tos?.length | receivers : language }}
+                </span>
+              </div>
+              <person-item
+                *ngIf="item?.tos?.length == 1"
+                [requesterItem]="item?.tosInfo[0]"
+                [noCursor]="true"
+              ></person-item>
+            </td>
+
+            <!-- history cc -->
+            <td class="history-cc">
+              <div
+                class="d-flex align-items-center gap-2"
+                *ngIf="item?.ccs?.length > 1"
+              >
+                <avatar-stack [members]="item?.ccsInfo"></avatar-stack>
+                <span class="members-count">
+                  {{ item?.ccs?.length | receivers : language }}
+                </span>
+              </div>
+              <person-item
+                *ngIf="item?.ccs?.length == 1"
+                [requesterItem]="item?.ccsInfo[0]"
+                [noCursor]="true"
+              ></person-item>
+              <div *ngIf="item?.ccs?.length == 0">
+                <!-- {{"shared.noCC"|translate}} -->
+                -
+              </div>
+            </td>
+            <!-- history external to -->
+            <td class="history-cc">
+              <div *ngIf="item?.externalTos.length > 0">
+                {{ item?.externalTos.length | receivers : language }}
+              </div>
+              <div *ngIf="item?.externalTos?.length == 0">-</div>
+            </td>
+            <!-- history external cc -->
+            <td class="history-cc">
+              <div *ngIf="item?.externalCcs.length > 0">
+                {{ item?.externalCcs.length | receivers : language }}
+              </div>
+              <div *ngIf="item?.externalCcs?.length == 0">-</div>
+            </td>
+           
+
+            <!-- history by -->
+            <td class="history-by">
+              <person-item
+                [requesterItem]="item?.creatorInfo"
+                [noCursor]="true"
+              ></person-item>
+            </td>
+            <td>
+              <button
+                [title]="'shared.viewDetails' | translate"
+                class="edit-grid-item-btn"
+                (click)="openDetailsModel(item)"
+              >
+                <i class="bx bxs-show"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <ng-template #no_data>
+      <div class="no-data">
+        <app-no-data
+          [msg]="'committeeDecisions.details.history.noData' | translate"
+        ></app-no-data>
+      </div>
+    </ng-template>
+  </section>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+<!-- create/edit KPI model -->
+<app-model
+  [dimensions]="{ width: 700, height: 750 }"
+  [id]="'history-details-modal'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="w-100">
+    <label class="modal-title">
+      {{ "committeeDecisions.details.messageDetails" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="border-top">
+    <app-send-decision-history-details
+      *ngIf="isDetailsModalOpened"
+      [language]="language"
+      [message]="selectedMessage"
+    ></app-send-decision-history-details>
+  </div>
+</app-model>

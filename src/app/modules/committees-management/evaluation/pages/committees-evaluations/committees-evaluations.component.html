@@ -1,0 +1,94 @@
+<div class="page">
+  <app-header-page
+    [backButton]="true"
+    [title]="'committeesEvaluations.pageTitle' | translate"
+    [isAddBtn]="false"
+    [showTotalItems]="true"
+    [totalItems]="totalItems"
+  ></app-header-page>
+
+  <!-- page filters -->
+  <app-page-filters
+    [searchPlaceHolder]="'committeesRequests.searchPlaceholder' | translate"
+    [appliedFiltersCount]="appliedFiltersCount"
+    [hasAssignedSwitch]="false"
+    (onClear)="clearFilter()"
+    (onSwitch)="getMyCommittees($event)"
+    (search)="onSearch($event)"
+    [hasAddBtn]="canAddEvaluation"
+    [addBtnLabel]="'committeesEvaluations.table.new' | translate"
+    (onAddBtnCLicked)="openCreateEvaluationModel()"
+    [addBtnPermission]="addEvaluationPermission"
+    [hasExportBtn]="true"
+    (onExportBtnClicked)="exportList()"
+    (onSearchBtnCLicked)="onSearchBtnCLicked()"
+    [hasAdvancedFilter]="true"
+  >
+    <app-evaluation-filter
+      [isFiltersEmpty]="emptyFIlters"
+      (filtersNumber)="getFiltersCount($event)"
+      (filter)="handelFilter($event)"
+    ></app-evaluation-filter>
+  </app-page-filters>
+  <!-- table -->
+  <ng-container *ngIf="loading; else table_data">
+    <div class="my-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- requests items table -->
+<ng-template #table_data>
+  <app-evaluation-table
+    *ngIf="list?.length > 0"
+    [SortedCol]="sortedCol"
+    [SortDirection]="sortDirection"
+    [totalItems]="totalItems"
+    [list]="list"
+    [paginationModel]="paginationModel"
+    (sortFilter)="handleSortFilter($event)"
+    (onPaginateEvent)="handlePaginationChange($event)"
+    (openEditModal)="editEvaluation($event)"
+    (refrshTable) = "refreshList()"
+  ></app-evaluation-table>
+
+  <div class="no-data" *ngIf="list?.length == 0 || !list">
+    <app-no-data
+      [msg]="'committeesEvaluations.noDataMsg' | translate"
+    ></app-no-data>
+  </div>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'create-evaluation'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="create-task-model-header w-100">
+    <label class="modal-title">
+      {{ "committeesEvaluations.modal.title" | translate }}
+    </label>
+  </div>
+
+  <div modal-content class="create-task-model-content border-top">
+    <!-- <create-task-model [committeeId]="125"></create-task-model> -->
+    <app-create-evaluation-model
+      (evaluationAdded)="evaluationAdded()"
+    ></app-create-evaluation-model>
+  </div>
+</app-model>
+<!-- (taskAdded)="getAllTasks()" -->
+
+<!-- loader skeleton for the table -->
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

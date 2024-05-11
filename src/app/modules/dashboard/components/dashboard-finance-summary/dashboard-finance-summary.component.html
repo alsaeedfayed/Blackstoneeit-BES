@@ -1,0 +1,131 @@
+<div class="finance-card-container">
+  <div class="header">
+    <span class="title">
+      {{ "dashboard.financeSummary" | translate }}
+    </span>
+    <!-- <span class="projects">
+      {{ data?.totalProjects }}
+      {{
+        data?.totalProjects > 1
+          ? ("dashboard.projectsLabel" | translate)
+          : ("dashboard.project" | translate)
+      }}
+    </span> -->
+  </div>
+
+  <div class="finance-progress-bars">
+    <div class="finance-progress">
+      <span [ngStyle]="{ 'background-color': colors.spent, 'width': data?.totalSpentPercentage }"></span>
+    </div>
+    <div class="finance-progress">
+      <span [ngStyle]="{ 'background-color': colors.planned, 'width': data?.totalPlannedPercentage }"></span>
+    </div>
+    <div class="finance-progress">
+      <span [ngStyle]="{ 'background-color': colors.budget, 'width': data?.totalBudgetPercentage }"></span>
+    </div>
+  </div>
+
+  <div class="finance-items">
+    <ul>
+      <li>
+        <div class="first-col">
+          <span class="dot" [ngStyle]="{ 'background-color': colors.spent }"></span>
+          <span class="status">{{ 'dashboard.spent' | translate }}</span>
+        </div>
+        <div class="second-col">
+          <span class="count" [ngStyle]="{ color: colors.spent }">
+            {{ data?.totalSpentAmount | currency : "" : "" }}
+            {{ "shared.AED" | translate }}
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="first-col">
+          <span class="dot" [ngStyle]="{ 'background-color': colors.planned }"></span>
+          <span class="status">{{ 'dashboard.planned' | translate }}</span>
+        </div>
+        <div class="second-col">
+          <span class="count" [ngStyle]="{ color: colors.planned }">
+            {{ data?.totalPlannedAmount | currency : "" : "" }}
+            {{ "shared.AED" | translate }}
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="first-col">
+          <span class="dot" [ngStyle]="{ 'background-color': colors.budget }"></span>
+          <span class="status">{{ 'dashboard.totalBudget' | translate }}</span>
+        </div>
+        <div class="second-col">
+          <span class="count" [ngStyle]="{ color: colors.budget }">
+            {{ data?.totalBudget | currency : "" : "" }}
+            {{ "shared.AED" | translate }}
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- <div class="labels">
+    <span class="spent">
+      {{ "dashboard.spent" | translate }}:
+      {{
+        data?.totalSpentAmount
+          | currency : ("shared.AED" | translate) + " " : "code"
+      }}
+    </span>
+    <span class="total">
+      {{ "dashboard.totalBudget" | translate }}:
+      {{
+        data?.totalBudget | currency : ("shared.AED" | translate) + " " : "code"
+      }}
+    </span>
+    <span class="spent">
+      {{ "dashboard.spent" | translate }}:
+      {{ data?.totalSpentAmount | currency : "" : "" }}
+      {{ "shared.AED" | translate }}
+    </span>
+    <span class="total">
+      {{ "dashboard.totalBudget" | translate }}:
+      {{ data?.totalBudget | currency : "" : "" }}
+      {{ "shared.AED" | translate }}
+    </span>
+  </div> -->
+
+  <!-- <div class="finance-progress">
+    <span
+      class="spent-progress"
+      [ngStyle]="{ width: data?.totalSpentPercentage }"
+    ></span>
+    <span class="planned"></span>
+    <span class="total-budget"></span>
+  </div> -->
+
+  <!-- <div class="items">
+    <div class="item">
+      <img src="../../../../../assets/icons/dollar-sign.svg" alt="" />
+      <span class="value">
+        {{
+          data?.totalBudget
+            | currency : ("shared.AED" | translate) + " " : "code"
+        }}
+        <span class="nowrap">
+          ({{ data?.totalProjects }}
+          {{ "dashboard.projectsLabel" | translate }})
+        </span>
+      </span>
+      <span class="label">{{ "dashboard.totalBudget" | translate }}</span>
+    </div>
+
+    <div class="item">
+      <img src="../../../../../assets/icons/dollar-sign.svg" alt="" />
+      <span class="value">
+        {{
+          data?.totalSpentAmount
+            | currency : ("shared.AED" | translate) + " " : "code"
+        }}
+      </span>
+      <span class="label">{{ "dashboard.totalSpentAmount" | translate }}</span>
+    </div>
+  </div> -->
+</div>

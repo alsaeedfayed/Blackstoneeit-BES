@@ -1,0 +1,57 @@
+<div class="items-timeline">
+  <h3 class="timeline-title mb-4" *ngIf="title">{{ title }}</h3>
+
+  <ul *ngFor="let item of items">
+    <div class="line"></div>
+    <li>
+      <div class="dot completed" *ngIf="item?.status?.code === 'Completed'">
+        <i class='bx bx-check'></i>
+      </div>
+      <div class="dot upcoming" *ngIf="item?.status?.code !== 'Completed'">
+        <i class='bx bx-dots-horizontal-rounded'></i>
+      </div>
+
+      <div class="item-content d-flex flex-column gap-3">
+        <div class="datetime" *ngIf="item?.action?.createdDate">
+          <span>{{ (item?.action?.createdDate | uTCToLocalDate) | date : "dd/MM/yyyy, h:mm a" }}</span>
+        </div>
+
+        <div class="task-details">
+          <workflow-person-item
+            [ownerItem]="item?.assignedTo"
+            [CompMode]="2"
+          ></workflow-person-item>
+
+          <div class="details" *ngIf="item?.action?.comments || item?.action?.attachments?.length">
+            <p class="paragraph" *ngIf="item?.action?.comments">{{ item?.action?.comments }}</p>
+
+            <ul class="attachments-list" *ngIf="item?.action?.attachments?.length">
+              <li *ngFor="let attachment of item?.action?.attachments">
+                <i class="bx bxs-file"></i>
+                <a target="_blank" (click)="openFile(attachment?.fileName)">
+                  {{ attachment?.uploadedFileName }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <workflow-badge
+        *ngIf="item?.status?.code === 'Completed'"
+        [className]="'complete'"
+        [label]="item?.status?.title[lang]"
+      ></workflow-badge>
+      <workflow-badge
+        *ngIf="item?.status?.code === 'Pending' || item?.status?.code === 'PendingForReview'"
+        [className]="'inProgress'"
+        [label]="item?.status?.title[lang]"
+      ></workflow-badge>
+      <workflow-badge
+        *ngIf="item?.status?.code === 'Unperformed'"
+        [className]="'closed'"
+        [label]="item?.status?.title[lang]"
+      ></workflow-badge>
+    </li>
+  </ul>
+</div>

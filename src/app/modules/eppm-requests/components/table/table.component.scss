@@ -1,0 +1,31 @@
+@import "src/assets/css/utils/variables.scss";
+
+.req-table-wrapper {
+  overflow-x: auto;
+
+  .table {
+    .project-name {
+      max-width: 300px;
+    }
+  }
+
+  .initiator-details {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-inline-end: 11px;
+    }
+
+    span {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      color: $tertiary-color;
+    }
+  }
+}

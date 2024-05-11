@@ -1,0 +1,24 @@
+<div class="dropdown-box">
+  <button
+    type="button"
+    class="btn btn-info dropdown-btn"
+    [ngClass]="{ show: show }"
+    (click)="show = !show"
+  >
+    <i class="bx bxs-download"></i>
+    {{ "shared.export" | translate }}
+    <i
+      class="bx chevron-icon"
+      [ngClass]="[show ? 'bx-chevron-up' : 'bx-chevron-down']"
+    ></i>
+  </button>
+
+  <ul #dropdown class="dropdown-list" [ngClass]="{ show: show }">
+    <li class="item" (click)="onSelect('xlsx')">
+      {{ "shared.excelFile" | translate }}
+    </li>
+    <li class="item" (click)="onSelect('csv')">
+      {{ "shared.csvFile" | translate }}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,35 @@
+<div class="modal-action">
+  <form [formGroup]="form">
+
+    <app-select *ngIf="ReassignActionType" formControlName="user" autofocus title="{{ 'cr.users' | translate }}" bindValue="id"
+        placeholder="{{ 'cr.selectUser' | translate }}" [control]="form | getControl: 'user'"
+        [bindLabel]="'fullName'" [items]="users">
+    </app-select>
+
+    <app-description-input-with-attachments
+      class="d-block pt-3"
+      title="{{ 'cr.comments' | translate }}"
+      formControlName="comments"
+      [control]="form | getControl: 'comments'"
+      (attachmentUploadEvent)="uploadFile($event)"
+      (onDelete)="deleteAttachment($event)"
+    ></app-description-input-with-attachments>
+  </form>
+
+  <div class="d-flex justify-content-flex-end actions">
+    <button class="btn btn-dark mr-2" (click)="closeModel()">
+      {{ 'shared.back' | translate }}
+    </button>
+    <button
+      class="btn btn-main"
+      [disabled]="form.invalid || loading"
+      (click)="saveAction()"
+    >
+      <i *ngIf="loading" class="bx bx-loader-alt bx-spin ml-1"></i>
+      <ng-container *ngIf="!loading">{{ 'shared.save' | translate }}</ng-container>
+    </button>
+  </div>
+</div>
+<!--
+[disabled]="model.isBtnLoading"
+(click)="model.onPopupSave()" -->

@@ -1,0 +1,111 @@
+<!-- buttons and status position -->
+<ng-container *ngIf="!decision; else data">
+  <div class="mb-3">
+    <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #data>
+  <div class="new-model-dialog-body">
+    <h3 class="fs-6 my-3">{{ language == "ar" ? decision?.nameAr : decision?.name }}</h3>
+
+    <!-- description -->
+    <div class="mb-4" *ngIf="decision?.notes">
+      <div class="angular-editor-description" [innerHTML]="decision?.notes | truncate: descTextLimit"></div>
+
+      <button 
+      class="see-more-btn" 
+      *ngIf="decision?.notes?.length > descTextInitialLimit"
+        (click)="toggleMoreText()">
+        <ng-container *ngIf="!isDescMoreTextDisplayed; else seeLess">
+          {{ 'committeesManagement.seeMore' | translate }}
+        </ng-container>
+        <ng-template #seeLess>
+          {{ 'committeesManagement.seeLess' | translate }}
+        </ng-template>
+      </button>
+    </div>
+
+    <!-- chairman -->
+    <div class="chairman mb-4">
+      <div class="block-title">{{ 'committeeDecisions.detailsModel.chairedBy' | translate }}</div>
+
+      <person-item [requesterItem]="decision?.creatorInfo" [noCursor]="true"></person-item>
+    </div>
+
+    <div class="d-flex gap-3 w-100">
+      <!-- related committee -->
+      <div class="related-committee flex-grow-1">
+        <div class="block-title">{{ 'committeeDecisions.detailsModel.relatedCommittee' | translate }}</div>
+
+        <a class="hoverableLink" [routerLink]="'/committees-management/committee-details/'+decision?.committeeId">
+          {{language == "ar" ? decision?.committeeInfo?.nameAr :decision?.committeeInfo?.name}}</a>
+      </div>
+
+      <!-- created -->
+      <div class="created flex-grow-1">
+        <div class="block-title">{{ 'committeeDecisions.detailsModel.created' | translate }}</div>
+
+        <span *ngIf="decision?.creationDate">
+          {{
+          language === "en" ?
+          ((decision?.creationDate | uTCToLocalDate).toLocaleString() | date: "d MMM y") :
+          ((decision?.creationDate | uTCToLocalDate).toLocaleString() | localizeDate : "d MMM y")
+          }}
+        </span>
+      </div>
+    </div>
+
+    <!-- horizontal line -->
+    <div class="horizontal-line"></div>
+
+    <!-- poll header -->
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-2" *ngIf="decision?.decisionVoting">
+      <h4 class="block-subtitle mb-0">{{ 'committeeDecisions.detailsModel.decisionVoting' | translate }}</h4>
+
+      <div class="block-length">1 {{ 'committeeDecisions.detailsModel.activePoll' | translate }}</div>
+    </div>
+
+    <!-- poll list -->
+    <ul class="poll-list" *ngIf="decision?.decisionVoting">
+      <li class="poll-item">
+        <div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+          <h5 class="poll-item-title mb-0">{{language == "ar" ? decision?.decisionVoting?.voting?.nameAr :
+            decision?.decisionVoting?.voting?.name}}</h5>
+
+          <div class="poll-item-time">{{ decision?.decisionVoting?.closingDate |
+            meetingTimeLeft:decision?.decisionVoting?.closingDate: decision?.decisionVoting?.closingDate :language }}
+          </div>
+        </div>
+
+        <div class="my-3">
+          <vote-percentage [yesPercentage]="decision?.yesPercentage" [noPercentage]="decision?.noPercentage"
+            [color]="'#D1CDFD'" [isReadonly]="false"
+            (votedYes)="onDecisionVoted(true)" (votedNo)="onDecisionVoted(false)"></vote-percentage>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- footer buttons -->
+  <div class="new-model-dialog-footer">
+    <!-- cancel button -->
+    <button
+      class="btn btn-info flex-grow-1"
+      (click)="closePopup()"
+    >
+      {{ 'shared.cancel' | translate }}
+    </button>
+    <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="isDownloading"
+    (click)="exportDataAsPDF()"
+  >
+    <i *ngIf="isDownloading" class="bx bx-loader-alt bx-spin ml-1"></i>
+    <i *ngIf="!isDownloading" class="bx bxs-file-pdf"></i>
+    {{
+      "committeeDecisions.downloadDecision" | translate
+    }}
+  </button>
+  </div>
+</ng-template>

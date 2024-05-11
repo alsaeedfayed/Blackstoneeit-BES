@@ -1,0 +1,158 @@
+<div class="new-model-dialog-body">
+  <ng-container *ngIf="loading; else formData">
+    <div class="mt-4">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-template #formData>
+    <div class="attendees-form pb-2" [formGroup]="form">
+      <tabs [tabs]="tabs" (activeTabChanged)="form.get('inviteType').setValue($event)" *ngIf="!isEdit"></tabs>
+
+      <div class="mt-3" *ngIf="form.get('inviteType').value == 1">
+        <app-select
+          formControlName="attendeeType"
+          [control]="form | getControl: 'attendeeType'"
+          [title]="'Meetings.attendeeType' | translate"
+          [placeholder]="'Meetings.selectAttendeeType' | translate"
+          [items]="attendeesType"
+          bindVlaue="key"
+          [bindLabel]="'value'"
+          [multiple]="false"
+          (change)="handleAttendeeTypes($event)"
+        ></app-select>
+      </div>
+
+      <div class="mt-3" *ngIf="form.get('inviteType').value == 2">
+        <label>{{ 'Meetings.attendeeType' | translate }} : </label>
+        <span><strong>{{ 'Meetings.internal' | translate }}</strong></span> 
+      </div>
+
+      <div class="mt-3" *ngIf="InternalType && form.get('inviteType').value == 1"> 
+        <app-select
+          formControlName="userId"
+          [control]="form | getControl: 'userId'"
+          [title]="'Meetings.inviteeName' | translate"
+          [placeholder]="'Meetings.selectInviteeName' | translate"
+          [items]="users"
+          bindValue="id"
+          [bindLabel]="'fullName'"
+          [multiple]="false"
+          [clearable]="true"
+          (onSearch)="searchUsers($event)"
+        ></app-select>
+      </div>
+
+      <div class="mt-3" *ngIf="ExternalType">
+        <app-filed
+          class="d-block"
+          formControlName="externalAttendeeName"
+          [control]="form | getControl: 'externalAttendeeName'"
+          [title]="'Meetings.inviteeName' | translate"
+          [placeholder]="'Meetings.enterInviteeName' | translate"
+        ></app-filed>
+      </div>
+
+      <div class="mt-3" *ngIf="ExternalType">
+        <app-filed
+          class="d-block"
+          formControlName="externalAttendeeEmail"
+          [control]="form | getControl: 'externalAttendeeEmail'"
+          [title]="'Meetings.attendeeEmail' | translate"
+          [placeholder]="'Meetings.attendeeEmailPlaceholder' | translate"
+        ></app-filed>
+      </div>
+
+      <div class="mt-3" *ngIf="form.get('inviteType').value == 1">
+        <app-select
+          formControlName="position"
+          [control]="form | getControl: 'position'"
+          [title]="'Meetings.inviteePosition' | translate"
+          [placeholder]="'Meetings.enterInviteePosition' | translate"
+          [items]="attendeesPoitions"
+          [bindVlaue]="'code'"
+          [bindLabel]="language === 'en' ? 'nameEn':'nameAr'"
+          [multiple]="false"
+          [clearable]="true"
+        ></app-select>
+      </div>
+
+      <div class="d-flex mt-3" *ngIf="form.get('inviteType').value == 1">
+        <app-checkbox
+          formControlName="attended"
+          [title]="'Meetings.attended' | translate"
+        ></app-checkbox>
+        <app-checkbox
+          style="display: none;"
+          formControlName="requestToSign"
+          [title]="'Meetings.directingRequestToSign' | translate"
+        ></app-checkbox>
+      </div>
+
+      <div class="mt-3 attendee-container" [hidden]="form.get('inviteType').value != 2">
+        <app-attendee-search
+          [memberToAddType]="memberToAddType"
+          [lang]="language"
+          [users]="users"
+          (onSearch)="searchUsers($event)"
+          [attendeesPoitions]="attendeesPoitions"
+          (selectedUsers)="setSelectedUser($event)"
+        ></app-attendee-search>
+
+        <div *ngIf="loading" class="mt-4">
+          <div *ngFor="let item of [1, 2, 3, 4]" >
+            <ngx-skeleton-loader
+              count="1"
+              [theme]="{
+                'border-radius': '10px',
+                height: '105px',
+                width: '280px',
+                'background-color': '#f5f6f9',
+                border: '1px solid white'
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <app-textarea-filed
+          formControlName="notes"
+          [control]="form | getControl: 'notes'"
+          [title]="'Meetings.Description' | translate"
+          [placeholder]="'Meetings.enterDescription' | translate"
+          [length]="500"
+        ></app-textarea-filed>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- footer buttons -->
+<div class="new-model-dialog-footer">
+
+  <!-- back button -->
+  <button
+    class="btn btn-dark flex-grow-1"
+    (click)="closePopup()"
+  >
+    {{ 'shared.back' | translate }}
+  </button>
+
+  <!-- save button -->
+  <button
+    class="btn btn-main flex-grow-1"
+    [disabled]="(form.invalid && form.get('inviteType').value == 1) || isBtnLoading"
+    (click)="addAttendee()"
+  >
+    <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="isBtnLoading"></i>
+    {{ 'shared.save' | translate }}
+  </button>
+</div>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>

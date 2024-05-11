@@ -1,0 +1,365 @@
+<div class="container bg-white py-2 border">
+  <div class="page-data mt-3">
+    <ng-container *ngIf="isLoading; else create_form">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </ng-container>
+  </div>
+
+  <ng-template #create_form>
+    <form class="new-event-form pb-4" [formGroup]="form">
+      <div class="form-header d-flex justify-content-end align-items-center">
+        <!-- <div class="title-wrapper d-flex align-items-center gap-3">
+          <i
+            class="bx bx-arrow-back"
+            [ngClass]="{ ar: lang === 'ar' }"
+            [routerLink]="['/bau/taskboard/' + selectedYear + '/tasks-table']"
+          ></i>
+          <h6 class="text">
+            {{ "bau.createNewTask" | translate }}
+          </h6>
+        </div> -->
+        <div class="button-wrapper d-flex gap-2">
+          <button
+            type="button"
+            class="btn cancel"
+            [routerLink]="['/bau/taskboard/' + selectedYear + '/tasks-table']"
+          >
+            {{ "bau.cancel" | translate }}
+          </button>
+          <button
+            *ngIf="mode == 'create'"
+            type="button"
+            class="btn cancel"
+            (click)="onOpenFollowUpModal()"
+          >
+            {{ "bau.importBtn" | translate }}
+          </button>
+          <button
+            type="submit"
+            class="btn submit"
+            [disabled]="!form.valid || uploadingFile"
+            (click)="onSubmit()"
+          >
+            <i class="bx bx-loader-alt bx-spin ml-1" *ngIf="uploadingFile"></i>
+            <ng-container *ngIf="mode == 'edit'">
+              {{ "shared.save" | translate }}
+            </ng-container>
+            <ng-container *ngIf="mode !== 'edit'">
+              {{ "bau.createTask" | translate }}
+            </ng-container>
+          </button>
+        </div>
+      </div>
+
+      <div class="opacity-25">
+        <hr class="my-4 mx-2" />
+      </div>
+
+      <!-- Related Main Task controls -->
+      <div class="form-group mt-3">
+        <app-select
+          class="d-block select-control"
+          formControlName="mainTaskId"
+          [title]="'bau.relatedMainTask' | translate"
+          [control]="form | getControl : 'mainTaskId'"
+          [placeholder]="'bau.relatedMainTaskPlaceholder' | translate"
+          [items]="mainTasks"
+          [bindVlaue]="'id'"
+          [bindLabel]="lang == 'ar' ? 'titleAr' : 'titleEn'"
+          [clearable]="true"
+          (change)="onSelectMainTask($event)"
+        ></app-select>
+      </div>
+
+      <!-- title controls -->
+      <div class="row">
+        <div class="col form-group mt-3 lang-order-1">
+          <app-filed
+            formControlName="titleEn"
+            [control]="form | getControl : 'titleEn'"
+            [title]="'bau.mainTaskTitle' | translate"
+            [placeholder]="'bau.mainTaskTitlePlaceholder' | translate"
+            [ngClass]="{ disapled: isDisabled }"
+          ></app-filed>
+        </div>
+        <div class="col form-group mt-3 lang-order-2">
+          <app-filed
+            formControlName="titleAr"
+            [control]="form | getControl : 'titleAr'"
+            [title]="'bau.mainTaskTitleArabic' | translate"
+            [placeholder]="'bau.mainTaskTitleArabicPlaceholder' | translate"
+            [ngClass]="{ disapled: isDisabled }"
+          ></app-filed>
+        </div>
+      </div>
+
+      <!-- description control -->
+      <div class="form-group mt-4">
+        <label class="form-label">
+          {{ "shared.description" | translate }}
+          <span class="required">*</span>
+        </label>
+        <angular-editor
+          formControlName="description"
+          [config]="editorConfig"
+          [ngClass]="{ disapled: isDisabled }"
+        >
+          <ng-template #customButtons>
+            <ae-toolbar-set>
+              <ae-button
+                iconClass="fa fa-paperclip fa-lg"
+                title="Attachment"
+                (buttonClick)="attachments.click()"
+              ></ae-button>
+            </ae-toolbar-set>
+          </ng-template>
+        </angular-editor>
+
+        <input
+          hidden
+          #attachments
+          type="file"
+          [accept]="supportedAttachmentTypes.join(',')"
+          (change)="onUploadFile($event)"
+        />
+
+        <uploaded-attachments-files
+        *ngIf="this.mode == 'create'"
+          class="d-block mt-3"
+          [files]="uploadedFiles"
+          [supportedTypes]="'shared.descriptionAttachmentsTypes' | translate"
+          (deleteFile)="onDeleteFile($event, 'new')"
+          (viewFile)="onViewLocalFile($event, 'new')"
+          [maxSize]="maxFileSizeInMB"
+        ></uploaded-attachments-files>
+
+        <uploaded-attachments-files
+          class="d-block mt-3"
+          [files]="oldAttachments"
+          (deleteFile)="onDeleteFile($event, 'old')"
+          (viewFile)="onViewLocalFile($event, 'old')"
+          [old]="true"
+        ></uploaded-attachments-files>
+      </div>
+
+      <!-- importance level control -->
+      <div class="d-flex mt-3 gap-3 importance">
+        <app-importance-level
+          [title]="'bau.importanceLevel' | translate"
+          [control]="form | getControl : 'importanceLevel'"
+          [selectedButton]="
+            form.controls.importanceLevel.value
+              ? form.controls.importanceLevel.value
+              : null
+          "
+        ></app-importance-level>
+        <!-- <div
+          class="alert alert-warning col d-flex gap-2 align-items-center"
+          role="alert"
+        >
+          <i class="bx bxs-info-circle"></i>
+          <div class="worning-text col">{{ "bau.alertText" | translate }}</div>
+        </div> -->
+      </div>
+
+      <div class="d-flex gap-3 mt-3">
+        <!-- budget control -->
+        <div class="budget form-group col">
+          <app-filed
+            formControlName="budget"
+            [control]="form | getControl : 'budget'"
+            [title]="'bau.budget' | translate"
+            [placeholder]="'bau.budgetPlaceholder' | translate"
+            [isNumber]="true"
+            [maxValue]="availableBudget"
+          ></app-filed>
+          <span
+            class="sub-text mt-1"
+            [ngClass]="{
+              'text-danger':
+                (form | getControl : 'budget').value > availableBudget
+            }"
+          >
+            {{ availableBudget - (form | getControl : "budget").value }}
+            {{ "bau.AED" | translate }}
+          </span>
+        </div>
+
+        <!-- period control -->
+        <div class="form-group col d-flex flex-wrap dueDate">
+          <label for="" class="form-label col-12">
+            {{ "bau.dueDate" | translate }}
+            <span class="required">*</span>
+          </label>
+          <div class="col-12">
+            <app-datepicker
+              [allowPastDate]="true"
+              [date]="form.controls.dueDate.value | DatePipe"
+              (getSelectedDate)="onDateSelect('dueDate', $event)"
+            ></app-datepicker>
+            <div *ngIf="form.get('dueDate').hasError('invalidYear')">
+              <span class="error-message">
+                {{ "bau.invalidYear" | translate }}
+              </span>
+            </div>
+            <div  *ngIf="form.get('dueDate').hasError('invalidDueDate')">
+              <span class="error-message">
+                {{ "bau.dueDateError" | translate }}
+              </span>
+            </div>
+          </div>
+          <span
+          class="sub-text mt-1 d-flex gap-2"
+          [ngClass]="{
+            'text-danger': (form | getControl : 'dueDate').value < mainTaskStartDate ||  (form | getControl : 'dueDate').value > mainTaskEndtDate
+          }"
+          *ngIf="mainTaskStartDate && mainTaskStartDate"
+        >
+          <span>
+            {{ "shared.from" | translate }}:
+            {{
+              lang === "en"
+                ? ((mainTaskStartDate | uTCToLocalDate : true).toLocaleString()
+                  | date : "dd, MMM")
+                : ((mainTaskStartDate | uTCToLocalDate : true).toLocaleString()
+                  | localizeDate : "dd, MMM")
+            }}
+          </span>
+          <span>
+            {{ "shared.to" | translate }}:
+            {{
+              lang === "en"
+                ? ((mainTaskEndtDate | uTCToLocalDate : true).toLocaleString()
+                  | date : "dd, MMM")
+                : ((mainTaskEndtDate | uTCToLocalDate : true).toLocaleString()
+                  | localizeDate : "dd, MMM")
+            }}
+          </span>
+        </span>
+        </div>
+
+        <div class="form-group col d-flex">
+          <app-select
+            class="d-block select-control"
+            formControlName="assignedTo"
+            [title]="'bau.subTask.assignTo' | translate"
+            [control]="form | getControl : 'assignedTo'"
+            [placeholder]="'bau.employeePlaceholder' | translate"
+            [items]="employees"
+            [dir]="lang === 'en' ? 'ltr' : 'rtl'"
+            [bindVlaue]="'id'"
+            [bindLabel]="lang == 'ar' ? 'fullName' : 'fullName'"
+            [clearable]="true"
+            (search)="searchEmployees($event)"
+            [ngClass]="{ disapled: isDisabled }"
+          ></app-select>
+          <!--          <ng-select-->
+          <!--            class="input-select"-->
+          <!--            formControlName="assignedTo"-->
+          <!--            [dir]="lang === 'en' ? 'ltr' : 'rtl'"-->
+          <!--            [searchable]="true"-->
+          <!--            [clearable]="true"-->
+          <!--            [placeholder]="'bau.employeePlaceholder' | translate"-->
+          <!--            [notFoundText]="'shared.noItemsFound' | translate"-->
+          <!--            [closeOnSelect]="true"-->
+          <!--            (scrollToEnd)="loadMoreEmployees()"-->
+          <!--            (search)="searchEmployees($event)"-->
+          <!--            [loading]="isGettingEmployees"-->
+          <!--          >-->
+          <!--            <ng-option-->
+          <!--              *ngFor="let employee of employees"-->
+          <!--              [value]="employee"-->
+          <!--            >-->
+          <!--              {{ employee?.fullName }}-->
+          <!--            </ng-option>-->
+          <!--          </ng-select>-->
+          <div
+            *ngIf="
+              form.get('assignedTo').hasError('required') &&
+              form.get('assignedTo').touched
+            "
+          >
+            <span class="error-message">
+              {{ "shared.validations.required" | translate }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #skeleton>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+    <app-skeleton-loader mode="table"></app-skeleton-loader>
+  </ng-template>
+  <app-model
+    [dimensions]="{ width: 800, height: 750 }"
+    [id]="'follow_up'"
+    [hasBackBtn]="false"
+    [hasTitle]="false"
+    [isNewModel]="true"
+  >
+    <div modal-header class="plan-start-model-header w-100">
+      <label class="modal-title">Search for a follow up to import</label>
+    </div>
+
+    <div modal-content class="plan-start-model-content border-top">
+      <div class="search-follow-up-sec">
+        <app-search (search)="searchFollowUp($event)"></app-search>
+        <ng-container *ngIf="isFilterFollowLoading; else followItems">
+          <ng-container [ngTemplateOutlet]="loader"></ng-container>
+        </ng-container>
+        <ng-template #followItems>
+          <div class="follow-up-items mt-3 mx-2">
+            <ng-container *ngFor="let follow of filteredData">
+              <div class="item">
+                <input
+                  type="radio"
+                  name="selectedItem"
+                  [value]="follow"
+                  [(ngModel)]="selectedValue"
+                />
+                <label for="{{ follow.id }}" class="mx-2">
+                  {{ follow.title }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </ng-template>
+
+        <ng-template #loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+          <app-skeleton-loader mode="table"></app-skeleton-loader>
+        </ng-template>
+      </div>
+
+      <!-- footer buttons -->
+      <div class="new-model-dialog-footer">
+        <!-- back button -->
+        <button
+          class="btn btn-dark flex-grow-1"
+          (click)="this.popupService.close()"
+        >
+          {{ "shared.back" | translate }}
+        </button>
+        <button
+          class="btn btn-main flex-grow-1"
+          [disabled]="selectedValue.id == null"
+          (click)="onPopupClose()"
+        >
+          {{ "bau.import" | translate }}
+        </button>
+      </div>
+    </div>
+  </app-model>
+</div>

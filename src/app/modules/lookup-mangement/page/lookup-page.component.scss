@@ -1,0 +1,49 @@
+.filters {
+  display: flex;
+  align-items: center;
+
+  .item {
+    display: flex;
+    align-items: center;
+
+    label {
+      margin-inline-end: 15px;
+    }
+
+    app-select {
+      min-width: 250px;
+      margin-inline-end: 15px;
+    }
+  }
+
+  button {
+    margin-inline-start: 8px;
+    font-weight: 500;
+  }
+}
+
+.table {
+  --index-width: 50px;
+  --actions-width: 70px;
+
+  .lookup-index {
+    width: var(--index-width);
+  }
+
+  .lookup-actions {
+    width: var(--actions-width);
+  }
+
+  .arabic-font {
+    font-family: "Janna LT Regular", sans-serif !important;
+  }
+}
+
+.no-data {
+  min-height: 450px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}

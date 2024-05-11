@@ -1,0 +1,32 @@
+.title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #717986;
+}
+
+.button {
+  font-size: 16px;
+  border-radius: 50px !important;
+}
+
+.btn-danger {
+  border: 0 !important;
+  box-shadow: 0px 4px 4px 0px rgba(255, 72, 72, 0.25) !important;
+  background-color: #dc3545 !important;
+}
+
+.btn-warning {
+  border: 0 !important;
+  box-shadow: 0px 4px 4px 0px rgba(255, 193, 7, 0.25) !important;
+  background-color: #ffca2c !important;
+}
+
+.btn-info {
+  border: 0 !important;
+  box-shadow: 0px 4px 4px 0px rgba(23, 162, 184, 0.25) !important;
+  background-color: #677e9f !important;
+}
+
+.required {
+  color: red;
+}

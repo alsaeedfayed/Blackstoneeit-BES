@@ -1,0 +1,75 @@
+<div class="requests-page">
+  <app-header-page
+    [title]="'cr.changeRequests' | translate"
+    [totalItems]="requestsCount"
+    [backButton]="true"
+    [isSearch]="true"
+    [searchKey]="title"
+    (search)="handleSearch($event)"
+  ></app-header-page>
+
+  <div class="requests-page-wrapper">
+    <!-- filters -->
+    <!-- <div class="req-filters">
+      <performance-change-requests-filters
+        (sortByFilterEvent)="handleSortByFilter($event)"
+        (catgoryFilterEvent)="handleCatgoryFilter($event)"
+        (statusesFilterEvent)="handleStatusFilter($event)"
+        (ownedTasksFilterEvent)="handleOwnedTasksFilter($event)"
+      ></performance-change-requests-filters>
+    </div> -->
+
+    <!-- change requests table -->
+    <ng-container *ngIf="loading; else table_data">
+      <ng-container [ngTemplateOutlet]="skeleton"></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #table_data>
+  <performance-change-requests-table
+    *ngIf="requests?.length > 0"
+    [Requests]="requests"
+    [paginationModle]="paginationModle"
+    [requestsCount]="requestsCount"
+    (onPaginateHandler)="paginateHandler($event)"
+  ></performance-change-requests-table>
+
+  <div
+    class="no-data"
+    *ngIf="requests?.length == 0 || !requests"
+  >
+    <app-no-data [msg]="'cr.noRequests' | translate"></app-no-data>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+  <app-skeleton-loader mode="table"></app-skeleton-loader>
+</ng-template>
+
+<app-model
+  [dimensions]="{ width: 620, height: 750 }"
+  [id]="'cr-popup'"
+  [hasBackBtn]="false"
+  [hasTitle]="false"
+  [isNewModel]="true"
+>
+  <div modal-header class="change-request-modal-header w-100">
+    <label class="modal-title">
+      {{ ('cr.changeRequests' | translate) + ': ' + '(' + (selectedScoreCardTitle$ | async) + ')' }}
+    </label>
+  </div>
+
+  <div modal-content class="change-request-modal-content border-top">
+    <performance-change-request-modal
+      *ngIf="showModel"
+      (updateListEvt)="updateListHandler()"
+    ></performance-change-request-modal>
+  </div>
+</app-model>

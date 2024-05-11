@@ -1,0 +1,611 @@
+<side-panel (sidePanelClosed)="handleOutsideClick($event)"
+  [wideModal]="modalState == 'transitionForm' || modalState == 'transitionEditForm'"
+  [displayHeader]="modalState == 'stateDetails' ? true : false" [title]="title? title[lang] : ''">
+  <div class="display-contents" modal-content>
+    <!-- Modal Body -->
+    <div class="modal-body" [class.p-4]="modalState == 'stateDetails'">
+      <div *ngIf="modalState == 'processForm' || modalState == 'processFormEdit'">
+        <form [formGroup]="processForm">
+          <div class="position-relative mb-4">
+            <div *ngIf="processTitleLanguage == 'en'" class="form-group position-relative">
+              <label for="" class="form-label">{{'Process title' | translate}} <span *ngIf="lang == 'ar'"
+                  class="disabled">(English)</span></label>
+              <div class="input-with-spinner">
+                <input type="text" formControlName="processName" dir="ltr" placeholder="Process title..."
+                  class="form-control">
+                <i *ngIf="processENLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+              <small *ngIf="getProcessForm.processName?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+              <small *ngIf="getProcessForm.processName?.errors?.invalidProcessName" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'Process with same title exists' | translate}}</span>
+              </small>
+            </div>
+
+            <div *ngIf="processTitleLanguage == 'ar'" class="form-group">
+              <label for="" class="form-label">{{'Process title' | translate}} <span *ngIf="lang == 'en'"
+                  class="disabled">(Arabic)</span></label>
+              <div class="input-with-spinner-rtl">
+                <input type="text" dir="rtl" placeholder="اسم العملية..." formControlName="processNameArabic"
+                  class="form-control">
+                <i *ngIf="processARLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+
+              <small *ngIf="getProcessForm.processNameArabic?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'Process with same title exists' | translate}}</span>
+              </small>
+              <small *ngIf="getProcessForm.processNameArabic?.errors?.invalidProcessName" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'Process with same title exists' | translate}}</span>
+              </small>
+            </div>
+
+            <div class="modal-language-switch">
+              <button (click)="switchInputs('en', 'processTitle')"
+                [ngClass]="{'active': processTitleLanguage == 'en', 'error' : getProcessForm.processName?.errors  && isFormSubmitted}">
+                English
+              </button>
+              <span class="language-switch-seperator">|</span>
+              <button (click)="switchInputs('ar', 'processTitle')"
+                [ngClass]="{'active': processTitleLanguage == 'ar', 'error' : getProcessForm.processNameArabic?.errors  && isFormSubmitted}">
+                Arabic
+              </button>
+            </div>
+          </div>
+
+
+          <div class="position-relative mb-4">
+            <div *ngIf="processDescriptionLanguage == 'en'" class="form-group">
+              <label for="" class="form-label">{{'Process description' | translate}} <span *ngIf="lang == 'ar'"
+                  class="disabled">(English)</span></label>
+              <input type="text" formControlName="processDescription" placeholder="Process description..." dir="ltr"
+                class="form-control">
+              <small *ngIf="getProcessForm.processDescription?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+            </div>
+            <div *ngIf="processDescriptionLanguage == 'ar'" class="form-group">
+              <label for="" class="form-label">{{'Process description' | translate}} <span *ngIf="lang == 'en'"
+                  class="disabled">(Arabic)</span></label>
+              <input type="text" dir="rtl" formControlName="processDescriptionAr" placeholder="وصف العملية..."
+                class="form-control">
+              <small *ngIf="getProcessForm.processDescriptionAr?.errors?.required && isFormSubmitted"
+                class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+            </div>
+            <div class="modal-language-switch">
+              <button (click)="switchInputs('en', 'processDescription')"
+                [ngClass]="{'active': processDescriptionLanguage == 'en', 'error' : getProcessForm.processDescription?.errors  && isFormSubmitted}">
+                English
+              </button>
+              <span class="language-switch-seperator">|</span>
+              <button (click)="switchInputs('ar', 'processDescription')"
+                [ngClass]="{'active': processDescriptionLanguage == 'ar', 'error' : getProcessForm.processDescriptionAr?.errors  && isFormSubmitted}">
+                Arabic
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group flex-row align-items-center justify-content-between">
+            <label for="status-checkbox" class="form-label">{{'enabled' | translate}}</label>
+
+            <div class="switch-btn">
+              <input type="checkbox" checked formControlName="processStatus" id="switch2">
+              <label for="switch2">
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="modalState == 'processStateForm' || modalState == 'processEditStateForm'">
+        <form [formGroup]="stateForm">
+
+          <div class="position-relative mb-4">
+            <div *ngIf="stateTitleLanguage == 'en'" class="form-group">
+              <label for="" class="form-label">{{'State Name' | translate}} <span *ngIf="lang == 'ar'"
+                  class="disabled">(English)</span> </label>
+              <div class="input-with-spinner">
+                <input type="text" formControlName="stateName" dir="ltr" placeholder="State name..."
+                  class="form-control">
+                <i *ngIf="stateENLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+
+              <small *ngIf="getStateForm.stateName?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+              <small *ngIf="getStateForm.stateName?.errors?.invalidStateName" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'State with same title exists' | translate}}</span>
+              </small>
+            </div>
+            <div *ngIf="stateTitleLanguage == 'ar'" class="form-group">
+              <label for="" class="form-label">{{'State Name' | translate}} <span *ngIf="lang == 'en'"
+                  class="disabled">(Arabic)</span></label>
+              <div class="input-with-spinner-rtl">
+                <input type="text" dir="rtl" placeholder="عنوان الحالة..." formControlName="stateNameArabic"
+                  class="form-control">
+                <i *ngIf="stateARLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+
+              <small *ngIf="getStateForm.stateNameArabic?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+              <small *ngIf="getStateForm.stateNameArabic?.errors?.invalidStateName" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'State with same title exists' | translate}}</span>
+              </small>
+            </div>
+            <div class="modal-language-switch">
+              <button (click)="switchInputs('en', 'stateTitle')"
+                [ngClass]="{'active': stateTitleLanguage == 'en', 'error' : getStateForm.stateName?.errors  && isFormSubmitted}">
+                English
+              </button>
+              <span class="language-switch-seperator">|</span>
+              <button (click)="switchInputs('ar', 'stateTitle')"
+                [ngClass]="{'active': stateTitleLanguage == 'ar', 'error' : getStateForm.stateNameArabic?.errors  && isFormSubmitted}">
+                Arabic
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="" class="form-label">{{'State Order' | translate}}</label>
+            <input type="number" formControlName="order"
+              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+              class="form-control">
+            <small *ngIf="getStateForm.order?.errors?.required && isFormSubmitted" class="form-error">
+              <i class="bx bxs-error-circle"></i>
+              <span>{{'This field is required' | translate}}</span>
+            </small>
+            <small *ngIf="getStateForm.order?.errors?.invalidNumber" class="form-error">
+              <i class="bx bxs-error-circle"></i>
+              <span>{{'Invalid value' | translate}}</span>
+            </small>
+          </div>
+          <div class="form-group mb-4">
+            <label for="" class="form-label">{{'External Status' |translate}}</label>
+            <input type="text" formControlName="externalStatus" class="form-control">
+            <small *ngIf="getStateForm.externalStatus?.errors?.required && isFormSubmitted" class="form-error">
+              <i class="bx bxs-error-circle"></i>
+              <span>{{'This field is required' | translate}}</span>
+            </small>
+          </div>
+          <div class="form-group flex-column" formGroupName="stage">
+            <label for="status-checkbox" class="form-label">{{'State Settings' | translate}}</label>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label for="first-stage" class="form-label stage-label mb-0">First State</label>
+              <input id="first-stage" (change)="validateSingleSelection($event)" type="checkbox" value="firstState"
+                formControlName="isInitial" class="form-control-checkbox">
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label for="last-stage" class="form-label stage-label mb-0">Last State</label>
+              <input id="last-stage" (change)="validateSingleSelection($event)" value="lastState"
+                formControlName="isFinal" type="checkbox" class="form-control-checkbox">
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label for="default-flow" class="form-label stage-label mb-0">Default Flow</label>
+              <input id="default-flow" formControlName="isDefaultFlow" type="checkbox" class="form-control-checkbox">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="modalState == 'stateDetails'">
+        <div>
+          <div class="state-info position-relative">
+            <app-actions-dropdown (firstBtnClickHandler)="openEditStateForm()" (secondBtnClickHandler)="deleteState()"
+              [firstBtnContent]="lang == 'en' ? 'Update State' : 'تحديث الحالة'"
+              [secondBtnText]="lang == 'en' ? 'Delete State' : 'حذف الحالة'"></app-actions-dropdown>
+            <h3 class="state-title mb-3">{{currentState?.title[lang]}}</h3>
+            <div class="d-flex">
+              <span *ngIf="currentState?.isDefaultFlow" class="_badge b-default-flow mr-2">
+                <img class="mr-1" src="/assets/icons/flow-icon.svg" alt="">
+                Default Flow
+              </span>
+              <span *ngIf="currentState?.isInitial" class="_badge b-first-state">First State</span>
+              <span *ngIf="currentState?.isFinal" class="_badge b-final-state">Final State</span>
+            </div>
+          </div>
+          <hr class="modal-seperator">
+
+
+          <div class="transitions">
+            <app-empty-state *ngIf="currentState?.transitions.length == 0"
+              [title]="lang == 'en' ? 'No transitions found for this state...' : 'لم يتم العثور على انتقالات لهذه الحالة ...'">
+            </app-empty-state>
+            <div *ngFor="let item of currentState?.transitions; let i = index">
+              <app-transition-card (editTransition)="editTransitionMode($event, item)"
+                (deleteTransition)="deleteTransition($event)" [data]="item" [states]="processData.states">
+              </app-transition-card>
+              <hr *ngIf="(i + 1) != currentState?.transitions.length" class="modal-seperator">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="modalState == 'transitionForm' || modalState == 'transitionEditForm'">
+        <form [formGroup]="transitionForm">
+          <div class="form-group position-relative mb-4">
+            <label for="" class="form-label">{{'Transition Title' | translate}}</label>
+            <div class="col-12 p-0" *ngIf="transitionTitleLanguage == 'en'">
+              <div class="input-with-spinner">
+                <input type="text" dir="ltr" formControlName="transitionTitle" placeholder="Transition title..."
+                  class="form-control w-100">
+                <i *ngIf="transitionENLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+              <small *ngIf="getTransitionForm.transitionTitle?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+              <small
+                *ngIf="getTransitionForm.transitionTitle?.errors?.invalidTransitionName && transitionTitleLanguage == 'en'"
+                class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>Transition with same title exists</span>
+              </small>
+
+            </div>
+
+            <div class="col-12 p-0" *ngIf="transitionTitleLanguage == 'ar'">
+              <div class="input-with-spinner-rtl">
+                <input type="text" dir="rtl" formControlName="transitionTitleAr" placeholder="عنوان الانتقال..."
+                  class="form-control w-100">
+                <i *ngIf="transitionARLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+              <small *ngIf="getTransitionForm.transitionTitleAr?.errors?.required && isFormSubmitted"
+                class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+              <small
+                *ngIf="getTransitionForm.transitionTitleAr?.errors?.invalidTransitionName && transitionTitleLanguage == 'ar'"
+                class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'Transition with same title exists' | translate}}</span>
+              </small>
+            </div>
+            <div class="modal-language-switch">
+              <button (click)="switchInputs('en', 'transitionTitle')"
+                [ngClass]="{'active': transitionTitleLanguage == 'en', 'error' : getTransitionForm.transitionTitle?.errors?.required  && isFormSubmitted}">
+                English
+              </button>
+              <span class="language-switch-seperator">|</span>
+              <button (click)="switchInputs('ar', 'transitionTitle')"
+                [ngClass]="{'active': transitionTitleLanguage == 'ar', 'error' : getTransitionForm.transitionTitleAr?.errors?.required  && isFormSubmitted}">
+                Arabic
+              </button>
+            </div>
+          </div>
+          <div class="d-flex mb-4">
+            <div class="col-6 pr-3">
+              <div class="form-group position-relative mb-4">
+                <label for="" class="form-label">{{'Origin State' | translate}}</label>
+                <input type="text" formControlName="originState" disabled placeholder="Origin state..."
+                  class="form-control">
+                <small *ngIf="getTransitionForm.originState?.errors?.required && isFormSubmitted" class="form-error">
+                  <i class="bx bxs-error-circle"></i>
+                  <span>{{'This field is required' | translate}}</span>
+                </small>
+              </div>
+              <div class="form-group position-relative mb-4">
+                <label for="" class="form-label">{{'Button Label' | translate}}</label>
+                <div *ngIf="buttonLabelLanguage == 'en'">
+                  <input *ngIf="buttonLabelLanguage == 'en'" type="text" dir="ltr" formControlName="buttonLabel"
+                    placeholder="Button label..." class="form-control w-100">
+                  <small *ngIf="getTransitionForm.buttonLabel?.errors?.required && isFormSubmitted" class="form-error">
+                    <i class="bx bxs-error-circle"></i>
+                    <span>{{'This field is required' | translate}}</span>
+                  </small>
+                </div>
+
+                <div *ngIf="buttonLabelLanguage == 'ar'">
+                  <input type="text" dir="rtl" formControlName="buttonLabelAr" placeholder="تسمية الزر..."
+                    class="form-control w-100">
+                  <small *ngIf="getTransitionForm.buttonLabelAr?.errors?.required && isFormSubmitted"
+                    class="form-error">
+                    <i class="bx bxs-error-circle"></i>
+                    <span>{{'This field is required' | translate}}</span>
+                  </small>
+                </div>
+
+                <div class="modal-language-switch">
+                  <button (click)="switchInputs('en', 'buttonLabel')"
+                    [ngClass]="{'active': buttonLabelLanguage == 'en', 'error' : getTransitionForm.buttonLabel?.errors?.required  && isFormSubmitted}">
+                    English
+                  </button>
+                  <span>|</span>
+                  <button (click)="switchInputs('ar', 'buttonLabel')"
+                    [ngClass]="{'active': buttonLabelLanguage == 'ar', 'error' : getTransitionForm.buttonLabelAr?.errors?.required  && isFormSubmitted}">
+                    Arabic
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-3">
+              <div class="form-group position-relative mb-4">
+                <label for="" class="form-label">{{'Destination State' | translate}}</label>
+                <input id="typeahead-prevent-manual-entry" type="text" formControlName="destinationState"
+                  [ngbTypeahead]="searchStates" [inputFormatter]="statesFormatter" [resultFormatter]="statesFormatter"
+                  [ngModelOptions]="{standalone: true}"
+                  [placeholder]="lang == 'en' ? 'Destination state...' : 'الى الحالة...'" class="form-control mb-2"
+                  [editable]='false' />
+                <small *ngIf="getTransitionForm.destinationState?.errors?.required && isFormSubmitted"
+                  class="form-error">
+                  <i class="bx bxs-error-circle"></i>
+                  <span>{{'This field is required' | translate}}</span>
+                </small>
+              </div>
+              <div class="form-group mb-4">
+                <label for="" class="form-label">{{'Button Color' | translate}}</label>
+                <div class="position-relative">
+                  <select formControlName="buttonColor" aria-label="Default select example" class="form-select">
+                    <!-- <option selected
+                            disabled
+                            value=null>
+                      Select button color...
+                    </option> -->
+                    <option value="primary">Primary</option>
+                    <option value="danger">Danger</option>
+                    <option value="success">Success</option>
+                    <option value="secondary">Secondary</option>
+                    <option value="warning">Warning</option>
+                  </select>
+                </div>
+                <small *ngIf="getTransitionForm.buttonColor?.errors?.required && isFormSubmitted" class="form-error">
+                  <i class="bx bxs-error-circle"></i>
+                  <span>{{'This field is required' | translate}}</span>
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="form-group col-6 pr-3" [class.col-12]="authorizationType == 'requester'">
+              <label for="" class="form-label">{{'Authorization Type' | translate}}</label>
+              <div class="d-flex flex-wrap">
+                <div class="form-group mb-0  position-relative">
+                  <input id="requester" name="authorizationType" type="radio" value="Requester"
+                    formControlName="authorizationType" (change)="authorizationTypeChange($event, 'Requester')"
+                    [checked]="authorizationType == 'requester'" class="form-control-radio-hidden">
+                  <label for="requester" class="form-label radio-button-label">
+                    {{'Requester' | translate}}
+                    <i class="bx bxs-user-voice"></i>
+                  </label>
+
+                </div>
+                <div class="form-group mb-0 position-relative">
+                  <input id="users" name="authorizationType" type="radio" value="User"
+                    formControlName="authorizationType" (change)="authorizationTypeChange($event, 'User')"
+                    class="form-control-radio-hidden">
+                  <label for="users" class="form-label radio-button-label">
+                    {{'Specific Users' | translate}}
+                    <i class="bx bx-group"></i>
+                  </label>
+                </div>
+                <div class="form-group mb-0  position-relative">
+                  <input id="roles" name="authorizationType" type="radio" value="Role"
+                    formControlName="authorizationType" (change)="authorizationTypeChange($event, 'Role')"
+                    class="form-control-radio-hidden">
+                  <label for="roles" class="form-label radio-button-label">
+                    {{'Specific Roles' | translate}}
+                    <i class="bx bxs-user-badge"></i>
+                  </label>
+
+                </div>
+              </div>
+            </div>
+            <div *ngIf="authorizationType != 'Requester'" class="form-group position-relative col-6 pl-3">
+              <label for="" class="form-label" *ngIf="authorizationType == 'User'">{{'Allowed Users' |
+                translate}}</label>
+              <label for="" class="form-label" *ngIf="authorizationType == 'Role'">{{'Allowed Roles' |
+                translate}}</label>
+              <div class="input-with-spinner">
+                <input id="typeahead-prevent-manual-entry" type="text" class="form-control mb-2"
+                  [(ngModel)]="rolesInput" [ngbTypeahead]="authorizationType == 'User' ? searchUsers : searchRoles"
+                  [inputFormatter]="authorizationType == 'User' ? usersFormatter : rolesFormatter"
+                  [resultFormatter]="authorizationType == 'User' ? usersFormatter : rolesFormatter"
+                  (selectItem)="authorizationType == 'User' ? selectUser($event) : selectRole($event)"
+                  [ngModelOptions]="{standalone: true}" [placement]="'bottom'" [editable]='false' />
+                <i *ngIf="searchUsersLoading" class="bx bx-loader-alt bx-spin"></i>
+              </div>
+
+              <div *ngIf="authorizationType == 'User'" class="d-flex flex-wrap align-items-start">
+                <span class="_badge b-role mr-1 mb-1 d-flex align-items-center" *ngFor="let item of selectedUsers">
+                  {{item?.fullName}}
+                  <i (click)="removeUser(item.id)" class="bx bx-x"></i>
+                </span>
+              </div>
+              <div *ngIf="authorizationType == 'Role'" class="d-flex flex-wrap align-items-start">
+                <span class="_badge b-role mr-1 mb-1 d-flex align-items-center" *ngFor="let item of selectedRoles">
+                  <div *ngIf="item?.name">{{item?.name}}</div>
+                  <div *ngIf="item?.roleName">{{item?.roleName}}</div>
+                  <i (click)="removeRole(item.id)" class="bx bx-x"></i>
+                </span>
+              </div>
+              <small *ngIf="(authorizationType == 'Role' && selectedRoles.length == 0) && isFormSubmitted"
+                class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'At least one role must be selected' | translate}}</span>
+              </small>
+              <small *ngIf="(authorizationType == 'User' && selectedUsers.length == 0) && isFormSubmitted"
+                class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'At least one user must be selected' | translate}}</span>
+              </small>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="form-group col-6 pr-3">
+              <label for="" class="form-label">{{'Option' | translate}}</label>
+              <div class="d-flex flex-wrap">
+                <div class="form-group mb-0  position-relative">
+                  <input id="single" name="option" type="radio" formControlName="option" [checked]="true" value="Single"
+                    class="form-control-radio-hidden">
+                  <label for="single" class="form-label radio-button-label">
+                    Single
+                    <i class="bx bx-right-arrow-alt"></i>
+                  </label>
+                </div>
+                <div class="form-group mb-0 position-relative">
+                  <input id="reversable" name="option" type="radio" formControlName="option" value="Reversable"
+                    class="form-control-radio-hidden">
+                  <label for="reversable" class="form-label radio-button-label">
+                    Reversable
+                    <i class='bx bx-repeat'></i>
+                  </label>
+                </div>
+                <div class="form-group mb-0  position-relative">
+                  <input id="sequential" name="option" type="radio" formControlName="option" value="Sequential"
+                    class="form-control-radio-hidden">
+                  <label for="sequential" class="form-label radio-button-label">
+                    Sequential
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M21 16L16.1538 12V15.3333H5V16.6667H16.1538V20L21 16Z" fill="#C5C6C7" />
+                      <path d="M17 7L12.1538 3V6.33333H5V7.66667H12.1538V11L17 7Z" fill="#C5C6C7" />
+                    </svg>
+                  </label>
+                </div>
+                <div class="form-group mb-0  position-relative">
+                  <input id="parallel" name="option" type="radio" formControlName="option" value="Parallel"
+                    class="form-control-radio-hidden">
+                  <label for="parallel" class="form-label radio-button-label">
+                    Parallel
+
+                    <i class='bx bx-shuffle'></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-6 pl-3">
+              <label for="" class="form-label">{{'Minimum Vote' | translate}}</label>
+              <input type="number" formControlName="minimumVote"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                class="form-control">
+              <small *ngIf="getTransitionForm.minimumVote?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+              <small *ngIf="getTransitionForm.minimumVote?.errors?.invalidNumber" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>Invalid minimum vote value</span>
+              </small>
+            </div>
+          </div>
+
+
+          <div class="form-group flex-row align-items-center justify-content-between mb-4">
+            <label for="comment-checkbox" class="form-label stage-label mb-0">{{'Comment Required' | translate}}</label>
+            <input id="comment-checkbox" type="checkbox" (change)="toggleCommentTitle()" formControlName="commentTag"
+              class="form-control-checkbox">
+          </div>
+
+          <div *ngIf="commentTitleFlag" class="form-group position-relative mb-4">
+            <label for="" class="form-label">{{'Comment Title' | translate}}</label>
+            <div class="col-12 p-0" *ngIf="commentTitleLanguage == 'en'">
+              <input type="text" formControlName="commentTitle" dir="ltr" placeholder="Comment title..."
+                class="form-control w-100">
+              <small *ngIf="getTransitionForm.commentTitle?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+            </div>
+
+            <div class="col-12 p-0" *ngIf="commentTitleLanguage == 'ar'">
+              <input type="text" dir="rtl" formControlName="commentTitleAr" placeholder="عنوان التعليق..."
+                class="form-control w-100">
+              <small *ngIf="getTransitionForm.commentTitleAr?.errors?.required && isFormSubmitted" class="form-error">
+                <i class="bx bxs-error-circle"></i>
+                <span>{{'This field is required' | translate}}</span>
+              </small>
+            </div>
+            <div class="modal-language-switch">
+              <button (click)="switchInputs('en', 'commentTitle')"
+                [ngClass]="{'active': commentTitleLanguage == 'en', 'error' : getTransitionForm.commentTitle?.errors?.required  && isFormSubmitted}">
+                English
+              </button>
+              <span class="language-switch-seperator">|</span>
+              <button (click)="switchInputs('ar', 'commentTitle')"
+                [ngClass]="{'active': commentTitleLanguage == 'ar', 'error' : getTransitionForm.commentTitleAr?.errors?.required  && isFormSubmitted}">
+                Arabic
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group flex-row align-items-center justify-content-between mb-4">
+            <label for="attachment-checkbox" class="form-label stage-label mb-0">{{'Attachment Required' |
+              translate}}</label>
+            <input id="attachment-checkbox" type="checkbox" formControlName="attachmentTag"
+              class="form-control-checkbox">
+          </div>
+
+          <div class="form-group flex-row align-items-center justify-content-between"
+            *ngIf="getTransitionForm.authorizationType.value != 'Requester'">
+            <label for="action-visibility-checkbox" class="form-label stage-label mb-0">{{'Action external visibility' |
+              translate}}</label>
+            <input id="action-visibility-checkbox" type="checkbox" formControlName="actionVisibility"
+              class="form-control-checkbox">
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer" [class.p-4]="modalState == 'stateDetails'">
+      <!-- Process form buttons -->
+      <div class="d-flex w-100 justify-content-end"
+        *ngIf="modalState == 'processForm' || modalState == 'processFormEdit'">
+        <button (click)="hideSidepanel()" class="btn btn-primary-outline mr-2 w-25">
+          {{'cancel' | translate}}
+        </button>
+        <button [disabled]="isBtnLoading" (click)="modalState == 'processForm' ? addProcess() : editProcess()"
+          class="btn btn-primary w-25">
+          <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin mr-2"></i>
+          {{'save' | translate}}
+        </button>
+      </div>
+      <!-- State form buttons -->
+      <div class="d-flex w-100 justify-content-end"
+        *ngIf="modalState == 'processStateForm' || modalState == 'processEditStateForm'">
+        <button (click)="modalState == 'processStateForm' ? hideSidepanel() : closeEditStateForm()"
+          class="btn btn-primary-outline mr-2 w-25">
+          {{'cancel' | translate}}
+
+        </button>
+        <button [disabled]="isBtnLoading" (click)="modalState == 'processStateForm' ? addState(): editState()"
+          class="btn btn-primary w-25">
+          <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin mr-2"></i>
+          {{'save' | translate}}
+        </button>
+      </div>
+      <!-- State details buttons -->
+      <div class="d-flex w-100 justify-content-end" *ngIf="modalState == 'stateDetails'">
+        <button (click)="switchToTransition()" class="btn btn-primary w-auto">
+          {{'Add New Transition' | translate}}
+          <i class="bx bxs-plus-circle mr-0 ml-2"></i>
+        </button>
+      </div>
+      <!-- transition form buttons -->
+      <div class="d-flex w-100 justify-content-end"
+        *ngIf="modalState == 'transitionForm' || modalState == 'transitionEditForm'">
+        <button (click)="cancelTransitionMode()" class="btn btn-primary-outline w-25 mr-2">
+          {{'cancel' | translate}}
+
+        </button>
+        <button [disabled]="isBtnLoading" (click)="modalState == 'transitionForm' ? addTransition() : editTransition()"
+          class="btn btn-primary w-25">
+          <i *ngIf="isBtnLoading" class="bx bx-loader-alt bx-spin mr-2"></i>
+          <i *ngIf="!isBtnLoading" class="bx bx-plus"></i>
+          {{'save' | translate}}
+
+        </button>
+      </div>
+    </div>
+  </div>
+</side-panel>

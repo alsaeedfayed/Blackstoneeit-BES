@@ -1,0 +1,15 @@
+<div class="modal fade"
+     [id]="id"
+     data-bs-backdrop="static"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+     (hidden.bs.modal)="close.emit()">
+  <div class="modal-dialog popup"
+       [ngClass]="{'confirmation-mode': mode === 'confirmation'}"
+       [ngStyle]="{ 'min-width': dimensions?.width + 'px'}">
+    <div class="modal-content">
+      <ng-content select="[modal-content]"></ng-content>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="event-registration-container">
+  <div class="bg-img-container">
+    <div class="logo">
+      <img [src]="logo$ | async" alt="image" width="72" height="60" />
+    </div>
+
+    <div class="event-info col-11 col-md-10 col-lg-10 col-xl-7 col-xxl-6">
+      <h1>{{ event?.title }}</h1>
+    </div>
+
+    <img
+      class="bg-img"
+      [src]="event?.coverPhoto?.url || 'assets/img/default_img.png'"
+      [alt]="event?.title"
+    />
+
+    <div class="form-container col-11 col-md-10 col-lg-10 col-xl-7 col-xxl-6">
+
+      <!-- empty state -->
+      <div *ngIf="mode === 'empty-state'" class="empty-state">
+        <div>
+          <app-empty-state
+            [title]="'eventRegistration.emptyState.title' | translate"
+            [description]="'eventRegistration.emptyState.desc' | translate"
+          ></app-empty-state>
+        </div>
+      </div>
+
+      <!-- success state -->
+      <div *ngIf="mode === 'success-state'" class="success-state">
+        <div>
+          <app-success-state
+            [title]="'eventRegistration.successState.title' | translate"
+          ></app-success-state>
+        </div>
+      </div>
+
+      <!-- registration form -->
+      <div *ngIf="mode === 'form'">
+        <h3 class="form-title text-center">
+          {{ 'eventRegistration.form.title' | translate }}
+        </h3>
+
+        <form [formGroup]="form">
+          <!-- full name control -->
+          <div class="form-group mb-4">
+            <app-filed
+              [formControl]="form.controls['fullName']"
+              [control]="form | getControl: 'fullName'"
+              [title]="'eventRegistration.form.fullName' | translate"
+              [placeholder]="'eventRegistration.form.fullNamePlaceholder' | translate"
+            ></app-filed>
+          </div>
+
+          <!-- title control -->
+          <div class="form-group mb-4">
+            <app-filed
+              [formControl]="form.controls['title']"
+              [control]="form | getControl: 'title'"
+              [title]="'eventRegistration.form.position' | translate"
+              [placeholder]="'eventRegistration.form.positionPlaceholder' | translate"
+            ></app-filed>
+          </div>
+
+          <!-- email control -->
+          <div class="form-group mb-4">
+            <app-filed
+              id="email"
+              [formControl]="form.controls['email']"
+              [control]="form | getControl: 'email'"
+              [title]="'eventRegistration.form.email' | translate"
+              [placeholder]="'eventRegistration.form.emailPlaceholder' | translate"
+              [dir]="'ltr'"
+            ></app-filed>
+          </div>
+
+          <!-- mobile control -->
+          <div class="form-group mb-4">
+            <label for="mobile" class="form-label">
+              {{ 'eventRegistration.form.phoneNumber' | translate }}
+              <span class="astrix-red">*</span>
+            </label>
+
+            <input
+              id="mobile"
+              type="tel"
+              class="form-control"
+              formControlName="phoneNumber"
+              [dropSpecialCharacters]="false"
+              prefix="+971-5"
+              dir="ltr"
+              mask="00 000 000"
+              [placeholder]="'eventRegistration.form.phoneNumberPlaceholder' | translate"
+            />
+            <small
+              *ngIf="getRegistrationForm.phoneNumber?.touched && getRegistrationForm.phoneNumber.errors?.required"
+              class="form-error"
+            >
+              <i class="bx bxs-error-circle"></i>
+              <span>{{ 'eventRegistration.form.thisFieldIsRequired' | translate }}</span>
+            </small>
+          </div>
+
+          <!-- profile picture -->
+          <div class="profile-picture">
+            <div class="form-group">
+              <label for="" class="form-label">{{ 'eventRegistration.form.profilePicture' | translate }}</label>
+              <div class="file-input-container mb-2">
+                <label for="file-input" class="file-input">
+                  <i class="bx bx-upload"></i>
+                  <span class="cta-text">
+                    {{ 'eventRegistration.form.selectFiles' | translate }}
+                  </span>
+                  <span class="supported-files-text">
+                    {{ 'eventRegistration.form.supportedFiles' | translate }}
+                  </span>
+                  <input
+                    (change)="onProfileImageChoose($event)"
+                    formControlName="profilePicture"
+                    accept="image/*,"
+                    type="file"
+                    id="profile-picture-input"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div class="uploaded-image border" *ngIf="imgUrl">
+              <img [src]="imgUrl" alt="" />
+            </div>
+          </div>
+
+          <!-- submit button -->
+          <div class="mt-4">
+            <button
+              class="btn btn-main w-100"
+              [disabled]="form?.invalid || isBtnLoading"
+              (click)="onRegistrationSubmit()"
+            >
+              <i class="bx bx-loader-alt bx-spin mr-2" *ngIf="isBtnLoading"></i>
+              {{ 'eventRegistration.form.submitRequest' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

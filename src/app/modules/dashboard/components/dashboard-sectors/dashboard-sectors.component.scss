@@ -1,0 +1,94 @@
+@import "src/assets/css/utils/variables.scss";
+
+.tasks-progress-container {
+  background: #ffffff;
+  padding: 21px 20px;
+  box-shadow: 0px 0px 26px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    // margin-bottom: 45px;
+
+    .title {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 21px;
+      color: $tertiary-color;
+    }
+  }
+
+  .content {
+    height: 210px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 35px;
+    .row {
+      &:not(:last-child) {
+        margin-bottom: 25px;
+      }
+    }
+  }
+
+  // .chart {
+  //   padding: 32px 30px;
+  // }
+}
+
+.distribution {
+  display: flex;
+  position: relative;
+  height: 15px;
+  border-radius: 75px;
+  background-color: #f6f6f6;
+  overflow: hidden;
+
+  span {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #fff;
+  }
+}
+
+.labels {
+  display: flex;
+  align-items: center;
+  gap: 15px 50px;
+  flex-wrap: wrap;
+  margin-top: 35px;
+
+  .label {
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-inline-end: 5px;
+    }
+  }
+}
+
+.text-end {
+  font-size: 12px;
+  font-weight: 400;
+  color: #86909c;
+}
+
+.closed {
+  background: #717986;
+}
+
+.on-track {
+  background: #01db9a;
+}
+
+.off-track {
+  background: #fb3e7a;
+}
+
+.started {
+  background-color: #0075ff;
+}

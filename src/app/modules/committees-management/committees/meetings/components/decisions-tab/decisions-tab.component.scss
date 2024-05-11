@@ -1,0 +1,182 @@
+@import "src/assets/css/utils/variables.scss";
+
+.add-new-btn {
+  display: block;
+  background: none;
+  color: $main-color;
+  font-weight: 500;
+  padding-block: 0;
+  padding-inline: 1.5rem;
+  margin-block: 2rem 1rem;
+  margin-inline-start: auto;
+  border: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.decisions-list {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+
+    tr {
+      --actions-width: 70px;
+
+      &:not(:first-of-type) {
+        border-bottom: 1px solid #efefef;
+      }
+
+      th {
+        color: $info_color;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0 1.25rem;
+      }
+
+      td {
+        font-weight: 400;
+        padding: 0.625rem 1.25rem;
+      }
+
+      .decisions-title {
+        min-width: 200px;
+        max-width: 300px;
+        word-break: break-word;
+      }
+
+      .decisions-status {
+        width: 170px;
+      }
+
+      .decisions-poll {
+        // width: 300px;
+      }
+
+      .decisions-actions {
+        width: var(--actions-width);
+
+        .edit-grid-item-btn {
+          height: 1.25rem;
+          width: 1.25rem;
+          background: none;
+          color: $black-color;
+          padding: 0;
+          border: 0;
+          transition: color 0.15s ease-in-out;
+
+          &:hover {
+            color: $main-color;
+          }
+        }
+      }
+    }
+  }
+
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 1rem 2rem;
+
+    ::ng-deep app-no-data {
+      .no-data {
+        position: static;
+        top: initial;
+        left: initial;
+        transform: none;
+      }
+
+      img {
+        display: block;
+        margin: auto;
+        width: 101px;
+        height: 83px;
+      }
+
+      p {
+        width: auto;
+        font-size: 0.875rem;
+        margin: 1.5rem 0 0;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .noVoting {
+    margin-top: -.2rem;
+    .status{
+      visibility: hidden;
+    }
+  }
+
+  .vote-progress {
+    .bg-danger {
+      //left : 100% !important
+    }
+  }
+}
+
+::ng-deep {
+  .en {
+    .votingBarNo {
+      direction: rtl !important;
+      .vote-progress{
+        .vote-progress-bar{
+          right:  0 !important;
+        }
+        .vote-progress-label {
+          direction: ltr !important;
+        }
+      }
+
+    }
+
+    .votingBarYes{
+      direction: ltr !important;
+      .vote-progress{
+        .vote-progress-bar{
+         // left:  0 !important;
+        }
+        .vote-progress-label {
+         // direction: ltr !important;
+        }
+      }
+    }
+  }
+
+  .ar {
+    .votingBarNo {
+      direction: rtl !important;
+      .vote-progress{
+        .vote-progress-bar{
+          right:  0 !important;
+        }
+        .vote-progress-label {
+          direction: rtl !important;
+        }
+      }
+
+    }
+
+
+    .votingBarYes{
+      direction: ltr !important;
+      .vote-progress{
+        .vote-progress-bar{
+          left: 0 !important;
+          right: unset !important;
+        }
+        .vote-progress-label {
+         direction: rtl !important;
+        }
+      }
+    }
+  }
+
+}
+
